@@ -206,6 +206,11 @@
                     if(response.html_level){
                         $wrapper.html('');
                         $wrapper.append(response.html_level);
+                        $(".wcmp-product-cat-level").mCustomScrollbar();
+                        checkCategoryScroller();
+                        var getAllCatColumn = $('.wcmp-product-categories-wrap .cat-column');
+                        getAllCatColumn.css("width", get_cat_width);
+                        
                     }
                 },
                 complete: function() {

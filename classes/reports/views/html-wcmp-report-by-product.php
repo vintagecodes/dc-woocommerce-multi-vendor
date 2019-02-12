@@ -48,28 +48,27 @@ global $WCMp;
 		<div class="left_align pad_left">
 			<form name="search_product_form" method="post" action="">
 				<p>
-					<select id="search_product" name="search_product" class="ajax_chosen_select_products_and_variations" data-placeholder="<?php _e('Search for a product...', 'dc-woocommerce-multi-vendor') ?>" style="min-width:210px;">
+					<select id="search_product" name="search_product" class="wc-product-search" data-placeholder="<?php _e('Search for a product...', 'dc-woocommerce-multi-vendor') ?>" data-action="wcmp_json_search_products_and_variations" style="min-width:210px;">
 						<?php echo $option; ?>
 					</select> 
-					<input type="button" style="vertical-align: top;" class="product_report_search" value="<?php _e( 'Show', 'dc-woocommerce-multi-vendor' ); ?>" />
+					<input type="button" style="vertical-align: top;" class="product_report_search submit button" value="<?php _e( 'Show', 'dc-woocommerce-multi-vendor' ); ?>" />
 				</p>
 			</form>
 		</div>
 	</div>
 	<div class="postbox sort_chart box_data">
-		<?php if( !empty($report_sort_arr) ) { ?>
-			<div class="sorting_box">
-				<span><b><?php _e( 'Sort By : ', 'dc-woocommerce-multi-vendor' ); ?></b></span>
-				<select name="product_report_sort" class="product_report_sort">
-					<option value="total_sales"><?php _e( 'Total Sales', 'dc-woocommerce-multi-vendor' ); ?></option>
-					<option value="admin_earning"><?php _e( 'Total Earnings', 'dc-woocommerce-multi-vendor' ); ?></option>
-				</select>
-				<input type="checkbox" class="low_to_high" name="low_to_high" value="checked" />
-				<button class="low_to_high_btn_product"><i class="fa fa-arrow-up"></i></button>
-				<input type="checkbox" class="high_to_low" name="high_to_low" value="checked" checked />
-				<button class="high_to_low_btn_product"><i class="fa fa-arrow-down"></i></button>
-			</div>
-		<?php } ?>
+                <div class="sorting_box">
+                        <span><b><?php _e( 'Sort By : ', 'dc-woocommerce-multi-vendor' ); ?></b></span>
+                        <select name="product_report_sort" class="product_report_sort">
+                                <option value="total_sales"><?php _e( 'Total Sales', 'dc-woocommerce-multi-vendor' ); ?></option>
+                                <option value="admin_earning"><?php _e( 'Admin Earnings', 'dc-woocommerce-multi-vendor' ); ?></option>
+                                <option value="vendor_earning"><?php _e( 'Vendor Earnings', 'dc-woocommerce-multi-vendor' ); ?></option>
+                        </select>
+                        <input type="checkbox" class="low_to_high" name="low_to_high" value="checked" />
+                        <button class="low_to_high_btn_product"><i class="dashicons dashicons-arrow-up-alt"></i></button>
+                        <input type="checkbox" class="high_to_low" name="high_to_low" value="checked" checked />
+                        <button class="high_to_low_btn_product"><i class="dashicons dashicons-arrow-down-alt"></i></button>
+                </div>
 		<div class="product_sort_chart">
 			<?php echo $report_html; ?>
 		</div>

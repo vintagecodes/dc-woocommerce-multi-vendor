@@ -1903,7 +1903,8 @@ textarea.form-control {
 }
 
 .bar1,
-.bar2 {
+.bar2,
+.bar3 {
     width: 30px;
     height: 15px;
     float: left;
@@ -1916,6 +1917,10 @@ textarea.form-control {
 
 .bar2 {
     background-color: #1dbb5c;
+    border-radius: 3px;
+}
+.bar3 {
+    background-color: #ddd30c;
     border-radius: 3px;
 }
 
@@ -1995,13 +2000,16 @@ textarea.form-control {
 .bars span.alt {
     background-color: #1dbb5c !important;
 }
+.bars span.vendor_bar {
+    background-color: #ddd30c !important;
+}
 
-i.fa-arrow-up {
+i.dashicons-arrow-up-alt {
     color: #AF938F;
     font-size: 16px;
 }
 
-i.fa-arrow-down {
+i.dashicons-arrow-down-alt {
     color: #AF9692;
     font-size: 16px;
     font-weight: 100;
@@ -2009,3 +2017,119 @@ i.fa-arrow-down {
 
 
 /*********************** Report End ***********************/
+
+/***********************  Shop order Suborder Icon ***********************/
+.widefat .column-wcmp_suborder mark{
+    display: block;
+    text-indent: -9999px;
+    position: relative;
+    height: 1em;
+    width: 1em;
+    background: 0 0;
+    font-size: 1.4em;
+    margin: 0 auto
+}
+.widefat .column-wcmp_suborder mark:after{
+    font-family: WooCommerce;
+    speak: none;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    text-indent: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center
+}
+
+.widefat .column-wcmp_suborder mark {
+    float: left;
+    margin-right: 8px;
+    font-size: 1.1em;
+    margin-top: 2px;
+}
+
+/* Suborder Icon */
+
+.widefat .column-wcmp_suborder mark.pending:after{
+    content: "\e012";
+    color: #ffba00
+}
+
+.widefat .column-wcmp_suborder mark.trash:after{
+    content: "\e602";
+    color: #a00
+}
+
+.widefat .column-wcmp_suborder mark.completed:after{
+    content: "\e015";
+    color: #2ea2cc
+}
+
+.widefat .column-wcmp_suborder mark.on-hold:after{
+    content: "\e033";
+    color: #999
+}
+
+.widefat .column-wcmp_suborder mark.failed:after{
+    content: "\e016";
+    color: #d0c21f
+}
+
+.widefat .column-wcmp_suborder mark.cancelled:after{
+    content: "\e013";
+    color: #a00
+}
+
+.widefat .column-wcmp_suborder mark.processing:after{
+    content: "\e011";
+    color: #73a724
+}
+
+.widefat .column-wcmp_suborder mark.refunded:after {
+    content: "\e014";
+    color: #999
+}
+
+#wcmp-commission-data button.handlediv, #wcmp-commission-data .hndle{ display: none;}
+/*#wcmp-commission-data{ padding: 23px 24px 12px; }*/
+#wcmp-commission-data .inside{ padding: 0; margin: 0;}
+#wcmp-commission-data h2 {
+    margin: 0;
+    font-family: HelveticaNeue-Light,'Helvetica Neue Light','Helvetica Neue',sans-serif;
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1.2;
+    text-shadow: 1px 1px 1px #fff;
+    padding: 0;
+}
+
+.wcmp-commission-amount a.edit_commission_amount {
+    width: 14px;
+    height: 0;
+    padding: 14px 0 0;
+    margin: 0 0 0 6px;
+    overflow: hidden;
+    position: relative;
+    color: #999;
+    border: 0;
+    float: right;
+}
+
+.wcmp-commission-amount a.edit_commission_amount::after {
+    font-family: Dashicons;
+    content: '\f464';
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    vertical-align: top;
+    line-height: 14px;
+    font-size: 14px;
+    font-weight: 400;
+}

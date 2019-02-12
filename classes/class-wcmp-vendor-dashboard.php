@@ -74,6 +74,7 @@ Class WCMp_Admin_Dashboard {
                             $response = $WCMp->payment_gateway->payment_gateways[$payment_method]->process_payment($vendor, $commissions, 'manual');
                             if ($response) {
                                 if (isset($response['transaction_id'])) {
+                                    do_action( 'wcmp_after_vendor_withdrawal_transaction_success', $response['transaction_id'] );
                                     $redirect_url = wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_transaction_details_endpoint', 'vendor', 'general', 'transaction-details'), $response['transaction_id']);
                                     $notice = $this->get_wcmp_transaction_notice($response['transaction_id']);
                                     if (isset($notice['type'])) {
@@ -431,10 +432,13 @@ Class WCMp_Admin_Dashboard {
                 // Only submit if the order has the product belonging to this vendor
                 $order = wc_get_order($_POST['order_id']);
                 $comment = esc_textarea($_POST['comment_text']);
-                $comment_id = $order->add_order_note($comment, 1);
+                $note_type = $_POST['note_type'];
+		$is_customer_note = ( 'customer' === $note_type ) ? 1 : 0;
+                $comment_id = $order->add_order_note($comment, $is_customer_note, true);
                 // update comment author & email
                 wp_update_comment(array('comment_ID' => $comment_id, 'comment_author' => $vendor->page_title, 'comment_author_email' => $vendor->user_data->user_email));
                 add_comment_meta($comment_id, '_vendor_id', $vendor->id);
+                wc_add_notice(__('Order note added', 'dc-woocommerce-multi-vendor'), 'success');
                 wp_redirect(esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders'), $order->get_id())));
                 die();
             }
@@ -469,11 +473,11 @@ Class WCMp_Admin_Dashboard {
         $vendor = get_wcmp_vendor($user->ID);
         $vendor = apply_filters('wcmp_vendor_dashboard_pages_vendor', $vendor);
         if ($vendor) {
-            $order_page = apply_filters('wcmp_vendor_view_order_page', true);
-            if ($order_page) {
-                $hook = add_menu_page(__('Orders', 'dc-woocommerce-multi-vendor'), __('Orders', 'dc-woocommerce-multi-vendor'), 'read', 'dc-vendor-orders', array($this, 'wcmp_vendor_orders_page'));
-                add_action("load-$hook", array($this, 'add_order_page_options'));
-            }
+//            $order_page = apply_filters('wcmp_vendor_view_order_page', true);
+//            if ($order_page) {
+//                $hook = add_menu_page(__('Orders', 'dc-woocommerce-multi-vendor'), __('Orders', 'dc-woocommerce-multi-vendor'), 'read', 'dc-vendor-orders', array($this, 'wcmp_vendor_orders_page'));
+//                add_action("load-$hook", array($this, 'add_order_page_options'));
+//            }
 
             $shipping_page = apply_filters('wcmp_vendor_view_shipping_page', true);
             if ($vendor->is_shipping_enable() && $shipping_page) {

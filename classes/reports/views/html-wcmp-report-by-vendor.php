@@ -51,25 +51,24 @@ global $WCMp;
 					<select id="vendor" name="vendor" class="ajax_chosen_select_vendor vendor_info" data-placeholder="<?php _e( 'Search for a vendor...', 'dc-woocommerce-multi-vendor' ); ?>" style="min-width:210px;">
 						<?php echo $option; ?>
 					</select>
-					<input type="button" style="vertical-align: top;" class="vendor_report_search" value="<?php _e( 'Show', 'dc-woocommerce-multi-vendor' ); ?>" />
+					<input type="button" style="vertical-align: top;" class="vendor_report_search submit button" value="<?php _e( 'Show', 'dc-woocommerce-multi-vendor' ); ?>" />
 				</p>
 			</form>
 		</div>
 	</div>
 	<div class="postbox box_data">
-		<?php if( !empty($report_sort_arr) ) { ?>
 			<div class="sorting_box">
 				<span><b><?php _e( 'Sort By : ', 'dc-woocommerce-multi-vendor' ); ?></b></span>
 				<select name="vendor_report_sort" class="vendor_report_sort">
 					<option value="total_sales"><?php _e( 'Total Sales', 'dc-woocommerce-multi-vendor' ); ?></option>
-					<option value="admin_earning"><?php _e( 'Total Earnings', 'dc-woocommerce-multi-vendor' ); ?></option>
+					<option value="admin_earning"><?php _e( 'Admin Earnings', 'dc-woocommerce-multi-vendor' ); ?></option>
+                                        <option value="vendor_earning"><?php _e( 'Vendor Earnings', 'dc-woocommerce-multi-vendor' ); ?></option>
 				</select>
 				<input type="checkbox" class="low_to_high" name="low_to_high" value="checked" />
-				<button class="low_to_high_btn_vendor"><i class="fa fa-arrow-up"></i></button>
-				<input type="checkbox" class="high_to_low" name="high_to_low" value="checked" checked />
-				<button class="high_to_low_btn_vendor"><i class="fa fa-arrow-down"></i></button>
+				<button class="low_to_high_btn_vendor"><i class="dashicons dashicons-arrow-up-alt"></i></button>
+				<input type="checkbox" class="high_to_low" name="high_to_low" value="checked" />
+				<button class="high_to_low_btn_vendor"><i class="dashicons dashicons-arrow-down-alt"></i></button>
 			</div>
-		<?php } ?>
 		<div class="sort_chart">
 			<?php echo $html_chart; ?>
 		</div>

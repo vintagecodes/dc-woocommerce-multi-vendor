@@ -55,8 +55,9 @@ abstract class WCMp_Payment_Gateway {
         $transaction_total = 0;
         if (is_array($this->commissions)) {
             foreach ($this->commissions as $commission) {
-                $commission_amount = get_wcmp_vendor_order_amount(array('commission_id' => $commission, 'vendor_id' => $this->vendor->id));
-                $transaction_total += (float) $commission_amount['total'];
+                $commission_amount = WCMp_Commission::commission_totals($commission, 'edit');
+                //$commission_amount = get_wcmp_vendor_order_amount(array('commission_id' => $commission, 'vendor_id' => $this->vendor->id));
+                $transaction_total += (float) $commission_amount;
             }
         }
         return apply_filters('wcmp_commission_transaction_amount', $transaction_total, $this->vendor->id, $this->commissions, $this->payment_gateway);
@@ -156,7 +157,7 @@ abstract class WCMp_Payment_Gateway {
                 update_post_meta($this->transaction_id, 'paid_date', date("Y-m-d H:i:s"));
             }
         }
-        do_action('wcmp_transaction_update_meta_data', $commission_status, $this->transaction_id, $this->vendor);
+        do_action('wcmp_transaction_update_meta_data', $commission_status, $this->transaction_id, $this->vendor, $this);
     }
 
     public function email_notify($commission_status = 'wcmp_processing') {

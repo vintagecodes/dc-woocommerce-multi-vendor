@@ -30,10 +30,12 @@ class WCMp_Frontend {
         add_filter('woocommerce_cart_shipping_packages', array(&$this, 'wcmp_split_shipping_packages'), 0);
         // Rename woocommerce shipping packages
         add_filter('woocommerce_shipping_package_name', array(&$this, 'woocommerce_shipping_package_name'), 10, 3);
-        // Add extra vendor_id to shipping packages
-        add_action('woocommerce_checkout_create_order_shipping_item', array(&$this, 'add_meta_date_in_shipping_package'), 10, 4);
-        // processed woocomerce checkout order data
-        add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_checkout_order_processed'), 30, 3);
+        if (is_wcmp_version_less_3_4_0()) {
+            // Add extra vendor_id to shipping packages
+            add_action('woocommerce_checkout_create_order_shipping_item', array(&$this, 'add_meta_date_in_shipping_package'), 10, 4);
+            // processed woocomerce checkout order data
+            add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_checkout_order_processed'), 30, 3);
+        }
         // store visitors stats
         add_action('template_redirect', array(&$this, 'wcmp_store_visitors_stats'), 99);
     }

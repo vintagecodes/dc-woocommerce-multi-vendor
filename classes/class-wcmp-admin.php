@@ -24,7 +24,7 @@ class WCMp_Admin {
         add_action('delete_post', array($this, 'remove_commission_from_sales_report'), 10);
         add_action('trashed_post', array($this, 'remove_commission_from_sales_report'), 10);
         add_action('untrashed_post', array($this, 'restore_commission_from_sales_report'), 10);
-        add_action('woocommerce_order_status_changed', array($this, 'change_commission_status'), 20, 3);
+        //add_action('woocommerce_order_status_changed', array($this, 'change_commission_status'), 20, 3);
         if (get_wcmp_vendor_settings('is_singleproductmultiseller', 'general') == 'Enable') {
             add_action('admin_enqueue_scripts', array($this, 'wcmp_kill_auto_save'));
         }
@@ -44,7 +44,7 @@ class WCMp_Admin {
         // Admin notice for advance frontend modules (Temp)
         add_action('admin_notices', array(&$this, 'advance_frontend_manager_notice'));
     }
-
+    
     function add_hidden_order_items($order_items) {
         $order_items[] = '_give_tax_to_vendor';
         $order_items[] = '_give_shipping_to_vendor';
@@ -337,6 +337,7 @@ class WCMp_Admin {
             'toplevel_page_wc-reports',
             'product',
             'edit-product',
+            'edit-shop_order',
             'user-edit',
             'profile',
             'users',
@@ -423,6 +424,7 @@ class WCMp_Admin {
             if (!wp_style_is('woocommerce_chosen_styles', 'queue')) {
                 wp_enqueue_style('woocommerce_chosen_styles', $WCMp->plugin_url . '/assets/admin/css/chosen' . $suffix . '.css');
             }
+            wp_enqueue_style( 'woocommerce_admin_styles' );
             wp_enqueue_script('WCMp_chosen');
             wp_enqueue_script('WCMp_ajax-chosen');
             wp_enqueue_script('wcmp-admin-commission-js');

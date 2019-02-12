@@ -20,6 +20,7 @@ class WCMp_Vendor_Hooks {
         add_action( 'wcmp_vendor_dashboard_vendor-billing_endpoint', array( &$this, 'wcmp_vendor_dashboard_vendor_billing_endpoint' ) );
         add_action( 'wcmp_vendor_dashboard_vendor-shipping_endpoint', array( &$this, 'wcmp_vendor_dashboard_vendor_shipping_endpoint' ) );
         add_action( 'wcmp_vendor_dashboard_vendor-report_endpoint', array( &$this, 'wcmp_vendor_dashboard_vendor_report_endpoint' ) );
+        //add_action( 'wcmp_vendor_dashboard_banking-overview_endpoint', array( &$this, 'wcmp_vendor_dashboard_banking_overview_endpoint' ) );
 
         add_action( 'wcmp_vendor_dashboard_add-product_endpoint', array( &$this, 'wcmp_vendor_dashboard_add_product_endpoint' ) );
         add_action( 'wcmp_vendor_dashboard_edit-product_endpoint', array( &$this, 'wcmp_vendor_dashboard_edit_product_endpoint' ) );
@@ -172,7 +173,15 @@ class WCMp_Vendor_Hooks {
                         , 'position'    => 10
                         , 'link_target' => '_self'
                         , 'nav_icon'    => 'wcmp-font ico-reports-icon'
-                    )
+                    ),
+//                    'banking-overview' => array(
+//                        'label'       => __( 'Banking Overview', 'dc-woocommerce-multi-vendor' )
+//                        , 'url'         => wcmp_get_vendor_dashboard_endpoint_url( get_wcmp_vendor_settings( 'wcmp_vendor_banking_overview_endpoint', 'vendor', 'general', 'banking-overview' ) )
+//                        , 'capability'  => apply_filters( 'wcmp_vendor_dashboard_menu_vendor_banking_report_capability', true )
+//                        , 'position'    => 20
+//                        , 'link_target' => '_self'
+//                        , 'nav_icon'    => 'wcmp-font ico-reports-icon'
+//                    )
                 )
                 , 'link_target' => '_self'
                 , 'nav_icon'    => 'wcmp-font ico-reports-icon'
@@ -430,6 +439,20 @@ class WCMp_Vendor_Hooks {
         $array_report = $WCMp_Plugin_Post_Reports->vendor_sales_stat_overview( $vendor, $start_date, $end_date );
         $WCMp->template->get_template( 'vendor-dashboard/vendor-report.php', $array_report );
     }
+    
+    public function wcmp_vendor_dashboard_banking_overview_endpoint() {
+        global $WCMp;
+        $table_headers = apply_filters('wcmp_vendor_dashboard_banking_overview_table_headers', array(
+            'status'        => array('label' => '', 'class' => 'text-center'),
+            'date'          => array('label' => __( 'Date', 'dc-woocommerce-multi-vendor' )),
+            'ref_type'      => array('label' => __( 'Type', 'dc-woocommerce-multi-vendor' )),
+            'ref_info'      => array('label' => __( 'Reference', 'dc-woocommerce-multi-vendor' )),
+            'credit'        => array('label' => __( 'Credit', 'dc-woocommerce-multi-vendor' )),
+            'debit'         => array('label' => __( 'Debit', 'dc-woocommerce-multi-vendor' )),
+        ), get_current_user_id());
+        $WCMp->library->load_dataTable_lib();
+        $WCMp->template->get_template( 'vendor-dashboard/vendor-reports/vendor-ledger.php', array( 'table_headers' => $table_headers ) );
+    }
 
     public function wcmp_vendor_dashboard_add_product_endpoint() {
         global $WCMp, $wp;
@@ -556,6 +579,7 @@ class WCMp_Vendor_Hooks {
     public function wcmp_vendor_dashboard_vendor_orders_endpoint() {
         global $WCMp, $wp;
         $vendor = get_current_vendor();
+        $suffix       = defined( 'WCMP_SCRIPT_DEBUG' ) && WCMP_SCRIPT_DEBUG ? '' : '.min';
         if ( isset( $_POST['wcmp-submit-mark-as-ship'] ) ) {
             $order_id = $_POST['order_id'];
             $tracking_id = $_POST['tracking_id'];
@@ -564,6 +588,59 @@ class WCMp_Vendor_Hooks {
         }
         $vendor_order = $wp->query_vars[get_wcmp_vendor_settings( 'wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders' )];
         if ( ! empty( $vendor_order ) ) {
+            $order = wc_get_order( $vendor_order );
+            $WCMp->library->load_select2_lib();
+            wp_register_script( 'jquery-tiptip', WC()->plugin_url() . '/assets/js/jquery-tiptip/jquery.tipTip' . $suffix . '.js', array( 'jquery' ), WC_VERSION, true );
+            wp_register_script( 'wc-clipboard', WC()->plugin_url() . '/assets/js/admin/wc-clipboard' . $suffix . '.js', array( 'jquery' ), WC_VERSION );
+            wp_register_script( 'selectWoo', WC()->plugin_url() . '/assets/js/selectWoo/selectWoo.full' . $suffix . '.js', array( 'jquery' ), '1.0.4' );
+            wp_register_script( 'wc-enhanced-select', WC()->plugin_url() . '/assets/js/admin/wc-enhanced-select' . $suffix . '.js', array( 'jquery', 'selectWoo' ), WC_VERSION );
+            wp_localize_script(
+                    'wc-enhanced-select',
+                    'wc_enhanced_select_params',
+                    array(
+                            'i18n_no_matches'           => _x( 'No matches found', 'enhanced select', 'woocommerce' ),
+                            'i18n_ajax_error'           => _x( 'Loading failed', 'enhanced select', 'woocommerce' ),
+                            'i18n_input_too_short_1'    => _x( 'Please enter 1 or more characters', 'enhanced select', 'woocommerce' ),
+                            'i18n_input_too_short_n'    => _x( 'Please enter %qty% or more characters', 'enhanced select', 'woocommerce' ),
+                            'i18n_input_too_long_1'     => _x( 'Please delete 1 character', 'enhanced select', 'woocommerce' ),
+                            'i18n_input_too_long_n'     => _x( 'Please delete %qty% characters', 'enhanced select', 'woocommerce' ),
+                            'i18n_selection_too_long_1' => _x( 'You can only select 1 item', 'enhanced select', 'woocommerce' ),
+                            'i18n_selection_too_long_n' => _x( 'You can only select %qty% items', 'enhanced select', 'woocommerce' ),
+                            'i18n_load_more'            => _x( 'Loading more results&hellip;', 'enhanced select', 'woocommerce' ),
+                            'i18n_searching'            => _x( 'Searching&hellip;', 'enhanced select', 'woocommerce' ),
+                            'ajax_url'                  => admin_url( 'admin-ajax.php' ),
+                            'search_products_nonce'     => wp_create_nonce( 'search-products' ),
+                            'search_customers_nonce'    => wp_create_nonce( 'search-customers' ),
+                            'search_categories_nonce'   => wp_create_nonce( 'search-categories' ),
+                    )
+            );
+            wp_enqueue_script('selectWoo');
+            wp_enqueue_script('wc-clipboard');
+            wp_enqueue_script('jquery-tiptip');
+            wp_enqueue_script('wc-enhanced-select');
+            wp_register_script('wcmp_order_details_js', $WCMp->plugin_url . 'assets/frontend/js/wcmp-order-details.js', array('jquery', 'accounting', 'jquery-tiptip', 'wc-enhanced-select', 'wc-clipboard'), $WCMp->version, true);
+            wp_enqueue_script('wcmp_order_details_js');
+            wp_localize_script(
+                    'wcmp_order_details_js',
+                    'wcmp_order_details_js_script_data',
+                    array(
+                        'i18n_do_refund'                => __( 'Are you sure you wish to process this refund? This action cannot be undone.', 'woocommerce' ),
+                        'post_id'                       => isset( $vendor_order ) ? $vendor_order : '',
+                        'order_item_nonce'              => wp_create_nonce( 'wcmp-order-item' ),
+                        'grant_access_nonce'            => wp_create_nonce( 'grant-access' ),
+                        'revoke_access_nonce'           => wp_create_nonce( 'revoke-access' ),
+                        'mon_decimal_point'             => wc_get_price_decimal_separator(),
+                        'ajax_url'                      => admin_url( 'admin-ajax.php' ),
+                        'currency_format_num_decimals'  => wc_get_price_decimals(),
+                        'currency_format_symbol'        => get_woocommerce_currency_symbol( $order->get_currency() ),
+                        'currency_format_decimal_sep'   => esc_attr( wc_get_price_decimal_separator() ),
+                        'currency_format_thousand_sep'  => esc_attr( wc_get_price_thousand_separator() ),
+                        'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS.
+                        'rounding_precision'            => wc_get_rounding_precision(),
+                        'i18n_download_permission_fail' => __( 'Could not grant access - the user may already have permission for this file or billing email is not set. Ensure the billing email is set, and the order has been saved.', 'woocommerce' ),
+                        'i18n_permission_revoke'        => __( 'Are you sure you want to revoke access to this download?', 'woocommerce' ),
+                    )
+            );
             $WCMp->template->get_template( 'vendor-dashboard/vendor-orders/vendor-order-details.php', array( 'order_id' => $vendor_order ) );
         } else {
             $WCMp->library->load_dataTable_lib();

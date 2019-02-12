@@ -32,6 +32,8 @@ final class WCMp {
     public $settings;
     public $wcmp_wp_fields;
     public $user;
+    public $order;
+    public $report;
     public $vendor_caps;
     public $vendor_dashboard;
     public $transaction;
@@ -45,6 +47,7 @@ final class WCMp {
     public $product_qna;
     public $commission;
     public $shipping_gateway;
+    public $ledger;
 
     /**
      * Class construct
@@ -64,7 +67,8 @@ final class WCMp {
         $this->init_stripe_library();
         // Init payment gateways
         $this->init_payment_gateway();
-
+        // includes functions
+        $this->includes();
         // Intialize Crons
         $this->init_cron_job();
         // Load Woo helper
@@ -161,6 +165,9 @@ final class WCMp {
         // Init Calculate commission class
         $this->load_class('calculate-commission');
         $this->commission = new WCMp_Calculate_Commission();
+        // Init Calculate commission class
+        $this->load_class('order');
+        $this->order = new WCMp_Order();
         // Init product vendor taxonomies
         $this->init_taxonomy();
         // Init product action class 
@@ -178,17 +185,16 @@ final class WCMp {
         $this->library->load_jquery_style_lib();
         // Init user roles
         $this->init_user_roles();
-
         // Init custom reports
         $this->init_custom_reports();
-
         // Init vendor dashboard
         $this->init_vendor_dashboard();
         // Init vendor coupon
         $this->init_vendor_coupon();
-        
         // Init WCMp API
         $this->init_wcmp_rest_api();
+        // Init Ledger
+        //$this->init_ledger();
         
         if (!wp_next_scheduled('migrate_spmv_multivendor_table') && !get_option('spmv_multivendor_table_migrated', false)) {
             wp_schedule_event(time(), 'every_5minute', 'migrate_spmv_multivendor_table');
@@ -209,6 +215,16 @@ final class WCMp {
         $previous_plugin_version = get_option('dc_product_vendor_plugin_db_version');
         /* Migrate WCMp data */
         do_wcmp_data_migrate($previous_plugin_version, $this->version);
+    }
+    
+    /**
+     * Include required core files used in admin and on the frontend.
+     */
+    public function includes() {
+        /**
+         * Core functionalities.
+         */
+        include_once ($this->plugin_path . "/includes/wcmp-order-functions.php" );
     }
 
     /**
@@ -331,7 +347,7 @@ final class WCMp {
     function init_custom_reports() {
         // Init custom report
         $this->load_class('report');
-        new WCMp_Report();
+        $this->report = new WCMp_Report();
     }
 
     /**
@@ -421,6 +437,17 @@ final class WCMp {
     function init_vendor_coupon() {
         $this->load_class('coupon');
         $this->coupon = new WCMp_Coupon();
+    }
+    
+    /**
+     * Init Ledger
+     *
+     * @access public
+     * @return void
+     */
+    function init_ledger() {
+        $this->load_class('ledger');
+        $this->ledger = new WCMp_Ledger();
     }
 
     /**

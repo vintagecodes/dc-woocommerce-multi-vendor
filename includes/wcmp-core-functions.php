@@ -1630,6 +1630,21 @@ if (!function_exists('do_wcmp_data_migrate')) {
                     }
                 }
             }
+            if (version_compare($previous_plugin_version, '3.4.0', '<=')) {
+                $args = array('role' => 'dc_vendor', 'fields' => 'ids', 'orderby' => 'registered', 'order' => 'ASC');
+                $user_query = new WP_User_Query($args);
+                if ( !get_option( 'user_wcmp_vendor_role_updated' ) && !empty( $user_query->results ) ) {
+                    foreach ( $user_query->results as $vendor_id ) {
+                        $user = new WP_User( $vendor_id );
+                        $user->add_cap( 'edit_shop_orders' );
+                    }
+                    update_option( 'user_wcmp_vendor_role_updated', true );
+                }
+                
+                if( !get_option('wcmp_orders_table_migrated') && !wp_next_scheduled('wcmp_orders_migration') ){
+                    wp_schedule_event( time(), 'hourly', 'wcmp_orders_migration' );
+                }
+            }
             /* Migrate commission data into table */
             do_wcmp_commission_data_migrate();
         }
@@ -3512,14 +3527,14 @@ if (!function_exists('wcmp_get_shipping_zone')) {
 
     function wcmp_get_shipping_zone($zoneID = '') {
         $zones = array();
-		if( class_exists( 'WCMP_Shipping_Zone' ) ) :
-			if ( isset($zoneID) && $zoneID != '' ) {
-				$zones = WCMP_Shipping_Zone::get_zone($zoneID);
-			} else {
-				$zones = WCMP_Shipping_Zone::get_zones();
-			}
-		endif;
-		return $zones;
+        if( class_exists( 'WCMP_Shipping_Zone' ) ) :
+            if (isset($zoneID) && $zoneID != '') {
+                $zones = WCMP_Shipping_Zone::get_zone($zoneID);
+            } else {
+                $zones = WCMP_Shipping_Zone::get_zones();
+            }
+        endif;
+        return $zones;
     }
 
 }
@@ -4046,5 +4061,37 @@ if ( ! function_exists( 'wcmp_get_price_to_display' ) ) {
             $price_html = $product->get_price_html();
         }
         return apply_filters( 'wcmp_get_price_to_display', $price_html, $product, $args );
+    }
+}
+
+if (!function_exists('is_wcmp_version_less_3_4_0')) {
+
+    /**
+     * Check WCmp current version is less than 3.4.0
+     *
+     * @return boolean true/false
+     */
+    function is_wcmp_version_less_3_4_0() {
+        $current_wcmp = get_option('dc_product_vendor_plugin_db_version');
+        //return version_compare( $current_wcmp, '3.4.0', '<' );
+        return false;
+    }
+}
+
+if (!function_exists('wcmp_get_commission_statuses')) {
+    /**
+     * Get all commission statuses.
+     *
+     * @since 3.2.0
+     * @return array
+     */
+    function wcmp_get_commission_statuses() {
+        $commission_statuses = array(
+            'paid'              => __( 'Paid', 'dc-woocommerce-multi-vendor' ),
+            'unpaid'            => __( 'Unpaid', 'dc-woocommerce-multi-vendor' ),
+            'refunded'          => __( 'Refunded', 'dc-woocommerce-multi-vendor' ),
+            'partial_refunded'  => __( 'Partial refunded', 'dc-woocommerce-multi-vendor' ),
+        );
+        return apply_filters( 'wcmp_get_commission_statuses', $commission_statuses );
     }
 }

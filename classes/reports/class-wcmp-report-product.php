@@ -64,7 +64,7 @@ class WCMp_Report_Product extends WC_Admin_Report {
         $product_report = $report_bk = array();
 
 
-        $args = array(
+        $args = apply_filters( 'wcmp_report_data_product_query_args', array(
             'post_type' => 'shop_order',
             'posts_per_page' => -1,
             'post_status' => array('wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed'),
@@ -88,7 +88,17 @@ class WCMp_Report_Product extends WC_Admin_Report {
                     'day' => date('j', $this->end_date),
                 ),
             )
-        );
+        ) );
+        
+        // for vendor end
+        if( is_user_wcmp_vendor( get_current_user_id() ) ){
+            $args['author'] = get_current_user_id();
+            $args['meta_query'][] = array(
+                        'key' => '_vendor_id',
+                        'value' => get_current_user_id(),
+                        'compare' => '='
+                    );
+        }
 
         $qry = new WP_Query($args);
 
@@ -97,44 +107,72 @@ class WCMp_Report_Product extends WC_Admin_Report {
         if (!empty($orders)) {
 
             $gross_sales = $my_earning = $vendor_earning = 0;
+            $pro_total = $vendor_total = array();
             foreach ($orders as $order_obj) {
-                $order = wc_get_order($order_obj->ID);
-                if ($vendor = get_wcmp_vendor(get_current_vendor_id())) {
-                    $vendors_orders = get_wcmp_vendor_orders(array('order_id' => $order->get_id(), 'vendor_id' => get_current_vendor_id()));
-                } else {
-                    $vendors_orders = get_wcmp_vendor_orders(array('order_id' => $order->get_id()));
+                try {
+                    $order = wc_get_order($order_obj->ID);
+                    if ($order) :
+                        $vendor_order = wcmp_get_order($order->get_id());
+                        if( $vendor_order ){
+                            $line_items = $order->get_items( 'line_item' );
+                            
+                            foreach ($line_items as $item_id => $item) {
+                                $pro_total[$item->get_product_id()] = isset( $pro_total[$item->get_product_id()] ) ? $pro_total[$item->get_product_id()] + $item->get_subtotal() : $item->get_subtotal();
+                                $total_sales[$item->get_product_id()]['product_id'] = $item->get_product_id();
+                                $total_sales[$item->get_product_id()]['total_sales'] = $pro_total[$item->get_product_id()];
+                                $meta_data = $item->get_meta_data();
+                                // get item commission
+                                foreach ( $meta_data as $meta ) {
+                                    if($meta->key == '_vendor_item_commission'){
+                                        $vendor_total[$item->get_product_id()] = isset( $vendor_total[$item->get_product_id()] ) ? $vendor_total[$item->get_product_id()] + floatval($meta->value) : floatval($meta->value);
+                                        $total_sales[$item->get_product_id()]['vendor_earning'] = $vendor_total[$item->get_product_id()];
+                                    }
+                                }
+                                // admin part
+                                $total_sales[$item->get_product_id()]['admin_earning'] = $total_sales[$item->get_product_id()]['total_sales'] - $total_sales[$item->get_product_id()]['vendor_earning'];
+                            }
+                        }
+                    endif;
+                } catch (Exception $ex) {
+
                 }
-
-                foreach ($vendors_orders as $key => $v_order) {
-                    try {
-                        $item = new WC_Order_Item_Product($v_order->order_item_id);
-                        $gross_sales += $item->get_subtotal();
-                        $total_sales[$v_order->product_id] = isset($total_sales[$v_order->product_id]) ? ( $total_sales[$v_order->product_id] + $item->get_subtotal() ) : $item->get_subtotal();
-                        $vendors_orders_amount = get_wcmp_vendor_order_amount(array('order_id' => $order->get_id(), 'product_id' => $v_order->product_id));
-
-                        $vendor_earning = $vendors_orders_amount['commission_amount'];
-                        if ($vendor = get_wcmp_vendor(get_current_vendor_id())) {
-                            $admin_earnings[$v_order->product_id] = isset($admin_earnings[$v_order->product_id]) ? ( $admin_earnings[$v_order->product_id] + $vendor_earning ) : $vendor_earning;
-                        } else {
-                            $admin_earnings[$v_order->product_id] = isset($admin_earnings[$v_order->product_id]) ? ( $admin_earnings[$v_order->product_id] + $item->get_subtotal() - $vendor_earning ) : $item->get_subtotal() - $vendor_earning;
-                        }
-
-                        if ($total_sales[$v_order->product_id] > $max_total_sales) {
-                            $max_total_sales = $total_sales[$v_order->product_id];
-                        }
-
-                        if (!empty($total_sales[$v_order->product_id]) && !empty($admin_earnings[$v_order->product_id])) {
-                            $product_report[$index]['product_id'] = $v_order->product_id;
-                            $product_report[$index]['total_sales'] = $total_sales[$v_order->product_id];
-                            $product_report[$index++]['admin_earning'] = $admin_earnings[$v_order->product_id];
-
-                            $report_bk[$v_order->product_id]['total_sales'] = $total_sales[$v_order->product_id];
-                            $report_bk[$v_order->product_id]['admin_earning'] = $admin_earnings[$v_order->product_id];
-                        }
-                    } catch (Exception $ex) {
-                        
-                    }
-                }
+                
+//                if ($vendor = get_wcmp_vendor(get_current_vendor_id())) {
+//                    $vendors_orders = get_wcmp_vendor_orders(array('order_id' => $order->get_id(), 'vendor_id' => get_current_vendor_id()));
+//                } else {
+//                    $vendors_orders = get_wcmp_vendor_orders(array('order_id' => $order->get_id()));
+//                }
+//
+//                foreach ($vendors_orders as $key => $v_order) {
+//                    try {
+//                        $item = new WC_Order_Item_Product($v_order->order_item_id);
+//                        $gross_sales += $item->get_subtotal();
+//                        $total_sales[$v_order->product_id] = isset($total_sales[$v_order->product_id]) ? ( $total_sales[$v_order->product_id] + $item->get_subtotal() ) : $item->get_subtotal();
+//                        $vendors_orders_amount = get_wcmp_vendor_order_amount(array('order_id' => $order->get_id(), 'product_id' => $v_order->product_id));
+//
+//                        $vendor_earning = $vendors_orders_amount['commission_amount'];
+//                        if ($vendor = get_wcmp_vendor(get_current_vendor_id())) {
+//                            $admin_earnings[$v_order->product_id] = isset($admin_earnings[$v_order->product_id]) ? ( $admin_earnings[$v_order->product_id] + $vendor_earning ) : $vendor_earning;
+//                        } else {
+//                            $admin_earnings[$v_order->product_id] = isset($admin_earnings[$v_order->product_id]) ? ( $admin_earnings[$v_order->product_id] + $item->get_subtotal() - $vendor_earning ) : $item->get_subtotal() - $vendor_earning;
+//                        }
+//
+//                        if ($total_sales[$v_order->product_id] > $max_total_sales) {
+//                            $max_total_sales = $total_sales[$v_order->product_id];
+//                        }
+//
+//                        if (!empty($total_sales[$v_order->product_id]) && !empty($admin_earnings[$v_order->product_id])) {
+//                            $product_report[$index]['product_id'] = $v_order->product_id;
+//                            $product_report[$index]['total_sales'] = $total_sales[$v_order->product_id];
+//                            $product_report[$index++]['admin_earning'] = $admin_earnings[$v_order->product_id];
+//
+//                            $report_bk[$v_order->product_id]['total_sales'] = $total_sales[$v_order->product_id];
+//                            $report_bk[$v_order->product_id]['admin_earning'] = $admin_earnings[$v_order->product_id];
+//                        }
+//                    } catch (Exception $ex) {
+//                        
+//                    }
+//                }
             }
 
 
@@ -160,30 +198,28 @@ class WCMp_Report_Product extends WC_Admin_Report {
                 }
             }
 
-            wp_localize_script('wcmp_report_js', 'wcmp_report_product', array('product_report' => $product_report,
-                'report_bk' => $report_bk,
-                'total_sales_sort' => $total_sales_sort,
-                'admin_earning_sort' => $admin_earning_sort,
-                'max_total_sales' => $max_total_sales,
+            wp_localize_script('wcmp_report_js', 'wcmp_report_product', array(
+                'total_sales_arr' => $total_sales,
+                'orders' => $orders,
                 'start_date' => $start_date,
                 'end_date' => $end_date
             ));
 
             $report_chart = $report_html = '';
-            if (sizeof($report_sort_arr) > 0) {
-                foreach ($report_sort_arr as $product_id => $sales_report) {
-                    $width = ( $sales_report['total_sales'] > 0 ) ? ( round($sales_report['total_sales']) / round($max_total_sales) ) * 100 : 0;
-                    $width2 = ( $sales_report['admin_earning'] > 0 ) ? ( round($sales_report['admin_earning']) / round($max_total_sales) ) * 100 : 0;
-
-                    if ($product = wc_get_product($product_id)) {
-
+            if (sizeof($total_sales) > 0) {
+                foreach ($total_sales as $product_id => $sales_report) {
+                    $total_sales_width = ( $sales_report['total_sales'] > 0 ) ? round($sales_report['total_sales']) / round($sales_report['total_sales']) * 100 : 0;
+                    $admin_earning_width = ( $sales_report['admin_earning'] > 0 ) ? ( $sales_report['admin_earning'] / round($sales_report['total_sales']) ) * 100 : 0;
+                    $vendor_earning_width = ( $sales_report['vendor_earning'] > 0 ) ? ( $sales_report['vendor_earning'] / round($sales_report['total_sales']) ) * 100 : 0;
+                    $product = wc_get_product($product_id);
+                    if( $product ) {
                         $product_url = admin_url('post.php?post=' . $product_id . '&action=edit');
-
                         $report_chart .= '<tr><th><a href="' . $product_url . '">' . $product->get_title() . '</a></th>
-						<td width="1%"><span>' . wc_price($sales_report['total_sales']) . '</span><span class="alt">' . wc_price($sales_report['admin_earning']) . '</span></td>
+						<td width="1%"><span>' . wc_price($sales_report['total_sales']) . '</span><span class="alt">' . wc_price($sales_report['admin_earning']) . '</span><span class="alt">' . wc_price($sales_report['vendor_earning']) . '</span></td>
 						<td class="bars">
-							<span style="width:' . esc_attr($width) . '%">&nbsp;</span>
-							<span class="alt" style="width:' . esc_attr($width2) . '%">&nbsp;</span>
+                                                    <span class="gross_bar" style="width:' . esc_attr($total_sales_width) . '%">&nbsp;</span>
+                                                    <span class="admin_bar alt" style="width:' . esc_attr($admin_earning_width) . '%">&nbsp;</span>
+                                                    <span class="vendor_bar alt" style="width:' . esc_attr($vendor_earning_width) . '%">&nbsp;</span>
 						</td></tr>';
                     }
                 }
@@ -192,9 +228,11 @@ class WCMp_Report_Product extends WC_Admin_Report {
 					<h4>' . __("Sales and Earnings", 'dc-woocommerce-multi-vendor') . '</h4>
 					<div class="bar_indecator">
 						<div class="bar1">&nbsp;</div>
-						<span class="">' . __("Gross Sales", 'dc-woocommerce-multi-vendor') . '</span>
+						<span class="">' . __('Gross Sales', 'dc-woocommerce-multi-vendor') . '</span>
 						<div class="bar2">&nbsp;</div>
-						<span class="">' . __("My Earnings", 'dc-woocommerce-multi-vendor') . '</span>
+						<span class="">' . __('Admin Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+                                                <div class="bar3">&nbsp;</div>
+						<span class="">' . __('Vendor Earnings', 'dc-woocommerce-multi-vendor') . '</span>
 					</div>
 					<table class="bar_chart">
 						<thead>

@@ -1802,6 +1802,7 @@ class WCMp_Product {
     
     public function show_default_product_cats_product_single( $terms = array() ){
         global $product;
+        if( !is_object( $product )) $product = wc_get_product( get_the_ID() );
         if(is_product() && $product){
             $default_cat_hierarchy = get_post_meta( $product->get_id(), '_default_cat_hierarchy_term_id', true );
             if( !$default_cat_hierarchy ) return $terms;

@@ -13,6 +13,7 @@ if (!defined('ABSPATH'))
 global $WCMp;
 $vendor = get_wcmp_vendor(absint($vendor_id));
 do_action( 'woocommerce_email_header', $email_heading, $email );
+$text_align = is_rtl() ? 'right' : 'left';
 ?>
 
 <p><?php printf(__('A new order was received and marked as processing from %s. Their order is as follows:', 'dc-woocommerce-multi-vendor'), $order->get_billing_first_name() . ' ' . $order->get_billing_last_name()); ?></p>
@@ -22,9 +23,9 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
     <thead>
         <tr>
             <?php do_action('wcmp_before_vendor_order_table_header', $order, $vendor->term_id); ?>
-            <th scope="col" style="text-align:left; border: 1px solid #eee;"><?php _e('Product', 'dc-woocommerce-multi-vendor'); ?></th>
-            <th scope="col" style="text-align:left; border: 1px solid #eee;"><?php _e('Quantity', 'dc-woocommerce-multi-vendor'); ?></th>
-            <th scope="col" style="text-align:left; border: 1px solid #eee;"><?php _e('Commission', 'dc-woocommerce-multi-vendor'); ?></th>
+            <th scope="col" style="text-align:<?php echo $text_align; ?>; border: 1px solid #eee;"><?php _e('Product', 'dc-woocommerce-multi-vendor'); ?></th>
+            <th scope="col" style="text-align:<?php echo $text_align; ?>; border: 1px solid #eee;"><?php _e('Quantity', 'dc-woocommerce-multi-vendor'); ?></th>
+            <th scope="col" style="text-align:<?php echo $text_align; ?>; border: 1px solid #eee;"><?php _e('Commission', 'dc-woocommerce-multi-vendor'); ?></th>
             <?php do_action('wcmp_after_vendor_order_table_header', $order, $vendor->term_id); ?>
         </tr>
     </thead>
@@ -45,15 +46,15 @@ if (apply_filters('show_cust_order_calulations_field', true, $vendor->id)) {
             foreach ($totals as $total_key => $total) {
                 ?><tr>
                     <th scope="row" colspan="2" style="text-align:left; border: 1px solid #eee;"><?php echo $total['label']; ?></th>
-                    <td style="text-align:left; border: 1px solid #eee;"><?php echo $total['value']; ?></td>
+                    <td style="text-align:<?php echo $text_align; ?>; border: 1px solid #eee;"><?php echo $total['value']; ?></td>
                 </tr><?php
             }
         }
         ?>
     </table>
     <?php
-}
-if (apply_filters('show_cust_address_field', true, $vendor->id)) {
+    }
+    if (apply_filters('show_cust_address_field', true, $vendor->id)) {
     ?>
     <h2><?php _e('Customer Details', 'dc-woocommerce-multi-vendor'); ?></h2>
     <?php if ($order->get_billing_email()) { ?>
@@ -63,36 +64,26 @@ if (apply_filters('show_cust_address_field', true, $vendor->id)) {
     <?php if ($order->get_billing_phone()) { ?>
         <p><strong><?php _e('Telephone:', 'dc-woocommerce-multi-vendor'); ?></strong> <?php echo $order->get_billing_phone(); ?></p>
     <?php
+        }
     }
-}
-if (apply_filters('show_cust_billing_address_field', true, $vendor->id)) {
     ?>
-    <table cellspacing="0" cellpadding="0" style="width: 100%; vertical-align: top;" border="0">
-        <tr>
-            <td valign="top" width="50%">
-                <h3><?php _e('Billing Address', 'dc-woocommerce-multi-vendor'); ?></h3>
-                <p><?php echo $order->get_formatted_billing_address(); ?></p>
+    <table id="addresses" cellspacing="0" cellpadding="0" style="width: 100%; vertical-align: top; margin-bottom: 40px; padding:0;" border="0">
+	<tr>
+            <?php if (apply_filters('show_cust_billing_address_field', true, $vendor->id)) { ?>
+            <td style="text-align:<?php echo $text_align; ?>; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; border:0; padding:0;" valign="top" width="50%">
+                <h2><?php _e( 'Billing Address', 'dc-woocommerce-multi-vendor' ); ?></h2>
+                <address class="address">
+                    <?php echo ( $address = $order->get_formatted_billing_address() ) ? $address : __( 'N/A', 'woocommerce' ); ?>
+                </address>
             </td>
-        </tr>
-    </table>
-    <?php }
-?>
-
-<?php if (apply_filters('show_cust_shipping_address_field', true, $vendor->id)) { ?> 
-    <?php if (( $shipping = $order->get_formatted_shipping_address())) { ?>
-        <table cellspacing="0" cellpadding="0" style="width: 100%; vertical-align: top;" border="0">
-            <tr>
-                <td valign="top" width="50%">
-                    <h3><?php _e('Shipping Address', 'dc-woocommerce-multi-vendor'); ?></h3>
-                    <p><?php echo $shipping; ?></p>
+            <?php } ?>
+            <?php if ( apply_filters('show_cust_shipping_address_field', true, $vendor->id) && ! wc_ship_to_billing_address_only() && $order->needs_shipping_address() && ( $shipping = $order->get_formatted_shipping_address() ) ) : ?>
+                <td style="text-align:<?php echo $text_align; ?>; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; padding:0;" valign="top" width="50%">
+                        <h2><?php _e('Shipping Address', 'dc-woocommerce-multi-vendor'); ?></h2>
+                        <address class="address"><?php echo $shipping; ?></address>
                 </td>
-            </tr>
-        </table>
-    <?php
-    }
-}
-?>
-
-
+            <?php endif; ?>
+	</tr>
+    </table>
 
 <?php do_action('wcmp_email_footer'); ?>
