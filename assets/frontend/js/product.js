@@ -185,7 +185,7 @@ var wcmpAfmProductEditor = ( function ( $ ) {
             media = this.mediaController();
             downloads = this.downloadsController();
             attributes = this.attributeController();
-            variations = this.variationController();
+            //variations = this.variationController();
             this.setupEnvironment();
         },
         mediaController: function ( ) {
@@ -477,7 +477,7 @@ var wcmpAfmProductEditor = ( function ( $ ) {
             media.init();
             downloads.init();
             attributes.init();
-            variations.init();
+            //variations.init();
 
             this.salePriceDateFieldInit( $( '#woocommerce-product-data' ) );
             //Make download files sortable
@@ -863,6 +863,7 @@ var wcmpAfmProductEditor = ( function ( $ ) {
                         var this_page = window.location.toString();
                         this_page = this_page.replace( /(?:\/#?|\/\d+\/?)?$/, '/' + wcmp_advance_product_params.product_id + '/' );
                         $wrapper.unblock();
+                        $wrapper.trigger('wcmp_after_save_attribute_triggered');
                         // Load variations panel.
 //                        $( '#variable_product_options' ).load( this_page + ' #variable_product_options_inner', function () {
 //                            $( '#variable_product_options' ).trigger( 'reload' );

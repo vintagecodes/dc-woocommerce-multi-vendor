@@ -26,7 +26,7 @@ class WCMp_Commission {
             // Handle commission paid status
             add_action('post_submitbox_misc_actions', array($this, 'custom_actions_content'));
             add_action('save_post', array($this, 'custom_actions_save'));
-
+            
             // Handle post columns
             add_filter('manage_edit-' . $this->post_type . '_columns', array($this, 'wcmp_register_custom_column_headings'), 10, 1);
             add_action('manage_pages_custom_column', array($this, 'wcmp_register_custom_columns'), 10, 2);
@@ -572,6 +572,63 @@ class WCMp_Commission {
             $total = $tax_amount + $commission_refunded_tax;
             return $context == 'view' ? wc_price($total, array('currency' => $order->get_currency())) : $total;
         }
+    }
+    
+    /**
+     * Get commission totals array
+     * @param array $args 
+     * @param boolean $check_caps
+     * @return array 
+     */
+    public static function get_commissions_total_data( $args = array(), $vendor_id = 0, $check_caps = true ) {
+        global $WCMp;
+        $default_args = array(
+            'post_type' => 'dc_commission',
+            'post_status' => array('publish', 'private'),
+            'posts_per_page' => -1,
+            'fields' => 'ids',
+            'meta_query' => array(
+                array(
+                    'key' => '_paid_status',
+                    'value' => array('unpaid', 'partial_refunded'),
+                    'compare' => 'IN'
+                ),
+            )
+	);
+        $args = wp_parse_args( $args, $default_args );
+        $commissions = new WP_Query( $args );
+        if( $commissions->get_posts() ) :
+            $commission_amount = $shipping_amount = $tax_amount = $total = 0;
+            foreach ( $commissions->get_posts() as $commission_id ) {
+                $commission_amount += self::commission_amount_totals( $commission_id, 'edit' );
+                $shipping_amount += self::commission_shipping_totals( $commission_id, 'edit' );
+                $tax_amount += self::commission_tax_totals( $commission_id, 'edit' );
+            }
+            if( $check_caps && $vendor_id ){
+                $amount = array(
+                    'commission_amount' => $commission_amount,
+                );
+                if ($WCMp->vendor_caps->vendor_payment_settings('give_shipping') && !get_user_meta($vendor_id, '_vendor_give_shipping', true)) {
+                    $amount['shipping_amount'] = $shipping_amount;
+                } else {
+                    $amount['shipping_amount'] = 0;
+                }
+                if ($WCMp->vendor_caps->vendor_payment_settings('give_tax') && !get_user_meta($vendor_id, '_vendor_give_tax', true)) {
+                    $amount['tax_amount'] = $tax_amount;
+                } else {
+                    $amount['tax_amount'] = 0;
+                }
+                $amount['total'] = $amount['commission_amount'] + $amount['shipping_amount'] + $amount['tax_amount'];
+                return $amount;
+            }else{
+                return array(
+                    'commission_amount' => $commission_amount,
+                    'shipping_amount' => $shipping_amount,
+                    'tax_amount' => $tax_amount,
+                    'total' => $commission_amount + $shipping_amount + $tax_amount
+                );
+            }
+        endif;
     }
 
     /**
@@ -1482,15 +1539,15 @@ class WCMp_Commission {
         header("Content-Disposition: attachment;filename={$filename}");
         header("Content-Transfer-Encoding: binary");
         // Set CSV headers
-        $headers = array(
+        $headers = apply_filters('wcmp_vendor_commission_data_header',array(
             'Recipient',
             'Currency',
             'Commission',
             'Shipping',
             'Tax',
             'Total',
-            'Status'
-        );
+            'Status',
+        ));
         $commissions_data = array();
         $currency = get_woocommerce_currency();
         foreach ($post_ids as $commission) {
@@ -1498,7 +1555,7 @@ class WCMp_Commission {
             $commission_staus = get_post_meta($commission, '_paid_status', true);
             $commission_amounts = get_wcmp_vendor_order_amount(array('vendor_id' => $commission_data->vendor->id, 'commission_id' => $commission));
             $recipient = get_user_meta($commission_data->vendor->id, '_vendor_paypal_email', true) ? get_user_meta($commission_data->vendor->id, '_vendor_paypal_email', true) : $commission_data->vendor->page_title;
-            $commissions_data[] = array(
+            $commissions_data[] = apply_filters('wcmp_vendor_commission_data', array(
                 $recipient,
                 $currency,
                 $commission_amounts['commission_amount'],
@@ -1506,7 +1563,7 @@ class WCMp_Commission {
                 $commission_amounts['tax_amount'] + $commission_amounts['shipping_tax_amount'],
                 $commission_amounts['total'],
                 $commission_staus
-            );
+            ), $commission_data);
         }
         // Initiate output buffer and open file
         ob_start();

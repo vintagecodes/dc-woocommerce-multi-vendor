@@ -78,8 +78,7 @@ final class WCMp {
         add_action('init', array(&$this, 'init'));
 
         add_action('admin_init', array(&$this, 'wcmp_admin_init'));
-        // Intialize WCMp Emails
-        add_filter('woocommerce_email_classes', array(&$this, 'wcmp_email_classes'));
+
         // WCMp Update Notice
         add_action('in_plugin_update_message-dc-woocommerce-multi-vendor/dc_product_vendor.php', array(&$this, 'wcmp_plugin_update_message'));
 
@@ -194,7 +193,7 @@ final class WCMp {
         // Init WCMp API
         $this->init_wcmp_rest_api();
         // Init Ledger
-        //$this->init_ledger();
+        $this->init_ledger();
         
         if (!wp_next_scheduled('migrate_spmv_multivendor_table') && !get_option('spmv_multivendor_table_migrated', false)) {
             wp_schedule_event(time(), 'every_5minute', 'migrate_spmv_multivendor_table');
@@ -479,42 +478,6 @@ final class WCMp {
     }
 
     /**
-     * Register WCMp emails class
-     *
-     * @access public
-     * @return array
-     */
-    function wcmp_email_classes($emails) {
-        include( 'emails/class-wcmp-email-vendor-new-account.php' );
-        include( 'emails/class-wcmp-email-admin-new-vendor-account.php' );
-        include( 'emails/class-wcmp-email-approved-vendor-new-account.php' );
-        include( 'emails/class-wcmp-email-rejected-vendor-new-account.php' );
-        include( 'emails/class-wcmp-email-vendor-new-order.php' );
-        include( 'emails/class-wcmp-email-vendor-notify-shipped.php' );
-        include( 'emails/class-wcmp-email-vendor-new-product-added.php' );
-        include( 'emails/class-wcmp-email-admin-added-new-product-to-vendor.php' );
-        include( 'emails/class-wcmp-email-vendor-new-commission-transaction.php' );
-        include( 'emails/class-wcmp-email-vendor-direct-bank.php' );
-        include( 'emails/class-wcmp-email-admin-withdrawal-request.php' );
-        include( 'emails/class-wcmp-email-vendor-orders-stats-report.php' );
-
-        $emails['WC_Email_Vendor_New_Account'] = new WC_Email_Vendor_New_Account();
-        $emails['WC_Email_Admin_New_Vendor_Account'] = new WC_Email_Admin_New_Vendor_Account();
-        $emails['WC_Email_Approved_New_Vendor_Account'] = new WC_Email_Approved_New_Vendor_Account();
-        $emails['WC_Email_Rejected_New_Vendor_Account'] = new WC_Email_Rejected_New_Vendor_Account();
-        $emails['WC_Email_Vendor_New_Order'] = new WC_Email_Vendor_New_Order();
-        $emails['WC_Email_Notify_Shipped'] = new WC_Email_Notify_Shipped();
-        $emails['WC_Email_Vendor_New_Product_Added'] = new WC_Email_Vendor_New_Product_Added();
-        $emails['WC_Email_Admin_Added_New_Product_to_Vendor'] = new WC_Email_Admin_Added_New_Product_to_Vendor();
-        $emails['WC_Email_Vendor_Commission_Transactions'] = new WC_Email_Vendor_Commission_Transactions();
-        $emails['WC_Email_Vendor_Direct_Bank'] = new WC_Email_Vendor_Direct_Bank();
-        $emails['WC_Email_Admin_Widthdrawal_Request'] = new WC_Email_Admin_Widthdrawal_Request();
-        $emails['WC_Email_Vendor_Orders_Stats_Report'] = new WC_Email_Vendor_Orders_Stats_Report();
-
-        return $emails;
-    }
-
-    /**
      * Return data for script handles.
      * @since  3.0.6 
      * @param  string $handle
@@ -592,28 +555,30 @@ final class WCMp {
      */
     public function init_stripe_library(){
         global $WCMp;
-        $stripe_dependencies = WC_Dependencies_Product_Vendor::stripe_dependencies();
-        if($stripe_dependencies['status']){
-            $load_library = (get_wcmp_vendor_settings('payment_method_stripe_masspay', 'payment') == 'Enable') ? true : false;
-            if(!class_exists("Stripe\Stripe") && apply_filters('wcmp_load_stripe_library', $load_library)) {
-                require_once( $this->plugin_path . 'lib/Stripe/init.php' );
-            }
-        }else{
-            switch ($stripe_dependencies['module']) {
-                case 'phpversion':
-                    add_action('admin_notices', array($this, 'wcmp_stripe_phpversion_required_notice'));
-                    break;
-                case 'curl':
-                    add_action('admin_notices', array($this, 'wcmp_stripe_curl_required_notice'));
-                    break;
-                case 'mbstring':
-                    add_action('admin_notices', array($this, 'wcmp_stripe_mbstring_required_notice'));
-                    break;
-                case 'json':
-                    add_action('admin_notices', array($this, 'wcmp_stripe_json_required_notice'));
-                    break;
-                default:
-                    break;
+        $load_library = (get_wcmp_vendor_settings('payment_method_stripe_masspay', 'payment') == 'Enable') ? true : false;
+        if(apply_filters('wcmp_load_stripe_library', $load_library)){
+            $stripe_dependencies = WC_Dependencies_Product_Vendor::stripe_dependencies();
+            if($stripe_dependencies['status']){
+                if(!class_exists("Stripe\Stripe")) {
+                    require_once( $this->plugin_path . 'lib/Stripe/init.php' );
+                }
+            }else{
+                switch ($stripe_dependencies['module']) {
+                    case 'phpversion':
+                        add_action('admin_notices', array($this, 'wcmp_stripe_phpversion_required_notice'));
+                        break;
+                    case 'curl':
+                        add_action('admin_notices', array($this, 'wcmp_stripe_curl_required_notice'));
+                        break;
+                    case 'mbstring':
+                        add_action('admin_notices', array($this, 'wcmp_stripe_mbstring_required_notice'));
+                        break;
+                    case 'json':
+                        add_action('admin_notices', array($this, 'wcmp_stripe_json_required_notice'));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

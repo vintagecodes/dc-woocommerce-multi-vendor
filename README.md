@@ -1,6 +1,6 @@
 # [WC Marketplace](wc-marketplace.com)
 ```
-This WCMp Split Order ( Beta - 1 ) is in active development and beta release for WCMp Split order next major version.
+This WCMp Split Order ( Beta - 2 ) is in active development and beta release for WCMp Split order next major version.
 For better debugging, it's also recommended you add define( 'SCRIPT_DEBUG', true ); to your wp-config. It is recommended not to use this version in live site.
 ```
 WC Marketplace is the fastest growing multi-store marketplace plugin for WooCommerce.

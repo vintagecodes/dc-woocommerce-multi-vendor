@@ -27,8 +27,12 @@ Class WCMp_Admin_Dashboard {
         // Vendor store updater info
         add_action('wcmp_dashboard_setup', array(&$this, 'wcmp_dashboard_setup_updater'), 6);
         // Vendor save product
-        add_action( 'template_redirect', array( &$this, 'save_product' ), 90 );
-        add_action( 'template_redirect', array( &$this, 'save_coupon' ), 90 );
+        if ( current_user_can( 'edit_products' ) ) {
+            add_action( 'template_redirect', array( &$this, 'save_product' ), 90 );
+        }
+        if ( current_vendor_can( 'edit_shop_coupon' ) ) {
+            add_action( 'template_redirect', array( &$this, 'save_coupon' ), 90 );
+        }
         
         add_filter( 'wcmp_vendor_dashboard_add_product_url', array( &$this, 'wcmp_vendor_dashboard_add_product_url' ), 10 );
 
@@ -505,6 +509,9 @@ Class WCMp_Admin_Dashboard {
                 <?php wp_nonce_field( 'backend_vendor_shipping_data', 'vendor_shipping_data' ); ?>
                 <?php 
                 if ($zone_id) {
+                    if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
+                        $WCMp->load_vendor_shipping();
+                    }
                     $zones = WCMP_Shipping_Zone::get_zone($zone_id);
                     if ($zones)
                         $zone = WC_Shipping_Zones::get_zone(absint($zone_id));
@@ -890,6 +897,9 @@ Class WCMp_Admin_Dashboard {
                         }
                     }
                 }
+                if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
+                    $WCMp->load_vendor_shipping();
+                }
                 WCMP_Shipping_Zone::save_location($location, $zone_id);
 
                 $WCMp->load_class('shipping-gateway');
@@ -1192,6 +1202,9 @@ Class WCMp_Admin_Dashboard {
                     }
                 }
             }
+        }
+        if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
+            $WCMp->load_vendor_shipping();
         }
         WCMP_Shipping_Zone::save_location($location, $zone_id);
 
@@ -1570,23 +1583,14 @@ Class WCMp_Admin_Dashboard {
 
         public function wcmp_vendor_product_stats($args = array()) {
             global $WCMp;
-            $publish_products_count = 0;
-            $pending_products_count = 0;
-            $draft_products_count = 0;
-            $trashed_products_count = 0;
-
-            $user_id = get_current_user_id();
-
+            $publish_products_count = $pending_products_count = $draft_products_count = $trashed_products_count = 0;
+            $vendor = get_wcmp_vendor(get_current_user_id());
             $args = array('post_status' => array('publish', 'pending', 'draft', 'trash'));
-            $vendor = get_wcmp_vendor(absint($user_id));
             $product_stats = array();
-            $products = $vendor->get_products($args);
-            $product_stats['total_products'] = count($products);
-            foreach ($products as $key => $value) {
-                $product_id = $value->ID;
-                $product = wc_get_product($product_id);
-                $vendor = get_wcmp_product_vendors($product_id);
-                if (!empty($vendor) && $vendor->id == $user_id) {
+            if($vendor) :
+                $products = $vendor->get_products($args);
+                $product_stats['total_products'] = count($products);
+                foreach ($products as $key => $value) {
                     if ($value->post_status == 'publish')
                         $publish_products_count += 1;
                     if ($value->post_status == 'pending')
@@ -1597,17 +1601,15 @@ Class WCMp_Admin_Dashboard {
                         $trashed_products_count += 1;
                     }
                 }
-            }
+            endif;
             $product_stats['publish_products_count'] = $publish_products_count;
             $product_stats['pending_products_count'] = $pending_products_count;
             $product_stats['draft_products_count'] = $draft_products_count;
             $product_stats['trashed_products_count'] = $trashed_products_count;
-
             $product_stats['product_page_url'] = wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_products_endpoint', 'vendor', 'general', 'products'));
 
-// variables to send $product_page_url $publish_products_count $pending_products_count $trashed_products_count
-            //require_once(plugin_dir_path( __FILE__ ) . "wcmp_vendor_published_pending_trashed_products.php");
             $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_vendor_product_stats.php', $product_stats);
+            
         }
 
         public function wcmp_vendor_product_sales_report() {
@@ -1625,7 +1627,25 @@ Class WCMp_Admin_Dashboard {
             $start_date = isset($requestData['from_date']) ? $requestData['from_date'] : date('01-m-Y');
             $end_date = isset($requestData['to_date']) ? $requestData['to_date'] : date('t-m-Y');
             $transaction_details = $WCMp->transaction->get_transactions($vendor->term_id);
-            $unpaid_orders = get_wcmp_vendor_order_amount(array('commission_status' => 'unpaid'), $vendor->id);
+            //$unpaid_orders = get_wcmp_vendor_order_amount(array('commission_status' => 'unpaid'), $vendor->id);
+            $args = array(
+                'meta_query' => array(
+                    array(
+                        'key' => '_commission_vendor',
+                        'value' => absint($vendor->term_id),
+                        'compare' => '='
+                    ),
+                ),
+//                'date_query' => array(
+//                    array(
+//                        'after'     => $start_date,
+//                        'before'    => $end_date,
+//                        'inclusive' => true,
+//                    ),
+//                ),
+            );
+            $unpaid_commission_total = WCMp_Commission::get_commissions_total_data( $args, $vendor->id );
+
             $count = 0; // varible for counting 5 transaction details
             foreach ($transaction_details as $transaction_id => $details) {
                 $count++;
@@ -1639,7 +1659,7 @@ Class WCMp_Admin_Dashboard {
                 $total_amount = $total_amount + $details['total_amount'];
             }
             //print_r($total_amount);
-            $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_vendor_transaction_details.php', array('total_amount' => $unpaid_orders['total'], 'transaction_display_array' => $transaction_display_array));
+            $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_vendor_transaction_details.php', array('total_amount' => $unpaid_commission_total['total'], 'transaction_display_array' => $transaction_display_array));
         }
 
         public function wcmp_vendor_products_cust_qna() {
@@ -1950,6 +1970,7 @@ Class WCMp_Admin_Dashboard {
                         'sku'                => isset( $_POST['_sku'] ) ? wc_clean( $_POST['_sku'] ) : null,
                         'manage_stock'       => ! empty( $_POST['_manage_stock'] ),
                         'stock_quantity'     => $stock,
+                        'low_stock_amount'   => isset( $_POST['_low_stock_amount'] ) && '' !== $_POST['_low_stock_amount'] ? wc_stock_amount( wp_unslash( $_POST['_low_stock_amount'] ) ) : '',
                         'backorders'         => isset( $_POST['_backorders'] ) ? wc_clean( $_POST['_backorders'] ) : null,
                         'stock_status'       => isset( $_POST['_stock_status'] ) ? wc_clean( $_POST['_stock_status'] ) : null,
                         'sold_individually'  => ! empty( $_POST['_sold_individually'] ),

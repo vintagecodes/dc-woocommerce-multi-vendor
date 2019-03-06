@@ -23,7 +23,7 @@ global $WCMp;
             <input type="hidden" id="wcmp_vlist_center_lng" name="wcmp_vlist_center_lng" value=""/>
             <div class="wcmp-store-map-filter">
                 <div class="wcmp-inp-wrap">
-                    <input type="text" name="locationText" id="locationText" placeholder="Enter Address" value="<?php echo isset($request['locationText']) ? $request['locationText'] : ''; ?>">
+                    <input type="text" name="locationText" id="locationText" placeholder="<?php _e('Enter Address', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($request['locationText']) ? $request['locationText'] : ''; ?>">
                 </div>
                 <div class="wcmp-inp-wrap">
                     <select name="radiusSelect" id="radiusSelect">
@@ -46,7 +46,7 @@ global $WCMp;
                         <?php do_action('wcmp_vendor_list_sort_distanceSelect_extra_options'); ?>
                     </select>
                 </div>
-                <?php do_action('wcmp_vendor_list_vendor_sort_map_extra_filters'); ?>
+                <?php do_action( 'wcmp_vendor_list_vendor_sort_map_extra_filters', $request ); ?>
                 <input type="submit" name="vendorListFilter" value="<?php _e('Submit', 'dc-woocommerce-multi-vendor'); ?>">
             </div>
         </form>
@@ -69,23 +69,6 @@ global $WCMp;
                 }
                 ?>
             </p>
-            <!-- <div class="wcmp-pull-right">
-                <ul class="wcmp-pagination wcmp-pull-left">
-                    <li class="prev-pag pag-nav" style="display: none;"><a href="#">Prev</a></li>
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">...</a></li>
-                    <li><a href="#">10</a></li>
-                    <li class="next-pag pag-nav"><a href="#">Next</a></li>
-                </ul>
-                <select name="" id="" class="wcmp-store-per-page wcmp-pull-right">
-                    <option value="9 per page">9 per page</option>
-                    <option value="12 per page">12 per page</option>
-                    <option value="15 per page">15 per page</option>
-                    <option value="18 per page">18 per page</option>
-                </select>
-            </div> -->
             
             <form name="vendor_sort" method="post" >
                 <div class="vendor_sort">
@@ -120,7 +103,7 @@ global $WCMp;
                     }
                     ?>
                     <select name="vendor_sort_category" id="vendor_sort_category" class="select"><?php echo $options_html; ?></select>
-                    <?php do_action('wcmp_vendor_list_vendor_sort_extra_attributes'); ?>
+                    <?php do_action( 'wcmp_vendor_list_vendor_sort_extra_attributes', $request ); ?>
                     <input value="<?php echo __('Sort', 'dc-woocommerce-multi-vendor'); ?>" type="submit">
                 </div>
             </form>
@@ -137,8 +120,7 @@ global $WCMp;
                 $image = $vendor->get_image() ? $vendor->get_image('image', array(125, 125)) : $WCMp->plugin_url . 'assets/images/WP-stdavatar.png';
                 $banner = $vendor->get_image('banner') ? $vendor->get_image('banner') : '';
                 ?>
-                
-                
+
                 <div class="wcmp-store-list">
                     <?php do_action('wcmp_vendor_lists_single_before_image', $vendor->term_id, $vendor->id); ?>
                     <div class="wcmp-profile-wrap">
@@ -201,13 +183,6 @@ global $WCMp;
                     'mid_size'     => 3,
             ) ) );
 	?>
-        <!--li class="prev-pag pag-nav" style="display: none;"><a href="#">Prev</a></li>
-        <li class="active"><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">...</a></li>
-        <li><a href="#">10</a></li>
-        <li class="next-pag pag-nav"><a href="#">Next</a></li-->
     </div>
     <?php endif; ?>
 </div> 

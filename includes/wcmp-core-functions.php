@@ -274,11 +274,11 @@ if (!function_exists('doProductVendorLOG')) {
         global $WCMp;
         $file = $WCMp->plugin_path . 'log/product_vendor.log';
         if (file_exists($file)) {
-            $temphandle = @fopen($file, 'w+'); // @codingStandardsIgnoreLine.
-            @fclose($temphandle); // @codingStandardsIgnoreLine.
-            if (defined('FS_CHMOD_FILE')) {
-                @chmod($file, FS_CHMOD_FILE); // @codingStandardsIgnoreLine.
-            }
+//            $temphandle = @fopen($file, 'w+'); // @codingStandardsIgnoreLine.
+//            @fclose($temphandle); // @codingStandardsIgnoreLine.
+//            if (defined('FS_CHMOD_FILE')) {
+//                @chmod($file, FS_CHMOD_FILE); // @codingStandardsIgnoreLine.
+//            }
             // Open the file to get existing content
             $current = file_get_contents($file);
             if ($current) {
@@ -2680,7 +2680,7 @@ if (!function_exists('wcmp_date')) {
     function wcmp_date($date) {
         $date = wc_string_to_datetime($date)->setTimezone(new DateTimeZone('UTC'));
         $date = wc_string_to_datetime($date)->setTimezone(new DateTimeZone(get_vendor_timezone_string()));
-        return $date->format(get_option('date_format'));
+        return $date->date_i18n( get_option('date_format'), $date );
     }
 
 }
@@ -3526,14 +3526,16 @@ if (!function_exists('wcmp_list_categories')) {
 if (!function_exists('wcmp_get_shipping_zone')) {
 
     function wcmp_get_shipping_zone($zoneID = '') {
+        global $WCMp;
         $zones = array();
-        if( class_exists( 'WCMP_Shipping_Zone' ) ) :
-            if (isset($zoneID) && $zoneID != '') {
+        if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
+            $WCMp->load_vendor_shipping();
+        }
+        if ( isset($zoneID) && $zoneID != '' ) {
                 $zones = WCMP_Shipping_Zone::get_zone($zoneID);
-            } else {
+        } else {
                 $zones = WCMP_Shipping_Zone::get_zones();
-            }
-        endif;
+        }
         return $zones;
     }
 
@@ -3740,6 +3742,9 @@ if ( ! function_exists( 'wcmp_default_product_types' ) ) {
     function wcmp_default_product_types() {
         return array(
             'simple'   => __( 'Simple product', 'woocommerce' ),
+            'grouped'  => __( 'Grouped product', 'woocommerce' ),
+            'external' => __( 'External/Affiliate product', 'woocommerce' ),
+            'variable' => __( 'Variable product', 'woocommerce' ),
         );
     }
 
@@ -4093,5 +4098,22 @@ if (!function_exists('wcmp_get_commission_statuses')) {
             'partial_refunded'  => __( 'Partial refunded', 'dc-woocommerce-multi-vendor' ),
         );
         return apply_filters( 'wcmp_get_commission_statuses', $commission_statuses );
+    }
+}
+
+if (!function_exists('wcmp_get_product_link')) {
+    /**
+     * Get product link.
+     *
+     * @since 3.4.0
+     * @param integer $product_id
+     * @return string url
+     */
+    function wcmp_get_product_link( $product_id ) {
+        $link = '';
+        if ( current_user_can('edit_published_products') && get_wcmp_vendor_settings('is_edit_delete_published_product', 'capabilities', 'product') == 'Enable' ) {
+            $link = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $product_id));
+        }
+        return apply_filters('wcmp_get_product_link', $link, $product_id);
     }
 }

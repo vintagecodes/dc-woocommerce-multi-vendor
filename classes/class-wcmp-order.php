@@ -28,9 +28,10 @@ class WCMp_Order {
             add_action('admin_head', array($this, 'count_processing_order'), 5);
             add_filter('views_edit-shop_order', array($this, 'shop_order_statuses_get_views') );
             add_filter('wp_count_posts', array($this, 'shop_order_count_orders'), 99, 3 );
-            
-            add_filter('manage_shop_order_posts_columns', array($this, 'wcmp_shop_order_columns'), 99);
-            add_action('manage_shop_order_posts_custom_column', array($this, 'wcmp_show_shop_order_columns'), 99, 2);
+            if( !is_user_wcmp_vendor( get_current_user_id() ) ) {
+                add_filter('manage_shop_order_posts_columns', array($this, 'wcmp_shop_order_columns'), 99);
+                add_action('manage_shop_order_posts_custom_column', array($this, 'wcmp_show_shop_order_columns'), 99, 2);
+            }
             if(apply_filters('wcmp_parent_order_to_vendor_order_status_synchronization', true))
                 add_action('woocommerce_order_status_changed', array($this, 'wcmp_parent_order_to_vendor_order_status_synchronization'), 90, 3);
             if(apply_filters('wcmp_vendor_order_to_parent_order_status_synchronization', true))
@@ -47,6 +48,8 @@ class WCMp_Order {
             add_action( 'trashed_post', array( $this, 'trash_wcmp_suborder' ), 10, 1 );
             // Order Delete 
             add_action( 'deleted_post', array( $this, 'delete_wcmp_suborder' ), 10, 1 );
+            // Restrict default order edit caps for vendor
+            add_action( 'admin_enqueue_scripts', array( $this, 'wcmp_vendor_order_backend_restriction' ), 99 );
         }
     }
 
@@ -941,6 +944,20 @@ class WCMp_Order {
                 }
             }
         }
+    }
+    
+    public function wcmp_vendor_order_backend_restriction(){
+        if(is_user_wcmp_vendor(get_current_user_id())){
+            $inline_css = "
+                #order_data .order_data_column a.edit_address { display: none; }
+                #order_data .order_data_column .wc-customer-user label a{ display: none; }
+                #woocommerce-order-items .woocommerce_order_items_wrapper table.woocommerce_order_items th.line_tax .delete-order-tax{ display: none; }
+                #woocommerce-order-items .wc-order-edit-line-item-actions a, #woocommerce-order-items .wc-order-edit-line-item-actions a { display: none; }
+                #woocommerce-order-items .add-items .button.add-line-item, #woocommerce-order-items .add-items .button.add-coupon { display: none; }
+                ";
+            wp_add_inline_style('woocommerce_admin_styles', $inline_css);
+        }
+        
     }
 
 }

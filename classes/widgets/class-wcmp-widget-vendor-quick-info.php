@@ -199,23 +199,15 @@ class DC_Widget_Quick_Info_Widget extends WP_Widget {
 
             /* === Sanitize Form Value === */
             $vendor = get_wcmp_vendor($_POST['quick_info']['vendor_id']);
-            $to = sanitize_email($vendor->user_data->user_email);
-            $subject = sanitize_text_field($_POST['quick_info']['subject']);
-            $message = sanitize_text_field($_POST['quick_info']['message']);
-            $from = sanitize_text_field($_POST['quick_info']['name']);
-            $from_email = sanitize_email($_POST['quick_info']['email']);
-            $admin_email = get_option('admin_email');
-            $headers[] = "From: {$from} <{$from_email}>";
-            $headers[] = "Cc: Admin <{$admin_email}>";
-            $headers[] = "Reply-To: {$from} <{$from_email}>";
-            $headers = apply_filters('wcmp_contact_vendor_send_mail_headers', $headers);
-            /* === Send Mail === */
-            $check = wp_mail($to, $subject, $message, $headers);
-
-            /* === Prevent resubmit form === */
-            unset($_POST);
-            $redirect = esc_url(add_query_arg(array('message' => $check ? 1 : 0), $vendor->permalink));
-            wp_redirect($redirect);
+            
+            $mail = WC()->mailer()->emails['WC_Email_Vendor_Contact_Widget'];
+            $result = $mail->trigger( $vendor, $_POST['quick_info'] );
+            if( $result ){
+                wc_add_notice(__('Email sent successfully.', 'dc-woocommerce-multi-vendor'), 'success');
+            }else{
+                wc_add_notice(__('Unable to send email. Please try again.', 'dc-woocommerce-multi-vendor'), 'error');
+            }
+            wp_redirect($vendor->permalink);
             exit;
         }
     }
@@ -229,9 +221,7 @@ class DC_Widget_Quick_Info_Widget extends WP_Widget {
         return
                 !empty($_POST['dc_vendor_quick_info_submitted']) &&
                 wp_verify_nonce($_POST['dc_vendor_quick_info_submitted'], 'dc_vendor_quick_info_submitted') &&
-                !empty($_POST['quick_info']) &&
-                !empty($_POST['quick_info']['name']) &&
-                !empty($_POST['quick_info']['subject']) &&
+                !empty($_POST['quick_info']) && 
                 !empty($_POST['quick_info']['email']) &&
                 !empty($_POST['quick_info']['message']) &&
                 !empty($_POST['quick_info']['vendor_id']) &&

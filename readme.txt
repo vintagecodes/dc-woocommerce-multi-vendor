@@ -1,11 +1,11 @@
 === WC Marketplace ===
-Contributors: Dualcube, greyparrots, arimghosh, purnendu, itzmekhokan
+Contributors: Dualcube, greyparrots, purnendu, itzmekhokan
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.2
-Tested up to: 5.0.3
+Tested up to: 5.1
 Requires PHP: 5.6
-Stable tag: 3.3.1
+Stable tag: 3.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,11 +14,12 @@ WC Marketplace - The most user recommended multi-vendor marketplace plugin for W
 == Description ==
 <strong>WCMp:</strong> Welcome, this is Riley, your WCMp virtual guide. I'm here to help you know better about WC Marketplace as plugin and as [organization](https://wc-marketplace.com/). In it's core, WCMp is a WooCommerce based multi vendor solution engineered to address all your marketplace needs. Try and fall in love with WCMp, yes it's that simple ☺
 
-> Version Highlights
+> Brace yourself for [WCMp 3.4](https://wc-marketplace.com/latest-release/)
 >
-> - <strong>Introducing [REST API (v1.0)](https://wc-marketplace.github.io/rest-api-docs/) with WCMp v3.1.0.</strong>
-> - <strong>Best-In-Class Vendor Management System.</strong>
-> - <strong>Built-in Stripe support for commission disbursal besides PayPal and Bank Transfer!</strong>
+> - <strong>Introduction of Vendor split order modules.</strong>
+> - <strong>Best in class Vendor Transaction log.</strong>
+> - <strong>Integrated Refund module.</strong>
+> - <strong>Better Invoicing methods.</strong>
 
 <strong>You:</strong> [In your mind - "Ahem. Really?"] All plugin makers say that. What makes you different from others?
 
@@ -115,6 +116,24 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.3.3 - 2019-03-05 =
+* Added - `Low stock threshold` settings added in product inventory settings.
+* Tweak - New product email product edit link changed from backend to frontend.
+* Fix - Language issue on WCMp date.
+* Fix - WCMp core product types supported issue.
+
+= 3.3.2 - 2019-02-26 =
+* Added - Contact vendor email with WC_Mail template.
+* Fix - Core wcmp_get_shipping_zone function issue fixed.
+* Fix - Respect backend settings for vendor registration issue.
+* Fix - New tag addition for product issue fixed.
+* Fix - SPMV term_links-product_cat issue fixed.
+* Dev - Redirect url `wcmp_user_apply_vendor_redirect_url` filter added.
+* Dev - Calculate shipping `wcmp_get_shipping_methods_for_shipping_address` filter added.
+* Dev - Generate commission `wcmp_vendor_commission_data_header` filter added.
+* Dev - Generate commission `wcmp_vendor_commission_data` filter added.
+* Updated - Language file.
+
 = 3.3.1 - 2019-01-22 =
 * Added - Advance marketplace product listing settings added for admin.
 * Added - GTIN settings added for admin.

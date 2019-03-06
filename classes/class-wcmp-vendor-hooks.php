@@ -20,7 +20,7 @@ class WCMp_Vendor_Hooks {
         add_action( 'wcmp_vendor_dashboard_vendor-billing_endpoint', array( &$this, 'wcmp_vendor_dashboard_vendor_billing_endpoint' ) );
         add_action( 'wcmp_vendor_dashboard_vendor-shipping_endpoint', array( &$this, 'wcmp_vendor_dashboard_vendor_shipping_endpoint' ) );
         add_action( 'wcmp_vendor_dashboard_vendor-report_endpoint', array( &$this, 'wcmp_vendor_dashboard_vendor_report_endpoint' ) );
-        //add_action( 'wcmp_vendor_dashboard_banking-overview_endpoint', array( &$this, 'wcmp_vendor_dashboard_banking_overview_endpoint' ) );
+        add_action( 'wcmp_vendor_dashboard_banking-overview_endpoint', array( &$this, 'wcmp_vendor_dashboard_banking_overview_endpoint' ) );
 
         add_action( 'wcmp_vendor_dashboard_add-product_endpoint', array( &$this, 'wcmp_vendor_dashboard_add_product_endpoint' ) );
         add_action( 'wcmp_vendor_dashboard_edit-product_endpoint', array( &$this, 'wcmp_vendor_dashboard_edit_product_endpoint' ) );
@@ -174,14 +174,14 @@ class WCMp_Vendor_Hooks {
                         , 'link_target' => '_self'
                         , 'nav_icon'    => 'wcmp-font ico-reports-icon'
                     ),
-//                    'banking-overview' => array(
-//                        'label'       => __( 'Banking Overview', 'dc-woocommerce-multi-vendor' )
-//                        , 'url'         => wcmp_get_vendor_dashboard_endpoint_url( get_wcmp_vendor_settings( 'wcmp_vendor_banking_overview_endpoint', 'vendor', 'general', 'banking-overview' ) )
-//                        , 'capability'  => apply_filters( 'wcmp_vendor_dashboard_menu_vendor_banking_report_capability', true )
-//                        , 'position'    => 20
-//                        , 'link_target' => '_self'
-//                        , 'nav_icon'    => 'wcmp-font ico-reports-icon'
-//                    )
+                    'banking-overview' => array(
+                        'label'       => __( 'Banking Overview', 'dc-woocommerce-multi-vendor' )
+                        , 'url'         => wcmp_get_vendor_dashboard_endpoint_url( get_wcmp_vendor_settings( 'wcmp_vendor_banking_overview_endpoint', 'vendor', 'general', 'banking-overview' ) )
+                        , 'capability'  => apply_filters( 'wcmp_vendor_dashboard_menu_vendor_banking_report_capability', true )
+                        , 'position'    => 20
+                        , 'link_target' => '_self'
+                        , 'nav_icon'    => 'wcmp-font ico-reports-icon'
+                    )
                 )
                 , 'link_target' => '_self'
                 , 'nav_icon'    => 'wcmp-font ico-reports-icon'
@@ -443,12 +443,13 @@ class WCMp_Vendor_Hooks {
     public function wcmp_vendor_dashboard_banking_overview_endpoint() {
         global $WCMp;
         $table_headers = apply_filters('wcmp_vendor_dashboard_banking_overview_table_headers', array(
-            'status'        => array('label' => '', 'class' => 'text-center'),
+            'status'        => array('label' => __( 'Status', 'dc-woocommerce-multi-vendor' ), 'class' => 'text-center'),
             'date'          => array('label' => __( 'Date', 'dc-woocommerce-multi-vendor' )),
             'ref_type'      => array('label' => __( 'Type', 'dc-woocommerce-multi-vendor' )),
             'ref_info'      => array('label' => __( 'Reference', 'dc-woocommerce-multi-vendor' )),
             'credit'        => array('label' => __( 'Credit', 'dc-woocommerce-multi-vendor' )),
             'debit'         => array('label' => __( 'Debit', 'dc-woocommerce-multi-vendor' )),
+            'balance'       => array('label' => __( 'Balance', 'dc-woocommerce-multi-vendor' )),
         ), get_current_user_id());
         $WCMp->library->load_dataTable_lib();
         $WCMp->template->get_template( 'vendor-dashboard/vendor-reports/vendor-ledger.php', array( 'table_headers' => $table_headers ) );

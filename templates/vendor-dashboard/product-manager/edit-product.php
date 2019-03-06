@@ -191,7 +191,7 @@ global $WCMp;
                                         </li>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
-                                <?php do_action( 'wcmp_product_write_panel_tabs' ); ?>
+                                <?php do_action( 'wcmp_product_write_panel_tabs', $post->ID ); ?>
                             </ul>
                         </div>
                         <!-- Nav tabs End -->
@@ -206,6 +206,7 @@ global $WCMp;
                             }
                             $WCMp->template->get_template( 'vendor-dashboard/product-manager/views/html-product-data-linked-products.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
                             $WCMp->template->get_template( 'vendor-dashboard/product-manager/views/html-product-data-attributes.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
+                            do_action( 'wcmp_after_attribute_product_tabs_content', $self, $product_object, $post );
                             $WCMp->template->get_template( 'vendor-dashboard/product-manager/views/html-product-data-advanced.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
                             ?>
                             <?php do_action( 'wcmp_product_tabs_content', $self, $product_object, $post ); ?>
@@ -220,6 +221,7 @@ global $WCMp;
         <div class="row">
             <div class="col-md-8">
             <?php do_action( 'wcmp_after_product_excerpt_metabox_panel', $post->ID ); ?>
+            <?php do_action( 'wcmp_afm_after_product_excerpt_metabox_panel', $post->ID ); ?>
             </div>
             <div class="col-md-4">
                 <?php if( ( get_wcmp_vendor_settings('is_disable_marketplace_plisting', 'general') == 'Enable' ) ) :

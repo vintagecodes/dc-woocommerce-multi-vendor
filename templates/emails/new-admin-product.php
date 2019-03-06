@@ -22,8 +22,9 @@ global $WCMp;
 		<?php printf( __( "Product title: %s",  'dc-woocommerce-multi-vendor' ), $product_name ); ?><br/>
 		<?php printf( __( "Submitted by: %s",  'dc-woocommerce-multi-vendor' ), 'Site Administrator' ); ?><br/>
 		<?php 
+                    $product_link = apply_filters( 'wcmp_email_admin_new_product_link', esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $post_id)));
 			if($submit_product) {
-				printf( __( "Edit product: %s",  'dc-woocommerce-multi-vendor' ), admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ); 
+				printf( __( "Edit product: %s",  'dc-woocommerce-multi-vendor' ), $product_link ); 
 			} else {
 				printf( __( "View product: %s",  'dc-woocommerce-multi-vendor' ), get_permalink($post_id)); 
 			}

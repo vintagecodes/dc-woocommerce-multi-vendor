@@ -842,11 +842,31 @@ class WCMp_Vendor {
                     'start_date' => $last_seven_day_date
                 );
                 $args = apply_filters('get_vendor_orders_reports_of_pending_shipping_query_args', wp_parse_args($args, $defaults));
-                $pending_shippings = $wpdb->get_results(
-                        $wpdb->prepare("SELECT order_id FROM {$wpdb->prefix}wcmp_vendor_orders WHERE commission_id > 0 AND vendor_id=%d AND `created` BETWEEN %s AND %s AND `is_trashed` != 1 AND `shipping_status` != 1 group by order_id order by order_id DESC", $args['vendor_id'], $args['start_date'], $args['end_date']
+                
+                $query = array(
+                    'author' => $args['vendor_id'],
+                    'date_query' => array(
+                        array(
+                            'after'     => $args['start_date'],
+                            'before'    => $args['end_date'],
+                            'inclusive' => true,
+                        ),
+                    ),
+                    'meta_query'    => array(
+                        'relation' => 'OR',
+                        array(
+                            'key'       => 'dc_pv_shipped',
+                            'compare'   => 'NOT EXISTS',
+                        ),
+                        array(
+                            'key'       => 'wcmp_vendor_order_shipped',
+                            'compare'   => 'NOT EXISTS',
                         )
+                    )
                 );
-                $reports = $pending_shippings;
+                $vendor_orders = wcmp_get_orders( $query, 'object' );
+
+                $reports = $vendor_orders;
                 break;
 
             default:
@@ -885,8 +905,10 @@ class WCMp_Vendor {
                 $mails->trigger($order_id, $customer_email, $this->term_id, array('tracking_id' => $tracking_id, 'tracking_url' => $tracking_url));
             }
             update_post_meta($order_id, 'dc_pv_shipped', $shippers);
+            // set new meta shipped
+            update_post_meta($order_id, 'wcmp_vendor_order_shipped', 1);
         }
-        $wpdb->query("UPDATE {$wpdb->prefix}wcmp_vendor_orders SET shipping_status = '1' WHERE order_id = $order_id and vendor_id = $this->id");
+        //$wpdb->query("UPDATE {$wpdb->prefix}wcmp_vendor_orders SET shipping_status = '1' WHERE order_id = $order_id and vendor_id = $this->id");
         do_action('wcmp_vendors_vendor_ship', $order_id, $this->term_id);
         $order = wc_get_order($order_id);
         $comment_id = $order->add_order_note(__('Vendor ', 'dc-woocommerce-multi-vendor') . $this->page_title . __(' has shipped his part of order to customer.', 'dc-woocommerce-multi-vendor') . '<br><span>' . __('Tracking Url : ', 'dc-woocommerce-multi-vendor') . '</span> <a target="_blank" href="' . $tracking_url . '">' . $tracking_url . '</a><br><span>' . __('Tracking Id : ', 'dc-woocommerce-multi-vendor') . '</span>' . $tracking_id, '1', true);

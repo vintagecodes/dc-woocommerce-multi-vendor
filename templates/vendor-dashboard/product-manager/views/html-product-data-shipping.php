@@ -47,18 +47,18 @@ defined( 'ABSPATH' ) || exit;
                 </div>
             </div> 
         <?php endif; ?>
-        <?php do_action( 'wcmp_afm_product_options_dimensions' ); ?> 
+        <?php do_action( 'wcmp_afm_product_options_dimensions', $post->ID, $product_object, $post ); ?> 
         <div class="form-group">
             <label class="control-label col-sm-3 col-md-3" for="product_shipping_class"><?php esc_html_e( 'Shipping class', 'woocommerce' ); ?></label>
             <div class="col-md-6 col-sm-9">
                 <select name="product_shipping_class" id="product_shipping_class" class="form-control regular-select">
-                    <option value="-1"><?php esc_html_e( 'No shipping class', 'woocommerce' ); ?></option>
-                    <?php foreach ( get_current_vendor_shipping_classes() as $key => $class_name ) : ?>
+                    <?php foreach ( get_current_vendor_shipping_classes() as $key => $class_name  ) : ?>
                         <option value="<?php esc_attr_e( $key ); ?>" <?php selected( $product_object->get_shipping_class_id( 'edit' ), $key ); ?>><?php esc_html_e( $class_name ); ?></option>
                     <?php endforeach; ?>
+                    <option value="-1"><?php esc_html_e( 'No shipping class', 'woocommerce' ); ?></option>
                 </select>
             </div>
         </div> 
-        <?php do_action( 'wcmp_afm_product_options_shipping' ); ?> 
+        <?php do_action( 'wcmp_afm_product_options_shipping', $post->ID, $product_object, $post ); ?> 
     </div>
 </div>

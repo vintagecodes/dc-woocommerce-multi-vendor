@@ -22,7 +22,7 @@ global $WCMp;
 ?>
 <div role="tabpanel" class="tab-pane fade" id="general_product_data">
     <div class="row-padding">
-        <?php do_action( 'wcmp_afm_before_general_product_data' ); ?>
+        <?php do_action( 'wcmp_afm_before_general_product_data', $post->ID, $product_object, $post ); ?>
         <?php
         $product_url_visibility = apply_filters( 'general_tab_product_url_section', array( 'external' ) );
         if ( call_user_func_array( "wcmp_is_allowed_product_type", $product_url_visibility ) ) :
@@ -84,7 +84,7 @@ global $WCMp;
                         <a href="#" class="pull-right cancel_sale_schedule form-text"><?php _e( 'Cancel', 'woocommerce' ); ?></a>
                     </div>
                 </div> 
-                <?php do_action( 'wcmp_afm_product_options_pricing' ); ?> 
+                <?php do_action( 'wcmp_afm_product_options_pricing', $post->ID, $product_object, $post ); ?> 
             </div>
         <?php endif; ?>
         <?php if ( $WCMp->vendor_caps->vendor_can( 'downloadable' ) ) : ?>
@@ -152,7 +152,7 @@ global $WCMp;
                         <input class="form-control" type="text" placeholder="<?php _e( 'Never', 'woocommerce' ); ?>" id="_download_expiry" name="_download_expiry" value="<?php echo -1 === $product_object->get_download_expiry( 'edit' ) ? '' : $product_object->get_download_expiry( 'edit' ); ?>" />
                     </div>
                 </div> 
-                <?php do_action( 'wcmp_afm_product_options_downloads' ); ?>
+                <?php do_action( 'wcmp_afm_product_options_downloads', $post->ID, $product_object, $post ); ?>
             </div>
         <?php endif; ?>
         <?php
@@ -183,6 +183,6 @@ global $WCMp;
                 </div>  
             </div>
         <?php endif; ?>
-        <?php do_action( 'wcmp_afm_after_general_product_data' ); ?>
+        <?php do_action( 'wcmp_afm_after_general_product_data', $post->ID, $product_object, $post ); ?>
     </div>
 </div>

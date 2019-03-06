@@ -84,5 +84,5 @@ defined( 'ABSPATH' ) || exit;
             </div>
         </div>
     </div>
-    <?php do_action( 'wcmp_afm_product_options_attributes' ); ?>
+    <?php do_action( 'wcmp_afm_product_options_attributes', $post->ID, $product_object, $post ); ?>
 </div>

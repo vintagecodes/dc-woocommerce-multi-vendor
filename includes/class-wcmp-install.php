@@ -284,21 +284,21 @@ class WCMp_Install {
                 `location_type` varchar(255) DEFAULT NULL,
                 PRIMARY KEY (`id`)
                 ) $collate;";
-  //       $create_tables_query[] = "CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "wcmp_vendor_ledger` (
-  //               `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  //               `vendor_id` int(11) NOT NULL,
-  //               `order_id` bigint(20) NOT NULL,
-  //               `ref_id` bigint(20) NOT NULL,
-  //               `ref_type` varchar(100) NOT NULL DEFAULT '',
-  //               `ref_info` varchar(255) NOT NULL DEFAULT '',
-  //               `ref_status` varchar(100) NOT NULL DEFAULT '',
-  //               `ref_updated` timestamp NULL,
-  //               `credit` varchar(100) NOT NULL,
-		// `debit` varchar(100) NOT NULL,
-  //               `balance` varchar(255) NOT NULL DEFAULT 0,
-  //               `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,	
-  //               PRIMARY KEY (`id`)
-  //               ) $collate;";
+        $create_tables_query[] = "CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "wcmp_vendor_ledger` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `vendor_id` int(11) NOT NULL,
+                `order_id` bigint(20) NOT NULL,
+                `ref_id` bigint(20) NOT NULL,
+                `ref_type` varchar(100) NOT NULL DEFAULT '',
+                `ref_info` varchar(255) NOT NULL DEFAULT '',
+                `ref_status` varchar(100) NOT NULL DEFAULT '',
+                `ref_updated` timestamp NULL,
+                `credit` varchar(100) NOT NULL,
+		`debit` varchar(100) NOT NULL,
+                `balance` varchar(255) NOT NULL DEFAULT 0,
+                `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,	
+                PRIMARY KEY (`id`)
+                ) $collate;";
 
         foreach ($create_tables_query as $create_table_query) {
             $wpdb->query($create_table_query);

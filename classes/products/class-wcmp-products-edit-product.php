@@ -280,7 +280,7 @@ class WCMp_Products_Edit_Product {
                     );
                 }
             }
-            $edit_product_params = apply_filters( 'wcmp_edit_product_params', array(
+            $edit_product_params = apply_filters( 'wcmp_advance_product_script_params', array(
                 'ajax_url'                            => admin_url( 'admin-ajax.php' ),
                 'product_id'                          => $this->product_id,
                 'search_products_nonce'               => wp_create_nonce( 'search-products' ),

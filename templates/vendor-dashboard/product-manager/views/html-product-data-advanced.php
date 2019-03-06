@@ -45,6 +45,6 @@ defined( 'ABSPATH' ) || exit;
             </div> 
         <?php endif; ?>
 
-        <?php do_action( 'wcmp_afm_product_options_advanced' ); ?>
+        <?php do_action( 'wcmp_afm_product_options_advanced', $post->ID, $product_object, $post ); ?>
     </div>
 </div>

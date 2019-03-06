@@ -6,7 +6,7 @@
  * Functions for order specific things.
  *
  * @package WCMp/Functions
- * @version 3.2.0
+ * @version 3.4.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Get all orders.
  *
- * @since 3.2.0
+ * @since 3.4.0
  * @used-by WC_Order::set_status
  * @return array
  */
@@ -38,6 +38,27 @@ function wcmp_get_orders($args = array(), $return_type = 'ids') {
         return $orders;
     }
     return $query->get_posts();
+}
+
+/**
+ * Get Vendor order object.
+ *
+ * @since 3.4.0
+ * @return object/false Vendor order object
+ */
+function wcmp_get_order($id){
+    global $WCMp;
+    if($id){
+        if(!class_exists('WCMp_Vendor_Order')){
+            // Init WCMp Vendor Order class
+            $WCMp->load_class('vendor-order');
+        }
+        $vendor_order = new WCMp_Vendor_Order($id);
+        if(!$vendor_order->vendor_id) return false;
+        return $vendor_order;
+    }else{
+        return false;
+    }
 }
 
 /**

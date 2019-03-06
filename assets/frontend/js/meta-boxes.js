@@ -49,6 +49,7 @@
 
             $editingWrapItem.css('display', 'inline-block');
             $editingWrapItem.children('.form-control').val($editableText);
+            $editingWrapItem.children('label').hide();
             $editable.hide();
             $(this).hide();
         },

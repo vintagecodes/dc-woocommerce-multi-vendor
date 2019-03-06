@@ -369,6 +369,13 @@ class WCMp_Cron_Job {
                                     'posted_data' => array(),
                                     'line_items' => $items
                             ), true);
+                            // mark as shipped
+                            $shippers = get_post_meta($vorder->order_id, 'dc_pv_shipped', true) ? get_post_meta($vorder->order_id, 'dc_pv_shipped', true) : array();
+                            if (in_array($vendor->id, $shippers)) {
+                                update_post_meta($vendor_order_id, 'dc_pv_shipped', $shippers);
+                                // set new meta shipped
+                                update_post_meta($vendor_order_id, 'wcmp_vendor_order_shipped', 1);
+                            }
                             // add commission id in order meta
                             update_post_meta($vendor_order_id, '_commission_id', $vorder->commission_id);
                             // add order id with commission meta

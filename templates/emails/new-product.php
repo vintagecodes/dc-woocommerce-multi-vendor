@@ -25,7 +25,9 @@ else  $title = __( 'Product', 'dc-woocommerce-multi-vendor' );
 	<p>
 		<?php printf( __( "%s title: %s",  'dc-woocommerce-multi-vendor' ), $title, $product_name ); ?><br/>
 		<?php printf( __( "Submitted by: %s",  'dc-woocommerce-multi-vendor' ), $vendor_name ); ?><br/>
-		<?php printf( __( "Edit %s: %s",  'dc-woocommerce-multi-vendor' ), $title, admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ); ?>
+		<?php 
+                $product_link = apply_filters( 'wcmp_email_vendor_new_product_link', esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $post_id)));
+                printf( __( "Edit %s: %s",  'dc-woocommerce-multi-vendor' ), $title, $product_link ); ?>
 		<br/>
 	</p>
 

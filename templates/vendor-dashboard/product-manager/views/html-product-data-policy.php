@@ -25,7 +25,7 @@ $_wcmp_cancallation_policy = get_post_meta( $id, '_wcmp_cancallation_policy', tr
 ?>
 <div role="tabpanel" class="tab-pane fade" id="product_policy_data">
     <div class="row-padding"> 
-        <?php do_action( 'wcmp_afm_before_vendor_policies' ); ?>
+        <?php do_action( 'wcmp_afm_before_vendor_policies', $post->ID, $product_object, $post ); ?>
         <?php if ( apply_filters( 'can_vendor_edit_shipping_policy_field', true ) ) : ?>
             <div class="form-group">
                 <label class="control-label col-sm-3 col-md-3" for="_wcmp_shipping_policy"><?php esc_attr_e( 'Shipping Policy', 'dc-woocommerce-multi-vendor' ); ?></label>
@@ -83,6 +83,6 @@ $_wcmp_cancallation_policy = get_post_meta( $id, '_wcmp_cancallation_policy', tr
                 </div>
             </div>
         <?php endif; ?>
-        <?php do_action( 'wcmp_afm_after_vendor_policies' ); ?>
+        <?php do_action( 'wcmp_afm_after_vendor_policies', $post->ID, $product_object, $post ); ?>
     </div>
 </div>

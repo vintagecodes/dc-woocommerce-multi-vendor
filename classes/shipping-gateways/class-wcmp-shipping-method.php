@@ -191,7 +191,10 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
         }
         
         $shipping_methods = WCMP_Shipping_Zone::get_shipping_methods( $zone->get_id(), $vendor_id );
-        
+        /*
+        * Contributing Author: Vivek Athalye @vnathalye
+        */
+        $shipping_methods = apply_filters('wcmp_get_shipping_methods_for_shipping_address', $shipping_methods, $package );
         /*if ( !self::is_shipping_enabled_for_seller( $vendor_id ) ) {
             return;
         }*/

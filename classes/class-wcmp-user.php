@@ -217,7 +217,8 @@ class WCMp_User {
                 if (isset($_POST['pending_vendor']) && ( $_POST['pending_vendor'] == 'true' )) {
                     $this->vendor_registration($user->ID);
                     $this->wcmp_customer_new_account($user->ID);
-                    wp_redirect(get_permalink(get_option('woocommerce_myaccount_page_id')));
+                    $redirect_to = apply_filters( 'wcmp_user_apply_vendor_redirect_url', get_permalink( wcmp_vendor_dashboard_page_id() ), $_POST );
+                    wp_redirect( $redirect_to );
                     exit;
                 }
             }

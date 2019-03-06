@@ -101,18 +101,4 @@ class WCMp_Vendor_Order {
     
 }
 
-/**
- * Get Vendor order object.
- *
- * @since 3.1.2.0
- * @return object/false Vendor order object
- */
-function wcmp_get_order($id){
-    if($id){
-        $vendor_order = new WCMp_Vendor_Order($id);
-        if(!$vendor_order->vendor_id) return false;
-        return $vendor_order;
-    }else{
-        return false;
-    }
-}
+

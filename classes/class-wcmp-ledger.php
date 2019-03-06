@@ -24,16 +24,28 @@ class WCMp_Ledger {
     public function wcmp_commission_after_save_commission_total( $commission_id, $order ){
         if( $order ){
             $vendor_id = get_post_meta( $order->get_id(), '_vendor_id', true);
+            $vendor = get_wcmp_vendor( $vendor_id );
+            $args = array(
+                'meta_query' => array(
+                    array(
+                        'key' => '_commission_vendor',
+                        'value' => absint($vendor->term_id),
+                        'compare' => '='
+                    ),
+                ),
+            );
+            $unpaid_commission_total = WCMp_Commission::get_commissions_total_data( $args, $vendor->id );
             $commission_total = get_post_meta( $commission_id, '_commission_total', true );
             $data = array(
                 'vendor_id'     => $vendor_id,
                 'order_id'      => $order->get_id(),
                 'ref_id'        => $commission_id,
                 'ref_type'      => 'commission',
-                'ref_info'      => sprintf(__('Commission generated for Order &ndash; #%s', 'dc-woocommerce-multi-vendor'), $order->get_id()),
+                'ref_info'      => sprintf(__('Commission generated for Order &ndash; <a href="%s" target="_blank">#%s</a>', 'dc-woocommerce-multi-vendor'), esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders'), $order->get_id())), $order->get_id()),
                 'ref_status'    => 'unpaid',
                 'ref_updated'   => date('Y-m-d H:i:s', current_time('timestamp')),
                 'credit'        => $commission_total,
+                'balance'       => $unpaid_commission_total['total'],
             );
             $data_store = $this->load_ledger_data_store();
             $data_store->create($data);
@@ -50,15 +62,27 @@ class WCMp_Ledger {
             foreach ($commission_specific_orders as $corder) {
                 $commission_total += $corder->commission_amount + $corder->shipping + $corder->tax + $corder->shipping_tax_amount;
             }
+            $vendor = get_wcmp_vendor( $tbl_vorder_data->vendor_id );
+            $args = array(
+                'meta_query' => array(
+                    array(
+                        'key' => '_commission_vendor',
+                        'value' => absint($vendor->term_id),
+                        'compare' => '='
+                    ),
+                ),
+            );
+            $unpaid_commission_total = WCMp_Commission::get_commissions_total_data( $args, $vendor->id );
             $data = array(
                 'vendor_id'     => $tbl_vorder_data->vendor_id,
                 'order_id'      => $order->get_id(),
                 'ref_id'        => $commission_id,
                 'ref_type'      => 'commission',
-                'ref_info'      => sprintf(__('Commission generated for Order &ndash; #%s', 'dc-woocommerce-multi-vendor'), $order->get_id()),
+                'ref_info'      => sprintf(__('Commission generated for Order &ndash; <a href="%s" target="_blank">#%s</a>', 'dc-woocommerce-multi-vendor'), esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders'), $order->get_id())), $order->get_id()),
                 'ref_status'    => $tbl_vorder_data->commission_status,
                 'ref_updated'   => date('Y-m-d H:i:s', strtotime($commission->post_date)),
                 'credit'        => $commission_total,
+                'balance'       => $unpaid_commission_total['total'],
             );
             $data_store = $this->load_ledger_data_store();
             $data_store->create($data);
@@ -70,15 +94,27 @@ class WCMp_Ledger {
             $vendor_id = get_post_meta( $order->get_id(), '_vendor_id', true);
             $refund_total = isset( $commissions_refunded[$commission_id] ) ? abs( $commissions_refunded[$commission_id] ) : 0;
             $refund = new WC_Order_Refund($refund_id);
+            $vendor = get_wcmp_vendor( $vendor_id );
+            $args = array(
+                'meta_query' => array(
+                    array(
+                        'key' => '_commission_vendor',
+                        'value' => absint($vendor->term_id),
+                        'compare' => '='
+                    ),
+                ),
+            );
+            $unpaid_commission_total = WCMp_Commission::get_commissions_total_data( $args, $vendor->id );
             $data = array(
                 'vendor_id'     => $vendor_id,
                 'order_id'      => $order->get_id(),
                 'ref_id'        => $refund_id,
                 'ref_type'      => 'refund',
-                'ref_info'      => sprintf(__('Refund generated for Commission &ndash; #%s', 'dc-woocommerce-multi-vendor'), $commission_id),
+                'ref_info'      => sprintf(__('Refund generated for Commission &ndash; <a href="%s" target="_blank">#%s</a>', 'dc-woocommerce-multi-vendor'), esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders'), $order->get_id())),  $commission_id),
                 'ref_status'    => $refund->get_status(),
                 'ref_updated'   => date('Y-m-d H:i:s', current_time('timestamp')),
-                'debit'        => $refund_total,
+                'debit'         => $refund_total,
+                'balance'       => $unpaid_commission_total['total'],
             );
             $data_store = $this->load_ledger_data_store();
             $data_store->create($data);
@@ -94,15 +130,26 @@ class WCMp_Ledger {
                 foreach ( $commissions as $commission_id ) {
                     $withdrawal_total = WCMp_Commission::commission_totals($commission_id, 'edit');
                     $order_id = get_post_meta( $commission_id, '_commission_order_id', true );
+                    $args = array(
+                        'meta_query' => array(
+                            array(
+                                'key' => '_commission_vendor',
+                                'value' => absint($vendor->term_id),
+                                'compare' => '='
+                            ),
+                        ),
+                    );
+                    $unpaid_commission_total = WCMp_Commission::get_commissions_total_data( $args, $vendor->id );
                     $data = array(
                         'vendor_id'     => $vendor->id,
                         'order_id'      => $order_id,
                         'ref_id'        => $transaction_id,
                         'ref_type'      => 'withdrawal',
-                        'ref_info'      => sprintf(__('Withdrawal generated for Commission &ndash; #%s', 'dc-woocommerce-multi-vendor'), $commission_id),
+                        'ref_info'      => sprintf(__('Withdrawal generated for Commission &ndash; <a href="%s" target="_blank">#%s</a>', 'dc-woocommerce-multi-vendor'), esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_transaction_details_endpoint', 'vendor', 'general', 'transaction-details'), $transaction_id)), $commission_id),
                         'ref_status'    => 'completed',
                         'ref_updated'   => date('Y-m-d H:i:s', current_time('timestamp')),
                         'debit'        => $withdrawal_total,
+                        'balance'       => $unpaid_commission_total['total'],
                     );
                     $data_store = $this->load_ledger_data_store();
                     $data_store->create($data);

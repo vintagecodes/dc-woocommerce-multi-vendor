@@ -47,7 +47,7 @@ $subtotal = 0;
             </h3>
             <div class="change-status pull-left">
                 <div class="order-status-text pull-left <?php echo 'wc-' . $order->get_status( 'edit' ); ?>">
-                    <i class="wcmp-font ico-delete-icon"></i>
+                    <i class="wcmp-font ico-pendingpayment-status-icon"></i>
                     <span class="order_status_lbl"><?php echo esc_html( wc_get_order_status_name( $order->get_status() ) ); ?></span>
                 </div>
                 <div class="dropdown pull-left clearfix">

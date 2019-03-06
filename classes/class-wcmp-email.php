@@ -9,14 +9,55 @@
  
 class WCMp_Email {
 	
-	public function __construct() {		
-	  	global $WCMp;
-	  	add_action( 'woocommerce_email_customer_details', array( $this, 'wcmp_vendor_messages_customer_support' ), 30, 3 );	
-	  	// Intialize WCMp Email Footer text settings
+    public function __construct() {		
+        global $WCMp;
+        // Intialize WCMp Emails
+        add_filter('woocommerce_email_classes', array($this, 'wcmp_email_classes'));
+        add_action( 'woocommerce_email_customer_details', array( $this, 'wcmp_vendor_messages_customer_support' ), 30, 3 );	
+        // Intialize WCMp Email Footer text settings
         add_filter('woocommerce_get_settings_email', array($this, 'wcmp_settings_email'));
         // WCMp Email Footer hook
         add_action( 'wcmp_email_footer', array( $this, 'wcmp_email_footer' ) );
-	}
+    }
+    
+    /**
+     * Register WCMp emails class
+     *
+     * @access public
+     * @return array
+     */
+    function wcmp_email_classes($emails) {
+        include( 'emails/class-wcmp-email-vendor-new-account.php' );
+        include( 'emails/class-wcmp-email-admin-new-vendor-account.php' );
+        include( 'emails/class-wcmp-email-approved-vendor-new-account.php' );
+        include( 'emails/class-wcmp-email-rejected-vendor-new-account.php' );
+        include( 'emails/class-wcmp-email-vendor-new-order.php' );
+        include( 'emails/class-wcmp-email-vendor-notify-shipped.php' );
+        include( 'emails/class-wcmp-email-vendor-new-product-added.php' );
+        include( 'emails/class-wcmp-email-admin-added-new-product-to-vendor.php' );
+        include( 'emails/class-wcmp-email-vendor-new-commission-transaction.php' );
+        include( 'emails/class-wcmp-email-vendor-direct-bank.php' );
+        include( 'emails/class-wcmp-email-admin-withdrawal-request.php' );
+        include( 'emails/class-wcmp-email-vendor-orders-stats-report.php' );
+        include( 'emails/class-wcmp-email-vendor-contact-widget.php' );
+        
+        $wcmp_email = array();
+        $wcmp_email['WC_Email_Vendor_New_Account'] = new WC_Email_Vendor_New_Account();
+        $wcmp_email['WC_Email_Admin_New_Vendor_Account'] = new WC_Email_Admin_New_Vendor_Account();
+        $wcmp_email['WC_Email_Approved_New_Vendor_Account'] = new WC_Email_Approved_New_Vendor_Account();
+        $wcmp_email['WC_Email_Rejected_New_Vendor_Account'] = new WC_Email_Rejected_New_Vendor_Account();
+        $wcmp_email['WC_Email_Vendor_New_Order'] = new WC_Email_Vendor_New_Order();
+        $wcmp_email['WC_Email_Notify_Shipped'] = new WC_Email_Notify_Shipped();
+        $wcmp_email['WC_Email_Vendor_New_Product_Added'] = new WC_Email_Vendor_New_Product_Added();
+        $wcmp_email['WC_Email_Admin_Added_New_Product_to_Vendor'] = new WC_Email_Admin_Added_New_Product_to_Vendor();
+        $wcmp_email['WC_Email_Vendor_Commission_Transactions'] = new WC_Email_Vendor_Commission_Transactions();
+        $wcmp_email['WC_Email_Vendor_Direct_Bank'] = new WC_Email_Vendor_Direct_Bank();
+        $wcmp_email['WC_Email_Admin_Widthdrawal_Request'] = new WC_Email_Admin_Widthdrawal_Request();
+        $wcmp_email['WC_Email_Vendor_Orders_Stats_Report'] = new WC_Email_Vendor_Orders_Stats_Report();
+        $wcmp_email['WC_Email_Vendor_Contact_Widget'] = new WC_Email_Vendor_Contact_Widget();
+
+        return array_merge( $emails, apply_filters( 'wcmp_email_classes', $wcmp_email ) );
+    }
 
 	/**
      * Register WCMp emails footer text settings

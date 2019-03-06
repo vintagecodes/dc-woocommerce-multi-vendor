@@ -430,12 +430,14 @@ class WCMp_Frontend {
             $vendor_id = get_queried_object()->term_id;
             // Get vendor info
             $vendor = get_wcmp_vendor_by_term($vendor_id);
-            $image = $vendor->get_image() ? $vendor->get_image() : $WCMp->plugin_url . 'assets/images/WP-stdavatar.png';
-            $description = $vendor->description;
+            if( $vendor ){
+                $image = $vendor->get_image() ? $vendor->get_image() : $WCMp->plugin_url . 'assets/images/WP-stdavatar.png';
+                $description = $vendor->description;
 
-            $address = $vendor->get_formatted_address();
+                $address = $vendor->get_formatted_address();
 
-            $WCMp->template->get_template('archive_vendor_info.php', array('vendor_id' => $vendor->id, 'banner' => $vendor->get_image('banner'), 'profile' => $image, 'description' => apply_filters('the_content', $description), 'mobile' => $vendor->phone, 'location' => $address, 'email' => $vendor->user_data->user_email));
+                $WCMp->template->get_template('archive_vendor_info.php', array('vendor_id' => $vendor->id, 'banner' => $vendor->get_image('banner'), 'profile' => $image, 'description' => apply_filters('the_content', $description), 'mobile' => $vendor->phone, 'location' => $address, 'email' => $vendor->user_data->user_email));
+            }
         }
     }
 

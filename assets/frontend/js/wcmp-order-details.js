@@ -114,6 +114,7 @@ jQuery(function ($) {
                 if (response) {
                     $('.order_status_lbl').html('');
                     $('.order_status_lbl').html(response);
+                    $('#order_current_status').val(selected_status);
                     $('.change-status').removeClass('loaderOverlay');
                 }
             });

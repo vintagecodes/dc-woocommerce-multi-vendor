@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
                 </div>
             </div> 
         <?php endif; ?>
-        <?php do_action( 'wcmp_afm_product_options_sku' ); ?>
+        <?php do_action( 'wcmp_afm_product_options_sku', $post->ID, $product_object, $post ); ?>
         <?php if ( apply_filters( 'wcmp_can_vendor_manage_stock', 'yes' === get_option( 'woocommerce_manage_stock' ) ) ) : ?> 
             <?php
             $manage_stock_visibility = apply_filters( 'inventory_tab_manage_stock_section', array( 'simple', 'variable' ) );
@@ -51,7 +51,7 @@ defined( 'ABSPATH' ) || exit;
                         </div>
                     </div>  
                 </div>
-                <?php do_action( 'wcmp_afm_product_options_stock' ); ?>
+                <?php do_action( 'wcmp_afm_product_options_stock', $post->ID, $product_object, $post ); ?>
                 <?php
                 $stock_fields_visibility = apply_filters( 'inventory_tab_stock_fields_section', array( 'simple', 'variable' ) );
                 if ( call_user_func_array( "wcmp_is_allowed_product_type", $stock_fields_visibility ) ) :
@@ -81,10 +81,19 @@ defined( 'ABSPATH' ) || exit;
                                 </select> 
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3 col-md-3" for="_low_stock_amount">
+                                <?php _e( 'Low stock threshold', 'woocommerce' ); ?>
+                                <span class="img_tip" data-desc="<?php esc_html_e( 'When product stock reaches this amount you will be notified by email', 'woocommerce' ); ?>"></span>
+                            </label>
+                            <div class="col-md-6 col-sm-9">
+                                <input class="form-control" type="text" id="_low_stock_amount" name="_low_stock_amount" value="<?php echo $product_object->get_low_stock_amount( 'edit' ); ?>" placeholder="<?php echo get_option( 'woocommerce_notify_low_stock_amount' ); ?>" /> 
+                            </div>
+                        </div>
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
-            <?php do_action( 'wcmp_afm_product_options_stock_fields' ); ?>
+            <?php do_action( 'wcmp_afm_product_options_stock_fields', $post->ID, $product_object, $post ); ?>
             <?php
             $stock_status_invisibility = apply_filters( 'inventory_tab_stock_status_section_invisibility', array( 'variable', 'external' ) );
             if ( call_user_func_array( "wcmp_is_allowed_product_type", $stock_status_invisibility ) ) :
@@ -102,7 +111,7 @@ defined( 'ABSPATH' ) || exit;
                         </div>
                     </div>    
                 </div>
-                <?php do_action( 'wcmp_afm_product_options_stock_status' ); ?> 
+                <?php do_action( 'wcmp_afm_product_options_stock_status', $post->ID, $product_object, $post ); ?> 
             <?php endif; ?> 
         <?php endif; ?> 
         <?php
@@ -118,10 +127,10 @@ defined( 'ABSPATH' ) || exit;
                         <span class="form-text"><?php esc_html_e( 'Enable this to only allow one of this item to be bought in a single order', 'woocommerce' ); ?></span>
                     </div>
                 </div> 
-                <?php do_action( 'wcmp_afm_product_options_sold_individually' ); ?>
+                <?php do_action( 'wcmp_afm_product_options_sold_individually', $post->ID, $product_object, $post ); ?>
             </div>
         <?php endif; ?>
-        <?php do_action( 'wcmp_afm_after_inventory_section_ends' ); ?>
+        <?php do_action( 'wcmp_afm_after_inventory_section_ends', $post->ID, $product_object, $post ); ?>
     </div>
-    <?php do_action( 'wcmp_afm_product_options_inventory_product_data' ); ?>
+    <?php do_action( 'wcmp_afm_product_options_inventory_product_data', $post->ID, $product_object, $post ); ?>
 </div>

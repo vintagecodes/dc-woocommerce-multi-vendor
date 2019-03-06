@@ -22,7 +22,9 @@ class WCMp_Vendor_Registration_Shortcode {
      */
     public static function output($attr) {
         global $WCMp;
-        if (!apply_filters('enable_users_can_register_for_wcmp_vendor_registration', get_option('users_can_register')) || apply_filters('is_woocommerce_enable_myaccount_registration_for_wcmp_vendor_registration', get_option( 'woocommerce_enable_myaccount_registration' )) != 'yes') {
+        $enable_registration = ( get_option('users_can_register') ) ? get_option('users_can_register') : false;
+        $enable_registration = ( !$enable_registration ) ? get_option( 'woocommerce_enable_myaccount_registration' ) != 'yes' ? false : true : $enable_registration;
+        if (!apply_filters('enable_users_can_register_for_wcmp_vendor_registration', $enable_registration)) {
             echo ' ' . __('Signup has been disabled.', 'dc-woocommerce-multi-vendor');
             return;
         }
