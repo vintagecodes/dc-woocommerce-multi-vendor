@@ -304,11 +304,18 @@ class WCMp_Order {
 
         $vendor_order = wc_get_order($vendor_order_id);
 
-        $wc_checkout = WC()->checkout();
-        $checkout_fields = !is_admin() && !is_ajax() ? $wc_checkout->checkout_fields : array();
+        $checkout_fields = array();
+        if( !$data_migration ){
+            $wc_checkout = WC()->checkout();
+            $checkout_fields = !is_admin() && !is_ajax() ? $wc_checkout->checkout_fields : array();
+        }
         
         self::create_wcmp_order_line_items($vendor_order, $args);
-        self::create_wcmp_order_shipping_lines($vendor_order, WC()->session->get('chosen_shipping_methods'), WC()->shipping->get_packages(), $args, $data_migration);
+        if( $data_migration ){
+            self::create_wcmp_order_shipping_lines($vendor_order, array(), array(), $args, $data_migration);
+        }else{
+            self::create_wcmp_order_shipping_lines($vendor_order, WC()->session->get('chosen_shipping_methods'), WC()->shipping->get_packages(), $args, $data_migration);
+        }
         
         //self::create_wcmp_order_tax_lines( $vendor_order, $args );
         // Add customer checkout fields data to vendor order
@@ -378,50 +385,52 @@ class WCMp_Order {
         $line_items = $args['line_items'];
         $commission_rate_items = array();
         foreach ($line_items as $item_id => $order_item) {
-            $item = new WC_Order_Item_Product();
-            $product = wc_get_product($order_item['product_id']);
-      
-            $item->set_props(
-                    array(
-                        'quantity' => $order_item['quantity'],
-                        'variation' => $order_item['variation'],
-                        'subtotal' => $order_item['line_subtotal'],
-                        'total' => $order_item['line_total'],
-                        'subtotal_tax' => $order_item['line_subtotal_tax'],
-                        'total_tax' => $order_item['line_tax'],
-                        'taxes' => $order_item['line_tax_data'],
-                    )
-            );
+            if (isset($order_item['product_id']) && $order_item['product_id'] !== 0) {
+                $item = new WC_Order_Item_Product();
+                $product = wc_get_product($order_item['product_id']);
 
-            if ($product) {
                 $item->set_props(
                         array(
-                            'name' => $product->get_name(),
-                            'tax_class' => $product->get_tax_class(),
-                            'product_id' => $product->is_type('variation') ? $product->get_parent_id() : $product->get_id(),
-                            'variation_id' => $product->is_type('variation') ? $product->get_id() : 0,
+                            'quantity' => $order_item['quantity'],
+                            'variation' => $order_item['variation'],
+                            'subtotal' => $order_item['line_subtotal'],
+                            'total' => $order_item['line_total'],
+                            'subtotal_tax' => $order_item['line_subtotal_tax'],
+                            'total_tax' => $order_item['line_tax'],
+                            'taxes' => $order_item['line_tax_data'],
                         )
                 );
+
+                if ($product) {
+                    $item->set_props(
+                            array(
+                                'name' => $product->get_name(),
+                                'tax_class' => $product->get_tax_class(),
+                                'product_id' => $product->is_type('variation') ? $product->get_parent_id() : $product->get_id(),
+                                'variation_id' => $product->is_type('variation') ? $product->get_id() : 0,
+                            )
+                    );
+                }
+
+                $item->set_backorder_meta();
+                $item->add_meta_data('_vendor_order_item_id', $item_id);
+                // Add commission data
+                $item->add_meta_data('_vendor_item_commission', $order_item['commission']);
+
+                $item->add_meta_data('_vendor_id', $args['vendor_id']);
+                // BW compatibility with old meta.
+                $vendor = get_wcmp_vendor($args['vendor_id']);
+                $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
+                $item->add_meta_data($general_cap, $vendor->page_title);
+
+
+                do_action('wcmp_vendor_create_order_line_item', $item, $item_id, $order_item, $order);
+                // Add item to order and save.
+                $order->add_item($item);
+                // temporary commission rate save with order_item_id
+                if(isset($order_item['commission_rate']) && $order_item['commission_rate'])
+                    $commission_rate_items[$item_id] = $order_item['commission_rate'];
             }
-
-            $item->set_backorder_meta();
-            $item->add_meta_data('_vendor_order_item_id', $item_id);
-            // Add commission data
-            $item->add_meta_data('_vendor_item_commission', $order_item['commission']);
-            
-            $item->add_meta_data('_vendor_id', $args['vendor_id']);
-            // BW compatibility with old meta.
-            $vendor = get_wcmp_vendor($args['vendor_id']);
-            $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
-            $item->add_meta_data($general_cap, $vendor->page_title);
-
-
-            do_action('wcmp_vendor_create_order_line_item', $item, $item_id, $order_item, $order);
-            // Add item to order and save.
-            $order->add_item($item);
-            // temporary commission rate save with order_item_id
-            if(isset($order_item['commission_rate']) && $order_item['commission_rate'])
-                $commission_rate_items[$item_id] = $order_item['commission_rate'];
         }
         /**
          * Temporary commission rates save for vendor order.

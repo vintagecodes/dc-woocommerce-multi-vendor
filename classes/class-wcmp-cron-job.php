@@ -350,39 +350,60 @@ class WCMp_Cron_Job {
                     $vendor_done_commissions_ids = array();
                     foreach ($vendor_orders as $vorder) {
                         if(!in_array($vorder->commission_id, $vendor_done_commissions_ids)){
+                            $vendor_done_commissions_ids[] = $vorder->commission_id;
                             $commission_specific_orders = get_wcmp_vendor_orders(array('vendor_id' => $vendor->id, 'commission_id' => $vorder->commission_id));
                             $items = array();
+                            $commission_specific_orders_ids_done = array();
                             foreach ($commission_specific_orders as $corder) {
                                 $order = wc_get_order($corder->order_id);
-                                if($order){
-                                    $item = $order->get_item($corder->order_item_id);
-                                    $item['commission'] = $corder->commission_amount;
-                                    $item['commission_rate'] = array();
-                                    $items[$corder->order_id] = $item;
+                                if(!$order){
+                                    continue;
+                                }
+                                if(in_array($corder->order_id, $commission_specific_orders_ids_done)){
+                                    continue;
+                                }
+                                $commission_specific_orders_ids_done[] = $corder->order_id;
+
+                                $items = $order->get_items();
+                                $vendor_items = array();
+                                foreach ($items as $item_id => $item) {
+                                    if (isset($item['product_id']) && $item['product_id'] !== 0) {
+                                        // check vendor product
+                                        $has_vendor = get_wcmp_product_vendors($item['product_id']);
+                                        if ($has_vendor && $has_vendor->id == $vendor->id) {
+                                            $vendor_items['commission'] = $corder->commission_amount;
+                                            $vendor_items['commission_rate'] = array();
+                                            $vendor_items[$item_id] = $item;
+                                        }
+                                    }
+                                }
+                                try {
+                                    // migrate old orders
+                                    require_once ( $WCMp->plugin_path . '/classes/class-wcmp-order.php' );
+                                    $vendor_order_id = WCMp_Order::create_vendor_order(array(
+                                            'order_id' => $vorder->order_id,
+                                            'vendor_id' => $vendor->id,
+                                            'posted_data' => array(),
+                                            'line_items' => $vendor_items
+                                    ), true);
+                                    // mark as shipped
+                                    $shippers = get_post_meta($vorder->order_id, 'dc_pv_shipped', true) ? get_post_meta($vorder->order_id, 'dc_pv_shipped', true) : array();
+                                    if (in_array($vendor->id, $shippers)) {
+                                        update_post_meta($vendor_order_id, 'dc_pv_shipped', $shippers);
+                                        // set new meta shipped
+                                        update_post_meta($vendor_order_id, 'wcmp_vendor_order_shipped', 1);
+                                    }
+                                    // add commission id in order meta
+                                    update_post_meta($vendor_order_id, '_commission_id', $vorder->commission_id);
+                                    // add order id with commission meta
+                                    update_post_meta($vorder->commission_id, '_commission_order_id', $vendor_order_id);
+                                    // for track BW vendor order-commission
+                                    update_post_meta($vendor_order_id, '_old_order_id', $vorder->order_id);
+                                    do_action( 'wcmp_orders_migration_order_created', $vendor_order_id, $vorder );  
+                                } catch (Exception $exc) {
+                                    doProductVendorLOG("Error in order migration create order :".$exc->getMessage());
                                 }
                             }
-                            // migrate old orders
-                            require_once ( $WCMp->plugin_path . '/classes/class-wcmp-order.php' );
-                            $vendor_order_id = WCMp_Order::create_vendor_order(array(
-                                    'order_id' => $vorder->order_id,
-                                    'vendor_id' => $vendor->id,
-                                    'posted_data' => array(),
-                                    'line_items' => $items
-                            ), true);
-                            // mark as shipped
-                            $shippers = get_post_meta($vorder->order_id, 'dc_pv_shipped', true) ? get_post_meta($vorder->order_id, 'dc_pv_shipped', true) : array();
-                            if (in_array($vendor->id, $shippers)) {
-                                update_post_meta($vendor_order_id, 'dc_pv_shipped', $shippers);
-                                // set new meta shipped
-                                update_post_meta($vendor_order_id, 'wcmp_vendor_order_shipped', 1);
-                            }
-                            // add commission id in order meta
-                            update_post_meta($vendor_order_id, '_commission_id', $vorder->commission_id);
-                            // add order id with commission meta
-                            update_post_meta($vorder->commission_id, '_commission_order_id', $vendor_order_id);
-                            // for track BW vendor order-commission
-                            update_post_meta($vendor_order_id, '_old_order_id', $vorder->order_id);
-                            do_action( 'wcmp_orders_migration_order_created', $vendor_order_id, $vorder );   
                         }
                     }
                 }
