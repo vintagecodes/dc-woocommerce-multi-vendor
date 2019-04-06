@@ -65,7 +65,7 @@ global $WCMp;
                         $flag++;
                     }
                     // give option to set default terms hierarchy
-                    if( $nos_hierarchy > 1 ){ ?>
+                    if( $nos_hierarchy > 1 && ( get_wcmp_vendor_settings('is_disable_marketplace_plisting', 'general') != 'Enable' ) ){ ?>
                     <p class="pull-right multiple-cat-hierarchy"><?php _e( 'Select a different category :', 'dc-woocommerce-multi-vendor' );?>
                         <strong id="multiple-cat-hierarchy-lbl" class="primary-color">
                             <button type="button" class="multi-cat-choose-dflt-btn editabble-button" data-toggle="collapse" data-target="#multi_cat_hierarchy_visiblity"><u><?php _e( 'Choose default', 'dc-woocommerce-multi-vendor' );?></u> <i class="wcmp-font ico-downarrow-2-icon"></i></button>

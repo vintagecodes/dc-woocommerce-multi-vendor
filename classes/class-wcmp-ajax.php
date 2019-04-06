@@ -3093,7 +3093,7 @@ class WCMp_Ajax {
         global $WCMp;
 
         $zones = array();
-
+        
         if (isset($_POST['zoneID'])) {
             if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
                 $WCMp->load_vendor_shipping();
@@ -3205,9 +3205,11 @@ class WCMp_Ajax {
         if (empty($args['settings']['title'])) {
             wp_send_json_error(__('Shipping title must be required', 'dc-woocommerce-multi-vendor'));
         }
+        
         if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
             $WCMp->load_vendor_shipping();
         }
+        
         $result = WCMP_Shipping_Zone::update_shipping_method($args);
 
         $WCMp->load_class('shipping-gateway');
@@ -3232,9 +3234,11 @@ class WCMp_Ajax {
             'zone_id' => $_POST['zoneID'],
             'instance_id' => $_POST['instance_id']
         );
+        
         if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
             $WCMp->load_vendor_shipping();
         }
+        
         $result = WCMP_Shipping_Zone::delete_shipping_methods($data);
 
         if (is_wp_error($result)) {
@@ -3261,8 +3265,8 @@ class WCMp_Ajax {
         $message = $data['checked'] ? __('Shipping method enabled successfully', 'dc-woocommerce-multi-vendor') : __('Shipping method disabled successfully', 'dc-woocommerce-multi-vendor');
         wp_send_json_success($message);
     }
-
-    public function wcmp_configure_shipping_method() {
+    
+    public function wcmp_configure_shipping_method(){
         global $WCMp;
         $zone_id = isset($_POST['zoneId']) ? absint($_POST['zoneId']) : 0;
         $method_id = isset($_POST['methodId']) ? $_POST['methodId'] : '';

@@ -515,10 +515,10 @@ class WCMp_Commission {
                 $commission_amt = get_post_meta($commission_id, '_commission_amount', true);
                 $shipping_amt = get_post_meta($commission_id, '_shipping', true);
                 $tax_amt = get_post_meta($commission_id, '_tax', true);
-                $commission_total = ($commission_amt + $shipping_amt + $tax_amt);
+                $commission_total = (floatval($commission_amt) + floatval($shipping_amt) + floatval($tax_amt));
             }
             $commission_refunded_total = get_post_meta( $commission_id, '_commission_refunded', true );
-            $total = $commission_total + $commission_refunded_total;
+            $total = floatval($commission_total) + floatval($commission_refunded_total);
             return $context == 'view' ? wc_price($total, array('currency' => $order->get_currency())) : $total;
         }
     }
@@ -535,7 +535,7 @@ class WCMp_Commission {
             $order = wc_get_order($order_id);
             $commission_amount = get_post_meta( $commission_id, '_commission_amount', true );
             $commission_refunded_amount = get_post_meta( $commission_id, '_commission_refunded_items', true );
-            $total = $commission_amount + $commission_refunded_amount;
+            $total = floatval($commission_amount) + floatval($commission_refunded_amount);
             return $context == 'view' ? wc_price($total, array('currency' => $order->get_currency())) : $total;
         }
     }
@@ -552,7 +552,7 @@ class WCMp_Commission {
             $order = wc_get_order($order_id);
             $shipping_amount = get_post_meta( $commission_id, '_shipping', true );
             $commission_refunded_shipping = get_post_meta( $commission_id, '_commission_refunded_shipping', true );
-            $total = $shipping_amount + $commission_refunded_shipping;
+            $total = floatval($shipping_amount) + floatval($commission_refunded_shipping);
             return $context == 'view' ? wc_price($total, array('currency' => $order->get_currency())) : $total;
         }
     }
@@ -569,7 +569,7 @@ class WCMp_Commission {
             $order = wc_get_order($order_id);
             $tax_amount = get_post_meta( $commission_id, '_tax', true );
             $commission_refunded_tax = get_post_meta( $commission_id, '_commission_refunded_tax', true );
-            $total = $tax_amount + $commission_refunded_tax;
+            $total = floatval($tax_amount) + floatval($commission_refunded_tax);
             return $context == 'view' ? wc_price($total, array('currency' => $order->get_currency())) : $total;
         }
     }

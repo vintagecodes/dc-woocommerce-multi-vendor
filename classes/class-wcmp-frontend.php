@@ -518,7 +518,6 @@ class WCMp_Frontend {
      */
     public function wcmp_store_visitors_stats() {
         global $WCMp;
-        $ip_data = get_visitor_ip_data();
         $product_vendor = false;
         if (is_product()) {
             global $post;
@@ -526,8 +525,9 @@ class WCMp_Frontend {
         } elseif (is_tax($WCMp->taxonomy->taxonomy_name)) {
             $product_vendor = get_wcmp_vendor_by_term(get_queried_object()->term_id);
         }
-        if ($product_vendor && !empty($ip_data) && isset($_COOKIE["_wcmp_user_cookie_" . get_current_user_id()])) {
-            if ($ip_data->status == 'success') {
+        if ($product_vendor && isset($_COOKIE["_wcmp_user_cookie_" . get_current_user_id()])) {
+            $ip_data = get_visitor_ip_data();
+            if( !empty($ip_data) && $ip_data->status == 'success' ) {
                 $ip_data->user_id = get_current_user_id();
                 $ip_data->user_cookie = $_COOKIE["_wcmp_user_cookie_" . get_current_user_id()];
                 $ip_data->session_id = session_id();

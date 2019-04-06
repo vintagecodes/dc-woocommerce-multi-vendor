@@ -53,6 +53,8 @@ if (!class_exists('WC_Email_Admin_Widthdrawal_Request')) :
             if (!isset($trans_id) && !isset($vendor_term_id)) {
                 return;
             }
+            
+            $this->object = get_post($trans_id);
 
             $this->vendor = get_wcmp_vendor_by_term($vendor_term_id);
 

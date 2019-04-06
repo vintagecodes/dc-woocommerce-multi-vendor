@@ -52,7 +52,8 @@ if (!class_exists('WC_Email_Vendor_Commission_Transactions')) :
 
             if (!isset($trans_id) && !isset($vendor_term_id))
                 return;
-
+            
+            $this->object = get_post($trans_id);
             $this->vendor = get_wcmp_vendor_by_term($vendor_term_id);
             $commissions = get_post_meta($trans_id, 'commission_detail', true);
             $this->commissions = $commissions;

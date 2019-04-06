@@ -66,7 +66,8 @@ if (!class_exists('WC_Email_Vendor_New_Product_Added')) :
 
             if (!$this->is_enabled())
                 return;
-
+            
+            $this->object = $post;
             $this->find[] = '{product_name}';
             $this->product_name = $post->post_title;
             $this->replace[] = $this->product_name;

@@ -5399,4 +5399,15 @@ select[name="wcmp-vendor-orders_length"] {
 }
 .wcmp-vendor-ledger-report-row .widget-stats .stats-icon i.wcmp-font { font-weight: 500; }
 
+.vendor-announcements .ui-accordion .ui-accordion-header{
+overflow: visible;
+}
+.vendor-announcements .ui-accordion .ui-accordion-header:after {
+content: ".";
+display: block;
+height: 0;
+clear: both;
+visibility: hidden;
+}
+
 /*# sourceMappingURL=vendor_dashboard.css.map */

@@ -50,7 +50,7 @@ class WC_Email_Vendor_Orders_Stats_Report extends WC_Email {
         $this->report_data = $report_data;
         if($vendor && !isset($vendor->user_data->user_email)) return;
         $this->recipient = $vendor->user_data->user_email;
-        $this->vendor = $vendor;
+        $this->vendor = $this->object = $vendor;
         if ( ! $this->is_enabled() || ! $this->get_recipient() ) return;
 
         $this->find[ ]      = '{WEEKLY/MONTHLY}';

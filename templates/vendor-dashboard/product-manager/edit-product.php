@@ -256,6 +256,30 @@ global $WCMp;
                         </div>
                     </div>
                 <?php endif; ?>
+                <?php 
+                $custom_taxonomies = get_object_taxonomies( 'product', 'objects' );
+                if( $custom_taxonomies ){
+                    foreach ( $custom_taxonomies as $taxonomy ) {
+                        if ( in_array( $taxonomy->name, array( 'product_cat', 'product_tag' ) ) ) continue;
+                        if ( $taxonomy->public && $taxonomy->show_ui && $taxonomy->meta_box_cb ) { ?>
+                            <div class="panel panel-default pannel-outer-heading">
+                                <div class="panel-heading">
+                                    <h3 class="pull-left"><?php echo $taxonomy->label; ?></h3>
+                                </div>
+                                <div class="panel-body panel-content-padding form-group-wrapper">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <?php
+                                            echo wcmp_get_product_terms_HTML( $taxonomy->name, $post->ID, apply_filters( 'wcmp_vendor_can_add_'.$taxonomy->name, false, get_current_user_id() ) );
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php }
+                    }
+                }
+                ?>
                 <?php do_action( 'after_wcmp_product_tags_metabox_panel', $post->ID ); ?>
             </div>
         </div>

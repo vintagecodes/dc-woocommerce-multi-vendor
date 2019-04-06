@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.2
 Tested up to: 5.1
 Requires PHP: 5.6
-Stable tag: 3.3.3
+Stable tag: 3.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,14 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.3.4 - 2019-03-26 =
+* Added - Product custom taxonomy supports.
+* Added - Some WCMp email object supports.
+* Tweak - Default product category hierarchy now respect `Advance marketplace product listing` settings.
+* Fix - Vendor product category widget member function issue.
+* Fix - Sold by vendor anchor link issue.
+* Fix - Vendor dashboard Announcement action toggle issue.
+
 = 3.3.3 - 2019-03-05 =
 * Added - `Low stock threshold` settings added in product inventory settings.
 * Tweak - New product email product edit link changed from backend to frontend.

@@ -59,7 +59,7 @@ class WCMp_Email {
         return array_merge( $emails, apply_filters( 'wcmp_email_classes', $wcmp_email ) );
     }
 
-	/**
+    /**
      * Register WCMp emails footer text settings
      *
      * @access public

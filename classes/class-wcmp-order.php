@@ -28,6 +28,11 @@ class WCMp_Order {
             add_action('admin_head', array($this, 'count_processing_order'), 5);
             add_filter('views_edit-shop_order', array($this, 'shop_order_statuses_get_views') );
             add_filter('wp_count_posts', array($this, 'shop_order_count_orders'), 99, 3 );
+            // customer's order list (my account)
+            add_filter('woocommerce_my_account_my_orders_query', array($this, 'woocommerce_my_account_my_orders_query'), 99);
+            add_filter('woocommerce_my_account_my_orders_columns', array($this, 'woocommerce_my_account_my_orders_columns'), 99);
+            add_action('woocommerce_my_account_my_orders_column_wcmp_suborder', array($this, 'woocommerce_my_account_my_orders_column_wcmp_suborder'), 99);
+            add_action('wcmp_frontend_enqueue_scripts', array($this, 'wcmp_frontend_enqueue_scripts'));
             if( !is_user_wcmp_vendor( get_current_user_id() ) ) {
                 add_filter('manage_shop_order_posts_columns', array($this, 'wcmp_shop_order_columns'), 99);
                 add_action('manage_shop_order_posts_custom_column', array($this, 'wcmp_show_shop_order_columns'), 99, 2);
@@ -591,7 +596,7 @@ class WCMp_Order {
 
     public function wcmp_parent_order_to_vendor_order_status_synchronization($order_id, $old_status, $new_status) {
         //Check if order have sub-order
-        $status_to_sync = apply_filters('wcmp_parent_order_to_vendor_order_statuses_to_sync',array('processing'));
+        $status_to_sync = apply_filters('wcmp_parent_order_to_vendor_order_statuses_to_sync',array('on-hold', 'pending', 'processing'));
         if($new_status == $status_to_sync) :
             if (wp_get_post_parent_id( $order_id ) || get_post_meta($order_id, 'wcmp_vendor_order_status_synchronized', true))
                 return false;
@@ -966,7 +971,120 @@ class WCMp_Order {
                 ";
             wp_add_inline_style('woocommerce_admin_styles', $inline_css);
         }
-        
+    }
+    
+    public function woocommerce_my_account_my_orders_query( $query ){
+        if(!isset($query['post_parent'])){
+            $query['post_parent'] = 0;
+        }
+        return $query;
+    }
+    
+    public function woocommerce_my_account_my_orders_columns( $columns ) {
+        $suborder_column['wcmp_suborder'] = __( 'Suborders', 'dc-woocommerce-multi-vendor' );
+        $columns = array_slice($columns, 0, 1, true) + $suborder_column + array_slice($columns, 1, count($columns) - 1, true);
+        return $columns;
+    }
+    
+    public function woocommerce_my_account_my_orders_column_wcmp_suborder( $order ) {
+        $wcmp_suborders = $this->get_suborders($order->get_id());
+
+        if ($wcmp_suborders) {
+            echo '<ul class="wcmp-order-vendor" style="margin:0px;list-style:none;">';
+            foreach ($wcmp_suborders as $suborder) {
+                $vendor = get_wcmp_vendor(get_post_field('post_author', $suborder->get_id()));
+                $order_uri = esc_url( $suborder->get_view_order_url() );
+                printf('<li><strong><a href="%s" title="%s">#%s</a></strong> &ndash; <small class="wcmp-order-for-vendor">%s %s</small></li>', $order_uri, sanitize_title($suborder->get_status()), $suborder->get_order_number(), _x('for', 'Order table details', 'dc-woocommerce-multi-vendor'), $vendor->page_title
+                );
+                do_action('wcmp_after_suborder_details', $suborder);
+            }
+            echo '<ul>';
+        } else {
+            echo '<span class="na">&ndash;</span>';
+        }
+    }
+    
+    public function wcmp_frontend_enqueue_scripts(){
+        if(is_account_page()){
+            $styles = '/***********************  WCMp Suborder Icon ***********************/
+            .woocommerce-MyAccount-orders.account-orders-table .wcmp-order-vendor mark{
+                display: block;
+                text-indent: -9999px;
+                position: relative;
+                height: 1em;
+                width: 1em;
+                background: 0 0;
+                font-size: 1.4em;
+                margin: 0 auto
+            }
+            .woocommerce-MyAccount-orders.account-orders-table .wcmp-order-vendor mark:after{
+                font-family: WooCommerce;
+                speak: none;
+                font-weight: 400;
+                font-variant: normal;
+                text-transform: none;
+                line-height: 1;
+                -webkit-font-smoothing: antialiased;
+                margin: 0;
+                text-indent: 0;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                text-align: center
+            }
+
+            .woocommerce-MyAccount-orders.account-orders-table .wcmp-order-vendor mark {
+                float: left;
+                margin-right: 8px;
+                font-size: 1.1em;
+                margin-top: 2px;
+            }
+
+            /* Suborder Icon */
+
+            .woocommerce-MyAccount-orders.account-orders-table .wcmp-order-vendor mark.pending:after{
+                content: "\e012";
+                color: #ffba00
+            }
+
+            .woocommerce-MyAccount-orders.account-orders-table .wcmp-order-vendor mark.trash:after{
+                content: "\e602";
+                color: #a00
+            }
+
+            .woocommerce-MyAccount-orders.account-orders-table .wcmp-order-vendor mark.completed:after{
+                content: "\e015";
+                color: #2ea2cc
+            }
+
+            .woocommerce-MyAccount-orders.account-orders-table .wcmp-order-vendor mark.on-hold:after{
+                content: "\e033";
+                color: #999
+            }
+
+            .woocommerce-MyAccount-orders.account-orders-table .wcmp-order-vendor mark.failed:after{
+                content: "\e016";
+                color: #d0c21f
+            }
+
+            .woocommerce-MyAccount-orders.account-orders-table .wcmp-order-vendor mark.cancelled:after{
+                content: "\e013";
+                color: #a00
+            }
+
+            .woocommerce-MyAccount-orders.account-orders-table .wcmp-order-vendor mark.processing:after{
+                content: "\e011";
+                color: #73a724
+            }
+
+            .woocommerce-MyAccount-orders.account-orders-table .wcmp-order-vendor mark.refunded:after {
+                content: "\e014";
+                color: #999
+            }';
+            wp_add_inline_style('woocommerce-inline', $styles);
+        }
     }
 
 }

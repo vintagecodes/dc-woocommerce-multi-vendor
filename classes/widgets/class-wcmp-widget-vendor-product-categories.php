@@ -35,15 +35,16 @@ class WCMp_Widget_Vendor_Product_Categories extends WC_Widget {
 
     public function widget($args, $instance) {
         global $wp_query, $WCMp;
-        if (!is_tax($WCMp->taxonomy->taxonomy_name)) {
+        
+        $this->vendor_term_id = $wp_query->queried_object->term_id;
+        $vendor = get_wcmp_vendor_by_term($this->vendor_term_id);
+        if (!is_tax($WCMp->taxonomy->taxonomy_name) && !$vendor) {
             return;
         }
         $count = isset($instance['count']) ? $instance['count'] : $this->settings['count']['std'];
         $hierarchical = isset( $instance['hierarchical'] ) ? $instance['hierarchical'] : $this->settings['hierarchical']['std'];
 
-        $this->vendor_term_id = $wp_query->queried_object->term_id;
-        $this->widget_start($args, $instance);
-        $vendor = get_wcmp_vendor_by_term($this->vendor_term_id);
+        $this->widget_start($args, $instance); 
         $vendor_products = $vendor->get_products();
         $product_ids = wp_list_pluck($vendor_products, 'ID');
         $associated_terms = array();

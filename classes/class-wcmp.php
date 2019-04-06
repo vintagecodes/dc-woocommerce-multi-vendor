@@ -78,7 +78,7 @@ final class WCMp {
         add_action('init', array(&$this, 'init'));
 
         add_action('admin_init', array(&$this, 'wcmp_admin_init'));
-
+        
         // WCMp Update Notice
         add_action('in_plugin_update_message-dc-woocommerce-multi-vendor/dc_product_vendor.php', array(&$this, 'wcmp_plugin_update_message'));
 
@@ -559,6 +559,7 @@ final class WCMp {
         if(apply_filters('wcmp_load_stripe_library', $load_library)){
             $stripe_dependencies = WC_Dependencies_Product_Vendor::stripe_dependencies();
             if($stripe_dependencies['status']){
+                $load_library = (get_wcmp_vendor_settings('payment_method_stripe_masspay', 'payment') == 'Enable') ? true : false;
                 if(!class_exists("Stripe\Stripe")) {
                     require_once( $this->plugin_path . 'lib/Stripe/init.php' );
                 }

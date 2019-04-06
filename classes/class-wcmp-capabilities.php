@@ -36,7 +36,7 @@ class WCMp_Capabilities {
 
         add_action('woocommerce_get_item_data', array(&$this, 'add_sold_by_text_cart'), 30, 2);
         //add_action('woocommerce_new_order_item', array(&$this, 'order_item_meta_2'), 20, 3);
-        add_action('woocommerce_after_shop_loop_item_title', array($this, 'wcmp_after_add_to_cart_form'), 30);
+        add_action('woocommerce_after_shop_loop_item', array($this, 'wcmp_after_add_to_cart_form'), 6);
         /* for single product */
         add_action('woocommerce_product_meta_start', array($this, 'wcmp_after_add_to_cart_form'), 25);
         add_action('update_option_wcmp_capabilities_product_settings_name', array(&$this, 'update_wcmp_vendor_role_capability'), 10);

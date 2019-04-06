@@ -109,7 +109,7 @@ class WCMp_Product {
         // Hide products backend fields as per new product modifications
         add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 99 );
         // show default product categories
-        if( !apply_filters( 'wcmp_show_product_default_categories_hierarchy', false ) ) {
+        if( !apply_filters( 'wcmp_show_product_default_categories_hierarchy', false ) || ( get_wcmp_vendor_settings('is_disable_marketplace_plisting', 'general') != 'Enable' ) ) {
             add_filter( 'wcmp_vendor_product_list_row_product_categories', array($this, 'show_default_product_cats_in_vendor_list'), 10, 2);
             add_filter( 'woocommerce_admin_product_term_list', array($this, 'show_default_product_cats_in_wp_backend'), 99, 5);
             add_filter( 'term_links-product_cat', array($this, 'show_default_product_cats_product_single'), 99);
@@ -971,6 +971,13 @@ class WCMp_Product {
                         unset($_POST['dc_variable_shipping_class'][$post_key]);
                     }
                 }
+            }
+            
+            // Default cat hierarchy reset
+            $has_default_cat = get_post_meta( $post_id, '_default_cat_hierarchy_term_id', false );
+            $catagories = isset( $_POST['tax_input']['product_cat'] ) ? array_filter( array_map( 'intval', (array) $_POST['tax_input']['product_cat'] ) ) : array();
+            if( $has_default_cat && !in_array( $has_default_cat, $catagories ) ){
+                delete_post_meta( $post_id, '_default_cat_hierarchy_term_id' );
             }
         }
     }
