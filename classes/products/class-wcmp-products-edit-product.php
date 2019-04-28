@@ -56,7 +56,7 @@ class WCMp_Products_Edit_Product {
             $this->error_msg = __( 'You do not have permission to view this content. Please contact site administrator.', 'dc-woocommerce-multi-vendor' );
             return false;
         }
-        if ( $WCMp->vendor_caps->vendor_can('simple') ) {
+        if ( ! empty( wcmp_get_product_types() ) ) {
             switch ( $action ) {
                 case 'add':
                     if ( ! ( current_vendor_can( 'edit_product' ) ) ) {
