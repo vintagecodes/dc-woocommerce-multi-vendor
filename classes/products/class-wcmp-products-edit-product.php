@@ -56,7 +56,7 @@ class WCMp_Products_Edit_Product {
             $this->error_msg = __( 'You do not have permission to view this content. Please contact site administrator.', 'dc-woocommerce-multi-vendor' );
             return false;
         }
-        if ( $WCMp->vendor_caps->vendor_can('simple') ) {
+        if ( ! empty( wcmp_get_product_types() ) ) {
             switch ( $action ) {
                 case 'add':
                     if ( ! ( current_vendor_can( 'edit_product' ) ) ) {
@@ -68,16 +68,16 @@ class WCMp_Products_Edit_Product {
                     if ( $product_id && get_wcmp_product_vendors( $product_id ) ) {
                         $product = wc_get_product( $product_id );
                         if ( $product->get_status() === 'trash' ) {
-                            $this->error_msg = __( 'You can&#8217;t edit this item because it is in the Trash. Please restore it and try again.' );
+                            $this->error_msg = __( 'You can&#8217;t edit this item because it is in the Trash. Please restore it and try again.', 'dc-woocommerce-multi-vendor' );
                             return false;
                         }
                         if ( ! ( current_vendor_can( 'edit_product' ) && current_vendor_can( 'edit_published_products' ) ) ) {
-                            $this->error_msg = __( 'Sorry, you are not allowed to edit this item.' );
+                            $this->error_msg = __( 'Sorry, you are not allowed to edit this item.', 'dc-woocommerce-multi-vendor' );
                             return false;
                         }
                         return true;
                     }
-                    $this->error_msg = __( 'You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?' );
+                    $this->error_msg = __( 'You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?', 'dc-woocommerce-multi-vendor' );
                     return false;
             }
         } else {

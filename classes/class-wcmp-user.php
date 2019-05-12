@@ -233,7 +233,7 @@ class WCMp_User {
             $user = get_user_by('email', $_POST['email']);
             if (is_object($user) && isset($user->ID) && is_user_wcmp_vendor($user->ID)) {
                 $redirect_to = get_permalink(wcmp_vendor_dashboard_page_id());
-                return $redirect_to;
+                return apply_filters('wcmp_vendor_login_redirect', $redirect_to, $user);
             }
             return apply_filters('wcmp_vendor_login_redirect', $redirect_to, $user);
         }

@@ -21,11 +21,11 @@ $template_class = apply_filters('can_vendor_edit_shop_template', false) && get_u
         <?php
             if($banner != ''){
         ?>
-            <img src="<?php echo $banner; ?>" alt="">
+            <img src="<?php echo $banner; ?>" alt="<?php echo $vendor->page_title ?>">
         <?php
             } else{
         ?>
-            <img src="<?php echo $WCMp->plugin_url . 'assets/images/banner_placeholder.jpg'; ?>" alt="">
+            <img src="<?php echo $WCMp->plugin_url . 'assets/images/banner_placeholder.jpg'; ?>" alt="<?php echo $vendor->page_title ?>">
         <?php        
             }
         ?>
@@ -55,7 +55,7 @@ $template_class = apply_filters('can_vendor_edit_shop_template', false) && get_u
         ?>
         <div class="vendor_description">
             <div class="vendor_img_add">
-                <div class="img_div"><img height="400" width="200" src=<?php echo $profile; ?> /></div>
+                <div class="img_div"><img src=<?php echo $profile; ?> alt="<?php echo $vendor->page_title ?>"/></div>
                 <div class="vendor_address">
                     <p class="wcmp_vendor_name"><?php echo $vendor->page_title ?></p>
                     <?php do_action('before_wcmp_vendor_information',$vendor_id);?>
@@ -106,7 +106,7 @@ $template_class = apply_filters('can_vendor_edit_shop_template', false) && get_u
     ?>
     <div class="vendor_description">
         <div class="vendor_img_add">
-            <div class="img_div"><img height="400" width="200" src=<?php echo $profile; ?> /></div>
+            <div class="img_div"><img src=<?php echo $profile; ?> alt="<?php echo $vendor->page_title ?>"/></div>
             <div class="vendor_address">
                 <p class="wcmp_vendor_name"><?php echo $vendor->page_title ?></p>
                 <?php do_action('before_wcmp_vendor_information',$vendor_id);?>

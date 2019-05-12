@@ -56,10 +56,11 @@ class WCMp_Calculate_Commission {
                 
                 // add commission id with associated vendor order
                 update_post_meta($vendor_order_id, '_commission_id', $commission_id);
-                $email_admin = WC()->mailer()->emails['WC_Email_Vendor_New_Order'];
-                $email_admin->trigger($vendor_order_id);
                 // Mark commissions as processed
                 update_post_meta($vendor_order_id, '_commissions_processed', 'yes');
+                
+                $email_admin = WC()->mailer()->emails['WC_Email_Vendor_New_Order'];
+                $email_admin->trigger($vendor_order_id);
             }
         }
     }
@@ -622,10 +623,10 @@ class WCMp_Calculate_Commission {
         $category_wise_commission->fixed_with_percentage_qty = 0;
         if ($terms) {
             if (1 == count($terms)) {
-                $category_wise_commission->commision = get_woocommerce_term_meta($terms[0]->term_id, 'commision', true) ? get_woocommerce_term_meta($terms[0]->term_id, 'commision', true) : 0;
-                $category_wise_commission->commission_percentage = get_woocommerce_term_meta($terms[0]->term_id, 'commission_percentage', true) ? get_woocommerce_term_meta($terms[0]->term_id, 'commission_percentage', true) : 0;
-                $category_wise_commission->fixed_with_percentage = get_woocommerce_term_meta($terms[0]->term_id, 'fixed_with_percentage', true) ? get_woocommerce_term_meta($terms[0]->term_id, 'fixed_with_percentage', true) : 0;
-                $category_wise_commission->fixed_with_percentage_qty = get_woocommerce_term_meta($terms[0]->term_id, 'fixed_with_percentage_qty', true) ? get_woocommerce_term_meta($terms[0]->term_id, 'fixed_with_percentage_qty', true) : 0;
+                $category_wise_commission->commision = get_term_meta($terms[0]->term_id, 'commision', true) ? get_term_meta($terms[0]->term_id, 'commision', true) : 0;
+                $category_wise_commission->commission_percentage = get_term_meta($terms[0]->term_id, 'commission_percentage', true) ? get_term_meta($terms[0]->term_id, 'commission_percentage', true) : 0;
+                $category_wise_commission->fixed_with_percentage = get_term_meta($terms[0]->term_id, 'fixed_with_percentage', true) ? get_term_meta($terms[0]->term_id, 'fixed_with_percentage', true) : 0;
+                $category_wise_commission->fixed_with_percentage_qty = get_term_meta($terms[0]->term_id, 'fixed_with_percentage_qty', true) ? get_term_meta($terms[0]->term_id, 'fixed_with_percentage_qty', true) : 0;
             }
         }
         return apply_filters('wcmp_category_wise_commission', $category_wise_commission, $product_id);

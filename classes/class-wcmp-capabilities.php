@@ -107,7 +107,8 @@ class WCMp_Capabilities {
      */
     public function wcmp_product_type_selector($product_types) {
         $user = wp_get_current_user();
-        if (is_user_wcmp_vendor($user) && $product_types) {
+        if( !is_user_wcmp_vendor($user) ) return $product_types;
+        if ($product_types) {
             foreach ($product_types as $product_type => $value) {
                 $vendor_can = $this->vendor_can($product_type);
                 if (!$vendor_can) {

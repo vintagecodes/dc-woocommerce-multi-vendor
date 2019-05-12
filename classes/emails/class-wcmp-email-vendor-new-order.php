@@ -65,34 +65,28 @@ if (!class_exists('WC_Email_Vendor_New_Order')) :
          * @return void
          */
         function trigger($order_id) {
-            $vendors = get_vendor_from_an_order($order_id);
+            if( $order_id ) {
+                $vendor_id = get_post_meta($order_id, '_vendor_id', true);
+                $vendor = get_wcmp_vendor($vendor_id);
+                if ($vendor) {
+                    $this->object = $this->order = wc_get_order($order_id);
+                    $vendor_email = $vendor->user_data->user_email;
 
-            if ($vendors) {
-                foreach ($vendors as $vendor) {
+                    $this->find[] = '{order_date}';
+                    $this->replace[] = date_i18n(wc_date_format(), strtotime($this->order->get_date_created()));
 
-                    $vendor_obj = get_wcmp_vendor_by_term($vendor);
-                    $vendor_email = $vendor_obj->user_data->user_email;
-                    $vendor_id = $vendor_obj->id;
-
-                    if ($order_id && $vendor_email) {
-                        $this->object = $this->order = wc_get_order($order_id);
-
-                        $this->find[] = '{order_date}';
-                        $this->replace[] = date_i18n(wc_date_format(), strtotime($this->order->get_date_created()));
-
-                        $this->find[] = '{order_number}';
-                        $this->replace[] = $this->order->get_order_number();
-                        $this->vendor_email = $vendor_email;
-                        $this->vendor_id = $vendor_id;
-                        $this->recipient = $vendor_email;
-                    }
-                    
-                    if (!$this->is_enabled() || !$this->get_recipient()) {
-                        return;
-                    }
-
-                    $this->send($this->get_recipient(), $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments());
+                    $this->find[] = '{order_number}';
+                    $this->replace[] = $this->order->get_order_number();
+                    $this->vendor_email = $vendor_email;
+                    $this->vendor_id = $vendor_id;
+                    $this->recipient = $vendor_email;
                 }
+
+                if (!$this->is_enabled() || !$this->get_recipient()) {
+                    return;
+                }
+
+                $this->send($this->get_recipient(), $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments());
             }
         }
 

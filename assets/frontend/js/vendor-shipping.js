@@ -147,47 +147,40 @@
 
         editShippingMethod: function (event) {
             event.preventDefault();
-
-            var $product_popup_width = '60%',
-                    currentTarget = $(event.target).is(this.edit_shipping_method) ? event.target : $(event.target).closest(this.edit_shipping_method),
-                    $parents = $(currentTarget).parents('.edit_del_actions');
-            var instanceId = $parents.attr('data-instance_id'),
-                    zoneId = $('#zone_id').val(),
-                    methodId = $parents.attr('data-method_id'),
-                    methodSettings = $.parseJSON($parents.attr('data-method-settings'));
-
-            $('#wcmp_shipping_method_edit_container #method_id_selected').val(methodId);
-            $('#wcmp_shipping_method_edit_container #instance_id_selected').val(instanceId);
-
-            $('.shipping_form').hide();
-            $('#' + methodId).show();
-            if (methodId == 'free_shipping') {
-                $('#free_shipping #method_title_fs').val(methodSettings.settings.title);
-                methodSettings.settings.hasOwnProperty('min_amount')
-                        ? $('#free_shipping #minimum_order_amount_fs').val(methodSettings.settings.min_amount)
-                        : $('#free_shipping #minimum_order_amount_fs').val('0');
-                $('#free_shipping #method_description_fs').val(methodSettings.settings.description);
-            }
-            if (methodId == 'local_pickup') {
-                $('#local_pickup #method_title_lp').val(methodSettings.settings.title);
-                $('#local_pickup #method_cost_lp').val(methodSettings.settings.cost);
-                $('#local_pickup #method_tax_status_lp option[value=' + methodSettings.settings.tax_status + ']').attr('selected', 'selected');
-                $('#local_pickup #method_description_lp').val(methodSettings.settings.description);
-            }
-            if (methodId == 'flat_rate') {
-                $('#flat_rate #method_title_fr').val(methodSettings.settings.title);
-                $('#flat_rate #method_cost_fr').val(methodSettings.settings.cost);
-                $('#flat_rate #method_tax_status_fr option[value=' + methodSettings.settings.tax_status + ']').attr('selected', 'selected');
-                $('#flat_rate #method_description_fr').val(methodSettings.settings.description);
-                $('.sc_vals').each(function () {
-                    var class_id = $(this).attr('data-shipping_class_id');
-                    $(this).val(methodSettings.settings['class_cost_' + class_id]);
-                });
-                $('#flat_rate #calculation_type').val(methodSettings.settings.calculation_type).trigger('change');
-            }
-
-            /* make popup */
-            $('#wcmp_shipping_method_edit_container').show();
+            $( '.wcmp-zone-method-content' ).block({
+                    message: null,
+                    overlayCSS: {
+                            background: '#fff',
+                            opacity: 0.6
+                    }
+            });
+            
+            var instanceId = $(event.currentTarget).parents('.edit_del_actions').data('instance_id'),
+                methodId = $(event.currentTarget).parents('.edit_del_actions').data('method_id'),
+                zoneId = $(event.currentTarget).parents('.edit_del_actions').data('zone_id'),
+                data = {
+                    action: 'wcmp-vendor-configure-shipping-method',
+                    zoneId: zoneId,
+                    instanceId: instanceId,
+                    methodId: methodId
+                };
+                
+            var ajaxRequest = $.ajax({
+                method: 'post',
+                url: wcmp_vendor_shipping_script_data.ajaxurl,
+                data: data,
+                success: function (response) {
+                    if(response){
+                        $( '.wcmp-zone-method-content' ).unblock();
+                        /* make popup */
+                        $('#wcmp_shipping_method_edit_container #method_id_selected').val(methodId);
+                        $('#wcmp_shipping_method_edit_container #instance_id_selected').val(instanceId);
+                        $('#wcmp_shipping_method_edit_container #zone_id_selected').val(zoneId);
+                        $('#shipping-form-fields').html(response.settings_html);
+                        $('#wcmp_shipping_method_edit_container').show();
+                    }
+                },
+            });
         },
 
         updateShippingMethod: function (event) {
@@ -205,33 +198,10 @@
                             instance_id: instanceId,
                             zone_id: zoneId,
                             method_id: methodID,
-                            settings: {}
+                            settings: $('#wcmp-vendor-edit-shipping-form').serializeArray()
                         }
                     };
 
-            if (methodID == 'free_shipping') {
-                data.args.settings.title = $('#free_shipping #method_title_fs').val();
-                data.args.settings.description = $('#free_shipping #method_description_fs').val();
-                data.args.settings.cost = 0;
-                data.args.settings.tax_status = 'none';
-                data.args.settings.min_amount = $('#free_shipping #minimum_order_amount_fs').val();
-            }
-            if (methodID == 'local_pickup') {
-                data.args.settings.title = $('#local_pickup #method_title_lp').val();
-                data.args.settings.description = $('#local_pickup #method_description_lp').val();
-                data.args.settings.cost = $('#local_pickup #method_cost_lp').val();
-                data.args.settings.tax_status = $('#local_pickup #method_tax_status_lp option:selected').val();
-            }
-            if (methodID == 'flat_rate') {
-                data.args.settings.title = $('#flat_rate #method_title_fr').val();
-                data.args.settings.description = $('#flat_rate #method_description_fr').val();
-                data.args.settings.cost = $('#flat_rate #method_cost_fr').val();
-                data.args.settings.tax_status = $('#flat_rate #method_tax_status_fr option:selected').val();
-                $('.sc_vals').each(function () {
-                    data.args.settings['class_cost_' + $(this).attr('data-shipping_class_id')] = $(this).val();
-                });
-                data.args.settings.calculation_type = $('#flat_rate #calculation_type').val();
-            }
             $('#wcmp_shipping_method_edit_button').block({
                 message: null,
                 overlayCSS: {
@@ -242,14 +212,14 @@
             // $('#wcmp_settings_save_button').click();
 
             var ajaxRequest = $.ajax({
-                method: 'post',
+                method: 'POST',
                 url: wcmp_vendor_shipping_script_data.ajaxurl,
                 data: data,
                 success: function (response) {
                     if (response.success) {
                         appObj.modifyShippingMethods(undefined, zoneId);
                     } else {
-                        alert(resp.data);
+                        alert(response.data);
                     }
                 },
             });

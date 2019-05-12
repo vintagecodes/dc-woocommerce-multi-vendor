@@ -110,8 +110,6 @@ class WCMp_REST_API {
 			return;
 		}
 
-		$this->rest_api_includes();
-
 		// Init REST API routes.
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 10 );
 	}
@@ -137,6 +135,8 @@ class WCMp_REST_API {
 	public function register_rest_routes() {
 		// Register settings to the REST API.
 		$this->register_wp_admin_settings();
+
+		$this->rest_api_includes();
 
 		$controllers = array(
 			// v1 controllers.

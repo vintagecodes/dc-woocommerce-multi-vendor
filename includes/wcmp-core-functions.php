@@ -208,7 +208,7 @@ if (!function_exists('get_wcmp_vendor_by_term')) {
     function get_wcmp_vendor_by_term($term_id) {
         $vendor = false;
         if (!empty($term_id)) {
-            $user_id = get_woocommerce_term_meta($term_id, '_vendor_user_id');
+            $user_id = get_term_meta($term_id, '_vendor_user_id', true);
             if (is_user_wcmp_vendor($user_id)) {
                 $vendor = get_wcmp_vendor($user_id);
             }
@@ -3789,7 +3789,7 @@ if ( ! function_exists( 'get_current_vendor_shipping_classes' ) ) {
             $shipping_classes = get_terms( 'product_shipping_class', array( 'hide_empty' => 0 ) );
             foreach ( $shipping_classes as $shipping_class ) {
                 if ( apply_filters( 'wcmp_allowed_only_vendor_shipping_class', true ) ) {
-                    $vendor_id = absint( get_woocommerce_term_meta( $shipping_class->term_id, 'vendor_id', true ) );
+                    $vendor_id = absint( get_term_meta( $shipping_class->term_id, 'vendor_id', true ) );
                     if ( $vendor_id === $current_vendor_id ) {
                         $shipping_options[$shipping_class->term_id] = $shipping_class->name;
                     }

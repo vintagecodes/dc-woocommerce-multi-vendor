@@ -233,7 +233,7 @@ class WCMP_Shipping_Zone {
     public static function get_method_label( $method_id ) {
         $vendor_shipping_methods = wcmp_get_shipping_methods();
         if(isset($vendor_shipping_methods[$method_id])){
-            return $vendor_shipping_methods['flat_rate']->get_method_title();
+            return $vendor_shipping_methods[$method_id]->get_method_title();
         }
     }
 }

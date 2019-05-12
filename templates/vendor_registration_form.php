@@ -201,7 +201,7 @@ if (!empty($wcmp_vendor_registration_form_data) && is_array($wcmp_vendor_registr
                     <select class="country_to_state select_box" name="wcmp_vendor_fields[<?php echo $key; ?>][value]" <?php if($value['required']){ echo 'required="required"'; }?>>
                         <option value=""><?php _e( 'Select a country&hellip;', 'dc-woocommerce-multi-vendor' ); ?></option>
                         <?php 
-                            foreach ( WC()->countries->get_shipping_countries() as $key => $value ) {
+                            foreach ( WC()->countries->get_allowed_countries() as $key => $value ) {
                                 echo '<option value="' . esc_attr( $key ) . '" '. selected(apply_filters('wcmp_vendor_registration_form_default_country_code', '', $key), $key).'>' . esc_html( $value ) . '</option>';
                             }
                         ?>

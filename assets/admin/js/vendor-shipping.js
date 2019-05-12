@@ -141,7 +141,6 @@
                     },
                 });
                 
-
             },
 
             updateShippingMethod: function (event, target, posted_data) {
@@ -161,27 +160,6 @@
                                 settings: {}
                             }
                         };
-                    if (methodID == 'free_shipping') {
-                        data.args.settings.title = posted_data.method_title;
-                        data.args.settings.description = posted_data.method_description;
-                        data.args.settings.cost = 0;
-                        data.args.settings.tax_status = 'none';
-                        data.args.settings.min_amount = posted_data.minimum_order_amount;
-                    }
-                    if (methodID == 'local_pickup') {
-                        data.args.settings.title = posted_data.method_title;
-                        data.args.settings.description = posted_data.method_description;
-                        data.args.settings.cost = posted_data.method_cost;
-                        data.args.settings.tax_status = posted_data.method_tax_status;
-                    }
-                    if (methodID == 'flat_rate') {
-                        data.args.settings.title = posted_data.method_title;
-                        data.args.settings.description = posted_data.method_description;
-                        data.args.settings.cost = posted_data.method_cost;
-                        data.args.settings.tax_status = posted_data.method_tax_status;
-                        data.args.settings['class_cost_' + posted_data.shipping_class_id] = posted_data.shipping_class_cost;
-                        data.args.settings.calculation_type = posted_data.calculation_type;
-                    }
                     
                     var ajaxRequest = $.ajax({
                         method: 'post',
@@ -192,7 +170,7 @@
                                 location.reload();
                                 //appObj.modifyShippingMethods(undefined, zoneId);
                             } else {
-                                alert(resp.data);
+                                alert(response.data);
                             }
                         },
                     });

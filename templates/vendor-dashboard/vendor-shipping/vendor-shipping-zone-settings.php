@@ -81,7 +81,7 @@
 								</td>
 								<td><?php _e($vendor_shipping_method['settings']['description'], 'dc-woocommerce-multi-vendor' ); ?></td>
 								<td>
-									<div class="col-actions edit_del_actions" data-instance_id="<?php echo $vendor_shipping_method['instance_id']; ?>" data-method_id="<?php echo $vendor_shipping_method['id']; ?>" data-method-settings='<?php echo json_encode($vendor_shipping_method); ?>'>
+									<div class="col-actions edit_del_actions" data-zone_id="<?php echo $zone_id; ?>" data-instance_id="<?php echo $vendor_shipping_method['instance_id']; ?>" data-method_id="<?php echo $vendor_shipping_method['id']; ?>" data-method-settings='<?php echo json_encode($vendor_shipping_method); ?>'>
 										<span class="edit"><a href="javascript:void(0);" class="edit-shipping-method" title="<?php _e( 'Edit', 'dc-woocommerce-multi-vendor' ) ?>"><i class="wcmp-font ico-edit-pencil-icon"></i></a>
 										</span>|
 										<span class="delete"><a class="delete-shipping-method" href="javascript:void(0);" title="<?php _e( 'Delete', 'dc-woocommerce-multi-vendor' ) ?>"><i class="wcmp-font ico-delete-icon"></i></a></span>
