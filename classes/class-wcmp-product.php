@@ -1541,16 +1541,16 @@ class WCMp_Product {
      */
     public function save_product_cat_commission_fields($term_id, $tt_id = '', $taxonomy = '') {
         if (isset($_POST['commision']) && 'product_cat' === $taxonomy) {
-            update_woocommerce_term_meta($term_id, 'commision', esc_attr($_POST['commision']));
+            update_term_meta($term_id, 'commision', esc_attr($_POST['commision']));
         }
         if (isset($_POST['commission_percentage']) && 'product_cat' === $taxonomy) {
-            update_woocommerce_term_meta($term_id, 'commission_percentage', absint($_POST['commission_percentage']));
+            update_term_meta($term_id, 'commission_percentage', absint($_POST['commission_percentage']));
         }
         if (isset($_POST['fixed_with_percentage']) && 'product_cat' === $taxonomy) {
-            update_woocommerce_term_meta($term_id, 'fixed_with_percentage', esc_attr($_POST['fixed_with_percentage']));
+            update_term_meta($term_id, 'fixed_with_percentage', esc_attr($_POST['fixed_with_percentage']));
         }
         if (isset($_POST['fixed_with_percentage_qty']) && 'product_cat' === $taxonomy) {
-            update_woocommerce_term_meta($term_id, 'fixed_with_percentage_qty', absint($_POST['fixed_with_percentage_qty']));
+            update_term_meta($term_id, 'fixed_with_percentage_qty', absint($_POST['fixed_with_percentage_qty']));
         }
     }
     

@@ -180,11 +180,11 @@ class WCMp_Vendor {
                 update_user_meta($this->id, '_vendor_term_id', $term['term_id']);
                 // insert page_title meta @ initial term generate
                 update_user_meta($this->id, '_vendor_page_title', $this->user_data->user_login);
-                update_woocommerce_term_meta($term['term_id'], '_vendor_user_id', $this->id);
+                update_term_meta($term['term_id'], '_vendor_user_id', $this->id);
                 $this->term_id = $term['term_id'];
             } else if ($term->get_error_code() == 'term_exists') {
                 update_user_meta($this->id, '_vendor_term_id', $term->get_error_data());
-                update_woocommerce_term_meta($term->get_error_data(), '_vendor_user_id', $this->id);
+                update_term_meta($term->get_error_data(), '_vendor_user_id', $this->id);
                 $this->term_id = $term->get_error_data();
             }
         }
@@ -195,12 +195,12 @@ class WCMp_Vendor {
             $shipping_term = wp_insert_term($this->user_data->user_login . '-' . $this->id, 'product_shipping_class');
             if (!is_wp_error($shipping_term)) {
                 update_user_meta($this->id, 'shipping_class_id', $shipping_term['term_id']);
-                add_woocommerce_term_meta($shipping_term['term_id'], 'vendor_id', $this->id);
-                add_woocommerce_term_meta($shipping_term['term_id'], 'vendor_shipping_origin', get_option('woocommerce_default_country'));
+                add_term_meta($shipping_term['term_id'], 'vendor_id', $this->id);
+                add_term_meta($shipping_term['term_id'], 'vendor_shipping_origin', get_option('woocommerce_default_country'));
             } else if ($shipping_term->get_error_code() == 'term_exists') {
                 update_user_meta($this->id, 'shipping_class_id', $shipping_term->get_error_data());
-                add_woocommerce_term_meta($shipping_term->get_error_data(), 'vendor_id', $this->id);
-                add_woocommerce_term_meta($shipping_term->get_error_data(), 'vendor_shipping_origin', get_option('woocommerce_default_country'));
+                add_term_meta($shipping_term->get_error_data(), 'vendor_id', $this->id);
+                add_term_meta($shipping_term->get_error_data(), 'vendor_shipping_origin', get_option('woocommerce_default_country'));
             }
         }
     }

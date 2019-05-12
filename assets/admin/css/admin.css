@@ -301,6 +301,32 @@ a.wcmp_sub_sction {
     white-space: normal;
 }
 
+#vendor_preview_tabs{
+        padding: 0;
+}
+#vendor_preview_tabs .ui-tabs-nav{
+        padding: 0;
+        border: 0;
+}
+#vendor_preview_tabs .ui-tabs-nav li{
+        float: none !important;
+        white-space: initial;
+        clear: both;
+        border: 0;
+}
+#vendor_preview_tabs .ui-tabs-nav li a{
+        float: none !important;
+}
+#vendor_preview_tabs .ui-widget-header {
+    border: 1px solid #e78f08;
+    background: #f1f1f1;
+}
+@media screen and (min-width: 768px){
+        .subsubsub.wcmpsubtabadmin li a, .wcmp-ui-tabs .ui-tabs-nav li a {
+            padding: 20px 15px !important;
+    }
+}
+
 @media screen and (min-width: 768px) {
     .wcmp_subtab_container .subsubsub.wcmpsubtabadmin,
     .wcmp-ui-tabs ul.ui-tabs-nav {

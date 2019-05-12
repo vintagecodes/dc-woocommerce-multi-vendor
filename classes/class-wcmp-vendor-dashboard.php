@@ -1692,7 +1692,7 @@ Class WCMp_Admin_Dashboard {
                                         <option value=""><?php _e('Select a country&hellip;', 'dc-woocommerce-multi-vendor'); ?></option>
             <?php
             $country_code = get_user_meta(get_current_user_id(), '_vendor_country_code', true);
-            foreach (WC()->countries->get_shipping_countries() as $key => $value) {
+            foreach (WC()->countries->get_allowed_countries() as $key => $value) {
                 echo '<option value="' . esc_attr($key) . '"' . selected(esc_attr($country_code), esc_attr($key), false) . '>' . esc_html($value) . '</option>';
             }
             ?>
