@@ -359,7 +359,7 @@ class WCMp_Cron_Job {
                                 if(!$order){
                                     continue;
                                 }
-                                if(in_array($corder->order_id, $commission_specific_orders_ids_done)){
+                                if(get_post_meta($corder->order_id, '_wcmp_order_migrated', true) || in_array($corder->order_id, $commission_specific_orders_ids_done)){
                                     continue;
                                 }
                                 $commission_specific_orders_ids_done[] = $corder->order_id;
@@ -399,6 +399,8 @@ class WCMp_Cron_Job {
                                     update_post_meta($vorder->commission_id, '_commission_order_id', $vendor_order_id);
                                     // for track BW vendor order-commission
                                     update_post_meta($vendor_order_id, '_old_order_id', $vorder->order_id);
+                                    // prevent duplication
+                                    update_post_meta($corder->order_id, '_wcmp_order_migrated', true);
                                     do_action( 'wcmp_orders_migration_order_created', $vendor_order_id, $vorder );  
                                 } catch (Exception $exc) {
                                     doProductVendorLOG("Error in order migration create order :".$exc->getMessage());
