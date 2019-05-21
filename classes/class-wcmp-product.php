@@ -1829,6 +1829,7 @@ class WCMp_Product {
 
             return $links;
         }
+        return $links;
     }
     
 }
