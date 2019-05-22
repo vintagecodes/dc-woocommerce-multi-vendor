@@ -1807,7 +1807,7 @@ class WCMp_Product {
         return implode( ', ', $termlist );
     }
     
-    public function show_default_product_cats_product_single( $terms = array() ){
+    public function show_default_product_cats_product_single( $terms ){
         global $product;
         if( !is_object( $product )) $product = wc_get_product( get_the_ID() );
         if(is_product() && $product){
@@ -1829,7 +1829,7 @@ class WCMp_Product {
 
             return $links;
         }
-        return $links;
+        return $terms;
     }
     
 }
