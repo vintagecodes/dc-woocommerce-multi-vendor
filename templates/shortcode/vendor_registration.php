@@ -38,7 +38,7 @@
             <?php 
             $button_text = apply_filters('wcmp_vendor_registration_submit',__('Register', 'dc-woocommerce-multi-vendor'));
             ?>
-            <input type="submit" class="woocommerce-Button button" name="register" value="<?php echo $button_text; ?>" />
+            <button type="submit" class="woocommerce-Button button" name="register"><?php echo $button_text; ?></button>
         </p>
         <?php do_action('woocommerce_register_form_end'); ?>
     </form>

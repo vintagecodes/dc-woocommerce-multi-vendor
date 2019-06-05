@@ -314,7 +314,7 @@ class WCMp_Frontend {
         wp_register_script('wcmp_frontend_vdashboard_js', $frontend_script_path . 'wcmp_vendor_dashboard' . $suffix . '.js', array('jquery'), $WCMp->version, true);
         wp_register_script('frontend_js', $frontend_script_path . 'frontend' . $suffix . '.js', array('jquery'), $WCMp->version, true);
         wp_register_script('vendor_order_by_product_js', $frontend_script_path . 'vendor_order_by_product' . $suffix . '.js', array('jquery'), $WCMp->version, true);
-        wp_register_script('simplepopup_js', $frontend_script_path . 'simplepopup' . $suffix . '.js', array('jquery'), $WCMp->version, true);
+        //wp_register_script('simplepopup_js', $frontend_script_path . 'simplepopup' . $suffix . '.js', array('jquery'), $WCMp->version, true);
         wp_register_script('wcmp_new_vandor_dashboard_js', $frontend_script_path . 'vendor_dashboard' . $suffix . '.js', array('jquery'), $WCMp->version, true);
         wp_register_script('wcmp_seller_review_rating_js', $frontend_script_path . 'vendor_review_rating' . $suffix . '.js', array('jquery'), $WCMp->version, true);
         wp_register_script('wcmp_single_product_multiple_vendors', $frontend_script_path . 'single-product-multiple-vendors' . $suffix . '.js', array('jquery'), $WCMp->version, true);
@@ -351,7 +351,7 @@ class WCMp_Frontend {
         }
         if (is_woocommerce()) {
             wp_enqueue_script('frontend_js');
-            wp_enqueue_script('simplepopup_js');
+            //wp_enqueue_script('simplepopup_js');
             wp_enqueue_script('wcmp_single_product_multiple_vendors');
             wp_enqueue_script('wcmp_customer_qna_js');
         }

@@ -407,7 +407,15 @@ class WCMp_Settings {
                     }
                 }
             }
-
+            /**
+             *  patch for duplicate field name override from different settings areas
+             */
+            $tab_sub_tab = '';
+            if( $tab ) $tab_sub_tab = $tab;
+            if( $tab_section ) $tab_sub_tab = $tab_sub_tab."_".$tab_section;
+            $tab_settings_options = ( get_option( "wcmp_{$tab_sub_tab}_settings_name", array() ) ) ? get_option( "wcmp_{$tab_sub_tab}_settings_name", array() ) : get_option( "wcmp_{$tab}_settings_name", array() );
+            $this->options = ( $tab_settings_options ) ? $tab_settings_options : $this->options;
+            
             foreach ( $this->tabs as $tab_id => $tab_name ) {
                 settings_errors( "wcmp_{$tab_id}_settings_name" );
                 if ( $this->is_wcmp_tab_has_subtab( $tab_id ) ) {
@@ -867,6 +875,7 @@ class WCMp_Settings {
      */
     public function text_field_callback( $field ) {
         global $WCMp;
+        //print_r($this->options);die;
         $field['dfvalue'] = isset( $field['dfvalue'] ) ? esc_attr( $field['dfvalue'] ) : '';
         $field['value'] = isset( $field['value'] ) ? esc_attr( $field['value'] ) : $field['dfvalue'];
         $field['value'] = isset( $this->options[$field['name']] ) ? esc_attr( $this->options[$field['name']] ) : $field['value'];
