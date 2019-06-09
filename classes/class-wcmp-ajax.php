@@ -2056,7 +2056,7 @@ class WCMp_Ajax {
                         if ($diff < $commission_threshold_time) {
                             continue;
                         }
-                        if (is_commission_requested_for_withdrawals($commission_id)) {
+                        if (is_commission_requested_for_withdrawals($commission_id) || in_array($order->get_status('edit'), array('on-hold', 'pending', 'failed', 'refunded'))) {
                             $disabled_reqested_withdrawals = 'disabled';
                         } else {
                             $disabled_reqested_withdrawals = '';

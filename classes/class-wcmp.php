@@ -491,7 +491,10 @@ final class WCMp {
             case 'frontend_js' :
                 $params = array(
                     'ajax_url' => $this->ajax_url(),
-                    'messages' => array('confirm_dlt_pro' => __("Are you sure and want to delete this Product?\nYou can't undo this action ...", 'dc-woocommerce-multi-vendor')),
+                    'messages' => array(
+                        'confirm_dlt_pro' => __("Are you sure and want to delete this Product?\nYou can't undo this action ...", 'dc-woocommerce-multi-vendor'),
+                        'report_abuse_msg' => __('Report has been sent', 'dc-woocommerce-multi-vendor'),
+                    ),
                 );
                 break;
             

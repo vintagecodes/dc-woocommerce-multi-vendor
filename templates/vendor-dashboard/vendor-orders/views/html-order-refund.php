@@ -58,6 +58,9 @@ $who_refunded = new WP_User( $refund->get_refunded_by() );
                     echo wp_kses_post(
                             wc_price( '-' . $refund->get_amount(), array( 'currency' => $refund->get_currency() ) )
                     );
+                    
+                    $refunded_commission_amt = get_refund_commission_amount( $refund->get_id() );
+                    echo '<small class="refunded">' . wc_price( $refunded_commission_amt, array( 'currency' => $refund->get_currency() ) ) . '</small>';
                     ?>
             </div>
     </td>

@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 /**
  * @class 		WCMp Vendor Order Class
  *
- * @version		3.1.2.0
+ * @version		3.4.0
  * @package		WCMp
  * @author 		WC Marketplace
  */
@@ -42,7 +42,7 @@ class WCMp_Vendor_Order {
     /**
      * Get order vendor.
      *
-     * @since 3.1.2.0
+     * @since 3.4.0
      * @return object/false Vendor
      */
     public function get_vendor() {
@@ -52,7 +52,7 @@ class WCMp_Vendor_Order {
     /**
      * Get vendor commission total.
      *
-     * @since 3.2.0
+     * @since 3.4.0
      */
     public function get_commission_total($context = 'view') {
         $commission_id = $this->get_prop('_commission_id');
@@ -62,7 +62,7 @@ class WCMp_Vendor_Order {
     /**
      * Get vendor commission amount.
      *
-     * @since 3.2.0
+     * @since 3.4.0
      */
     public function get_commission($context = 'view') {
         $commission_id = $this->get_prop('_commission_id');
@@ -70,9 +70,34 @@ class WCMp_Vendor_Order {
     }
     
     /**
+     * Get formatted commission total.
+     *
+     * @since 3.4.0
+     */
+    public function get_formatted_commission_total($context = 'view') {
+        $commission_id = $this->get_prop('_commission_id');
+        $commission_amount = get_post_meta( $commission_id, '_commission_amount', true );
+        if($commission_amount != WCMp_Commission::commission_amount_totals($commission_id, 'edit')){
+            return '<del>' . wc_price($commission_amount, array('currency' => $this->order->get_currency())) . '</del> <ins>' . WCMp_Commission::commission_amount_totals($commission_id, $context).'</ins>'; 
+        }else{
+            return WCMp_Commission::commission_amount_totals($commission_amount, $context);
+        }
+    }
+    
+    /**
+     * Get commission refunded amount.
+     *
+     * @since 3.4.0
+     */
+    public function get_commission_refunded_amount($context = 'view') {
+        $commission_id = $this->get_prop('_commission_id');
+        return WCMp_Commission::commission_refunded_totals($commission_id, $context);
+    }
+    
+    /**
      * Get vendor shipping amount.
      *
-     * @since 3.2.0
+     * @since 3.4.0
      */
     public function get_shipping($context = 'view') {
         $commission_id = $this->get_prop('_commission_id');
@@ -82,7 +107,7 @@ class WCMp_Vendor_Order {
     /**
      * Get vendor tax amount.
      *
-     * @since 3.2.0
+     * @since 3.4.0
      */
     public function get_tax($context = 'view') {
         $commission_id = $this->get_prop('_commission_id');
@@ -92,7 +117,7 @@ class WCMp_Vendor_Order {
     /**
      * Get vendor order.
      *
-     * @since 3.1.2.0
+     * @since 3.4.0
      * @return object/false Vendor order
      */
     public function get_order() {

@@ -16,7 +16,7 @@ jQuery(function ($) {
                     // Qty
                     .on('change', 'input.quantity', this.quantity_changed)
                     // Status
-                    .on('change', '#order_status', this.order_status_changed)
+                    .on('click', '#order_status a', this.order_status_changed)
 
                     // Subtotal/total
                     .on('keyup change', '.split-input :input', function () {
@@ -93,17 +93,19 @@ jQuery(function ($) {
             $(this).trigger('quantity_changed');
         },
         order_status_changed: function (){
-            
-            $('.change-status').addClass('loaderOverlay');
-            var selected_status = $(this).val(),
+            var selected_status = $(this).data('status'),
                 current_status = $('#order_current_status').val(),
                 order_id = $('#order_ID').val();
             $(this).parents('.change-status').find('.order-status-text').removeClass (function (index, css) {
                // remove class start with 'wc' and add 
                return (css.match (/(^|\s)wc\S+/g) || []).join(' '); 
              }).addClass(selected_status);
-            if( current_status == selected_status ) return false;
-            
+            if( current_status == selected_status ) {
+                $('.change-status').removeClass('loaderOverlay');
+                $(".dropdown-order-statuses").removeClass('open');
+                return false;
+            }
+            $('.change-status').addClass('loaderOverlay');
             var data = {
                 action: 'wcmp_order_status_changed',
                 order_id: order_id,

@@ -365,7 +365,7 @@ class WCMp_Commission {
 
                                 ?>
                             </span>
-                            <input name="_commission_amount" type="text" id="_commission_amount" class="regular-text commission-amount-edit" value="<?php echo $commission_amount; ?>" style="display:none;" />
+                            <input name="_commission_amount" type="text" id="_commission_amount" class="regular-text commission-amount-edit" value="<?php echo self::commission_amount_totals($post_id, 'edit'); ?>" style="display:none;" />
                         </p>
                         <p class="form-field form-field-wide">
                             <label><strong><?php esc_html_e( 'Shipping', 'dc-woocommerce-multi-vendor' ); ?>:</strong></label>
@@ -537,6 +537,21 @@ class WCMp_Commission {
             $commission_refunded_amount = get_post_meta( $commission_id, '_commission_refunded_items', true );
             $total = floatval($commission_amount) + floatval($commission_refunded_amount);
             return $context == 'view' ? wc_price($total, array('currency' => $order->get_currency())) : $total;
+        }
+    }
+    
+    /**
+     * Calculate commission refunded amount total
+     * @param int $commission_id
+     * @param string $context
+     * @return value 
+     */
+    public static function commission_refunded_totals( $commission_id, $context = 'view' ) {
+        if($commission_id){
+            $order_id = get_post_meta($commission_id, '_commission_order_id', true);
+            $order = wc_get_order($order_id);
+            $commission_refunded = get_post_meta( $commission_id, '_commission_refunded', true );
+            return $context == 'view' ? wc_price($commission_refunded, array('currency' => $order->get_currency())) : $commission_refunded;
         }
     }
     

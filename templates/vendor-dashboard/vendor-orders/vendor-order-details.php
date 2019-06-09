@@ -50,17 +50,17 @@ $subtotal = 0;
                     <i class="wcmp-font ico-pendingpayment-status-icon"></i>
                     <span class="order_status_lbl"><?php echo esc_html( wc_get_order_status_name( $order->get_status() ) ); ?></span>
                 </div>
-                <div class="dropdown pull-left clearfix">
+                <div class="dropdown-order-statuses dropdown pull-left clearfix">
                     <span class="order-status-edit-button pull-left dropdown-toggle" data-toggle="dropdown"><u><?php _e( 'Edit', 'dc-woocommerce-multi-vendor' ); ?></u></span>
                     <input type="hidden" id="order_current_status" value="<?php echo 'wc-' . $order->get_status( 'edit' ); ?>" />
-                    <select id="order_status" name="order_status" class="dropdown-menu wcmp-select">
+                    <ul id="order_status" class="dropdown-menu dropdown-menu-right" style="margin-top:9px;z-index:1;">
                             <?php
-                            $statuses = wc_get_order_statuses();
+                            $statuses = apply_filters( 'wcmp_vendor_order_statuses', wc_get_order_statuses(), $order );
                             foreach ( $statuses as $status => $status_name ) {
-                                    echo '<option value="' . esc_attr( $status ) . '" ' . selected( $status, 'wc-' . $order->get_status( 'edit' ), false ) . '>' . esc_html( $status_name ) . '</option>';
+                                    echo '<li><a href="javascript:void(0);" data-status="' . esc_attr( $status ) . '" ' . selected( $status, 'wc-' . $order->get_status( 'edit' ), false ) . '>' . esc_html( $status_name ) . '</a></li>';
                             }
                             ?>
-                    </select>                     
+                    </ul>   
                 </div>        
             </div>
         </div>

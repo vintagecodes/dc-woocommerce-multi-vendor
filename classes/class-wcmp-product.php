@@ -1265,41 +1265,37 @@ class WCMp_Product {
         global $product;
         if (apply_filters('wcmp_show_report_abuse_link', true, $product)) {
             $report_abuse_text = apply_filters('wcmp_report_abuse_text', __('Report Abuse', 'dc-woocommerce-multi-vendor'), $product);
+            $show_in_popup = apply_filters('wcmp_show_report_abuse_form_popup', true, $product)
             ?>
-            <a href="#" id="report_abuse"><?php echo $report_abuse_text; ?></a><br>
-            <div id="report_abuse_form" class="simplePopup"> 
-                <h3 class="wcmp-abuse-report-title"><?php _e('Report an abuse for product ', 'dc-woocommerce-multi-vendor') . ' ' . the_title(); ?> </h3>
-                <form action="#" method="post" id="report-abuse" class="report-abuse-form" name="report-abuse">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <input type="text" class="report_abuse_name" id="report_abuse_name" name="report_abuse[name]" value="" style="width: 100%;" placeholder="<?php _e('Name', 'dc-woocommerce-multi-vendor'); ?>" required="">
-                                    <span class="wcmp-report-abuse-error"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="email" class="report_abuse_email" id="report_abuse_email" name="report_abuse[email]" value="" style="width: 100%;" placeholder="<?php _e('Email', 'dc-woocommerce-multi-vendor'); ?>" required="">
-                                    <span class="wcmp-report-abuse-error"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <textarea name="report_abuse[message]" class="report_abuse_msg" id="report_abuse_msg" rows="5" style="width: 100%;" placeholder="<?php _e('Leave a message explaining the reasons for your abuse report', 'dc-woocommerce-multi-vendor'); ?>" required=""></textarea>
-                                    <span class="wcmp-report-abuse-error"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="hidden" class="report_abuse_product_id" value="<?php echo $product->get_id(); ?>">
-                                    <input type="submit" class="submit-report-abuse submit" name="report_abuse[submit]" value="<?php _e('Report', 'dc-woocommerce-multi-vendor'); ?>">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div> 							
+            <div class="wcmp-report-abouse-wrapper">
+                <a href="javascript:void(0);" id="report_abuse"><?php echo $report_abuse_text; ?></a>
+                <div id="report_abuse_form"  class="<?php echo ( $show_in_popup ) ? 'report-abouse-modal' : ''; ?>" tabindex="-1" style="display: none;">
+                    <div class="<?php echo ( $show_in_popup ) ? 'modal-content' : 'toggle-content'; ?>">
+                        <div class="modal-header">
+                            <button type="button" class="close">&times;</button>
+                            <h2 class="wcmp-abuse-report-title1"><?php _e('Report an abuse for product ', 'dc-woocommerce-multi-vendor') . ' ' . the_title(); ?> </h2>
+                        </div>
+                        <div class="modal-body">
+                            <p class="field-row">
+                                <input type="text" class="report_abuse_name" id="report_abuse_name" name="report_abuse[name]" value="" style="width: 100%;" placeholder="<?php _e('Name', 'dc-woocommerce-multi-vendor'); ?>" required="">
+                                <span class="wcmp-report-abuse-error"></span>
+                            </p>
+                            <p class="field-row">
+                                <input type="email" class="report_abuse_email" id="report_abuse_email" name="report_abuse[email]" value="" style="width: 100%;" placeholder="<?php _e('Email', 'dc-woocommerce-multi-vendor'); ?>" required="">
+                                <span class="wcmp-report-abuse-error"></span>
+                            </p>
+                            <p class="field-row">
+                                <textarea name="report_abuse[message]" class="report_abuse_msg" id="report_abuse_msg" rows="5" style="width: 100%;" placeholder="<?php _e('Leave a message explaining the reasons for your abuse report', 'dc-woocommerce-multi-vendor'); ?>" required=""></textarea>
+                                <span class="wcmp-report-abuse-error"></span>
+                            </p>
+                        </div> 
+                        <div class="modal-footer">
+                            <input type="hidden" class="report_abuse_product_id" value="<?php echo $product->get_id(); ?>">
+                            <button type="button" id="woo_submit_enquiry" class="btn btn-primary submit-report-abuse" name="report_abuse[submit]"><?php _e('Report', 'dc-woocommerce-multi-vendor'); ?></button>
+                        </div>
+                    </div>
+                </div>
+            </div>							
             <?php
         }
     }
@@ -1807,7 +1803,7 @@ class WCMp_Product {
         return implode( ', ', $termlist );
     }
     
-    public function show_default_product_cats_product_single( $terms = array() ){
+    public function show_default_product_cats_product_single( $terms ){
         global $product;
         if( !is_object( $product )) $product = wc_get_product( get_the_ID() );
         if(is_product() && $product){
@@ -1829,6 +1825,7 @@ class WCMp_Product {
 
             return $links;
         }
+        return $terms;
     }
     
 }

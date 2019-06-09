@@ -157,7 +157,7 @@ if ( wc_tax_enabled() ) {
                                         <td class="label primary-color"><?php _e('Commission:', 'dc-woocommerce-multi-vendor'); ?></td>
                                         <td width="1%"></td>
                                         <td class="total primary-color">
-                                            <?php echo $vendor_order->get_commission(); // WPCS: XSS ok.  ?>
+                                            <?php echo $vendor_order->get_formatted_commission_total(); // WPCS: XSS ok.  ?>
                                         </td>
                                     </tr>
                                     <?php if (0 < $order->get_total_discount()) : ?>
@@ -227,6 +227,11 @@ if ( wc_tax_enabled() ) {
                                             <td class="label refunded-total"><?php esc_html_e('Refunded', 'woocommerce'); ?>:</td>
                                             <td width="1%"></td>
                                             <td class="total refunded-total">-<?php echo wc_price($order->get_total_refunded(), array('currency' => $order->get_currency())); // WPCS: XSS ok.  ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label refunded-total"><?php esc_html_e('Commission Refunded', 'dc-woocommerce-multi-vendor'); ?>:</td>
+                                            <td width="1%"></td>
+                                            <td class="total refunded-total"><?php echo $vendor_order->get_commission_refunded_amount(); // WPCS: XSS ok.  ?></td>
                                         </tr>
                                     <?php endif; ?>
 

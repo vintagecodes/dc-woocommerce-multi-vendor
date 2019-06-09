@@ -3,9 +3,9 @@ Contributors: Dualcube, greyparrots, purnendu, itzmekhokan
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.1
+Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 3.3.5
+Stable tag: 3.3.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,13 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.3.6 - 2019-05-14 =
+* Fix - woocommerce_term_meta issue fixed.
+* Fix - Vendor No allowed product types issue fixed.
+* Fix - Product types cap admin restriction issue fixed.
+* Tweak - Country dropdown dependancy.
+* Updated - Language file.
+
 = 3.3.5 - 2019-04-22 =
 * Added - WC 3.6+ compatibility added.
 * Tweak - Vendor shop logo image height-width for social share.

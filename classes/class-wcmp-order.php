@@ -42,6 +42,7 @@ class WCMp_Order {
             if(apply_filters('wcmp_vendor_order_to_parent_order_status_synchronization', true))
                 add_action('woocommerce_order_status_changed', array($this, 'wcmp_vendor_order_to_parent_order_status_synchronization'), 99, 3);
             // WCMp create orders
+            //add_action('woocommerce_saved_order_items', array(&$this, 'wcmp_create_orders_from_backend'), 10, 2 );
             add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_create_orders'), 10, 3);
             add_action('woocommerce_after_checkout_validation', array($this, 'wcmp_check_order_awaiting_payment'));
             // Order Refund
@@ -251,6 +252,10 @@ class WCMp_Order {
             }
         endif;
     }
+    
+//    public function wcmp_create_orders_from_backend( $order_id, $items ){
+//        
+//    }
 
     /**
      * Create a new vendor order programmatically
@@ -595,25 +600,29 @@ class WCMp_Order {
     }
 
     public function wcmp_parent_order_to_vendor_order_status_synchronization($order_id, $old_status, $new_status) {
-        //Check if order have sub-order
+        if(!$order_id) return;
+        // Check order have status
+        if (empty($new_status)) {
+            $order = wc_get_order($order_id);
+            $new_status = $order->get_status('edit');
+        }
+        
         $status_to_sync = apply_filters('wcmp_parent_order_to_vendor_order_statuses_to_sync',array('on-hold', 'pending', 'processing'));
-        if($new_status == $status_to_sync) :
+        if( in_array($new_status, $status_to_sync) ) :
             if (wp_get_post_parent_id( $order_id ) || get_post_meta($order_id, 'wcmp_vendor_order_status_synchronized', true))
                 return false;
-
+            
+            remove_action( 'woocommerce_order_status_completed', 'wc_paying_customer' );
+            // Check if order have sub-order
             $wcmp_suborders = $this->get_suborders($order_id);
 
             if ($wcmp_suborders) {
-
-                if (empty($new_status)) {
-                    $order = wc_get_order($order_id);
-                    $new_status = $order->get_status('edit');
-                }
-
                 foreach ($wcmp_suborders as $suborder) {
-                    $suborder->update_status($new_status, _x('Update by admin: ', 'Order note', 'dc-woocommerce-multi-vendor'));
+                    $suborder->update_status($new_status, _x('Update via parent order: ', 'Order note', 'dc-woocommerce-multi-vendor'));
                 }
                 update_post_meta($order_id, 'wcmp_vendor_order_status_synchronized', true);
+                
+                add_action( 'woocommerce_order_status_completed', 'wc_paying_customer' );
             }
         endif;
     }

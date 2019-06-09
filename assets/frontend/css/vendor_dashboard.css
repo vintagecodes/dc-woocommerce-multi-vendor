@@ -4626,7 +4626,8 @@ select[name="wcmp-vendor-orders_length"] {
   border-top: 1px solid #ddd; }
 .single-order-detail-table .wcmp-order-totals td, .single-order-detail-table .wc-order-totals td {
   padding-bottom: 10px !important;
-  padding-right: 20px !important; }
+/*  padding-right: 20px !important; */
+}
 .single-order-detail-table .form-control {
   height: 28px; }
 
@@ -5241,6 +5242,7 @@ select[name="wcmp-vendor-orders_length"] {
 .vendor-announcements .ajax_loader_class_msg img {
   margin: 20% auto; }
 
+/*********************** Ledger Report *************************/
 #wcmp-vendor-ledger td.debit {
     color: #761919;
 }
@@ -5313,63 +5315,6 @@ select[name="wcmp-vendor-orders_length"] {
 .wcmp-vendor-ledger-report-row .ledger-box-wrap {
     margin-bottom: 20px;
 }
-/*
-
-.wcmp-vendor-ledger-report-row .ledger-metric {
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    padding: 20px;
-    color: #fff;
-    margin-bottom: 30px;
-    border: 1px solid #e6e7e8;
-}
-.wcmp-vendor-ledger-report-row .ledger-metric .icon {
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-    float: left;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    background-color: #0081c2;
-    text-align: center;
-}
-.wcmp-vendor-ledger-report-row .ledger-metric .icon i {
-    font-size: 28px;
-    color: #fff;
-}
-.wcmp-vendor-ledger-report-row .ledger-metric p {
-    margin-bottom: 0;
-    line-height: 1.2;
-    text-align: right;
-}
-.wcmp-vendor-ledger-report-row .ledger-metric .number {
-    display: block;
-    font-size: 28px;
-    font-weight: 300;
-}
-.wcmp-vendor-ledger-report-row .ledger-metric .title {
-    font-size: 16px;
-}
-
-.wcmp-vendor-ledger-report-row .ledger-total-credit-bal .ledger-metric { background: #37a972; }
-.wcmp-vendor-ledger-report-row .ledger-total-debit-bal .ledger-metric { background: #d81d1d; }
-
-.wcmp-color-scheme-outer_space_blue .wcmp-vendor-ledger-report-row .ledger-initial-bal .ledger-metric,
-.wcmp-color-scheme-outer_space_blue .wcmp-vendor-ledger-report-row .ledger-total-ending-bal .ledger-metric { background: #3f85b9; }
-.wcmp-color-scheme-wild_watermelon .wcmp-vendor-ledger-report-row .ledger-initial-bal .ledger-metric,
-.wcmp-color-scheme-wild_watermelon .wcmp-vendor-ledger-report-row .ledger-total-ending-bal .ledger-metric { background: #fd5668; }
-.wcmp-color-scheme-old_west .wcmp-vendor-ledger-report-row .ledger-initial-bal .ledger-metric,
-.wcmp-color-scheme-old_west .wcmp-vendor-ledger-report-row .ledger-total-ending-bal .ledger-metric { background: #c7a589; }
-.wcmp-color-scheme-green_lagoon .wcmp-vendor-ledger-report-row .ledger-initial-bal .ledger-metric,
-.wcmp-color-scheme-green_lagoon .wcmp-vendor-ledger-report-row .ledger-total-ending-bal .ledger-metric { background: #009788; }
-
-.wcmp-color-scheme-outer_space_blue .wcmp-vendor-ledger-report-row .ledger-metric .icon { background: #3f85b9; }
-.wcmp-color-scheme-wild_watermelon .wcmp-vendor-ledger-report-row .ledger-metric .icon{ background: #fd5668; }
-.wcmp-color-scheme-old_west .wcmp-vendor-ledger-report-row .ledger-metric .icon { background: #c7a589; }
-.wcmp-color-scheme-green_lagoon .wcmp-vendor-ledger-report-row .ledger-metric .icon { background: #009788; }*/
-
 
 .wcmp-vendor-ledger-report-row .widget.widget-stats {
     position: relative;
@@ -5409,5 +5354,19 @@ height: 0;
 clear: both;
 visibility: hidden;
 }
+
+.wcmp_order_items_wrapper table.woocommerce_order_items small.refunded {
+    display: block;
+    color: #a00;
+    white-space: nowrap;
+    margin-top: .5em;
+}
+.wcmp_order_items_wrapper .wcmp-order-totals .refunded-total {
+    color: #a00;
+}
+.wcmp_order_items_wrapper .wcmp-order-totals .amount{
+    font-weight: 700;
+}
+.refund .line_cost{ text-align: right; }
 
 /*# sourceMappingURL=vendor_dashboard.css.map */

@@ -1,10 +1,41 @@
 /* global front_end_param */
 
-jQuery(document).ready(function ($) {
-    $('#report_abuse').click(function (e) {
-        e.preventDefault();
-        $('#report_abuse_form').simplePopup();
+jQuery(document).ready(function ($) { 
+    var block = function( $node ) {
+        if ( ! is_blocked( $node ) ) {
+            $node.addClass( 'processing' ).block( {
+                message: null,
+                overlayCSS: {
+                    background: '#fff',
+                    opacity: 0.6
+                }
+            } );
+        }
+    };
+    
+    var is_blocked = function( $node ) {
+        return $node.is( '.processing' ) || $node.parents( '.processing' ).length;
+    };
+
+    var unblock = function( $node ) {
+        $node.removeClass( 'processing' ).unblock();
+    };
+    
+    // Modal Close
+    $(".wcmp-report-abouse-wrapper .close").on('click', function () {
+        $(".wcmp-report-abouse-wrapper #report_abuse_form").slideToggle(500);
     });
+
+    $('.wcmp-report-abouse-wrapper #report_abuse').on('click', function () {
+        $(".wcmp-report-abouse-wrapper #report_abuse_form").slideToggle(1000);
+    });
+    
+    var modal = document.getElementById('report_abuse_form');
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 
     $('.submit-report-abuse').on('click', function (e) {
         var inpObjName = document.getElementById("report_abuse_name");
@@ -26,6 +57,7 @@ jQuery(document).ready(function ($) {
             $('#report_abuse_msg').next('span').html('');
         }
         e.preventDefault();
+        
         var data = {
             action: 'send_report_abuse',
             product_id: $('.report_abuse_product_id').val(),
@@ -34,12 +66,11 @@ jQuery(document).ready(function ($) {
             msg: $('.report_abuse_msg').val(),
         };
         if (inpObjName.checkValidity() && inpObjEmail.checkValidity() && inpObjMessage.checkValidity()) {
+            block($( '#report_abuse_form' ));
             $.post(frontend_js_script_data.ajax_url, data, function (responsee) {
-                $('.simplePopupClose').click();
-                $('#report_abuse').css({'box-shadow': 'none', 'cursor': 'default', 'color': '#686868'});
-                $('#report_abuse').attr('href', 'javascript:void(0)');
-                $('#report_abuse').off('click');
-                $('#report_abuse').text(front_end_param.report_abuse_msg);
+                unblock($( '#report_abuse_form' ));
+                $(".wcmp-report-abouse-wrapper #report_abuse_form").slideToggle(500);
+                $('#report_abuse').text(frontend_js_script_data.messages.report_abuse_msg);
             });
         }
     });

@@ -76,3 +76,23 @@ function is_wcmp_vendor_order($order) {
     }
     return (wcmp_get_order($order_id)) ? true : false;
 }
+
+/**
+ * Checking order is vendor order or not.
+ *
+ * @since 3.2.0
+ * @return boolean
+ */
+function get_refund_commission_amount($refund_id, $context = 'view') {
+    if( $refund_id ){
+        $order_id = wp_get_post_parent_id( $refund_id );
+        $commission_id = get_post_meta( $order_id, '_commission_id', true );
+        $commission_refunded_data = get_post_meta( $commission_id, '_commission_refunded_data', true );
+        if( isset($commission_refunded_data[$refund_id][$commission_id]) ){
+            $refund_commission = $commission_refunded_data[$refund_id][$commission_id];
+            return $refund_commission;
+            //return $context == 'view' ? wc_price($refund_commission, array('currency' => $order->get_currency())) : $refund_commission;
+        }
+    }
+    return false;
+}
