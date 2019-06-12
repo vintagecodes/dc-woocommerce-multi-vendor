@@ -155,7 +155,7 @@ class WCMp_Order {
             return false;
         }
         
-        $is_vendor_order = wcmp_get_order($object->get_id());
+        $is_vendor_order = ($object) ? wcmp_get_order($object->get_id()) : false;
         
         if ( $is_editpost_action && $is_vendor_order ) return $enabled;
 
@@ -254,7 +254,9 @@ class WCMp_Order {
     }
     
 //    public function wcmp_create_orders_from_backend( $order_id, $items ){
-//        
+//        $order = wc_get_order($order_id);
+//        if(!$order) return;
+//        $line_items = $order->get_items();
 //    }
 
     /**

@@ -436,7 +436,7 @@ Class WCMp_Admin_Dashboard {
                 // Only submit if the order has the product belonging to this vendor
                 $order = wc_get_order($_POST['order_id']);
                 $comment = esc_textarea($_POST['comment_text']);
-                $note_type = $_POST['note_type'];
+                $note_type = isset($_POST['note_type']) ? $_POST['note_type'] : '';
 		$is_customer_note = ( 'customer' === $note_type ) ? 1 : 0;
                 $comment_id = $order->add_order_note($comment, $is_customer_note, true);
                 // update comment author & email
