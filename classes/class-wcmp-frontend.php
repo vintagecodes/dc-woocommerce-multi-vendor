@@ -35,7 +35,8 @@ class WCMp_Frontend {
         // processed woocomerce checkout order data
         add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_checkout_order_processed'), 30, 3);
         // store visitors stats
-        add_action('template_redirect', array(&$this, 'wcmp_store_visitors_stats'), 99);
+        if(!apply_filters('wcmp_is_disable_store_visitors_stats', false))
+            add_action('template_redirect', array(&$this, 'wcmp_store_visitors_stats'), 99);
     }
 
     /**

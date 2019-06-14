@@ -79,6 +79,7 @@ class WCMp_Product {
             add_action( 'save_post_product', array( $this, 'wcmp_spmv_bulk_quick_edit_save_post' ), 99 );
             add_action( 'wcmp_create_duplicate_product', array( $this, 'wcmp_spmv_bulk_quick_edit_save_post' ), 99 );
             add_action( 'woocommerce_update_product', array( $this, 'wcmp_spmv_bulk_quick_edit_save_post' ), 99 );
+            add_action( 'woocommerce_product_duplicate_before_save', array( $this, 'wcmp_product_duplicate_before_save' ), 99, 2 );
         }
         add_action('woocommerce_product_query_tax_query', array(&$this, 'wcmp_filter_product_category'), 10);
         $this->vendor_product_restriction();
@@ -1291,7 +1292,7 @@ class WCMp_Product {
                         </div> 
                         <div class="modal-footer">
                             <input type="hidden" class="report_abuse_product_id" value="<?php echo $product->get_id(); ?>">
-                            <button type="button" id="woo_submit_enquiry" class="btn btn-primary submit-report-abuse" name="report_abuse[submit]"><?php _e('Report', 'dc-woocommerce-multi-vendor'); ?></button>
+                            <button type="button" class="btn btn-primary submit-report-abuse" name="report_abuse[submit]"><?php _e('Report', 'dc-woocommerce-multi-vendor'); ?></button>
                         </div>
                     </div>
                 </div>
@@ -1826,6 +1827,10 @@ class WCMp_Product {
             return $links;
         }
         return $terms;
+    }
+    
+    public function wcmp_product_duplicate_before_save($duplicate, $product){
+        $duplicate->set_name( $product->get_name() ); // remove duplicate (copy) strings
     }
     
 }

@@ -3159,9 +3159,12 @@ if (!function_exists('do_wcmp_spmv_set_object_terms')) {
                     }
                 }
             }
-            $min_price_product = apply_filters('wcmp_spmv_filtered_min_price_product', array_search(min($product_array_price), $product_array_price), $map_id);
-            $max_price_product = apply_filters('wcmp_spmv_filtered_max_price_product', array_search(max($product_array_price), $product_array_price), $map_id);
-            $top_rated_vendor_product = apply_filters('wcmp_spmv_filtered_top_rated_vendor_product', array_search(max($top_rated_vendors), $top_rated_vendors), $map_id);
+            $min_price_product = ($product_array_price) ? array_search(min($product_array_price), $product_array_price) : 0;
+            $min_price_product = apply_filters('wcmp_spmv_filtered_min_price_product', $min_price_product, $map_id);
+            $max_price_product = ($product_array_price) ? array_search(max($product_array_price), $product_array_price) : 0;
+            $max_price_product = apply_filters('wcmp_spmv_filtered_max_price_product', $max_price_product, $map_id);
+            $top_rated_vendor_product = ($top_rated_vendors) ? array_search(max($top_rated_vendors), $top_rated_vendors) : 0;
+            $top_rated_vendor_product = apply_filters('wcmp_spmv_filtered_top_rated_vendor_product', $top_rated_vendor_product, $map_id);
             $spmv_terms = $WCMp->taxonomy->get_wcmp_spmv_terms();
             if ($spmv_terms) {
                 foreach ($spmv_terms as $term) {
@@ -3239,9 +3242,12 @@ if (!function_exists('do_wcmp_spmv_set_object_terms')) {
                             }
                         }
                     }
-                    $min_price_product = apply_filters('wcmp_spmv_filtered_min_price_product', array_search(min($product_array_price), $product_array_price), $product_map_id);
-                    $max_price_product = apply_filters('wcmp_spmv_filtered_max_price_product', array_search(max($product_array_price), $product_array_price), $product_map_id);
-                    $top_rated_vendor_product = apply_filters('wcmp_spmv_filtered_top_rated_vendor_product', array_search(max($top_rated_vendors), $top_rated_vendors), $product_map_id);
+                    $min_price_product = ($product_array_price) ? array_search(min($product_array_price), $product_array_price) : 0;
+                    $min_price_product = apply_filters('wcmp_spmv_filtered_min_price_product', $min_price_product, $product_map_id);
+                    $max_price_product = ($product_array_price) ? array_search(max($product_array_price), $product_array_price) : 0;
+                    $max_price_product = apply_filters('wcmp_spmv_filtered_max_price_product', $max_price_product, $product_map_id);
+                    $top_rated_vendor_product = ($top_rated_vendors) ? array_search(max($top_rated_vendors), $top_rated_vendors) : 0;
+                    $top_rated_vendor_product = apply_filters('wcmp_spmv_filtered_top_rated_vendor_product', $top_rated_vendor_product, $product_map_id);
                     $spmv_terms = $WCMp->taxonomy->get_wcmp_spmv_terms(array('orderby' => 'id'));
                     if ($spmv_terms) {
                         foreach ($spmv_terms as $term) {

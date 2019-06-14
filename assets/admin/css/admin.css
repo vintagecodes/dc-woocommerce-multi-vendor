@@ -2035,3 +2035,14 @@ i.fa-arrow-down {
 
 
 /*********************** Report End ***********************/
+
+/*********************** WCMp Settings Tools ***********************/
+table.wcmp_tools_table.widefat { border: none; }
+table.wcmp_tools_table.widefat td, table.wcmp_tools_table.widefat th { padding: 2em; }
+table.wcmp_tools_table td strong.name, table.wcmp_tools_table th strong.name {
+    display: block;
+    margin-bottom: .5em;
+}
+table.wcmp_tools_table td.run-tool, table.wcmp_tools_table th.run-tool {
+    text-align: right;
+}

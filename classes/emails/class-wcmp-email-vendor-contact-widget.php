@@ -7,13 +7,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! class_exists( 'WC_Email_Vendor_Contact_Widget' ) ) :
 
 /**
- * New Order Email
+ * Vendor_Contact_Widget
  *
  * An email sent to the vendor via customer contact.
  *
  * @class 		WC_Email_Vendor_Contact_Widget
  * @version		3.3.2
- * @package		WooCommerce/Classes/Emails
+ * @package		WCMp/Classes/Emails
  * @extends 	WC_Email
  *
  */

@@ -41,6 +41,7 @@ class WCMp_Email {
         include( 'emails/class-wcmp-email-admin-withdrawal-request.php' );
         include( 'emails/class-wcmp-email-vendor-orders-stats-report.php' );
         include( 'emails/class-wcmp-email-vendor-contact-widget.php' );
+        include( 'emails/class-wcmp-email-send-report-abuse.php' );
         
         $wcmp_email = array();
         $wcmp_email['WC_Email_Vendor_New_Account'] = new WC_Email_Vendor_New_Account();
@@ -56,6 +57,7 @@ class WCMp_Email {
         $wcmp_email['WC_Email_Admin_Widthdrawal_Request'] = new WC_Email_Admin_Widthdrawal_Request();
         $wcmp_email['WC_Email_Vendor_Orders_Stats_Report'] = new WC_Email_Vendor_Orders_Stats_Report();
         $wcmp_email['WC_Email_Vendor_Contact_Widget'] = new WC_Email_Vendor_Contact_Widget();
+        $wcmp_email['WC_Email_Send_Report_Abuse'] = new WC_Email_Send_Report_Abuse();
 
         return array_merge( $emails, apply_filters( 'wcmp_email_classes', $wcmp_email ) );
     }

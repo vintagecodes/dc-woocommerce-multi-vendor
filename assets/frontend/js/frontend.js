@@ -58,8 +58,6 @@ jQuery(document).ready(function ($) {
         }
         e.preventDefault();
         
-        block($( '#report_abuse_form' ));
-        
         var data = {
             action: 'send_report_abuse',
             product_id: $('.report_abuse_product_id').val(),
@@ -68,6 +66,7 @@ jQuery(document).ready(function ($) {
             msg: $('.report_abuse_msg').val(),
         };
         if (inpObjName.checkValidity() && inpObjEmail.checkValidity() && inpObjMessage.checkValidity()) {
+            block($( '#report_abuse_form' ));
             $.post(frontend_js_script_data.ajax_url, data, function (responsee) {
                 unblock($( '#report_abuse_form' ));
                 $(".wcmp-report-abouse-wrapper #report_abuse_form").slideToggle(500);

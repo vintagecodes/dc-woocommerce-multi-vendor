@@ -462,9 +462,9 @@ class WCMp_Ajax {
             if ($product_map_id) {
                 $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_products_map WHERE product_map_id=%d", $product_map_id));
                 $product_ids = wp_list_pluck($results, 'product_id');
-                $first_inserted_map_pro_key = array_search(min(wp_list_pluck($results, 'ID')), wp_list_pluck($results, 'ID'));
-                if (isset($product_ids[$first_inserted_map_pro_key])) {
-                    $include[] = $product_ids[$first_inserted_map_pro_key];
+                //$first_inserted_map_pro_key = array_search(min(wp_list_pluck($results, 'ID')), wp_list_pluck($results, 'ID'));
+                if($product_ids){
+                    $include[] = min($product_ids);
                 }
             } else {
                 $include[] = $id;
@@ -1460,27 +1460,30 @@ class WCMp_Ajax {
         $check = !empty($name) && !empty($from_email) && !empty($user_message);
 
         if ($check) {
-            $product = get_post(absint($product_id));
+            //$product = get_post(absint($product_id));
             $vendor = get_wcmp_product_vendors($product_id);
-            $vendor_term = get_term($vendor->term_id);
-            $subject = __('Report an abuse for product', 'dc-woocommerce-multi-vendor') . get_the_title($product_id);
-
-            $to = sanitize_email(get_option('admin_email'));
-            $from_email = sanitize_email($from_email);
-            $headers = "From: {$name} <{$from_email}>" . "\r\n";
-
-            $message = sprintf(__("User %s (%s) is reporting an abuse on the following product: \n", 'dc-woocommerce-multi-vendor'), $name, $from_email);
-            $message .= sprintf(__("Product details: %s (ID: #%s) \n", 'dc-woocommerce-multi-vendor'), $product->post_title, $product->ID);
-
-            $message .= sprintf(__("Vendor shop: %s \n", 'dc-woocommerce-multi-vendor'), $vendor_term->name);
-
-            $message .= sprintf(__("Message: %s\n", 'dc-woocommerce-multi-vendor'), $user_message);
-            $message .= "\n\n\n";
-
-            $message .= sprintf(__("Product page:: %s\n", 'dc-woocommerce-multi-vendor'), get_the_permalink($product->ID));
-
-            /* === Send Mail === */
-            $response = wp_mail($to, $subject, $message, $headers);
+//            $vendor_term = get_term($vendor->term_id);
+//            $subject = __('Report an abuse for product', 'dc-woocommerce-multi-vendor') . get_the_title($product_id);
+//
+//            $to = sanitize_email(get_option('admin_email'));
+//            $from_email = sanitize_email($from_email);
+//            $headers = "From: {$name} <{$from_email}>" . "\r\n";
+//
+//            $message = sprintf(__("User %s (%s) is reporting an abuse on the following product: \n", 'dc-woocommerce-multi-vendor'), $name, $from_email);
+//            $message .= sprintf(__("Product details: %s (ID: #%s) \n", 'dc-woocommerce-multi-vendor'), $product->post_title, $product->ID);
+//
+//            $message .= sprintf(__("Vendor shop: %s \n", 'dc-woocommerce-multi-vendor'), $vendor_term->name);
+//
+//            $message .= sprintf(__("Message: %s\n", 'dc-woocommerce-multi-vendor'), $user_message);
+//            $message .= "\n\n\n";
+//
+//            $message .= sprintf(__("Product page:: %s\n", 'dc-woocommerce-multi-vendor'), get_the_permalink($product->ID));
+//
+//            /* === Send Mail === */
+//            $response = wp_mail($to, $subject, $message, $headers);
+            
+            $mail = WC()->mailer()->emails['WC_Email_Send_Report_Abuse'];
+            $result = $mail->trigger( $vendor, $_POST );
         }
         die();
     }
@@ -1489,7 +1492,7 @@ class WCMp_Ajax {
      * Set a flag while dismiss WCMp service notice
      */
     public function dismiss_wcmp_servive_notice() {
-        $updated = update_option('_is_dismiss_service_notice', true);
+        $updated = update_option('_is_dismiss_wcmp340_notice', true);
         echo $updated;
         die();
     }
@@ -1802,6 +1805,7 @@ class WCMp_Ajax {
                     if ((current_user_can('edit_published_products') && get_wcmp_vendor_settings('is_edit_delete_published_product', 'capabilities', 'product') == 'Enable') || in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending')))) {
                         $edit_product_link = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $product->get_id()));
                     }
+                    if(in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending'))) && !apply_filters('is_wcmp_vendor_edit_non_published_product', false)) $edit_product_link = '';
                     $edit_product_link = apply_filters('wcmp_vendor_product_list_product_edit_link', $edit_product_link, $product);
                     // Get actions
                     $onclick = "return confirm('" . __('Are you sure want to delete this product?', 'dc-woocommerce-multi-vendor') . "')";
@@ -1848,6 +1852,7 @@ class WCMp_Ajax {
                         if ($product->get_status() != 'trash')
                             unset($actions_col['delete']);
                     }
+                    if(in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending'))) && !apply_filters('is_wcmp_vendor_edit_non_published_product', false)) unset($actions_col['edit']);
 
                     $actions = apply_filters('wcmp_vendor_product_list_row_actions', $actions, $product);
                     $actions_col = apply_filters('wcmp_vendor_product_list_row_actions_column', $actions_col, $product);
@@ -3457,9 +3462,9 @@ class WCMp_Ajax {
                     if( $product && $product_map_id ){
                         $results = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_products_map WHERE product_map_id=%d", $product_map_id) );
                         $product_ids = wp_list_pluck($results, 'product_id');
-                        $first_inserted_map_pro_key = array_search(min(wp_list_pluck($results, 'ID')), wp_list_pluck($results, 'ID'));
-                        if(isset($product_ids[$first_inserted_map_pro_key])){
-                            $include[] = $product_ids[$first_inserted_map_pro_key];
+                        //$first_inserted_map_pro_key = array_search(min(wp_list_pluck($results, 'ID')), wp_list_pluck($results, 'ID'));
+                        if($product_ids){
+                            $include[] = min($product_ids);
                         }
                     }elseif($product) {
                         $include[] = $id;

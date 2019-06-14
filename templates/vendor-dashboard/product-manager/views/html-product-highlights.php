@@ -121,11 +121,11 @@ global $WCMp;
                 <p class="pro-title">
                     <label><?php _e('Product Title', 'dc-woocommerce-multi-vendor'); ?>: </label>
                     <strong class="editable-content"><?php echo $product_object->get_title( 'edit' ); ?></strong>
-                    <?php if( !$self->is_spmv() && $is_update ) : ?>
+                    <?php if( (!$self->is_spmv() && $is_update) || !apply_filters('wcmp_singleproductmultiseller_edit_product_title_disabled', true) ) : ?>
                     <button type="button" class="editable-content-button"><i class="wcmp-font ico-edit-pencil-icon" title="<?php _e('Edit', 'dc-woocommerce-multi-vendor'); ?>"></i> <!--span>edit</span--></button>
                     <?php endif; ?>
                     <span class="editing-content">
-                        <input type="text" class="form-control" name="post_title" id="post_title" value="<?php echo $product_object->get_title( 'edit' ); ?>"<?php if ( $self->is_spmv() ) echo ' readonly="readonly"'; ?>>
+                        <input type="text" class="form-control" name="post_title" id="post_title" value="<?php echo $product_object->get_title( 'edit' ); ?>"<?php if ( $self->is_spmv() && apply_filters('wcmp_singleproductmultiseller_edit_product_title_disabled', true) ) echo ' readonly="readonly"'; ?>>
                         <input type="hidden" name="original_post_title" value="<?php echo $product_object->get_title( 'edit' ); ?>">
                         <input type="hidden" name="post_ID" value="<?php echo $self->get_the_id(); ?>">
                         <input type="hidden" name="is_update" value="<?php esc_attr_e( $is_update ); ?>">
