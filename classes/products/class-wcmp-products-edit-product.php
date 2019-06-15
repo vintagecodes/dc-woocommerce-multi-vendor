@@ -47,6 +47,8 @@ class WCMp_Products_Edit_Product {
         if ( ! wcmp_is_allowed_vendor_shipping() ) {
             add_filter( 'wcmp_product_data_tabs', array( $this, 'remove_shipping_tab' ) );
         }
+        //check support for virtual and downloadable
+        add_filter( 'wcmp_product_type_options', array( $this, 'wcmp_set_product_type_options' ), 99 );
     }
 
     private function product_capablity_check( $action = 'add', $product_id = '' ) {
@@ -377,6 +379,16 @@ class WCMp_Products_Edit_Product {
      */
     public function get_gtin_no() {
         return (get_post_meta($this->product_id, '_wcmp_gtin_code', true)) ? get_post_meta($this->product_id, '_wcmp_gtin_code', true) : '';
+    }
+    
+    public function wcmp_set_product_type_options( $option ) {
+        global $WCMp;
+        foreach ( $option as $key => $val ) {
+            if ( ! $WCMp->vendor_caps->vendor_can( $key ) ) {
+                unset( $option[$key] );
+            }
+        }
+        return $option;
     }
 
 }
