@@ -1802,10 +1802,10 @@ class WCMp_Ajax {
                     $row = array();
                     $product = wc_get_product($product_single->ID);
                     $edit_product_link = '';
-                    if ((current_user_can('edit_published_products') && get_wcmp_vendor_settings('is_edit_delete_published_product', 'capabilities', 'product') == 'Enable') || in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending')))) {
+                    if ((current_vendor_can('edit_published_products') && get_wcmp_vendor_settings('is_edit_delete_published_product', 'capabilities', 'product') == 'Enable') || in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending')))) {
                         $edit_product_link = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $product->get_id()));
                     }
-                    if(in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending'))) && !apply_filters('is_wcmp_vendor_edit_non_published_product', false)) $edit_product_link = '';
+                    if(!current_vendor_can('edit_product') && in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending')))) $edit_product_link = '';
                     $edit_product_link = apply_filters('wcmp_vendor_product_list_product_edit_link', $edit_product_link, $product);
                     // Get actions
                     $onclick = "return confirm('" . __('Are you sure want to delete this product?', 'dc-woocommerce-multi-vendor') . "')";
@@ -1847,12 +1847,11 @@ class WCMp_Ajax {
                         unset($actions_col['delete']);
                     }
 
-                    if (!current_user_can('edit_published_products') && get_wcmp_vendor_settings('is_edit_delete_published_product', 'capabilities', 'product') != 'Enable' && !in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending')))) {
+                    if (!current_vendor_can('edit_published_products') && get_wcmp_vendor_settings('is_edit_delete_published_product', 'capabilities', 'product') != 'Enable' && !in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending')))) { 
                         unset($actions_col['edit']);
                         if ($product->get_status() != 'trash')
                             unset($actions_col['delete']);
-                    }
-                    if(in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending'))) && !apply_filters('is_wcmp_vendor_edit_non_published_product', false)) unset($actions_col['edit']);
+                    }elseif(!current_vendor_can('edit_product') && in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending')))){ unset($actions_col['edit']);}
 
                     $actions = apply_filters('wcmp_vendor_product_list_row_actions', $actions, $product);
                     $actions_col = apply_filters('wcmp_vendor_product_list_row_actions_column', $actions_col, $product);
