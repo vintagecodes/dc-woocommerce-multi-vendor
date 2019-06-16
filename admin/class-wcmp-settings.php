@@ -24,6 +24,7 @@ class WCMp_Settings {
         add_action( 'settings_page_general_tab_init', array( &$this, 'general_tab_init' ), 10, 1 );
         add_action( 'settings_page_general_policies_tab_init', array( &$this, 'general_policies_tab_init' ), 10, 2 );
         add_action( 'settings_page_general_customer_support_details_tab_init', array( &$this, 'general_customer_support_details_tab_init' ), 10, 2 );
+        add_action( 'settings_page_general_tools_tab_init', array( &$this, 'general_tools_tab_init' ), 10, 2 );
         // Settings tabs vendor
         add_action( 'settings_page_vendor_general_tab_init', array( &$this, 'vendor_general_tab_init' ), 10, 2 );
         add_action( 'settings_page_vendor_registration_tab_init', array( &$this, 'vendor_registration_tab_init' ), 10, 2 );
@@ -280,6 +281,7 @@ class WCMp_Settings {
         if ( 'Enable' === get_wcmp_vendor_settings( 'is_customer_support_details', 'general', '' ) ) {
             $tabsection_general['customer_support_details'] = array( 'title' => __( 'Customer Support', 'dc-woocommerce-multi-vendor' ), 'icon' => 'dashicons-universal-access' );
         }
+        $tabsection_general['tools'] = array( 'title' => __( 'Tools', 'dc-woocommerce-multi-vendor' ), 'icon' => 'dashicons-hammer' );
 
         return $tabsection_general;
     }
@@ -438,7 +440,11 @@ class WCMp_Settings {
                     settings_fields( "wcmp_{$tab}_{$tab_section}_settings_group" );
                     do_action( "wcmp_{$tab}_{$tab_section}_settings_before_submit" );
                     do_settings_sections( "wcmp-{$tab}-{$tab_section}-settings-admin" );
-                    submit_button();
+                    if ( $tab_section == 'tools' ) {
+                        do_action( "settings_page_{$tab}_{$tab_section}_tab_init", $tab, $tab_section );
+                    }else{
+                        submit_button();
+                    }
                 } else if ( $tab == 'payment' && isset( $_GET['tab_section'] ) && $_GET['tab_section'] != 'payment' ) {
                     settings_fields( "wcmp_{$tab}_{$tab_section}_settings_group" );
                     do_action( "wcmp_{$tab}_{$tab_section}_settings_before_submit" );
@@ -526,7 +532,7 @@ class WCMp_Settings {
         do_action( 'befor_settings_page_init' );
         foreach ( $this->tabs as $tab_id => $tab ) {
             do_action( "settings_page_{$tab_id}_tab_init", $tab_id );
-            $exclude_list = apply_filters( 'wcmp_subtab_init_exclude_list', array( 'payment', 'registration' ), $tab_id );
+            $exclude_list = apply_filters( 'wcmp_subtab_init_exclude_list', array( 'tools', 'payment', 'registration' ), $tab_id );
             if ( $this->is_wcmp_tab_has_subtab( $tab_id ) ) {
                 foreach ( $this->get_wcmp_subtabs( $tab_id ) as $subtab_id => $subtab ) {
                     if ( ! in_array( $subtab_id, $exclude_list ) ) {
@@ -672,6 +678,12 @@ class WCMp_Settings {
         global $WCMp;
         $WCMp->admin->load_class( "settings-{$tab}-{$subsection}", $WCMp->plugin_path, $WCMp->token );
         new WCMp_Settings_General_Customer_support_Details( $tab, $subsection );
+    }
+    
+    public function general_tools_tab_init( $tab, $subsection ) {
+        global $WCMp;
+        $WCMp->admin->load_class( "settings-{$tab}-{$subsection}", $WCMp->plugin_path, $WCMp->token );
+        new WCMp_Settings_General_Tools( $tab, $subsection );
     }
 
     public function capabilites_product_tab_init( $tab, $subsection ) {

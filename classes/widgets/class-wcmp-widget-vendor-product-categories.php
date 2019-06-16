@@ -36,7 +36,7 @@ class WCMp_Widget_Vendor_Product_Categories extends WC_Widget {
     public function widget($args, $instance) {
         global $wp_query, $WCMp;
         
-        $this->vendor_term_id = $wp_query->queried_object->term_id;
+        $this->vendor_term_id = ( isset( $wp_query->queried_object->term_id ) ) ? $wp_query->queried_object->term_id : 0;
         $vendor = get_wcmp_vendor_by_term($this->vendor_term_id);
         if (!is_tax($WCMp->taxonomy->taxonomy_name) && !$vendor) {
             return;

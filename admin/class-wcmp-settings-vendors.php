@@ -418,11 +418,13 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 				if ( is_wp_error( $user_id ) ) {
 					$error_string = $user_id->get_error_message();
 					echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+                                        $user_id = null;
 				} else {
 					if(isset($_POST['vendor_profile_image']) && $_POST['vendor_profile_image'] != '') update_user_meta($user_id, "_vendor_profile_image", $_POST['vendor_profile_image']);
 					echo '<div class="notice notice-success"><p>' . __( 'Vendor successfully created!', 'dc-woocommerce-multi-vendor' ) . '</p></div>';
 				}
                                 wp_safe_redirect(apply_filters('wcmp_add_new_vendor_redirect_url', admin_url('admin.php?page=vendors&action=edit&ID='.$user_id)));
+                                die();
 			}
 		}
 		

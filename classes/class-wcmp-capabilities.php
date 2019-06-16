@@ -40,6 +40,8 @@ class WCMp_Capabilities {
         /* for single product */
         add_action('woocommerce_product_meta_start', array($this, 'wcmp_after_add_to_cart_form'), 25);
         add_action('update_option_wcmp_capabilities_product_settings_name', array(&$this, 'update_wcmp_vendor_role_capability'), 10);
+        add_action('wcmp_before_capabilities_product_settings_field_save', array(&$this, 'update_wcmp_vendor_role_capability'), 10);
+        if (defined('WCMP_FORCE_VENDOR_CAPS') && WCMP_FORCE_VENDOR_CAPS) $this->update_wcmp_vendor_role_capability();
     }
 
     /**
@@ -206,7 +208,7 @@ class WCMp_Capabilities {
 
     public function update_wcmp_vendor_role_capability() {
         global $wp_roles;
-
+        
         if (!class_exists('WP_Roles')) {
             return;
         }
@@ -238,10 +240,14 @@ class WCMp_Capabilities {
             $caps['upload_files'] = false;
         }
         if ($this->vendor_capabilities_settings('is_submit_product', $capability)) {
-            $caps['edit_product'] = true;
             $caps['delete_product'] = true;
-            $caps['edit_products'] = true;
             $caps['delete_products'] = true;
+            $caps['edit_products'] = true;
+            if(!apply_filters('is_wcmp_vendor_edit_non_published_product', false)){
+                $caps['edit_product'] = false;
+            }else{
+                $caps['edit_product'] = true;
+            }
             if ($this->vendor_capabilities_settings('is_published_product', $capability)) {
                 $caps['publish_products'] = true;
             } else {
@@ -249,6 +255,7 @@ class WCMp_Capabilities {
             }
             if ($this->vendor_capabilities_settings('is_edit_delete_published_product', $capability)) {
                 $caps['edit_published_products'] = true;
+                $caps['edit_product'] = true;
                 $caps['delete_published_products'] = true;
             } else {
                 $caps['edit_published_products'] = false;

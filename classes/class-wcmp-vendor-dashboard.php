@@ -1414,7 +1414,8 @@ Class WCMp_Admin_Dashboard {
         }
         $visitor_map_filter .= '</select>
         </div>';
-        $this->wcmp_add_dashboard_widget('wcmp_vendor_visitors_map', __('Visitors Map', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_vendor_visitors_map'), 'normal', '', array('action' => array('html' => $visitor_map_filter)));
+        if(!apply_filters('wcmp_is_disable_store_visitors_stats', false))
+            $this->wcmp_add_dashboard_widget('wcmp_vendor_visitors_map', __('Visitors Map', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_vendor_visitors_map'), 'normal', '', array('action' => array('html' => $visitor_map_filter)));
         if ($vendor->is_shipping_enable()):
             $this->wcmp_add_dashboard_widget('wcmp_vendor_pending_shipping', __('Pending Shipping', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_vendor_pending_shipping'));
         endif;

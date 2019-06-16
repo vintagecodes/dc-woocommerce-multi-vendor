@@ -123,6 +123,8 @@ class WCMp_Settings_Capabilities_Product {
                 "wcmp_{$this->tab}_{$this->subsection}_settings_name", esc_attr( "wcmp_{$this->tab}_{$this->subsection}_settings_admin_updated" ), __( 'Vendor Settings Updated', 'dc-woocommerce-multi-vendor' ), 'updated'
             );
         }
+        // before return settings values
+        do_action( "wcmp_before_{$this->tab}_{$this->subsection}_settings_field_save", $new_input, $input );
         return apply_filters( "settings_{$this->tab}_{$this->subsection}_tab_new_input", $new_input, $input );
     }
 
