@@ -34,9 +34,9 @@ class WCMp_Admin {
 
         add_action('admin_menu', array(&$this, 'wcmp_admin_menu'));
         add_action('admin_head', array($this, 'menu_commission_count'));
-        if (!get_option('_is_dismiss_wcmp340_notice', false) && current_user_can('manage_options')) {
-            add_action('admin_notices', array(&$this, 'wcmp_service_page_notice'));
-        }
+//        if (!get_option('_is_dismiss_wcmp340_notice', false) && current_user_can('manage_options')) {
+//            add_action('admin_notices', array(&$this, 'wcmp_service_page_notice'));
+//        }
         add_action('wp_dashboard_setup', array(&$this, 'wcmp_remove_wp_dashboard_widget'));
         add_filter('woocommerce_order_actions', array(&$this, 'woocommerce_order_actions'));
         add_action('woocommerce_order_action_regenerate_order_commissions', array(&$this, 'regenerate_order_commissions'));
@@ -483,6 +483,13 @@ class WCMp_Admin {
             }";
             wp_add_inline_style( 'woocommerce_admin_styles', $custom_css );
         }
+        
+        // report a bugs settings
+        if($screen->id == 'wcmp_page_wcmp-report-bugs'){
+            $WCMp->library->load_upload_lib();
+            wp_enqueue_style('woocommerce_admin_styles');
+        }
+        
     }
 
     function wcmp_kill_auto_save() {

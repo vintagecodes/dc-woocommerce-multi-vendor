@@ -42,7 +42,7 @@ class WCMp_Order {
             if(apply_filters('wcmp_vendor_order_to_parent_order_status_synchronization', true))
                 add_action('woocommerce_order_status_changed', array($this, 'wcmp_vendor_order_to_parent_order_status_synchronization'), 99, 3);
             // WCMp create orders
-            //add_action('woocommerce_saved_order_items', array(&$this, 'wcmp_create_orders_from_backend'), 10, 2 );
+            add_action('woocommerce_saved_order_items', array(&$this, 'wcmp_create_orders_from_backend'), 10, 2 );
             add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_create_orders'), 10, 3);
             add_action('woocommerce_after_checkout_validation', array($this, 'wcmp_check_order_awaiting_payment'));
             // Order Refund
@@ -202,7 +202,7 @@ class WCMp_Order {
         }
     }
 
-    public function wcmp_create_orders($order_id, $posted_data, $order) {
+    public function wcmp_create_orders($order_id, $posted_data, $order, $backend = false) {
         global $WCMp;
         //check parent order exist
         if (wp_get_post_parent_id($order_id) != 0)
@@ -243,7 +243,7 @@ class WCMp_Order {
                             'vendor_id' => $vendor_id,
                             'posted_data' => $posted_data,
                             'line_items' => $items
-                ));
+                ), $backend);
             }
         }
         if ($vendor_orders) :
@@ -253,11 +253,11 @@ class WCMp_Order {
         endif;
     }
     
-//    public function wcmp_create_orders_from_backend( $order_id, $items ){
-//        $order = wc_get_order($order_id);
-//        if(!$order) return;
-//        $line_items = $order->get_items();
-//    }
+    public function wcmp_create_orders_from_backend( $order_id, $items ){
+        $order = wc_get_order($order_id);
+        if(!$order) return;
+        $this->wcmp_create_orders($order_id, array(), $order, true);
+    }
 
     /**
      * Create a new vendor order programmatically

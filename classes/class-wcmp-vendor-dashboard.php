@@ -305,7 +305,7 @@ Class WCMp_Admin_Dashboard {
         if ($vendor) {
             if (!empty($customer_orders)) {
                 foreach ($customer_orders as $commission_id => $customer_order) {
-                    $order = new WC_Order($customer_order);
+                    $order = wc_get_order($customer_order);
                     $vendor_items = $vendor->get_vendor_items_from_order($customer_order, $vendor->term_id);
                     $item_names = $item_qty = array();
                     if (sizeof($vendor_items) > 0) {
@@ -1016,9 +1016,12 @@ Class WCMp_Admin_Dashboard {
                 $order_ids = isset($_POST['selected_orders']) ? $_POST['selected_orders'] : array();
                 if ($order_ids && count($order_ids) > 0) {
                     foreach ($order_ids as $order_id) {
-                        $vendor_orders = $wpdb->get_results("SELECT DISTINCT commission_id from `{$wpdb->prefix}wcmp_vendor_orders` where vendor_id = " . $vendor->id . " AND order_id = " . $order_id, ARRAY_A);
-                        $commission_id = $vendor_orders[0]['commission_id'];
-                        $order_data[$commission_id] = $order_id;
+                        $vorder = wcmp_get_order($order_id);
+                        if($vorder){
+                            $commission_id = $vorder->get_prop('_commission_id');
+                            $order_data[$commission_id] = $order_id;
+                        }
+                        
                     }
                     if (!empty($order_data)) {
                         $this->generate_csv($order_data, $vendor);
