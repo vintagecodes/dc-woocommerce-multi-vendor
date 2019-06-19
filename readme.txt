@@ -3,9 +3,9 @@ Contributors: Dualcube, greyparrots, purnendu, itzmekhokan
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.2
+Tested up to: 5.2.1
 Requires PHP: 5.6
-Stable tag: 3.3.6
+Stable tag: 3.3.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,25 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.3.7 - 2019-06-19 =
+* Added - WCMp backend settings tools for cleanup data.
+* Added - Vendor report abuse email with WC_Mail template.
+* Fix - SPMV multilingual '(Copy)' issue.
+* Fix - SPMV newly created product deletion hide others products.
+* Fix - Product types option settings override.
+* Fix - Backend WCMp > Vendors > Add Vendor with existing user details error issue.
+* Fix - Admin add new product email edit product link.
+* Fix - WCMp core function warning max() issue.
+* Fix - Product category filter join() issue.
+* Fix - Backend payment settings overriden issue via addons.
+* Fix - Vendor registration wrong password submit disable issue.
+* Tweak - Vendor top rated products widget show.
+* Tweak - Vendor report abuse from.
+* Dev - Disable `wcmp_is_disable_store_visitors_stats` filter added.
+* Dev - Capability for product `is_wcmp_vendor_edit_non_published_product` filter added.
+* Updated - Stripe library.
+* Updated - Language file.
+
 = 3.3.6 - 2019-05-14 =
 * Fix - woocommerce_term_meta issue fixed.
 * Fix - Vendor No allowed product types issue fixed.
