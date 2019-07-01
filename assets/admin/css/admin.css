@@ -5,7 +5,6 @@ img {
     width: 100%;
 }
 
-
 #dc_admin_footer {
     bottom: 24px;
     text-align: center;
@@ -2053,6 +2052,7 @@ table.wcmp_tools_table td strong.name, table.wcmp_tools_table th strong.name {
 }
 table.wcmp_tools_table td.run-tool, table.wcmp_tools_table th.run-tool {
     text-align: right;
+}
 /***********************  Shop order Suborder Icon ***********************/
 .widefat .column-wcmp_suborder mark{
     display: block;
@@ -2156,7 +2156,7 @@ table.wcmp_tools_table td.run-tool, table.wcmp_tools_table th.run-tool {
     float: right;
 }
 
-.wcmp-commission-amount a.edit_commission_amount::after {
+.wcmp-commission-amount a.edit_commission_amount:after {
     font-family: Dashicons;
     content: '\f464';
     position: absolute;

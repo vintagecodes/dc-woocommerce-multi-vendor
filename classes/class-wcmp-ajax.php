@@ -243,6 +243,7 @@ class WCMp_Ajax {
             $order = wc_get_order($order_id);
             $vendor_order = wcmp_get_order($order_id);
             if ($order) {
+                if(in_array($order->get_status(), array('draft', 'trash'))) continue;
                 $actions = array();
                 $is_shipped = (array) get_post_meta($order->get_id(), 'dc_pv_shipped', true);
                 if (!in_array($vendor->id, $is_shipped)) {

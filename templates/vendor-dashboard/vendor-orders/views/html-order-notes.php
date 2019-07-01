@@ -74,7 +74,7 @@ global $WCMp;
                 <li class="list-group-item list-group-item-action flex-column align-items-start">
                     <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#shipping_tracking_wrap"><?php _e('Tracking number', 'dc-woocommerce-multi-vendor'); ?></button>
                 </li>
-                <li id="shipping_tracking_wrap" class="shipping_tracking collapse">
+                <li id="shipping_tracking_wrap" class="shipping_tracking collapse" style="padding:  10px 15px;;">
                     <form method="post">
                         <div class="form-group">
                             <label for="tracking_url"><?php _e('Enter Tracking Url', 'dc-woocommerce-multi-vendor'); ?> *</label>

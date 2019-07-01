@@ -1637,6 +1637,12 @@ if (!function_exists('do_wcmp_data_migrate')) {
                     foreach ( $user_query->results as $vendor_id ) {
                         $user = new WP_User( $vendor_id );
                         $user->add_cap( 'edit_shop_orders' );
+                        $user->add_cap( 'read_shop_orders' );
+                        $user->add_cap( 'delete_shop_orders' );
+                        $user->add_cap( 'publish_shop_orders' );
+                        $user->add_cap( 'edit_published_shop_orders' );
+                        $user->add_cap( 'delete_published_shop_orders' );
+                        $user->remove_cap( 'add_shop_orders' );
                     }
                     update_option( 'user_wcmp_vendor_role_updated', true );
                 }

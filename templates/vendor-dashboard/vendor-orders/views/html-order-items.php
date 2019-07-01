@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 global $WCMp, $wpdb;
 
 $payment_gateway     = wc_get_payment_gateway_by_order( $order );
-$line_items          = $order->get_items( apply_filters( 'woocommerce_admin_order_item_types', 'line_item' ) );
+$line_items          = $order->get_items( apply_filters( 'wcmp_vendor_order_item_types', 'line_item' ) );
 $discounts           = $order->get_items( 'discount' );
 $line_items_fee      = $order->get_items( 'fee' );
 $line_items_shipping = $order->get_items( 'shipping' );
@@ -129,7 +129,7 @@ if ( wc_tax_enabled() ) {
                                                 <li class="<?php echo esc_attr($class); ?>">
                                                     <?php if ($post_id) : ?>
                                                         <?php
-                                                        $post_url = apply_filters('woocommerce_admin_order_item_coupon_url', add_query_arg(
+                                                        $post_url = apply_filters('wcmp_vendor_order_item_coupon_url', add_query_arg(
                                                                         array(
                                                             'post' => $post_id,
                                                             'action' => 'edit',
@@ -170,7 +170,7 @@ if ( wc_tax_enabled() ) {
                                         </tr>
                                     <?php endif; ?>
 
-                                    <?php do_action('woocommerce_admin_order_totals_after_discount', $order->get_id()); ?>
+                                    <?php do_action('wcmp_vendor_order_totals_after_discount', $order->get_id()); ?>
 
                                     <?php if ($order->get_shipping_methods()) : ?>
                                         <tr>
@@ -189,7 +189,7 @@ if ( wc_tax_enabled() ) {
                                         </tr>
                                     <?php endif; ?>
 
-                                    <?php do_action('woocommerce_admin_order_totals_after_shipping', $order->get_id()); ?>
+                                    <?php do_action('wcmp_vendor_order_totals_after_shipping', $order->get_id()); ?>
 
                                     <?php if (wc_tax_enabled()) : ?>
                                         <?php foreach ($order->get_tax_totals() as $code => $tax) : ?>
@@ -210,7 +210,7 @@ if ( wc_tax_enabled() ) {
                                         <?php endforeach; ?>
                                     <?php endif; ?>
 
-                                    <?php do_action('woocommerce_admin_order_totals_after_tax', $order->get_id()); ?>
+                                    <?php do_action('wcmp_vendor_order_totals_after_tax', $order->get_id()); ?>
 
                                     <tr>
                                         <td class="label"><?php esc_html_e('Total', 'woocommerce'); ?>:</td>
@@ -220,7 +220,7 @@ if ( wc_tax_enabled() ) {
                                         </td>
                                     </tr>
 
-                                    <?php do_action('woocommerce_admin_order_totals_after_total', $order->get_id()); ?>
+                                    <?php do_action('wcmp_vendor_order_totals_after_total', $order->get_id()); ?>
 
                                     <?php if ($order->get_total_refunded()) : ?>
                                         <tr>
@@ -235,7 +235,7 @@ if ( wc_tax_enabled() ) {
                                         </tr>
                                     <?php endif; ?>
 
-                                    <?php do_action('woocommerce_admin_order_totals_after_refunded', $order->get_id()); ?>
+                                    <?php do_action('wcmp_vendor_order_totals_after_refunded', $order->get_id()); ?>
 
                                 </table>
                                 <div class="clear"></div>

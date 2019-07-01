@@ -377,7 +377,7 @@ class WCMp_Order {
          *
          * @since 3.1.2.0
          */
-        do_action('wcmp_checkout_create_order', $order, $args);
+        do_action('wcmp_checkout_create_order', $order, $vendor_order, $args);
 
         // Save the order.
         $v_order_id = $vendor_order->save();

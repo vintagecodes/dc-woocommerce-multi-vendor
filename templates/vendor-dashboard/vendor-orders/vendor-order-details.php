@@ -87,37 +87,6 @@ $subtotal = 0;
             $WCMp->template->get_template( 'vendor-dashboard/vendor-orders/views/html-order-notes.php', array( 'order' => $order, 'vendor_order' => $vendor_order, 'vendor' => $vendor ) );
             ?>
         </div>
-        <!--div class="col-md-4">
-            
-            <div class="panel panel-default panel-pading pannel-outer-heading order-action">
-                <div class="panel-heading">
-                    <h3>Downloadable product permission</h3>
-                </div>
-                <div class="panel-body">
-                    <ul class="list-group m-0">
-                        <li class="list-group-item">
-                            <a href="#">
-                                <i class="wcmp-font ico-rental-icon"></i>
-                                <span>First item</span>
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="#">
-                                <i class="wcmp-font ico-rental-icon"></i>
-                                <span>Second item</span>
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="#">
-                                <i class="wcmp-font ico-rental-icon"></i>
-                                <span>Third item</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-        </div-->
         
     </div>
 </div>

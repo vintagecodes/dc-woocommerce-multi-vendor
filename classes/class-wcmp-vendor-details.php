@@ -809,6 +809,7 @@ class WCMp_Vendor {
                     foreach ( $vendor_orders as $key => $order ) {
                         try{
                             $vendor_order = wcmp_get_order( $order->get_id() );
+                            if(!$vendor_order) continue;
                             $sales_total += $order->get_total();
                             $discount_amount += $order->get_total_discount();
                             $commission_id = $vendor_order->get_prop('_commission_id');
