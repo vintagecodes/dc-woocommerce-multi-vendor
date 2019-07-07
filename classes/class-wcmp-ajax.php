@@ -2080,7 +2080,7 @@ class WCMp_Ajax {
                         $row ['commission_amount'] = wc_price($commission_amount, array('currency' => $order->get_currency()));
                         $row ['shipping_amount'] = wc_price($shipping_amount, array('currency' => $order->get_currency()));
                         $row ['tax_amount'] = wc_price($tax_amount, array('currency' => $order->get_currency()));
-                        $row ['total'] = $vendor_order->get_commission_total();
+                        $row ['total'] = ( $vendor_order ) ? $vendor_order->get_commission_total() : wc_price(0);
                         $data[] = apply_filters('wcmp_vendor_withdrawal_list_row_data', $row, $commission_id);
                     }
                     

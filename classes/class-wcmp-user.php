@@ -93,11 +93,15 @@ class WCMp_User {
                 //check for admins
                 if (in_array('dc_vendor', $user->roles)) {
                     // redirect them to the default place
-                    $redirect_to = get_permalink(wcmp_vendor_dashboard_page_id());
+                    if(is_wcmp_vendor_completed_store_setup($user)){
+                        $redirect_to = get_permalink(wcmp_vendor_dashboard_page_id());
+                    }else{
+                        $redirect_to = get_permalink(wcmp_vendor_dashboard_page_id()).'?page=vendor-store-setup';
+                    }
                 }
             }
         }
-        return $redirect_to;
+        return apply_filters( 'wcmp_vendor_login_redirect_url', $redirect_to);
     }
 
     /**
@@ -110,13 +114,17 @@ class WCMp_User {
         if (!isset($_POST['wcmp-login-vendor'])) {
             if (is_array($user->roles)) {
                 if (in_array('dc_vendor', $user->roles)) {
-                    $redirect = get_permalink(wcmp_vendor_dashboard_page_id());
+                    if(is_wcmp_vendor_completed_store_setup($user)){
+                        $redirect = get_permalink(wcmp_vendor_dashboard_page_id());
+                    }else{
+                        $redirect = get_permalink(wcmp_vendor_dashboard_page_id()).'?page=vendor-store-setup';
+                    }
                 }
             } else if ($user->roles == 'dc_vendor') {
                 $redirect = get_permalink(wcmp_vendor_dashboard_page_id());
             }
         }
-        return $redirect;
+        return apply_filters( 'wcmp_vendor_login_redirect_url', $redirect);
     }
 
     /**

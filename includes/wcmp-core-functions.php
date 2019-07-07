@@ -1134,31 +1134,7 @@ if (!function_exists('do_wcmp_data_migrate')) {
                     update_wcmp_vendor_settings('can_vendor_edit_shipping_policy', 'Enable', 'general', 'policies');
                 }
                 delete_wcmp_vendor_settings('can_vendor_edit_refund_policy', 'capabilities');
-//                if (get_wcmp_vendor_settings('can_vendor_add_customer_support_details', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('can_vendor_add_customer_support_details', 'Enable', 'general', 'customer_support_details');
-//                }
-//                delete_wcmp_vendor_settings('can_vendor_add_customer_support_details', 'capabilities');
-                /* product tab */
-//                if (get_wcmp_vendor_settings('inventory', 'product') == 'Enable') {
-//                    update_wcmp_vendor_settings('inventory', 'Enable', 'capabilities', 'product');
-//                }
-//                delete_wcmp_vendor_settings('inventory', 'product');
-//                if (get_wcmp_vendor_settings('shipping', 'product') == 'Enable') {
-//                    update_wcmp_vendor_settings('shipping', 'Enable', 'capabilities', 'product');
-//                }
-//                delete_wcmp_vendor_settings('shipping', 'product');
-//                if (get_wcmp_vendor_settings('linked_products', 'product') == 'Enable') {
-//                    update_wcmp_vendor_settings('linked_products', 'Enable', 'capabilities', 'product');
-//                }
-//                delete_wcmp_vendor_settings('linked_products', 'product');
-//                if (get_wcmp_vendor_settings('attribute', 'product') == 'Enable') {
-//                    update_wcmp_vendor_settings('attribute', 'Enable', 'capabilities', 'product');
-//                }
-//                delete_wcmp_vendor_settings('attribute', 'product');
-//                if (get_wcmp_vendor_settings('advanced', 'product') == 'Enable') {
-//                    update_wcmp_vendor_settings('advanced', 'Enable', 'capabilities', 'product');
-//                }
-//                delete_wcmp_vendor_settings('advanced', 'product');
+
                 if (get_wcmp_vendor_settings('simple', 'product') == 'Enable') {
                     update_wcmp_vendor_settings('simple', 'Enable', 'capabilities', 'product');
                 }
@@ -1183,26 +1159,7 @@ if (!function_exists('do_wcmp_data_migrate')) {
                     update_wcmp_vendor_settings('downloadable', 'Enable', 'capabilities', 'product');
                 }
                 delete_wcmp_vendor_settings('downloadable', 'product');
-//                if (get_wcmp_vendor_settings('sku', 'product') == 'Enable') {
-//                    update_wcmp_vendor_settings('sku', 'Enable', 'capabilities', 'product');
-//                }
-//                delete_wcmp_vendor_settings('sku', 'product');
-//                if (get_wcmp_vendor_settings('taxes', 'product') == 'Enable') {
-//                    update_wcmp_vendor_settings('taxes', 'Enable', 'capabilities', 'product');
-//                }
-//                delete_wcmp_vendor_settings('taxes', 'product');
-//                if (get_wcmp_vendor_settings('add_comment', 'product') == 'Enable') {
-//                    update_wcmp_vendor_settings('add_comment', 'Enable', 'capabilities', 'product');
-//                }
-//                delete_wcmp_vendor_settings('add_comment', 'product');
-//                if (get_wcmp_vendor_settings('comment_box', 'product') == 'Enable') {
-//                    update_wcmp_vendor_settings('comment_box', 'Enable', 'capabilities', 'product');
-//                }
-//                delete_wcmp_vendor_settings('comment_box', 'product');
-//                if (get_wcmp_vendor_settings('stylesheet', 'product') == 'Enable') {
-//                    update_wcmp_vendor_settings('stylesheet', 'Enable', 'capabilities', 'product');
-//                }
-//                delete_wcmp_vendor_settings('stylesheet', 'product');
+
                 /* Capability tab */
                 if (get_wcmp_vendor_settings('is_submit_product', 'capabilities') == 'Enable') {
                     update_wcmp_vendor_settings('is_submit_product', 'Enable', 'capabilities', 'product');
@@ -1228,65 +1185,6 @@ if (!function_exists('do_wcmp_data_migrate')) {
                     update_wcmp_vendor_settings('is_edit_published_product', 'Enable', 'capabilities', 'product');
                 }
                 delete_wcmp_vendor_settings('is_edit_published_product', 'capabilities');
-                /* order tab */
-//                if (get_wcmp_vendor_settings('is_order_csv_export', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('is_order_csv_export', 'Enable', 'capabilities', 'order');
-//                }
-//                delete_wcmp_vendor_settings('is_order_csv_export', 'capabilities');
-//                if (get_wcmp_vendor_settings('is_show_email', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('is_show_email', 'Enable', 'capabilities', 'order');
-//                }
-//                delete_wcmp_vendor_settings('is_show_email', 'capabilities');
-//                if (get_wcmp_vendor_settings('show_customer_dtl', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('show_customer_dtl', 'Enable', 'capabilities', 'order');
-//                }
-//                delete_wcmp_vendor_settings('show_customer_dtl', 'capabilities');
-//                if (get_wcmp_vendor_settings('show_customer_billing', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('show_customer_billing', 'Enable', 'capabilities', 'order');
-//                }
-//                delete_wcmp_vendor_settings('show_customer_billing', 'capabilities');
-//                if (get_wcmp_vendor_settings('show_customer_shipping', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('show_customer_shipping', 'Enable', 'capabilities', 'order');
-//                }
-//                delete_wcmp_vendor_settings('show_customer_shipping', 'capabilities');
-//                if (get_wcmp_vendor_settings('show_cust_add', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('show_cust_add', 'Enable', 'capabilities', 'order');
-//                }
-//                delete_wcmp_vendor_settings('show_cust_add', 'capabilities');
-//                if (get_wcmp_vendor_settings('show_cust_billing_add', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('show_cust_billing_add', 'Enable', 'capabilities', 'order');
-//                }
-//                delete_wcmp_vendor_settings('show_cust_billing_add', 'capabilities');
-//                if (get_wcmp_vendor_settings('show_cust_shipping_add', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('show_cust_shipping_add', 'Enable', 'capabilities', 'order');
-//                }
-//                delete_wcmp_vendor_settings('show_cust_shipping_add', 'capabilities');
-//                if (get_wcmp_vendor_settings('show_cust_order_calulations', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('show_cust_order_calulations', 'Enable', 'capabilities', 'order');
-//                }
-//                delete_wcmp_vendor_settings('show_cust_order_calulations', 'capabilities');
-//                if (get_wcmp_vendor_settings('is_vendor_submit_comment', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('is_vendor_submit_comment', 'Enable', 'capabilities', 'order');
-//                }
-//                delete_wcmp_vendor_settings('is_vendor_submit_comment', 'capabilities');
-//                if (get_wcmp_vendor_settings('is_vendor_view_comment', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('is_vendor_view_comment', 'Enable', 'capabilities', 'order');
-//                }
-//                delete_wcmp_vendor_settings('is_vendor_view_comment', 'capabilities');
-                /* Mis Tab */
-//                if (get_wcmp_vendor_settings('can_vendor_add_message_on_email_and_thankyou_page', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('can_vendor_add_message_on_email_and_thankyou_page', 'Enable', 'capabilities', 'miscellaneous');
-//                }
-//                delete_wcmp_vendor_settings('can_vendor_add_message_on_email_and_thankyou_page', 'capabilities');
-//                if (get_wcmp_vendor_settings('is_vendor_add_external_url', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('is_vendor_add_external_url', 'Enable', 'capabilities', 'miscellaneous');
-//                }
-//                delete_wcmp_vendor_settings('is_vendor_add_external_url', 'capabilities');
-//                if (get_wcmp_vendor_settings('is_hide_option_show', 'capabilities') == 'Enable') {
-//                    update_wcmp_vendor_settings('is_hide_option_show', 'Enable', 'capabilities', 'miscellaneous');
-//                }
-//                delete_wcmp_vendor_settings('is_hide_option_show', 'capabilities');
-                #endregion
 
                 if (!get_wcmp_vendor_settings('is_edit_delete_published_product', 'capabilities', 'product')) {
                     update_wcmp_vendor_settings('is_edit_delete_published_product', 'Enable', 'capabilities', 'product');
@@ -4127,5 +4025,69 @@ if (!function_exists('wcmp_get_product_link')) {
             $link = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $product_id));
         }
         return apply_filters('wcmp_get_product_link', $link, $product_id);
+    }
+}
+
+if (!function_exists('get_wcmp_default_payment_gateways')) {
+    /**
+     * Get default payment gateways.
+     *
+     * @since 3.4.0
+     * @return array payment gateways
+     */
+    function get_wcmp_default_payment_gateways() {
+        $default_gateways = apply_filters('automatic_payment_method', 
+        array(
+            'paypal_masspay' => __('PayPal Masspay', 'dc-woocommerce-multi-vendor'), 
+            'paypal_payout' => __('Paypal Payout', 'dc-woocommerce-multi-vendor'), 
+            'stripe_masspay' => __('Stripe Connect', 'dc-woocommerce-multi-vendor'), 
+            'direct_bank' => __('Direct Bank Transfer', 'dc-woocommerce-multi-vendor'),
+            )
+        );
+        return apply_filters( 'wcmp_default_payment_gateways', $default_gateways );
+    }
+}
+
+if (!function_exists('get_wcmp_available_payment_gateways')) {
+    /**
+     * Get available payment gateways.
+     *
+     * @since 3.4.0
+     * @return array payment gateways
+     */
+    function get_wcmp_available_payment_gateways() {
+        $available_gateways = array();
+        $payment_admin_settings = get_option('wcmp_payment_settings_name');
+        $default_gateways = get_wcmp_default_payment_gateways();
+        foreach ($default_gateways as $key => $lable) {
+            $gateway_settings_key = 'payment_method_' . $key;
+            if (isset($payment_admin_settings[$gateway_settings_key]) && $payment_admin_settings[$gateway_settings_key] = 'Enable') {
+                $available_gateways[$key] = $lable;
+            }
+        }
+        return apply_filters( 'wcmp_available_payment_gateways', $available_gateways );
+    }
+}
+
+if (!function_exists('is_wcmp_vendor_completed_store_setup')) {
+    /**
+     * Check vendor store setup.
+     *
+     * @since 3.4.0
+     * @param object $user 
+     * @return boolean 
+     */
+    function is_wcmp_vendor_completed_store_setup( $user ) {
+        if( $user ){
+            $is_completed = get_user_meta( $user->ID, '_vendor_is_completed_setup_wizard', true );
+            $is_skipped = get_user_meta( $user->ID, '_vendor_skipped_setup_wizard', true );
+            $store_name = get_user_meta( $user->ID, '_vendor_page_title', true );
+            $country = get_user_meta( $user->ID, '_vendor_country', true );
+            $payment_mode = get_user_meta( $user->ID, '_vendor_payment_mode', true );
+            if( $is_skipped ) return true;
+            if( $store_name && $country && $payment_mode ) return true;
+            if( $is_completed || !apply_filters('wcmp_vendor_store_setup_wizard_enabled', true)) return true;
+        }
+        return false;
     }
 }
