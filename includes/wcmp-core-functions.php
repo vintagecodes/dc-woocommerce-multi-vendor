@@ -4086,7 +4086,7 @@ if (!function_exists('is_wcmp_vendor_completed_store_setup')) {
             $payment_mode = get_user_meta( $user->ID, '_vendor_payment_mode', true );
             if( $is_skipped ) return true;
             if( $store_name && $country && $payment_mode ) return true;
-            if( $is_completed || !apply_filters('wcmp_vendor_store_setup_wizard_enabled', true)) return true;
+            if( $is_completed || !apply_filters('wcmp_vendor_store_setup_wizard_enabled', true) ) return true;
         }
         return false;
     }
