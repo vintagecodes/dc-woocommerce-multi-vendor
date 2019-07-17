@@ -149,17 +149,17 @@ class WCMp_Order {
     }
     
     public function woocommerce_email_enabled_prevent($enabled, $object ){
-        $is_editpost_action = ! empty( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array('editpost','edit') );
-
-        if ( $is_editpost_action && ! empty( $_REQUEST['post_ID'] ) && wp_get_post_parent_id( $_REQUEST['post_ID'] ) == 0 && $object instanceof WC_Order && $_REQUEST['post_ID'] != $object->get_id() ) {
-            return false;
-        }
+//        $is_editpost_action = ! empty( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array('editpost','edit') );
+//
+//        if ( $is_editpost_action && ! empty( $_REQUEST['post_ID'] ) && wp_get_post_parent_id( $_REQUEST['post_ID'] ) == 0 && $object instanceof WC_Order && $_REQUEST['post_ID'] != $object->get_id() ) {
+//            return false;
+//        }
         
         $is_vendor_order = ($object) ? wcmp_get_order($object->get_id()) : false;
         
-        if ( $is_editpost_action && $is_vendor_order ) return $enabled;
+        if ( $object instanceof WC_Order && wp_get_post_parent_id( $object->get_id() ) && $is_vendor_order ) return $enabled;
 
-        return $enabled && $object instanceof WC_Order && wp_get_post_parent_id( $object->get_id() ) != 0 && !$is_editpost_action ? false : $enabled;
+        return $enabled;
     }
 
     public function wcmp_shop_order_columns($columns) {

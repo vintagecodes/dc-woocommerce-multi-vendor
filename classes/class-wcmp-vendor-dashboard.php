@@ -445,6 +445,13 @@ Class WCMp_Admin_Dashboard {
                 $note_type = isset($_POST['note_type']) ? $_POST['note_type'] : '';
 		$is_customer_note = ( 'customer' === $note_type ) ? 1 : 0;
                 $comment_id = $order->add_order_note($comment, $is_customer_note, true);
+                if( $is_customer_note ){
+                    $email_note = WC()->mailer()->emails['WC_Email_Customer_Note'];
+                    $email_note->trigger(array(
+                        'order_id'      => $order,
+                        'customer_note' => $comment,
+                    ));
+                }
                 // update comment author & email
                 wp_update_comment(array('comment_ID' => $comment_id, 'comment_author' => $vendor->page_title, 'comment_author_email' => $vendor->user_data->user_email));
                 add_comment_meta($comment_id, '_vendor_id', $vendor->id);

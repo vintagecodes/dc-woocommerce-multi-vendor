@@ -63,7 +63,7 @@ global $WCMp;
                             <textarea placeholder="<?php _e('Enter text ...', 'dc-woocommerce-multi-vendor'); ?>" required class="form-control" name="comment_text"></textarea>
                         </div>
                         <input type="hidden" name="order_id" value="<?php echo $order->get_id(); ?>">
-                        <select name="order_note_type" id="order_note_type" class="form-control inline-input">
+                        <select name="note_type" id="order_note_type" class="form-control inline-input">
                                 <option value=""><?php _e( 'Private note', 'woocommerce' ); ?></option>
                                 <option value="customer"><?php _e( 'Note to customer', 'woocommerce' ); ?></option>
                         </select>
