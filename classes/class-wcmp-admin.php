@@ -545,6 +545,11 @@ class WCMp_Admin {
 
     public function woocommerce_order_actions($actions) {
         $actions['regenerate_order_commissions'] = __('Regenerate order commissions', 'dc-woocommerce-multi-vendor');
+        if(is_user_wcmp_vendor(get_current_user_id())){
+            unset($actions['regenerate_order_commissions']);
+            if(isset($actions['send_order_details'])) unset( $actions['send_order_details'] );
+            if(isset($actions['send_order_details_admin'])) unset( $actions['send_order_details_admin'] );
+        }
         return $actions;
     }
 

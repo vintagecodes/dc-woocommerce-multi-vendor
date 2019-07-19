@@ -26,6 +26,7 @@ class WCMp_Order {
             // filters order list table
             add_filter('request', array($this, 'wc_order_list_filter'), 10, 1);
             add_action('admin_head', array($this, 'count_processing_order'), 5);
+            add_filter('admin_body_class', array( $this, 'add_admin_body_class' ));
             add_filter('views_edit-shop_order', array($this, 'shop_order_statuses_get_views') );
             add_filter('wp_count_posts', array($this, 'shop_order_count_orders'), 99, 3 );
             // customer's order list (my account)
@@ -979,6 +980,8 @@ class WCMp_Order {
                 #woocommerce-order-items .woocommerce_order_items_wrapper table.woocommerce_order_items th.line_tax .delete-order-tax{ display: none; }
                 #woocommerce-order-items .wc-order-edit-line-item-actions a, #woocommerce-order-items .wc-order-edit-line-item-actions a { display: none; }
                 #woocommerce-order-items .add-items .button.add-line-item, #woocommerce-order-items .add-items .button.add-coupon { display: none; }
+                .wcmp_vendor_admin.post-type-shop_order .wrap .page-title-action{ display: none; }
+                .wcmp_vendor_admin #menu-posts-shop_order .wp-submenu li:last-child, .wcmp_vendor_admin .menu-icon-shop_order.opensub li:last-child{ display: none; }
                 ";
             wp_add_inline_style('woocommerce_admin_styles', $inline_css);
         }
@@ -1096,6 +1099,13 @@ class WCMp_Order {
             }';
             wp_add_inline_style('woocommerce-inline', $styles);
         }
+    }
+    
+    public function add_admin_body_class( $body_classes ){
+        if ( is_user_wcmp_vendor(get_current_user_id() ) ) {
+            $body_classes .= ' wcmp_vendor_admin';
+        }
+        return $body_classes;
     }
 
 }
