@@ -57,6 +57,8 @@ class WCMp_Order {
             add_action( 'deleted_post', array( $this, 'delete_wcmp_suborder' ), 10, 1 );
             // Restrict default order edit caps for vendor
             add_action( 'admin_enqueue_scripts', array( $this, 'wcmp_vendor_order_backend_restriction' ), 99 );
+            add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 99 );
+            add_action( 'admin_menu', array( $this, 'remove_admin_menu' ), 99 );
         }
     }
 
@@ -697,6 +699,8 @@ class WCMp_Order {
                 $wcmp_suborders = $this->get_suborders($order_id);
                 if ($wcmp_suborders) {
                     foreach ($wcmp_suborders as $suborder) {
+                        $commission_id = get_post_meta( $suborder->get_id(), '_commission_id', true );
+                        wp_delete_post( $commission_id, true );
                         wc_delete_shop_order_transients($suborder->get_id());
                         wp_delete_post($suborder->get_id(), true);
                     }
@@ -966,6 +970,8 @@ class WCMp_Order {
             $wcmp_suborders = $this->get_suborders($order_id);
             if ( $wcmp_suborders ) {
                 foreach ( $wcmp_suborders as $suborder ) {
+                    $commission_id = get_post_meta( $suborder->get_id(), '_commission_id', true );
+                    wp_delete_post( $commission_id, true );
                     wp_delete_post( $suborder->get_id(), true );
                 }
             }
@@ -987,6 +993,25 @@ class WCMp_Order {
         }
     }
     
+    public function remove_meta_boxes(){
+        global $post;
+        if( $post && $post->post_type != 'shop_order' ) return;
+        if( !is_user_wcmp_vendor( get_current_user_id() ) ) return;
+        remove_meta_box( 'postcustom', 'shop_order', 'normal' );
+        remove_meta_box( 'woocommerce-order-downloads', 'shop_order', 'normal' );
+    }
+    
+    public function remove_admin_menu(){
+        global $submenu;
+        if( isset( $submenu['edit.php?post_type=shop_order'] ) ){
+            foreach ( $submenu['edit.php?post_type=shop_order'] as $key => $menu ) {
+                if( $menu[2] == 'post-new.php?post_type=shop_order' ){
+                    unset( $submenu['edit.php?post_type=shop_order'][$key] );
+                }
+            }
+        }
+    }
+
     public function woocommerce_my_account_my_orders_query( $query ){
         if(!isset($query['post_parent'])){
             $query['post_parent'] = 0;

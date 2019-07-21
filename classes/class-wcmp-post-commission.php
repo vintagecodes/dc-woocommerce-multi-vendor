@@ -1733,11 +1733,10 @@ class WCMp_Commission {
     }
 
     function wcmp_commission_delete_on_order_deleted($order_id) {
-        $vendor_orders = get_wcmp_vendor_orders(array('order_id' => $order_id));
-        if ($vendor_orders) {
-            foreach ($vendor_orders as $order) {
-                wp_delete_post($order->commission_id, true);
-            }
+        $vendor_order = wcmp_get_order($order_id);
+        if($vendor_order){
+            $commission_id = $vendor_order->get_prop('_commission_id');
+            wp_delete_post( $commission_id, true );
         }
     }
 
