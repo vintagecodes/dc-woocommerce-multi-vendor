@@ -259,6 +259,8 @@ class WCMp_Order {
     public function wcmp_create_orders_from_backend( $order_id, $items ){
         $order = wc_get_order($order_id);
         if(!$order) return;
+        $has_sub_order = get_post_meta($order_id, 'has_wcmp_sub_order', true) ? true : false;
+        if($has_sub_order) return;
         $this->wcmp_create_orders($order_id, array(), $order, true);
     }
 

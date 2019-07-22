@@ -153,14 +153,34 @@ if (!empty($wcmp_vendor_registration_form_data) && is_array($wcmp_vendor_registr
                 <?php
                 break;
             case 'recaptcha':
-                wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js');
+                $recaptcha_type = $value['recaptchatype'];
+                $sitekey = $value['sitekey'];
+                $secretkey = $value['secretkey'];
+                $script_url = ($recaptcha_type == 'v3') ? 'https://www.google.com/recaptcha/api.js?render='.$sitekey : 'https://www.google.com/recaptcha/api.js';
+                wp_enqueue_script('google-recaptcha', $script_url);
+                if($recaptcha_type == 'v3'):
                 ?>
+                <script>
+                    grecaptcha.ready(function () {
+                        grecaptcha.execute('<?php echo $sitekey; ?>', { action: 'wcmp-vendor-registration' }).then(function (token) {
+                            var recaptchaResponse = document.getElementById('recaptchav3Response');
+                            recaptchaResponse.value = token;
+                        });
+                    });
+                </script>
+                <?php endif; ?>
                 <div class="wcmp-regi-form-row <?php if(!empty($value['cssClass'])){ echo $value['cssClass']; } else {  echo 'wcmp-regi-12'; } ?>">
-                    <label><?php echo __($value['label'],'dc-woocommerce-multi-vendor'); ?><?php if($value['required']){ echo ' <span class="required">*</span>'; }?></label>
+                    <label><?php echo ($recaptcha_type == 'v2') ? __($value['label'],'dc-woocommerce-multi-vendor') : ''; ?><?php if($value['required']){ echo ' <span class="required">*</span>'; }?></label>
                     <?php echo $value['script']; ?>
+                    <input type="hidden" name="g-recaptchatype" value="<?php echo $recaptcha_type; ?>" />
                     <input type="hidden" name="wcmp_vendor_fields[<?php echo $key; ?>][value]" value="Verified" />
                     <input type="hidden" name="wcmp_vendor_fields[<?php echo $key; ?>][label]" value="<?php echo htmlentities($value['label']); ?>" />
                     <input type="hidden" name="wcmp_vendor_fields[<?php echo $key; ?>][type]" value="recaptcha" />
+                    <?php if($recaptcha_type == 'v3'): ?>
+                    <input type="hidden" name="recaptchav3Response" id="recaptchav3Response" />
+                    <input type="hidden" name="recaptchav3_sitekey" value="<?php echo $sitekey; ?>" />
+                    <input type="hidden" name="recaptchav3_secretkey" value="<?php echo $secretkey; ?>" />
+                    <?php endif; ?>
                 </div>
                 <?php
                 break;

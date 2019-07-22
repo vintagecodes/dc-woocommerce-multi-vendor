@@ -753,9 +753,10 @@ class WCMp_Ajax {
             if (!$vendor)
                 die('Invalid request');
             $order_data = array();
-            $customer_orders = $wpdb->get_results("SELECT DISTINCT commission_id from `{$wpdb->prefix}wcmp_vendor_orders` where vendor_id = " . $vendor->id . " AND order_id = " . $order_id, ARRAY_A);
-            if (!empty($customer_orders)) {
-                $commission_id = $customer_orders[0]['commission_id'];
+            $commission_id = get_post_meta( $order_id, '_commission_id', true );
+            //$customer_orders = $wpdb->get_results("SELECT DISTINCT commission_id from `{$wpdb->prefix}wcmp_vendor_orders` where vendor_id = " . $vendor->id . " AND order_id = " . $order_id, ARRAY_A);
+            if (!empty($commission_id)) {
+                //$commission_id = $customer_orders[0]['commission_id'];
                 $order_data[$commission_id] = $order_id;
                 $WCMp->vendor_dashboard->generate_csv($order_data, $vendor);
             }

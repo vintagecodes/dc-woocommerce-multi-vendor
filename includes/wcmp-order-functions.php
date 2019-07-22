@@ -64,7 +64,7 @@ function wcmp_get_order($id){
 /**
  * Checking order is vendor order or not.
  *
- * @since 3.2.0
+ * @since 3.4.0
  * @return boolean
  */
 function is_wcmp_vendor_order($order) {
@@ -80,7 +80,7 @@ function is_wcmp_vendor_order($order) {
 /**
  * Checking order is vendor order or not.
  *
- * @since 3.2.0
+ * @since 3.4.0
  * @return boolean
  */
 function get_refund_commission_amount($refund_id, $context = 'view') {

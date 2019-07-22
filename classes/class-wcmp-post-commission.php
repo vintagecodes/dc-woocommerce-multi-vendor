@@ -41,6 +41,7 @@ class WCMp_Commission {
             add_action('admin_notices', array(&$this, 'wcmp_commission_update_notice'));
             // Commissions delete on order deleted
             add_action('deleted_post', array(&$this, 'wcmp_commission_delete_on_order_deleted'));
+            add_action('admin_notices', array(&$this, 'wcmp_commission_notices') );
         }
     }
 
@@ -1294,18 +1295,31 @@ class WCMp_Commission {
         if (isset($_POST['_commission_amount'])) {
             $is_updated = update_post_meta($post_id, '_commission_amount', floatval($_POST['_commission_amount']));
         }
-        if ($is_updated) {
-            $new_commission_amount = floatval($_POST['_commission_amount']);
-            $commission_order = get_wcmp_vendor_orders(array('commission_id' => $post_id));
-            if ($commission_order) {
-                $total_line_quentity = array_sum(wp_list_pluck($commission_order, 'quantity'));
-                $line_commission_amount = (float) round(($new_commission_amount / $total_line_quentity), 2);
-                foreach ($commission_order as $commission) {
-                    $item_commission = $line_commission_amount * $commission->quantity;
-                    $wpdb->query("UPDATE `{$wpdb->prefix}wcmp_vendor_orders` SET commission_amount = '" . $item_commission . "' WHERE commission_id =" . $commission->commission_id . " AND  product_id = " . $commission->product_id);
-                }
+        
+        $order_id = get_post_meta($post_id, '_commission_order_id', true);
+        $order = wc_get_order($order_id);
+        if (isset($_POST['commission_status']) && in_array($_POST['commission_status'], array('refunded', 'partial_refunded'))) {
+            if($order && $order->get_refunds()){
+                update_post_meta($post_id, '_paid_status', $_POST['commission_status']);
+            }else{
+                set_transient('wcmp_comm_save_status_'.$post_id, __('Please make order refundable first.', 'dc-woocommerce-multi-vendor'), MINUTE_IN_SECONDS);
             }
+        }elseif(isset($_POST['commission_status'])){
+            update_post_meta($post_id, '_paid_status', $_POST['commission_status']);
         }
+        
+//        if ($is_updated) {
+//            $new_commission_amount = floatval($_POST['_commission_amount']);
+//            $commission_order = get_wcmp_vendor_orders(array('commission_id' => $post_id));
+//            if ($commission_order) {
+//                $total_line_quentity = array_sum(wp_list_pluck($commission_order, 'quantity'));
+//                $line_commission_amount = (float) round(($new_commission_amount / $total_line_quentity), 2);
+//                foreach ($commission_order as $commission) {
+//                    $item_commission = $line_commission_amount * $commission->quantity;
+//                    $wpdb->query("UPDATE `{$wpdb->prefix}wcmp_vendor_orders` SET commission_amount = '" . $item_commission . "' WHERE commission_id =" . $commission->commission_id . " AND  product_id = " . $commission->product_id);
+//                }
+//            }
+//        }
         do_action('wcmp_save_vendor_commission', $post_id, $is_updated, $_POST);
     }
 
@@ -1570,15 +1584,22 @@ class WCMp_Commission {
         foreach ($post_ids as $commission) {
             $commission_data = $this->get_commission($commission);
             $commission_staus = get_post_meta($commission, '_paid_status', true);
-            $commission_amounts = get_wcmp_vendor_order_amount(array('vendor_id' => $commission_data->vendor->id, 'commission_id' => $commission));
+            
+            //$commission_amounts = get_wcmp_vendor_order_amount(array('vendor_id' => $commission_data->vendor->id, 'commission_id' => $commission));
             $recipient = get_user_meta($commission_data->vendor->id, '_vendor_paypal_email', true) ? get_user_meta($commission_data->vendor->id, '_vendor_paypal_email', true) : $commission_data->vendor->page_title;
+            $commission_amount = get_post_meta( $commission, '_commission_amount', true ) ? get_post_meta( $commission, '_commission_amount', true ) : 0;
+            $shipping_amount = get_post_meta( $commission, '_shipping', true ) ? get_post_meta( $commission, '_shipping', true ) : 0;
+            $tax_amount = get_post_meta( $commission, '_tax', true ) ? get_post_meta( $commission, '_tax', true ) : 0;
+            $commission_total = get_post_meta( $commission, '_commission_total', true ) ? get_post_meta( $commission, '_commission_total', true ) : 0;
+            $commission_order = get_post_meta($commission, '_commission_order_id', true) ? wc_get_order(get_post_meta($commission, '_commission_order_id', true)) : false;
+            if($commission_order) $currency = $commission_order->get_currency();
             $commissions_data[] = apply_filters('wcmp_vendor_commission_data', array(
                 $recipient,
                 $currency,
-                $commission_amounts['commission_amount'],
-                $commission_amounts['shipping_amount'],
-                $commission_amounts['tax_amount'] + $commission_amounts['shipping_tax_amount'],
-                $commission_amounts['total'],
+                $commission_amount,
+                $shipping_amount,
+                $tax_amount,
+                $commission_total,
                 $commission_staus
             ), $commission_data);
         }
@@ -1737,6 +1758,17 @@ class WCMp_Commission {
         if($vendor_order){
             $commission_id = $vendor_order->get_prop('_commission_id');
             wp_delete_post( $commission_id, true );
+        }
+    }
+    
+    public function wcmp_commission_notices() {
+        if(isset($_GET['post']) && get_transient('wcmp_comm_save_status_' .  absint($_GET['post']))){
+        ?>
+        <div class="notice notice-error is-dismissible">
+            <p><?php echo get_transient('wcmp_comm_save_status_' .  absint($_GET['post'])); ?></p>
+        </div>
+        <?php
+        delete_transient('wcmp_comm_save_status_' .  absint($_GET['post']));
         }
     }
 

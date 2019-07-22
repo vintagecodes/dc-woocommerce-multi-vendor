@@ -6,6 +6,21 @@
             <input type="text" ng-model="field.label" class="wcmp-vendor-form-input-field" />
         </div>
         <div class="wcmp-vendor-form-input-field-container">
+            <label>reCAPTCHA Type</label>
+            <select class="wcmp-vendor-form-input-field" ng-model="field.recaptchatype" >
+                <option value="v3" ng-selected="field.recaptchatype === 'v3'">reCAPTCHA v3</option>
+                <option value="v2" ng-selected="field.recaptchatype === 'v2'">reCAPTCHA v2</option>
+            </select>
+        </div>
+        <div class="wcmp-vendor-form-input-field-container" ng-if="field.recaptchatype === 'v3'">
+            <label>Site key</label>
+            <input type="text" ng-model="field.sitekey" class="wcmp-vendor-form-input-field" />
+        </div>
+        <div class="wcmp-vendor-form-input-field-container" ng-if="field.recaptchatype === 'v3'">
+            <label>Secret key</label>
+            <input type="text" ng-model="field.secretkey" class="wcmp-vendor-form-input-field" />
+        </div>
+        <div class="wcmp-vendor-form-input-field-container" ng-if="field.recaptchatype === 'v2'">
             <label>Recaptcha Script</label>
             <textarea cols="20" rows="3" ng-model="field.script" class="wcmp-vendor-form-input-field"></textarea>
         </div>
