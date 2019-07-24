@@ -16,20 +16,27 @@ class WCMp_Report {
             add_filter('woocommerce_reports_charts', array($this, 'filter_tabs'), 99);
             add_filter('wcmp_filter_orders_report_overview', array($this, 'filter_orders_report_overview'), 99);
         }
-        //add_filter('woocommerce_reports_get_order_report_query', array( $this, 'wcmp_reports_get_order_report_query'), 99);
+        // filter admin woocommerce reports by excluding sub-orders
+        add_filter('woocommerce_reports_get_order_report_data_args', array($this, 'woocommerce_reports_get_order_report_data_args'), 99);
     }
     
-//    public function wcmp_reports_get_order_report_query($query) {
-//        //print_r($query);
-//        if(isset($query['where'])){
-//            $current_user = get_current_user_id();
-//		$query['where']  .= "
-//                    AND posts.post_author = {$current_user}";
-//        }
-//        
-//        //print_r(implode( ' ', $query ));die;
-//        return $query;
-//    }
+    public function woocommerce_reports_get_order_report_data_args( $args ) {
+        if( is_user_wcmp_vendor( get_current_user_id() ) ) return $args;
+        if( isset( $args['where'] ) ) {
+            $args['where'][] = array(
+                'key'      => 'posts.post_parent',
+                'value'    => 0,
+                'operator' => '=',
+            );
+        }else{
+            $args['where'] = array( array(
+                'key'      => 'posts.post_parent',
+                'value'    => 0,
+                'operator' => '=',
+            ) );
+        }
+        return $args;
+    }
     
     /**
 	 * Get report totals such as order totals and discount amounts.
