@@ -380,7 +380,7 @@ class WCMp_Order {
         /**
          * Action hook to adjust order before save.
          *
-         * @since 3.1.2.0
+         * @since 3.4.0
          */
         do_action('wcmp_checkout_create_order', $order, $vendor_order, $args);
 
@@ -868,11 +868,15 @@ class WCMp_Order {
 
             // Trigger notification emails.
             if ( ( $remaining_refund_amount - $args['amount'] ) > 0 || ( $order->has_free_item() && ( $remaining_refund_items - $refund_item_count ) > 0 ) ) {
+                $email_refund = WC()->mailer()->emails['WC_Email_Customer_Refunded_Order'];
+                $email_refund->trigger_partial( $order->get_id(), $refund->get_id() );
                 do_action( 'wcmp_vendor_order_partially_refunded', $order->get_id(), $refund->get_id() );
             } else {
                 if ( is_null( $args['reason'] ) ) {
                     $refund->set_reason( __( 'Order fully refunded', 'dc-woocommerce-multi-vendor' ) );
                 }
+                $email_refund = WC()->mailer()->emails['WC_Email_Customer_Refunded_Order'];
+                $email_refund->trigger_full( $order->get_id(), $refund->get_id() );
                 do_action( 'wcmp_vendor_order_fully_refunded', $order->get_id(), $refund->get_id() );
             }
         endif;

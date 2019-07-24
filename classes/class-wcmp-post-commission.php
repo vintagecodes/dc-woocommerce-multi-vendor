@@ -139,7 +139,7 @@ class WCMp_Commission {
                 /**
                  * Action hook to update commission meta data.
                  *
-                 * @since 3.1.2.0
+                 * @since 3.4.0
                  */
                 do_action('wcmp_commission_update_commission_meta', $commission_id);
 
@@ -221,7 +221,7 @@ class WCMp_Commission {
             /**
              * Action hook to update commission meta data.
              *
-             * @since 3.1.2.0
+             * @since 3.4.0
              */
             do_action('wcmp_commission_before_save_commission_total', $commission_id);
             $commission_total = (float) $commission_amount + (float) $shipping_amount + (float) $tax_amount + (float) $shipping_tax_amount;

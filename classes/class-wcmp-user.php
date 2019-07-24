@@ -150,7 +150,7 @@ class WCMp_User {
                     $recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
                     $recaptcha = json_decode($recaptcha);
 
-                    if ($recaptcha->score < 0.5) {
+                    if (!$recaptcha->success || $recaptcha->score < 0.5) {
                         $validation_errors->add('recaptcha is not validate', __('Please Verify  Recaptcha', 'dc-woocommerce-multi-vendor'));
                     }
                 }

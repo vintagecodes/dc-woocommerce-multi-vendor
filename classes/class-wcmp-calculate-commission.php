@@ -220,7 +220,7 @@ class WCMp_Calculate_Commission {
                 /**
                  * Action hook after commission refund save.
                  *
-                 * @since 3.1.2.0
+                 * @since 3.4.0
                  */
                 do_action('wcmp_after_create_commission_refunds', $order, $commission_id);
             endif;

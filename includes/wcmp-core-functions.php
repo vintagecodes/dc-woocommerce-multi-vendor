@@ -3652,9 +3652,6 @@ if ( ! function_exists( 'wcmp_default_product_types' ) ) {
     function wcmp_default_product_types() {
         return array(
             'simple'   => __( 'Simple product', 'woocommerce' ),
-            'grouped'  => __( 'Grouped product', 'woocommerce' ),
-            'external' => __( 'External/Affiliate product', 'woocommerce' ),
-            'variable' => __( 'Variable product', 'woocommerce' ),
         );
     }
 
@@ -3997,7 +3994,7 @@ if (!function_exists('wcmp_get_commission_statuses')) {
     /**
      * Get all commission statuses.
      *
-     * @since 3.2.0
+     * @since 3.4.0
      * @return array
      */
     function wcmp_get_commission_statuses() {

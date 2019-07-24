@@ -94,7 +94,7 @@ class WCMp_Settings {
         // transaction details page
         add_submenu_page( null, __( 'Transaction Details', 'dc-woocommerce-multi-vendor' ), __( 'Transaction Details', 'dc-woocommerce-multi-vendor' ), 'manage_woocommerce', 'wcmp-transaction-details', array( $this, 'wcmp_transaction_details' ) );
         // Report a bugs
-        $wcmp_extension_page = add_submenu_page( 'wcmp', __( 'Report a bugs', 'dc-woocommerce-multi-vendor' ), __( 'Report a bugs', 'dc-woocommerce-multi-vendor' ), 'manage_woocommerce', 'wcmp-report-bugs', array( $this, 'wcmp_report_bugs' ) );
+        //$wcmp_extension_page = add_submenu_page( 'wcmp', __( 'Report a bugs', 'dc-woocommerce-multi-vendor' ), __( 'Report a bugs', 'dc-woocommerce-multi-vendor' ), 'manage_woocommerce', 'wcmp-report-bugs', array( $this, 'wcmp_report_bugs' ) );
 
         // Assign priority incrmented by 1
         $wcmp_submenu_priority = array(

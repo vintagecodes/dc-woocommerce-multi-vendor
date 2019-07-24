@@ -157,12 +157,12 @@ if (!empty($wcmp_vendor_registration_form_data) && is_array($wcmp_vendor_registr
                 $sitekey = $value['sitekey'];
                 $secretkey = $value['secretkey'];
                 $script_url = ($recaptcha_type == 'v3') ? 'https://www.google.com/recaptcha/api.js?render='.$sitekey : 'https://www.google.com/recaptcha/api.js';
-                wp_enqueue_script('google-recaptcha', $script_url);
-                if($recaptcha_type == 'v3'):
                 ?>
+                <script src="<?php echo $script_url; ?>"></script>
+                <?php if($recaptcha_type == 'v3'): ?>
                 <script>
                     grecaptcha.ready(function () {
-                        grecaptcha.execute('<?php echo $sitekey; ?>', { action: 'wcmp-vendor-registration' }).then(function (token) {
+                        grecaptcha.execute('<?php echo $sitekey; ?>', { action: 'wcmp_vendor_registration' }).then(function (token) {
                             var recaptchaResponse = document.getElementById('recaptchav3Response');
                             recaptchaResponse.value = token;
                         });
