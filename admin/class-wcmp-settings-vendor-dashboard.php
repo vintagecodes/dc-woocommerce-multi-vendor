@@ -43,6 +43,11 @@ class WCMp_Settings_Vendor_Dashboard {
                         "vendor_color_scheme_picker" => array('title' => __('Dashboard Color Scheme', 'dc-woocommerce-multi-vendor'), 'class' => 'vendor_color_scheme_picker', 'type' => 'color_scheme_picker', 'id' => 'vendor_color_scheme_picker', 'label_for' => 'vendor_color_scheme_picker', 'name' => 'vendor_color_scheme_picker', 'dfvalue' => 'outer_space_blue', 'options' => array('outer_space_blue' => array('label' => __('Outer Space', 'dc-woocommerce-multi-vendor'), 'color' => array('#202528', '#333b3d','#3f85b9', '#316fa8')), 'green_lagoon' => array('label' => __('Green Lagoon', 'dc-woocommerce-multi-vendor'), 'color' => array('#171717', '#212121', '#009788','#00796a')), 'old_west' => array('label' => __('Old West', 'dc-woocommerce-multi-vendor'), 'color' => array('#46403c', '#59524c', '#c7a589', '#ad8162')), 'wild_watermelon' => array('label' => __('Wild Watermelon', 'dc-woocommerce-multi-vendor'), 'color' => array('#181617', '#353130', '#fd5668', '#fb3f4e'))))
                     ),
                 ),
+                "wcmp_vendor_setup_wizard_settings" => array("title" => __('Store Setup Wizard', 'dc-woocommerce-multi-vendor'), // Section one
+                    "fields" => array(
+                        "setup_wizard_introduction" => array('title' => __('Introduction step', 'dc-woocommerce-multi-vendor'), 'type' => 'wpeditor', 'id' => 'setup_wizard_introduction', 'label_for' => 'setup_wizard_introduction', 'name' => 'setup_wizard_introduction', 'cols' => 50, 'rows' => 6, 'hints' => __('Add some introduction or welcome speech to your vendor. This section display in vendor store setup wizard introduction step.', 'dc-woocommerce-multi-vendor')), // Textarea
+                    ),
+                ),
                 'wcmp_vendor_shop_template' => array(
                     'title' => __('Vendor Shop', 'dc-woocommerce-multi-vendor'),
                     'fields' => array(
@@ -83,6 +88,10 @@ class WCMp_Settings_Vendor_Dashboard {
         
         if(isset($input['wcmp_vendor_dashboard_custom_css'])){
             $new_input['wcmp_vendor_dashboard_custom_css'] = wp_unslash($input['wcmp_vendor_dashboard_custom_css']);
+        }
+        
+        if (isset($input['setup_wizard_introduction'])) {
+            $new_input['setup_wizard_introduction'] = $input['setup_wizard_introduction'];
         }
         
         if (!$hasError) {

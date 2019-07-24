@@ -1,0 +1,82 @@
+<?php
+/**
+ * Class WCMp_Ledger_Data_Store file.
+ *
+ * @package WCMp\Classes\Data Stores
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * WCMp Ledger Data Store.
+ *
+ * @version  3.4.0
+ */
+class WCMp_Ledger_Data_Store {
+    
+    public function __construct( ) {
+        
+    }
+
+    /**
+     * Method to create a row data.
+     *
+     * @since 3.4.0
+     * @param $data array .
+     */
+    public function create( $data = array() ) {
+        global $wpdb;
+        $data = apply_filters( 'wcmp_ledger_data_store_before_create_data', $data );
+        $wpdb->insert( $wpdb->prefix . 'wcmp_vendor_ledger', $data );
+        return $wpdb->insert_id;
+    }
+
+    /**
+     * Update data in the database.
+     *
+     * @since 3.4.0
+     * @param $id integer
+     * @param $data array
+     */
+    public function update( $id, $data ) {
+        global $wpdb;
+        if ( $id ) {
+            $wpdb->update( $wpdb->prefix . 'wcmp_vendor_ledger', $data, array( 'id' => $id ) );
+        }
+        do_action( 'wcmp_ledger_data_store_after_update_data', $id, $data );
+    }
+    
+    /**
+     * get data in the database.
+     *
+     * @since 3.4.0
+     * @param $args array
+     * @param $where string
+     */
+    public function get_ledger( $args = array(), $where = '', $requestData = array() ) {
+        global $wpdb;
+        $where_sql = implode(' AND ', array_map(
+                        function ($v, $k) {
+                    return sprintf("%s = '%s'", $k, $v);
+                }, $args, array_keys($args)
+        ));
+        if( $where ){
+            $where_sql .= ' AND '. $where;
+        } 
+        if( $requestData ){ // datatable requests
+            if( isset( $requestData['from_date'] ) && isset( $requestData['to_date'] ) ) {
+                $from = $requestData['from_date'].' 00:00:00';
+                $to = $requestData['to_date'].' 23:59:59';
+                $where_sql .= " AND created BETWEEN '{$from}' AND '{$to}' ";
+            }
+        }
+        $where_sql = apply_filters('wcmp_data_store_ledger_get_ledger_where_sql', $where_sql, $args, $where, $requestData );
+        $order_sql = apply_filters('wcmp_data_store_ledger_get_ledger_order_sql', 'ORDER BY created DESC', $args, $where, $requestData );
+        $sql = "SELECT * FROM {$wpdb->prefix}wcmp_vendor_ledger WHERE {$where_sql} {$order_sql}";
+        $get_ledger_sql = apply_filters('wcmp_data_store_ledger_get_ledger_sql_query', $sql, $args, $where, $requestData );
+        return $wpdb->get_results( $get_ledger_sql );
+    }
+	
+}

@@ -62,6 +62,10 @@ class WCMp_Endpoints {
                 'label' => __('Vendor Report', 'dc-woocommerce-multi-vendor'),
                 'endpoint' => get_wcmp_vendor_settings('wcmp_vendor_report_endpoint', 'vendor', 'general', 'vendor-report')
             )
+            , 'banking-overview' => array(
+                'label' => __('Banking Overview', 'dc-woocommerce-multi-vendor'),
+                'endpoint' => get_wcmp_vendor_settings('wcmp_vendor_banking_overview_endpoint', 'vendor', 'general', 'banking-overview')
+            )
             , 'add-product' => array(
                 'label' => __('Add Product', 'dc-woocommerce-multi-vendor'),
                 'endpoint' => get_wcmp_vendor_settings('wcmp_add_product_endpoint', 'vendor', 'general', 'add-product')

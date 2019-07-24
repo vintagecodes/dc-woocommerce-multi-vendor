@@ -503,40 +503,33 @@ class WCMp_Vendor {
      */
     public function vendor_order_item_table($order, $vendor_id, $is_ship = false) {
         global $WCMp;
-        $vendor_items = $this->get_vendor_items_from_order($order->get_id(), $vendor_id);
+        $vendor_items = $order->get_items( 'line_item' );
         foreach ($vendor_items as $item_id => $item) {
-            $_product = apply_filters('wcmp_woocommerce_order_item_product', $order->get_product_from_item($item), $item);
+            $product = $item->get_product();
+            $_product = apply_filters('wcmp_woocommerce_order_item_product', $product, $item);
             ?>
             <tr class="">
                 <?php do_action('wcmp_before_vendor_order_item_table', $item, $order, $vendor_id, $is_ship); ?>
                 <td scope="col" style="text-align:left; border: 1px solid #eee;" class="product-name">
                     <?php
                     if ($_product && !$_product->is_visible()) {
-                        echo apply_filters('wcmp_woocommerce_order_item_name', $item['name'], $item);
+                        echo apply_filters('wcmp_woocommerce_order_item_name', $item->get_name(), $item);
                     } else {
-                        echo apply_filters('woocommerce_order_item_name', sprintf('<a href="%s">%s</a>', get_permalink($item['product_id']), $item['name']), $item);
+                        echo apply_filters('woocommerce_order_item_name', sprintf('<a href="%s">%s</a>', get_permalink($item->get_product_id()), $item->get_name()), $item);
                     }
                     wc_display_item_meta($item);
                     ?>
                 </td>
                 <td scope="col" style="text-align:left; border: 1px solid #eee;">	
                     <?php
-                    echo $item['qty'];
+                    echo $item->get_quantity();
                     ?>
                 </td>
                 <td scope="col" style="text-align:left; border: 1px solid #eee;">
                     <?php
-                    $variation_id = 0;
-                    if (isset($item['variation_id']) && !empty($item['variation_id'])) {
-                        $variation_id = $item['variation_id'];
-                    }
-                    $product_id = $item['product_id'];
-                    $commission_amount = get_wcmp_vendor_order_amount(array('order_id' => $order->get_id(), 'product_id' => $product_id, 'variation_id' => $variation_id, 'order_item_id' => $item_id));
-                    if ($is_ship) {
-                        echo $order->get_formatted_line_subtotal($item);
-                    } else {
-                        echo wc_price($commission_amount['commission_amount']);
-                    }
+                    $commission = $item->get_meta('_vendor_item_commission', true);
+                    echo wc_price($commission);
+                   
                     ?>
                 </td>
                 <?php do_action('wcmp_after_vendor_order_item_table', $item, $order, $vendor_id, $is_ship); ?>
@@ -646,16 +639,17 @@ class WCMp_Vendor {
     public function wcmp_vendor_get_order_item_totals($order, $term_id) {
         global $WCMp;
         $vendor = get_wcmp_vendor_by_term($term_id);
-        $vendor_totals = get_wcmp_vendor_order_amount(array('vendor_id' => $vendor->id, 'order_id' => $order));
+        $vendor_order = wcmp_get_order( $order->get_id() );
+        //$vendor_totals = get_wcmp_vendor_order_amount(array('vendor_id' => $vendor->id, 'order_id' => $order));
         $vendor_shipping_method = get_wcmp_vendor_order_shipping_method($order->get_id(), $vendor->id);
         $order_item_totals = array();
         $order_item_totals['commission_subtotal'] = array(
             'label' => __('Commission Subtotal:', 'dc-woocommerce-multi-vendor'),
-            'value' => wc_price($vendor_totals['commission_amount'])
+            'value' => $vendor_order->get_commission()
         );
         $order_item_totals['tax_subtotal'] = array(
             'label' => __('Tax Subtotal:', 'dc-woocommerce-multi-vendor'),
-            'value' => wc_price($vendor_totals['tax_amount'] + $vendor_totals['shipping_tax_amount'])
+            'value' => $vendor_order->get_tax()
         );
         if ($vendor_shipping_method) {
             $order_item_totals['shipping_method'] = array(
@@ -665,11 +659,11 @@ class WCMp_Vendor {
         }
         $order_item_totals['shipping_subtotal'] = array(
             'label' => __('Shipping Subtotal:', 'dc-woocommerce-multi-vendor'),
-            'value' => wc_price($vendor_totals['shipping_amount'])
+            'value' => $vendor_order->get_shipping()
         );
         $order_item_totals['total'] = array(
             'label' => __('Total:', 'dc-woocommerce-multi-vendor'),
-            'value' => wc_price($vendor_totals['commission_amount'] + $vendor_totals['tax_amount'] + $vendor_totals['shipping_tax_amount'] + $vendor_totals['shipping_amount'])
+            'value' => $vendor_order->get_commission_total()
         );
         return $order_item_totals;
     }
@@ -795,55 +789,49 @@ class WCMp_Vendor {
                     'is_trashed' => ''
                 );
                 $args = apply_filters('get_vendor_orders_reports_of_vendor_stats_query_args', wp_parse_args($args, $defaults));
-                $sale_results = $wpdb->get_results(
-                        $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_vendor_orders WHERE vendor_id=%d AND `created` BETWEEN %s AND %s AND `is_trashed`=%d", $args['vendor_id'], $args['start_date'], $args['end_date'], $args['is_trashed']
-                        )
+                
+                $query = array(
+                    'author' => $args['vendor_id'],
+                    'date_query' => array(
+                        array(
+                            'after'     => $args['start_date'],
+                            'before'    => $args['end_date'],
+                            'inclusive' => true,
+                        ),
+                    )
                 );
-                $item_total_week = 0;
-                $comission_total_arr = array();
-                $total_comission_week = 0;
-                $shipping_total_week = 0;
-                $tax_total_week = 0;
-                $net_withdrawal_balance = 0;
-                $discount_amount = 0;
-                $com_orders = array();
-                $sale_item_count = array();
+                $vendor_orders = wcmp_get_orders( $query, 'object' );
+
+                $sales_total = $commission_total = $discount_amount = $net_withdrawal_balance = 0;
+                
                 $vendor_sales_results = array('traffic_no' => 0, 'coupon_total' => 0, 'withdrawal' => 0, 'earning' => 0, 'sales_total' => 0, 'orders_no' => 0);
-                if ($sale_results) {
-                    foreach ($sale_results as $sale) {
-                        if ($sale->commission_id != 0 && $sale->commission_id != '') {
-                            $order_item_id_week = $sale->order_item_id;
-                            $sale_item_count[] = $sale->quantity;
-                            $item_total_week += get_metadata('order_item', $sale->order_item_id, '_line_total', true);
-                            if (!in_array($sale->commission_id, $comission_total_arr)) {
-                                $comission_total_arr[] = $sale->commission_id;
-                                $order_id = get_post_meta($sale->commission_id, '_commission_order_id', true);
-                                $com_orders[] = $order_id;
-                                $order = wc_get_order($order_id);
-                                if ($order) {
-                                    $discount_amount += $order->get_total_discount();
-                                }
-                                $amount = get_wcmp_vendor_order_amount(array('commission_id' => $sale->commission_id), $this->id);
-                                $total_comission_week += $amount['total'];
-                                $shipping_total_week += $amount['shipping_amount'];
-                                $tax_total_week += $amount['tax_amount'] + $amount['shipping_tax_amount'];
-                                $paid_status_week = get_metadata('post', $sale->commission_id, '_paid_status', true);
-                                if ($paid_status_week == "paid") {
-                                    $net_withdrawal_balance += $amount['total'];
-                                }
+                if( $vendor_orders ){
+                    foreach ( $vendor_orders as $key => $order ) {
+                        try{
+                            $vendor_order = wcmp_get_order( $order->get_id() );
+                            if(!$vendor_order) continue;
+                            $sales_total += $order->get_total();
+                            $discount_amount += $order->get_total_discount();
+                            $commission_id = $vendor_order->get_prop('_commission_id');
+                            $commission_total += $vendor_order->get_commission_total( 'edit' );
+
+                            if( get_post_meta( $commission_id, '_paid_status', true ) == 'paid' ){
+                                 $net_withdrawal_balance += $vendor_order->get_commission_total( 'edit' );
                             }
+                        } catch (Exception $ex) {
+
                         }
+                        
                     }
-                    $item_total_week += ($shipping_total_week + $tax_total_week);
-                    $vendor_sales_results['sales_total'] = $item_total_week;
-                    $vendor_sales_results['earning'] = $total_comission_week;
-                    $vendor_sales_results['withdrawal'] = $net_withdrawal_balance;
-                    $where = "created BETWEEN '{$args['start_date']}' AND '{$args['end_date']}' AND ";
-                    $visitor_data = wcmp_get_visitor_stats($this->id, $where);
-                    $vendor_sales_results['traffic_no'] = count($visitor_data);
-                    $vendor_sales_results['coupon_total'] = $discount_amount;
-                    $vendor_sales_results['orders_no'] = count($com_orders);
                 }
+                $vendor_sales_results['sales_total'] = $sales_total;
+                $vendor_sales_results['earning'] = $commission_total;
+                $vendor_sales_results['withdrawal'] = $net_withdrawal_balance;
+                $where = "created BETWEEN '{$args['start_date']}' AND '{$args['end_date']}' AND ";
+                $visitor_data = wcmp_get_visitor_stats($this->id, $where);
+                $vendor_sales_results['traffic_no'] = count($visitor_data);
+                $vendor_sales_results['coupon_total'] = $discount_amount;
+                $vendor_sales_results['orders_no'] = count($vendor_orders);
 
                 $reports = $vendor_sales_results;
                 break;
@@ -855,11 +843,31 @@ class WCMp_Vendor {
                     'start_date' => $last_seven_day_date
                 );
                 $args = apply_filters('get_vendor_orders_reports_of_pending_shipping_query_args', wp_parse_args($args, $defaults));
-                $pending_shippings = $wpdb->get_results(
-                        $wpdb->prepare("SELECT order_id FROM {$wpdb->prefix}wcmp_vendor_orders WHERE commission_id > 0 AND vendor_id=%d AND `created` BETWEEN %s AND %s AND `is_trashed` != 1 AND `shipping_status` != 1 group by order_id order by order_id DESC", $args['vendor_id'], $args['start_date'], $args['end_date']
+                
+                $query = array(
+                    'author' => $args['vendor_id'],
+                    'date_query' => array(
+                        array(
+                            'after'     => $args['start_date'],
+                            'before'    => $args['end_date'],
+                            'inclusive' => true,
+                        ),
+                    ),
+                    'meta_query'    => array(
+                        'relation' => 'OR',
+                        array(
+                            'key'       => 'dc_pv_shipped',
+                            'compare'   => 'NOT EXISTS',
+                        ),
+                        array(
+                            'key'       => 'wcmp_vendor_order_shipped',
+                            'compare'   => 'NOT EXISTS',
                         )
+                    )
                 );
-                $reports = $pending_shippings;
+                $vendor_orders = wcmp_get_orders( $query, 'object' );
+
+                $reports = $vendor_orders;
                 break;
 
             default:
@@ -898,8 +906,10 @@ class WCMp_Vendor {
                 $mails->trigger($order_id, $customer_email, $this->term_id, array('tracking_id' => $tracking_id, 'tracking_url' => $tracking_url));
             }
             update_post_meta($order_id, 'dc_pv_shipped', $shippers);
+            // set new meta shipped
+            update_post_meta($order_id, 'wcmp_vendor_order_shipped', 1);
         }
-        $wpdb->query("UPDATE {$wpdb->prefix}wcmp_vendor_orders SET shipping_status = '1' WHERE order_id = $order_id and vendor_id = $this->id");
+        //$wpdb->query("UPDATE {$wpdb->prefix}wcmp_vendor_orders SET shipping_status = '1' WHERE order_id = $order_id and vendor_id = $this->id");
         do_action('wcmp_vendors_vendor_ship', $order_id, $this->term_id);
         $order = wc_get_order($order_id);
         $comment_id = $order->add_order_note(__('Vendor ', 'dc-woocommerce-multi-vendor') . $this->page_title . __(' has shipped his part of order to customer.', 'dc-woocommerce-multi-vendor') . '<br><span>' . __('Tracking Url : ', 'dc-woocommerce-multi-vendor') . '</span> <a target="_blank" href="' . $tracking_url . '">' . $tracking_url . '</a><br><span>' . __('Tracking Id : ', 'dc-woocommerce-multi-vendor') . '</span>' . $tracking_id, '1', true);

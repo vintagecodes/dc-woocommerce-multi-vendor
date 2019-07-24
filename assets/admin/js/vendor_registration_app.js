@@ -107,6 +107,7 @@ app.controller('postbox_menu',['$scope', 'vendor_registration_service', function
                     id: jsonLength,
                     type: type,
                     label: label,
+                    recaptchatype: 'v3',
                     hidden: false,
                     partial: type + '.html',
                     script: '',

@@ -93,11 +93,15 @@ class WCMp_User {
                 //check for admins
                 if (in_array('dc_vendor', $user->roles)) {
                     // redirect them to the default place
-                    $redirect_to = get_permalink(wcmp_vendor_dashboard_page_id());
+                    if(is_wcmp_vendor_completed_store_setup($user)){
+                        $redirect_to = get_permalink(wcmp_vendor_dashboard_page_id());
+                    }else{
+                        $redirect_to = get_permalink(wcmp_vendor_dashboard_page_id()).'?page=vendor-store-setup';
+                    }
                 }
             }
         }
-        return $redirect_to;
+        return apply_filters( 'wcmp_vendor_login_redirect_url', $redirect_to);
     }
 
     /**
@@ -110,13 +114,17 @@ class WCMp_User {
         if (!isset($_POST['wcmp-login-vendor'])) {
             if (is_array($user->roles)) {
                 if (in_array('dc_vendor', $user->roles)) {
-                    $redirect = get_permalink(wcmp_vendor_dashboard_page_id());
+                    if(is_wcmp_vendor_completed_store_setup($user)){
+                        $redirect = get_permalink(wcmp_vendor_dashboard_page_id());
+                    }else{
+                        $redirect = get_permalink(wcmp_vendor_dashboard_page_id()).'?page=vendor-store-setup';
+                    }
                 }
             } else if ($user->roles == 'dc_vendor') {
                 $redirect = get_permalink(wcmp_vendor_dashboard_page_id());
             }
         }
-        return $redirect;
+        return apply_filters( 'wcmp_vendor_login_redirect_url', $redirect);
     }
 
     /**
@@ -130,9 +138,23 @@ class WCMp_User {
                 $customer_id = $user->ID;
                 $validation_errors = new WP_Error();
                 $wcmp_vendor_registration_form_data = get_option('wcmp_vendor_registration_form_data');
-                if (isset($_POST['g-recaptcha-response']) && empty($_POST['g-recaptcha-response'])) {
-                    $validation_errors->add('recaptcha is not validate', __('Please Verify  Recaptcha', 'dc-woocommerce-multi-vendor'));
+                if(isset($_POST['g-recaptchatype']) && $_POST['g-recaptchatype'] == 'v2'){
+                    if (isset($_POST['g-recaptcha-response']) && empty($_POST['g-recaptcha-response'])) {
+                        $validation_errors->add('recaptcha is not validate', __('Please Verify  Recaptcha', 'dc-woocommerce-multi-vendor'));
+                    }
+                }elseif(isset($_POST['g-recaptchatype']) && $_POST['g-recaptchatype'] == 'v3') {
+                    $recaptcha_secret = isset($_POST['recaptchav3_secretkey']) ? $_POST['recaptchav3_secretkey'] : '';
+                    $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
+                    $recaptcha_response = isset($_POST['recaptchav3Response']) ? $_POST['recaptchav3Response'] : '';
+
+                    $recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
+                    $recaptcha = json_decode($recaptcha);
+
+                    if (!$recaptcha->success || $recaptcha->score < 0.5) {
+                        $validation_errors->add('recaptcha is not validate', __('Please Verify  Recaptcha', 'dc-woocommerce-multi-vendor'));
+                    }
                 }
+
                 if (isset($_FILES['wcmp_vendor_fields'])) {
                     $attacment_files = $_FILES['wcmp_vendor_fields'];
                     if (!empty($attacment_files) && is_array($attacment_files)) {

@@ -24,7 +24,7 @@ class WCMp_Admin {
         add_action('delete_post', array($this, 'remove_commission_from_sales_report'), 10);
         add_action('trashed_post', array($this, 'remove_commission_from_sales_report'), 10);
         add_action('untrashed_post', array($this, 'restore_commission_from_sales_report'), 10);
-        add_action('woocommerce_order_status_changed', array($this, 'change_commission_status'), 20, 3);
+        //add_action('woocommerce_order_status_changed', array($this, 'change_commission_status'), 20, 3);
         if (get_wcmp_vendor_settings('is_singleproductmultiseller', 'general') == 'Enable') {
             add_action('admin_enqueue_scripts', array($this, 'wcmp_kill_auto_save'));
         }
@@ -34,9 +34,9 @@ class WCMp_Admin {
 
         add_action('admin_menu', array(&$this, 'wcmp_admin_menu'));
         add_action('admin_head', array($this, 'menu_commission_count'));
-        if (!get_option('_is_dismiss_wcmp340_notice', false) && current_user_can('manage_options')) {
-            add_action('admin_notices', array(&$this, 'wcmp_service_page_notice'));
-        }
+//        if (!get_option('_is_dismiss_wcmp340_notice', false) && current_user_can('manage_options')) {
+//            add_action('admin_notices', array(&$this, 'wcmp_service_page_notice'));
+//        }
         add_action('wp_dashboard_setup', array(&$this, 'wcmp_remove_wp_dashboard_widget'));
         add_filter('woocommerce_order_actions', array(&$this, 'woocommerce_order_actions'));
         add_action('woocommerce_order_action_regenerate_order_commissions', array(&$this, 'regenerate_order_commissions'));
@@ -44,7 +44,7 @@ class WCMp_Admin {
         // Admin notice for advance frontend modules (Temp)
         add_action('admin_notices', array(&$this, 'advance_frontend_manager_notice'));
     }
-
+    
     function add_hidden_order_items($order_items) {
         $order_items[] = '_give_tax_to_vendor';
         $order_items[] = '_give_shipping_to_vendor';
@@ -337,6 +337,7 @@ class WCMp_Admin {
             'toplevel_page_wc-reports',
             'product',
             'edit-product',
+            'edit-shop_order',
             'user-edit',
             'profile',
             'users',
@@ -423,6 +424,7 @@ class WCMp_Admin {
             if (!wp_style_is('woocommerce_chosen_styles', 'queue')) {
                 wp_enqueue_style('woocommerce_chosen_styles', $WCMp->plugin_url . '/assets/admin/css/chosen' . $suffix . '.css');
             }
+            wp_enqueue_style( 'woocommerce_admin_styles' );
             wp_enqueue_script('WCMp_chosen');
             wp_enqueue_script('WCMp_ajax-chosen');
             wp_enqueue_script('wcmp-admin-commission-js');
@@ -481,6 +483,13 @@ class WCMp_Admin {
             }";
             wp_add_inline_style( 'woocommerce_admin_styles', $custom_css );
         }
+        
+        // report a bugs settings
+        if($screen->id == 'wcmp_page_wcmp-report-bugs'){
+            $WCMp->library->load_upload_lib();
+            wp_enqueue_style('woocommerce_admin_styles');
+        }
+        
     }
 
     function wcmp_kill_auto_save() {
@@ -536,6 +545,11 @@ class WCMp_Admin {
 
     public function woocommerce_order_actions($actions) {
         $actions['regenerate_order_commissions'] = __('Regenerate order commissions', 'dc-woocommerce-multi-vendor');
+        if(is_user_wcmp_vendor(get_current_user_id())){
+            unset($actions['regenerate_order_commissions']);
+            if(isset($actions['send_order_details'])) unset( $actions['send_order_details'] );
+            if(isset($actions['send_order_details_admin'])) unset( $actions['send_order_details_admin'] );
+        }
         return $actions;
     }
 

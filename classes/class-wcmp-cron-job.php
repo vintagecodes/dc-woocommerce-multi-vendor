@@ -23,6 +23,11 @@ class WCMp_Cron_Job {
         add_action('wcmp_spmv_product_meta_update', array(&$this, 'wcmp_spmv_product_meta_update'));
         // Reset product mapping
         add_action('wcmp_reset_product_mapping_data', array(&$this, 'wcmp_reset_product_mapping_data'), 10, 1);
+
+        add_action('migrate_multivendor_table', array(&$this, 'migrate_multivendor_table'));
+        // WCMp order migration
+        add_action('wcmp_orders_migration', array(&$this, 'wcmp_orders_migration'));
+
         $this->wcmp_clear_scheduled_event();
     }
 
@@ -332,6 +337,84 @@ class WCMp_Cron_Job {
         do_wcmp_spmv_set_object_terms($map_id);
         $exclude_spmv_products = get_wcmp_spmv_excluded_products_map_data();
         set_transient('wcmp_spmv_exclude_products_data', $exclude_spmv_products, YEAR_IN_SECONDS);
+    }
+    
+    public function wcmp_orders_migration() {
+        global $WCMp, $wpdb;
+
+        $vendors = get_wcmp_vendors();
+        if ($vendors) {
+            foreach ($vendors as $vendor) {
+                $vendor_orders = get_wcmp_vendor_orders(array('vendor_id' => $vendor->id));
+                if($vendor_orders){
+                    $vendor_done_commissions_ids = array();
+                    foreach ($vendor_orders as $vorder) {
+                        if(!in_array($vorder->commission_id, $vendor_done_commissions_ids)){
+                            $vendor_done_commissions_ids[] = $vorder->commission_id;
+                            $commission_specific_orders = get_wcmp_vendor_orders(array('vendor_id' => $vendor->id, 'commission_id' => $vorder->commission_id));
+                            $items = array();
+                            $commission_specific_orders_ids_done = array();
+                            foreach ($commission_specific_orders as $corder) {
+                                $order = wc_get_order($corder->order_id);
+                                if(!$order){
+                                    continue;
+                                }
+                                $vendor_specific_order_migrated = (get_post_meta($corder->order_id, '_wcmp_vendor_specific_order_migrated', true)) ? get_post_meta($corder->order_id, '_wcmp_vendor_specific_order_migrated', true) : array();
+                                if(in_array($vendor->id, $vendor_specific_order_migrated) || in_array($corder->order_id, $commission_specific_orders_ids_done)){
+                                    continue;
+                                }
+                                $vendor_specific_order_migrated[] = $vendor->id;
+                                $commission_specific_orders_ids_done[] = $corder->order_id;
+
+                                $items = $order->get_items();
+                                $vendor_items = array();
+                                foreach ($items as $item_id => $item) {
+                                    if (isset($item['product_id']) && $item['product_id'] !== 0) {
+                                        // check vendor product
+                                        $has_vendor = get_wcmp_product_vendors($item['product_id']);
+                                        if ($has_vendor && $has_vendor->id == $vendor->id) {
+                                            $vendor_items['commission'] = $corder->commission_amount;
+                                            $vendor_items['commission_rate'] = array();
+                                            $vendor_items[$item_id] = $item;
+                                        }
+                                    }
+                                }
+                                try {
+                                    // migrate old orders
+                                    require_once ( $WCMp->plugin_path . '/classes/class-wcmp-order.php' );
+                                    $vendor_order_id = WCMp_Order::create_vendor_order(array(
+                                            'order_id' => $vorder->order_id,
+                                            'vendor_id' => $vendor->id,
+                                            'posted_data' => array(),
+                                            'line_items' => $vendor_items
+                                    ), true);
+                                    // mark as shipped
+                                    $shippers = get_post_meta($vorder->order_id, 'dc_pv_shipped', true) ? get_post_meta($vorder->order_id, 'dc_pv_shipped', true) : array();
+                                    if (in_array($vendor->id, $shippers)) {
+                                        update_post_meta($vendor_order_id, 'dc_pv_shipped', $shippers);
+                                        // set new meta shipped
+                                        update_post_meta($vendor_order_id, 'wcmp_vendor_order_shipped', 1);
+                                    }
+                                    // add commission id in order meta
+                                    update_post_meta($vendor_order_id, '_commission_id', $vorder->commission_id);
+                                    // add order id with commission meta
+                                    update_post_meta($vorder->commission_id, '_commission_order_id', $vendor_order_id);
+                                    // for track BW vendor order-commission
+                                    update_post_meta($vendor_order_id, '_old_order_id', $vorder->order_id);
+                                    // prevent duplication
+                                    update_post_meta($corder->order_id, '_wcmp_vendor_specific_order_migrated', $vendor_specific_order_migrated);
+                                    do_action( 'wcmp_orders_migration_order_created', $vendor_order_id, $vorder );  
+                                } catch (Exception $exc) {
+                                    doProductVendorLOG("Error in order migration create order :".$exc->getMessage());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        update_option('wcmp_orders_table_migrated', true);
+        wp_clear_scheduled_hook('wcmp_orders_migration');
     }
 
 }

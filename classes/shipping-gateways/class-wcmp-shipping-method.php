@@ -1,7 +1,6 @@
 <?php
 class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
     public $default_option;
-
     public function __clone() {
         _doing_it_wrong( __FUNCTION__, __( 'Cloning this class could cause catastrophic disasters!', 'dc-woocommerce-multi-vendor' ), '3.0' );
     }
@@ -24,6 +23,7 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
         // additional hooks for post-calculations settings
         add_filter( 'woocommerce_shipping_chosen_method', array( $this, 'select_default_rate' ), 10, 2 );
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
+        add_filter( 'woocommerce_package_rates', array( $this, 'woocommerce_package_rates' ), 99, 2);
     }
 
 
@@ -125,7 +125,7 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
     */
     public function find_shipping_classes( $package ) {
         $found_shipping_classes = array();
-
+        
         foreach ( $package['contents'] as $item_id => $values ) {
             if ( $values['data']->needs_shipping() ) {
                 $found_class = $values['data']->get_shipping_class();
@@ -212,7 +212,7 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
                 continue;
             }
 
-            if ( $method['id'] == 'flat_rate' ) {
+            if ( $method['id'] == 'flat_rate' ) { 
                 $setting_cost = isset( $method['settings']['cost'] ) ? stripslashes_deep( $method['settings']['cost'] ) : '';
 
                 if ( '' !== $setting_cost ) {
@@ -227,10 +227,10 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
                 $shipping_classes = WC()->shipping->get_shipping_classes();
 
                 if ( ! empty( $shipping_classes ) ) {
-                    $found_shipping_classes = $this->find_shipping_classes( $package );
+                    $found_shipping_classes = $this->find_shipping_classes( $package );                   
                     $highest_class_cost     = 0;
                     $calculation_type = ! empty( $method['settings']['calculation_type'] ) ? $method['settings']['calculation_type'] : 'class';
-                    foreach ( $found_shipping_classes as $shipping_class => $products ) {
+                    foreach ( $found_shipping_classes as $shipping_class => $products ) {                       
                           // Also handles BW compatibility when slugs were used instead of ids
                         $shipping_class_term = get_term_by( 'slug', $shipping_class, 'product_shipping_class' );
                         $class_cost_string   = $shipping_class_term && $shipping_class_term->term_id
@@ -292,18 +292,8 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
         // send shipping rates to WooCommerce
         if( is_array( $rates ) && count( $rates ) > 0 ) {
             // cycle through rates to send and alter post-add settings
-            foreach( $rates as $key => $rate ) {
-                $this->add_rate( array(
-                    'id'        => $rate['id'],
-                    'label'     => apply_filters( 'wcmp_vendor_shipping_rate_label', $rate['label'], $rate ),
-                    'cost'      => $rate['cost'],
-                    'meta_data' => array( 'description' => $rate['description'] ),
-                    'package'   => $package,
-                ));
-
-                if( $rate['default'] == 'on' ) {
-                    $this->default = $rate['id'];
-                }
+            foreach( $rates as $key => $rate ) { 
+                $this->add_rate( apply_filters( 'wcmp_vendor_before_add_shipping_rate_data', $rate, $package ) );
             }
         }
     }
@@ -543,5 +533,18 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
             }
         }
         return false;
+    }
+    
+    public function woocommerce_package_rates( $rates, $package ){
+        if( !isset( $package['vendor_id'] ) ) return $rates;
+        if( !apply_filters( 'allow_supported_shipping_in_wcmp_vendor_shipping_package', true, $package ) && $rates ) {
+            foreach ( $rates as $key => $shipping_rate ) {
+                if( $shipping_rate->method_id != 'wcmp_vendor_shipping' ) {
+                    unset( $rates[$key] );
+                }
+            }
+            return $rates;
+        }
+        return $rates;
     }
 }

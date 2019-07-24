@@ -10,7 +10,11 @@
 Class WCMp_Admin_Dashboard {
 
     private $wcmp_vendor_order_page;
-
+    /** @var string Currenct Step */
+    private $step = '';
+    /** @var array Steps for the setup wizard */
+    private $steps = array();
+    private $vendor;
     function __construct() {
 
         // Add Shop Settings page 
@@ -51,6 +55,8 @@ Class WCMp_Admin_Dashboard {
         $this->vendor_updater_handler();
         // save shipping data
         $this->backend_shipping_handler();
+        // vendor store setup wizard
+        $this->vendor_setup_wizard();
     }
 
     function remove_admin_bar_links() {
@@ -78,6 +84,7 @@ Class WCMp_Admin_Dashboard {
                             $response = $WCMp->payment_gateway->payment_gateways[$payment_method]->process_payment($vendor, $commissions, 'manual');
                             if ($response) {
                                 if (isset($response['transaction_id'])) {
+                                    do_action( 'wcmp_after_vendor_withdrawal_transaction_success', $response['transaction_id'] );
                                     $redirect_url = wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_transaction_details_endpoint', 'vendor', 'general', 'transaction-details'), $response['transaction_id']);
                                     $notice = $this->get_wcmp_transaction_notice($response['transaction_id']);
                                     if (isset($notice['type'])) {
@@ -304,7 +311,7 @@ Class WCMp_Admin_Dashboard {
         if ($vendor) {
             if (!empty($customer_orders)) {
                 foreach ($customer_orders as $commission_id => $customer_order) {
-                    $order = new WC_Order($customer_order);
+                    $order = wc_get_order($customer_order);
                     $vendor_items = $vendor->get_vendor_items_from_order($customer_order, $vendor->term_id);
                     $item_names = $item_qty = array();
                     if (sizeof($vendor_items) > 0) {
@@ -435,10 +442,20 @@ Class WCMp_Admin_Dashboard {
                 // Only submit if the order has the product belonging to this vendor
                 $order = wc_get_order($_POST['order_id']);
                 $comment = esc_textarea($_POST['comment_text']);
-                $comment_id = $order->add_order_note($comment, 1);
+                $note_type = isset($_POST['note_type']) ? $_POST['note_type'] : '';
+		$is_customer_note = ( 'customer' === $note_type ) ? 1 : 0;
+                $comment_id = $order->add_order_note($comment, $is_customer_note, true);
+                if( $is_customer_note ){
+                    $email_note = WC()->mailer()->emails['WC_Email_Customer_Note'];
+                    $email_note->trigger(array(
+                        'order_id'      => $order,
+                        'customer_note' => $comment,
+                    ));
+                }
                 // update comment author & email
                 wp_update_comment(array('comment_ID' => $comment_id, 'comment_author' => $vendor->page_title, 'comment_author_email' => $vendor->user_data->user_email));
                 add_comment_meta($comment_id, '_vendor_id', $vendor->id);
+                wc_add_notice(__('Order note added', 'dc-woocommerce-multi-vendor'), 'success');
                 wp_redirect(esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders'), $order->get_id())));
                 die();
             }
@@ -473,11 +490,11 @@ Class WCMp_Admin_Dashboard {
         $vendor = get_wcmp_vendor($user->ID);
         $vendor = apply_filters('wcmp_vendor_dashboard_pages_vendor', $vendor);
         if ($vendor) {
-            $order_page = apply_filters('wcmp_vendor_view_order_page', true);
-            if ($order_page) {
-                $hook = add_menu_page(__('Orders', 'dc-woocommerce-multi-vendor'), __('Orders', 'dc-woocommerce-multi-vendor'), 'read', 'dc-vendor-orders', array($this, 'wcmp_vendor_orders_page'));
-                add_action("load-$hook", array($this, 'add_order_page_options'));
-            }
+//            $order_page = apply_filters('wcmp_vendor_view_order_page', true);
+//            if ($order_page) {
+//                $hook = add_menu_page(__('Orders', 'dc-woocommerce-multi-vendor'), __('Orders', 'dc-woocommerce-multi-vendor'), 'read', 'dc-vendor-orders', array($this, 'wcmp_vendor_orders_page'));
+//                add_action("load-$hook", array($this, 'add_order_page_options'));
+//            }
 
             $shipping_page = apply_filters('wcmp_vendor_view_shipping_page', true);
             if ($vendor->is_shipping_enable() && $shipping_page) {
@@ -1012,9 +1029,12 @@ Class WCMp_Admin_Dashboard {
                 $order_ids = isset($_POST['selected_orders']) ? $_POST['selected_orders'] : array();
                 if ($order_ids && count($order_ids) > 0) {
                     foreach ($order_ids as $order_id) {
-                        $vendor_orders = $wpdb->get_results("SELECT DISTINCT commission_id from `{$wpdb->prefix}wcmp_vendor_orders` where vendor_id = " . $vendor->id . " AND order_id = " . $order_id, ARRAY_A);
-                        $commission_id = $vendor_orders[0]['commission_id'];
-                        $order_data[$commission_id] = $order_id;
+                        $vorder = wcmp_get_order($order_id);
+                        if($vorder){
+                            $commission_id = $vorder->get_prop('_commission_id');
+                            $order_data[$commission_id] = $order_id;
+                        }
+                        
                     }
                     if (!empty($order_data)) {
                         $this->generate_csv($order_data, $vendor);
@@ -1580,23 +1600,14 @@ Class WCMp_Admin_Dashboard {
 
         public function wcmp_vendor_product_stats($args = array()) {
             global $WCMp;
-            $publish_products_count = 0;
-            $pending_products_count = 0;
-            $draft_products_count = 0;
-            $trashed_products_count = 0;
-
-            $user_id = get_current_user_id();
-
+            $publish_products_count = $pending_products_count = $draft_products_count = $trashed_products_count = 0;
+            $vendor = get_wcmp_vendor(get_current_user_id());
             $args = array('post_status' => array('publish', 'pending', 'draft', 'trash'));
-            $vendor = get_wcmp_vendor(absint($user_id));
             $product_stats = array();
-            $products = $vendor->get_products($args);
-            $product_stats['total_products'] = count($products);
-            foreach ($products as $key => $value) {
-                $product_id = $value->ID;
-                $product = wc_get_product($product_id);
-                $vendor = get_wcmp_product_vendors($product_id);
-                if (!empty($vendor) && $vendor->id == $user_id) {
+            if($vendor) :
+                $products = $vendor->get_products($args);
+                $product_stats['total_products'] = count($products);
+                foreach ($products as $key => $value) {
                     if ($value->post_status == 'publish')
                         $publish_products_count += 1;
                     if ($value->post_status == 'pending')
@@ -1607,17 +1618,15 @@ Class WCMp_Admin_Dashboard {
                         $trashed_products_count += 1;
                     }
                 }
-            }
+            endif;
             $product_stats['publish_products_count'] = $publish_products_count;
             $product_stats['pending_products_count'] = $pending_products_count;
             $product_stats['draft_products_count'] = $draft_products_count;
             $product_stats['trashed_products_count'] = $trashed_products_count;
-
             $product_stats['product_page_url'] = wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_products_endpoint', 'vendor', 'general', 'products'));
 
-// variables to send $product_page_url $publish_products_count $pending_products_count $trashed_products_count
-            //require_once(plugin_dir_path( __FILE__ ) . "wcmp_vendor_published_pending_trashed_products.php");
             $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_vendor_product_stats.php', $product_stats);
+            
         }
 
         public function wcmp_vendor_product_sales_report() {
@@ -1635,7 +1644,25 @@ Class WCMp_Admin_Dashboard {
             $start_date = isset($requestData['from_date']) ? $requestData['from_date'] : date('01-m-Y');
             $end_date = isset($requestData['to_date']) ? $requestData['to_date'] : date('t-m-Y');
             $transaction_details = $WCMp->transaction->get_transactions($vendor->term_id);
-            $unpaid_orders = get_wcmp_vendor_order_amount(array('commission_status' => 'unpaid'), $vendor->id);
+            //$unpaid_orders = get_wcmp_vendor_order_amount(array('commission_status' => 'unpaid'), $vendor->id);
+            $args = array(
+                'meta_query' => array(
+                    array(
+                        'key' => '_commission_vendor',
+                        'value' => absint($vendor->term_id),
+                        'compare' => '='
+                    ),
+                ),
+//                'date_query' => array(
+//                    array(
+//                        'after'     => $start_date,
+//                        'before'    => $end_date,
+//                        'inclusive' => true,
+//                    ),
+//                ),
+            );
+            $unpaid_commission_total = WCMp_Commission::get_commissions_total_data( $args, $vendor->id );
+
             $count = 0; // varible for counting 5 transaction details
             foreach ($transaction_details as $transaction_id => $details) {
                 $count++;
@@ -1649,7 +1676,7 @@ Class WCMp_Admin_Dashboard {
                 $total_amount = $total_amount + $details['total_amount'];
             }
             //print_r($total_amount);
-            $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_vendor_transaction_details.php', array('total_amount' => $unpaid_orders['total'], 'transaction_display_array' => $transaction_display_array));
+            $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_vendor_transaction_details.php', array('total_amount' => $unpaid_commission_total['total'], 'transaction_display_array' => $transaction_display_array));
         }
 
         public function wcmp_vendor_products_cust_qna() {
@@ -2158,6 +2185,483 @@ Class WCMp_Admin_Dashboard {
             return esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product')));
         }
         return $url;
+    }
+    
+    public function vendor_setup_wizard(){
+        global $WCMp;
+        if (filter_input(INPUT_GET, 'page') != 'vendor-store-setup' || !apply_filters('wcmp_vendor_store_setup_wizard_enabled', true)) {
+            return;
+        }
+     
+        $this->steps = $this->vendor_setup_wizard_steps();
+        $current_step = filter_input(INPUT_GET, 'step');
+        $this->step = $current_step ? sanitize_key($current_step) : current(array_keys($this->steps));
+        $this->vendor = get_current_vendor();
+        
+        // skip setup
+        if (filter_input(INPUT_GET, 'page') == 'vendor-store-setup' && filter_input(INPUT_GET, 'skip_setup') ) { 
+            update_user_meta( $this->vendor->id, '_vendor_skipped_setup_wizard', true );
+            wp_redirect( wcmp_get_vendor_dashboard_endpoint_url( 'dashboard' ) );
+            exit;
+        }
+        
+        $suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
+        wp_register_script('jquery-blockui', WC()->plugin_url() . '/assets/js/jquery-blockui/jquery.blockUI' . $suffix . '.js', array('jquery'), '2.70', true);
+        wp_register_script( 'jquery-tiptip', WC()->plugin_url() . '/assets/js/jquery-tiptip/jquery.tipTip' . $suffix . '.js', array( 'jquery' ), WC_VERSION, true );
+        wp_register_script( 'selectWoo', WC()->plugin_url() . '/assets/js/selectWoo/selectWoo.full' . $suffix . '.js', array( 'jquery' ), '1.0.0' );
+        wp_register_script('wc-enhanced-select', WC()->plugin_url() . '/assets/js/admin/wc-enhanced-select' . $suffix . '.js', array('jquery', 'selectWoo'), WC_VERSION);
+        wp_localize_script('wc-enhanced-select', 'wc_enhanced_select_params', array(
+            'i18n_no_matches' => _x('No matches found', 'enhanced select', 'dc-woocommerce-multi-vendor'),
+            'i18n_ajax_error' => _x('Loading failed', 'enhanced select', 'dc-woocommerce-multi-vendor'),
+            'i18n_input_too_short_1' => _x('Please enter 1 or more characters', 'enhanced select', 'dc-woocommerce-multi-vendor'),
+            'i18n_input_too_short_n' => _x('Please enter %qty% or more characters', 'enhanced select', 'dc-woocommerce-multi-vendor'),
+            'i18n_input_too_long_1' => _x('Please delete 1 character', 'enhanced select', 'dc-woocommerce-multi-vendor'),
+            'i18n_input_too_long_n' => _x('Please delete %qty% characters', 'enhanced select', 'dc-woocommerce-multi-vendor'),
+            'i18n_selection_too_long_1' => _x('You can only select 1 item', 'enhanced select', 'dc-woocommerce-multi-vendor'),
+            'i18n_selection_too_long_n' => _x('You can only select %qty% items', 'enhanced select', 'dc-woocommerce-multi-vendor'),
+            'i18n_load_more' => _x('Loading more results&hellip;', 'enhanced select', 'dc-woocommerce-multi-vendor'),
+            'i18n_searching' => _x('Searching&hellip;', 'enhanced select', 'dc-woocommerce-multi-vendor'),
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'search_products_nonce' => wp_create_nonce('search-products'),
+            'search_customers_nonce' => wp_create_nonce('search-customers'),
+        ));
+
+        wp_enqueue_style('woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css', array(), WC_VERSION);
+        wp_enqueue_style('wc-setup', WC()->plugin_url() . '/assets/css/wc-setup.css', array('dashicons', 'install'), WC_VERSION);
+        wp_register_script('wc-setup', WC()->plugin_url() . '/assets/js/admin/wc-setup' . $suffix . '.js', array('jquery', 'wc-enhanced-select', 'jquery-blockui', 'jquery-tiptip'), WC_VERSION);
+        wp_register_script('wcmp-setup', $WCMp->plugin_url . '/assets/admin/js/setup-wizard.js', array('wc-setup'), WC_VERSION);
+        wp_localize_script('wc-setup', 'wc_setup_params', array(
+            'locale_info' => json_encode(include( WC()->plugin_path() . '/i18n/locale-info.php' )),
+            'states'                  => WC()->countries->get_states(),
+        ));
+        
+        if (!empty($_POST['save_step']) && isset($this->steps[$this->step]['handler'])) {
+            call_user_func($this->steps[$this->step]['handler'], $this);
+        }
+        
+        ob_start();
+        $this->setup_wizard_header();
+        $this->setup_wizard_steps();
+        $this->setup_wizard_content();
+        $this->setup_wizard_footer();
+        exit();
+    }
+    
+    /**
+     * Get the URL for the next step's screen.
+     * @param string step   slug (default: current step)
+     * @return string       URL for next step if a next step exists.
+     *                      Admin URL if it's the last step.
+     *                      Empty string on failure.
+     * @since 2.7.7
+     */
+    public function get_next_step_link($step = '') {
+        if (!$step) {
+            $step = $this->step;
+        }
+
+        $keys = array_keys($this->steps);
+        if (end($keys) === $step) {
+            return admin_url();
+        }
+
+        $step_index = array_search($step, $keys);
+        if (false === $step_index) {
+            return '';
+        }
+
+        return add_query_arg('step', $keys[$step_index + 1]);
+    }
+    
+    public function vendor_setup_wizard_steps(){
+        $default_steps = array(
+            'introduction' => array(
+                'name' => __('Introduction', 'dc-woocommerce-multi-vendor'),
+                'view' => array($this, 'vendor_setup_introduction'),
+                'handler' => '',
+            ),
+            'store_setup' => array(
+                'name' => __('Store setup', 'dc-woocommerce-multi-vendor'),
+                'view' => array($this, 'vendor_store_setup'),
+                'handler' => array( $this, 'wcmp_setup_store_setup_save' ),
+            ),
+            'payment'     => array(
+                'name'    => __( 'Payment', 'woocommerce' ),
+                'view'    => array( $this, 'vendor_payment_setup' ),
+                'handler' => array( $this, 'wcmp_setup_payment_save' ),
+            ),
+            'next_steps'  => array(
+                'name'    => __( 'Ready!', 'woocommerce' ),
+                'view'    => array( $this, 'wcmp_store_setup_ready' ),
+                'handler' => '',
+            ),
+        );
+        return apply_filters('wcmp_vendor_setup_wizard_steps', $default_steps);
+    }
+    
+    /**
+     * Setup Wizard Header.
+     */
+    public function setup_wizard_header() {
+        global $WCMp;
+        ?>
+        <!DOCTYPE html>
+        <html <?php language_attributes(); ?>>
+            <head>
+                <meta name="viewport" content="width=device-width" />
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                <title>
+                    <?php 
+                    printf(
+                        __( '%s &rsaquo; Store Setup Wizard', 'dc-woocommerce-multi-vendor' ),
+                        wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES )
+                    );
+                    ?>
+                </title>
+                <?php wp_print_scripts('wc-setup'); ?>
+                <?php wp_print_scripts('wcmp-setup'); ?>
+                <?php do_action('admin_print_styles'); ?>
+                <?php do_action('wcmp_vendor_head'); ?>
+                <style type="text/css">
+                    .wc-setup-steps {
+                        justify-content: center;
+                    }
+                </style>
+            </head>
+            <body class="wcmp-vendor-wizard wc-setup wp-core-ui">
+                <h1 id="wc-logo">
+                    <a href="<?php echo apply_filters( 'wcmp_vendor_setup_wizard_site_logo_link', site_url(), get_current_user_id() ); ?>">
+                        <?php $site_logo = get_wcmp_vendor_settings('wcmp_dashboard_site_logo', 'vendor', 'dashboard') ? get_wcmp_vendor_settings('wcmp_dashboard_site_logo', 'vendor', 'dashboard') : '';
+                        if ($site_logo) { ?>
+                        <img src="<?php echo get_url_from_upload_field_value($site_logo); ?>" alt="<?php echo bloginfo(); ?>">
+                        <?php } else {
+                            echo bloginfo();
+                        } ?>
+                    </a>
+                </h1>
+        <?php
+    }
+
+    /**
+     * Output the steps.
+     */
+    public function setup_wizard_steps() {
+        $ouput_steps = $this->steps;
+        array_shift($ouput_steps);
+        ?>
+        <ol class="wc-setup-steps">
+            <?php foreach ($ouput_steps as $step_key => $step) : ?>
+                <li class="<?php
+                if ($step_key === $this->step) {
+                    echo 'active';
+                } elseif (array_search($this->step, array_keys($this->steps)) > array_search($step_key, array_keys($this->steps))) {
+                    echo 'done';
+                }
+                ?>"><?php echo esc_html($step['name']); ?></li>
+        <?php endforeach; ?>
+        </ol>
+        <?php
+    }
+
+    /**
+     * Output the content for the current step.
+     */
+    public function setup_wizard_content() {
+        echo '<div class="wc-setup-content">';
+        call_user_func($this->steps[$this->step]['view'], $this);
+        echo '</div>';
+    }
+    
+    /**
+     * Setup Wizard Footer.
+     */
+    public function setup_wizard_footer() {
+        do_action( 'wcmp_vendor_setup_wizard_footer', $this->step, $this->vendor );
+        ?>
+        </body>
+    </html>
+    <?php
+    }
+
+    /**
+     * Introduction step.
+     */
+    public function vendor_setup_introduction() {
+        $setup_wizard_introduction = get_wcmp_vendor_settings('setup_wizard_introduction');
+        if($setup_wizard_introduction){
+            echo htmlspecialchars_decode( wpautop( $setup_wizard_introduction ), ENT_QUOTES );
+        }else{
+        ?>
+        <h1><?php 
+        printf(
+            __( 'Welcome to the %s family!', 'dc-woocommerce-multi-vendor' ),
+            wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES )
+        );
+        ?></h1>
+        <p><?php _e('Thank you for being the part of us. This quick setup wizard will help you configure the basic store settings and you will have your marketplace ready in no time. <strong>It’s completely optional and shouldn’t take longer than five minutes.</strong>', 'dc-woocommerce-multi-vendor'); ?></p>
+        <p><?php esc_html_e("If you don't want to go through the wizard right now, you can skip and return to the dashboard. Come back anytime if you change your mind!", 'dc-woocommerce-multi-vendor'); ?></p>
+        <?php } ?>
+        <p class="wc-setup-actions step">
+            <a href="<?php echo esc_url($this->get_next_step_link()); ?>" class="button-primary button button-large button-next"><?php esc_html_e("Let's go!", 'dc-woocommerce-multi-vendor'); ?></a>
+            <a href="<?php echo wcmp_get_vendor_dashboard_endpoint_url( 'dashboard' ) . '?page=vendor-store-setup&skip_setup=1'; ?>" class="button button-large"><?php esc_html_e('Not right now', 'dc-woocommerce-multi-vendor'); ?></a>
+        </p>
+        <?php
+    }
+    
+    /**
+     * Store setup step.
+     */
+    public function vendor_store_setup() {
+        
+        $store_name     = ( $this->vendor->page_title ) ? $this->vendor->page_title : '';
+        $address        = ( $this->vendor->address_1 ) ? $this->vendor->address_1 : WC()->countries->get_base_address();
+        $address_2      = ( $this->vendor->address_2 ) ? $this->vendor->address_2 : WC()->countries->get_base_address_2();
+        $city           = ( $this->vendor->city ) ? $this->vendor->city : WC()->countries->get_base_city();
+        $state          = ( $this->vendor->state_code ) ? $this->vendor->state_code : WC()->countries->get_base_state();
+        $country        = ( $this->vendor->country_code ) ? $this->vendor->country_code : WC()->countries->get_base_country();
+        $postcode       = ( $this->vendor->postcode ) ? $this->vendor->postcode : WC()->countries->get_base_postcode();
+        $store_phone    = ( $this->vendor->phone ) ? $this->vendor->phone : '';
+        if ( empty( $country ) ) {
+            $user_location = WC_Geolocation::geolocate_ip();
+            $country       = $user_location['country'];
+            $state         = $user_location['state'];
+        }
+        $locale_info         = include WC()->plugin_path() . '/i18n/locale-info.php';
+        $currency_by_country = wp_list_pluck( $locale_info, 'currency_code' );
+        $current_offset = get_user_meta($this->vendor->id, 'gmt_offset', true);
+        $tzstring = get_user_meta($this->vendor->id, 'timezone_string', true);
+        // Remove old Etc mappings. Fallback to gmt_offset.
+        if (false !== strpos($tzstring, 'Etc/GMT')) {
+            $tzstring = '';
+        }
+
+        if (empty($tzstring)) { // Create a UTC+- zone if no timezone string exists
+            $check_zone_info = false;
+            if (0 == $current_offset) {
+                $tzstring = 'UTC+0';
+            } elseif ($current_offset < 0) {
+                $tzstring = 'UTC' . $current_offset;
+            } else {
+                $tzstring = 'UTC+' . $current_offset;
+            }
+        }
+        ?>
+        <!--h1><?php esc_html_e('Store Setup', 'dc-woocommerce-multi-vendor'); ?></h1-->
+        <form method="post" class="store-address-info">
+            <?php wp_nonce_field( 'wcmp-vendor-setup' ); ?>
+            <p class="store-setup"><?php esc_html_e( 'The following wizard will help you configure your store and get you started quickly.', 'woocommerce' ); ?></p>
+            
+            <div class="store-address-container">
+                
+                <label class="location-prompt" for="store_name"><?php esc_html_e('Store Name', 'dc-woocommerce-multi-vendor'); ?></label>
+                <input type="text" id="store_name" class="location-input" name="store_name" value="<?php echo esc_attr( $store_name ); ?>"  placeholder="<?php _e('Enter your Store Name here', 'dc-woocommerce-multi-vendor'); ?>" />
+                
+                <label for="store_country" class="location-prompt"><?php esc_html_e( 'Where is your store based?', 'woocommerce' ); ?></label>
+                <select id="store_country" name="store_country" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'woocommerce' ); ?>" class="location-input wc-enhanced-select dropdown">
+                <?php foreach ( WC()->countries->get_countries() as $code => $label ) : ?>
+                    <option <?php selected( $code, $country ); ?> value="<?php echo esc_attr( $code ); ?>"><?php echo esc_html( $label ); ?></option>
+                <?php endforeach; ?>
+                </select>
+
+                <label class="location-prompt" for="store_address_1"><?php esc_html_e( 'Address', 'woocommerce' ); ?></label>
+                <input type="text" id="store_address_1" class="location-input" name="store_address_1" value="<?php echo esc_attr( $address ); ?>" />
+
+                <label class="location-prompt" for="store_address_2"><?php esc_html_e( 'Address line 2', 'woocommerce' ); ?></label>
+                <input type="text" id="store_address_2" class="location-input" name="store_address_2" value="<?php echo esc_attr( $address_2 ); ?>" />
+
+                <div class="city-and-postcode">
+                    <div>
+                        <label class="location-prompt" for="store_city"><?php esc_html_e( 'City', 'woocommerce' ); ?></label>
+                        <input type="text" id="store_city" class="location-input" name="store_city" value="<?php echo esc_attr( $city ); ?>" />
+                    </div>
+                    <div class="store-state-container hidden">
+                        <label for="store_state" class="location-prompt">
+                                <?php esc_html_e( 'State', 'woocommerce' ); ?>
+                        </label>
+                        <select id="store_state" name="store_state" data-placeholder="<?php esc_attr_e( 'Choose a state&hellip;', 'woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'State', 'woocommerce' ); ?>" class="location-input wc-enhanced-select dropdown"></select>
+                    </div>
+                    <div>
+                        <label class="location-prompt" for="store_postcode"><?php esc_html_e( 'Postcode / ZIP', 'woocommerce' ); ?></label>
+                        <input type="text" id="store_postcode" class="location-input" name="store_postcode" value="<?php echo esc_attr( $postcode ); ?>" />
+                    </div>
+                </div>
+                <div class="city-and-postcode">
+                    <div>
+                        <label class="location-prompt" for="store_phone"><?php esc_html_e( 'Phone', 'dc-woocommerce-multi-vendor' ); ?></label>
+                        <input type="text" id="store_phone" class="location-input" name="store_phone" value="<?php echo esc_attr( $store_phone ); ?>" />
+                    </div>
+                    <div>
+                        <label class="location-prompt" for="timezone_string"><?php esc_html_e( 'Timezone', 'dc-woocommerce-multi-vendor' ); ?></label>
+                        <select id="timezone_string" name="timezone_string" class="location-input wc-enhanced-select dropdown" aria-describedby="timezone-description">
+                            <?php echo wp_timezone_choice($tzstring, get_user_locale()); ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                var wc_setup_currencies = JSON.parse( decodeURIComponent( '<?php echo rawurlencode( wp_json_encode( $currency_by_country ) ); ?>' ) );
+                var wc_base_state       = "<?php echo esc_js( $state ); ?>";
+            </script>
+            
+            <p class="wc-setup-actions step">
+                <input type="submit" class="button-primary button button-large button-next" value="<?php esc_attr_e('Continue', 'dc-woocommerce-multi-vendor'); ?>" name="save_step" />
+                <a href="<?php echo esc_url($this->get_next_step_link()); ?>" class="button button-large button-next"><?php esc_html_e('Skip this step', 'dc-woocommerce-multi-vendor'); ?></a>
+            </p>
+        </form>
+        <?php
+    }
+    
+    /**
+     * Save initial store settings.
+     */
+    public function wcmp_setup_store_setup_save(){
+        global $WCMp;
+        if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'wcmp-vendor-setup' ) ) return;
+
+        $storename      = isset( $_POST['store_name'] ) ? wc_clean( wp_unslash( $_POST['store_name'] ) ) : '';
+        $address_1      = isset( $_POST['store_address_1'] ) ? wc_clean( wp_unslash( $_POST['store_address_1'] ) ) : '';
+        $address_2      = isset( $_POST['store_address_2'] ) ? wc_clean( wp_unslash( $_POST['store_address_2'] ) ) : '';
+        $city           = isset( $_POST['store_city'] ) ? wc_clean( wp_unslash( $_POST['store_city'] ) ) : '';
+        $country        = isset( $_POST['store_country'] ) ? wc_clean( wp_unslash( $_POST['store_country'] ) ) : '';
+        $state          = isset( $_POST['store_state'] ) ? wc_clean( wp_unslash( $_POST['store_state'] ) ) : '';
+        $postcode       = isset( $_POST['store_postcode'] ) ? wc_clean( wp_unslash( $_POST['store_postcode'] ) ) : '';
+        $storephone     = isset( $_POST['store_phone'] ) ? wc_clean( wp_unslash( $_POST['store_phone'] ) ) : '';
+        $tzstring       = isset( $_POST['timezone_string'] ) ? wc_clean( wp_unslash( $_POST['timezone_string'] ) ) : '';
+
+        if ( $storename ) {
+            wp_update_term( $this->vendor->term_id, $WCMp->taxonomy->taxonomy_name, array('name' => $storename) );
+            update_user_meta( $this->vendor->id, '_vendor_page_title', $storename );
+        }
+        if ( $address_1 ) update_user_meta( $this->vendor->id, '_vendor_address_1', $address_1 );
+        if ( $address_2 ) update_user_meta( $this->vendor->id, '_vendor_address_2', $address_2 );
+        if ( $city ) update_user_meta( $this->vendor->id, '_vendor_city', $city );
+        if( $country ) {
+            $country_code = $country;
+            $country_data = WC()->countries->get_countries();
+            $country_name = ( isset($country_data[$country_code]) ) ? $country_data[$country_code] : $country_code; //To get country name by code
+            update_user_meta( $this->vendor->id, '_vendor_country', $country_name );
+            update_user_meta( $this->vendor->id, '_vendor_country_code', $country_code );
+        }
+        if ( $state ) {
+            $country_code = $country;
+            $state_code = $state;
+            $state_data = WC()->countries->get_states($country_code);
+            $state_name = ( isset($state_data[$state_code]) ) ? $state_data[$state_code] : $state_code; //to get State name by state code
+            update_user_meta( $this->vendor->id, '_vendor_state', $state_name );
+            update_user_meta( $this->vendor->id, '_vendor_state_code', $state_code );
+        }
+        if ( $postcode ) update_user_meta( $this->vendor->id, '_vendor_postcode', $postcode );
+        if ( $storephone ) update_user_meta( $this->vendor->id, '_vendor_phone', $storephone );
+        if ( $tzstring ) {
+            if ( !empty( $tzstring ) && preg_match('/^UTC[+-]/', $tzstring ) ) {
+                $gmt_offset = $tzstring;
+                $gmt_offset = preg_replace( '/UTC\+?/', '', $gmt_offset );
+                $tzstring = '';
+            } else {
+                $gmt_offset = 0;
+            }
+            update_user_meta( $this->vendor->id, 'timezone_string', $tzstring );
+            update_user_meta( $this->vendor->id, 'gmt_offset', $gmt_offset );
+        }
+        // set flag
+        update_user_meta( $this->vendor->id, '_vendor_is_completed_setup_wizard', true );
+        wp_safe_redirect( esc_url_raw( $this->get_next_step_link() ) );
+        exit;
+    }
+    
+    /**
+     * Payment setup step.
+     */
+    public function vendor_payment_setup() { 
+        $vendor_payment_mode = ( $this->vendor->payment_mode ) ? $this->vendor->payment_mode : '';
+        $available_gateways   = apply_filters( 'wcmp_vendor_setup_wizard_available_payment_gateways', get_wcmp_available_payment_gateways(), $this->vendor );
+        ?>
+        <h1><?php esc_html_e( 'Payment Method', 'dc-woocommerce-multi-vendor' ); ?></h1>
+        <form method="post" class="wc-wizard-payment-gateway-form">
+            <?php wp_nonce_field( 'wcmp-vendor-setup' ); ?>
+            <p>
+                <?php
+                printf(
+                    __( '%s offers follows payments for you.', 'dc-woocommerce-multi-vendor' ),
+                    wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES )
+                );
+                ?>
+            </p>
+         
+            <div class="product-type-container">
+                <label class="location-prompt" for="product_type">
+                        <?php esc_html_e( 'Choose Payment Method', 'dc-woocommerce-multi-vendor' ); ?>
+                </label>
+                <select id="vendor_payment_mode" name="vendor_payment_mode" class="location-input wc-enhanced-select dropdown">
+                <?php
+                foreach ( $available_gateways as $gateway_id => $gateway ) { ?>
+                    <option <?php selected( $gateway_id, $vendor_payment_mode ); ?> value="<?php echo esc_attr( $gateway_id ); ?>"><?php echo esc_html( $gateway ); ?></option>
+                <?php }
+                ?>
+                </select>
+            </div>
+            <p class="wc-setup-actions step">
+                <input type="submit" class="button-primary button button-large button-next" value="<?php esc_attr_e('Continue', 'dc-woocommerce-multi-vendor'); ?>" name="save_step" />
+                <a href="<?php echo esc_url($this->get_next_step_link()); ?>" class="button button-large button-next"><?php esc_html_e('Skip this step', 'dc-woocommerce-multi-vendor'); ?></a>
+            </p>
+        </form>
+        <?php
+    }
+    
+    /**
+     * Save initial payment settings.
+     */
+    public function wcmp_setup_payment_save(){
+        if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'wcmp-vendor-setup' ) ) return;
+
+        $payment_mode      = isset( $_POST['vendor_payment_mode'] ) ? wc_clean( wp_unslash( $_POST['vendor_payment_mode'] ) ) : '';
+        if ( $payment_mode ) update_user_meta( $this->vendor->id, '_vendor_payment_mode', $payment_mode );
+        wp_redirect( esc_url_raw( $this->get_next_step_link() ) );
+        exit;
+    }
+    
+    /**
+     * Final setup step.
+     */
+    public function wcmp_store_setup_ready() { 
+        ?>
+        <h1><?php esc_html_e( "You're ready to start selling!", 'woocommerce' ); ?></h1>
+
+        <ul class="wc-wizard-next-steps">
+            <li class="wc-wizard-next-step-item">
+                <div class="wc-wizard-next-step-description">
+                    <p class="next-step-heading"><?php esc_html_e( 'Next step', 'woocommerce' ); ?></p>
+                    <h3 class="next-step-description"><?php esc_html_e( 'Create some products', 'woocommerce' ); ?></h3>
+                    <p class="next-step-extra-info"><?php esc_html_e( "You're ready to add products to your store.", 'woocommerce' ); ?></p>
+                </div>
+                <div class="wc-wizard-next-step-action">
+                    <p class="wc-setup-actions step">
+                        <a class="button button-primary button-large" href="<?php echo apply_filters( 'wcmp_vendor_setup_wizard_ready_add_product_url', wcmp_get_vendor_dashboard_endpoint_url( get_wcmp_vendor_settings( 'wcmp_add_product_endpoint', 'vendor', 'general', 'add-product' ) ) ); ?>">
+                            <?php esc_html_e( 'Create a product', 'woocommerce' ); ?>
+                        </a>
+                    </p>
+                </div>
+            </li>
+            <li class="wc-wizard-additional-steps">
+                <div class="wc-wizard-next-step-description">
+                    <p class="next-step-heading"><?php esc_html_e( 'You can also:', 'woocommerce' ); ?></p>
+                </div>
+                <div class="wc-wizard-next-step-action">
+                    <p class="wc-setup-actions step">
+                        <a class="button button-large" href="<?php echo wcmp_get_vendor_dashboard_endpoint_url( 'dashboard' ); ?>">
+                            <?php esc_html_e( 'Visit Dashboard', 'woocommerce' ); ?>
+                        </a>
+                        <a class="button button-large" href="<?php echo wcmp_get_vendor_dashboard_endpoint_url( get_wcmp_vendor_settings( 'wcmp_vendor_billing_endpoint', 'vendor', 'general', 'vendor-billing' ) ); ?>">
+                            <?php esc_html_e( 'Payment Configure', 'dc-woocommerce-multi-vendor' ); ?>
+                        </a>
+                        <a class="button button-large" href="<?php echo wcmp_get_vendor_dashboard_endpoint_url( get_wcmp_vendor_settings( 'wcmp_store_settings_endpoint', 'vendor', 'general', 'storefront' ) ); ?>">
+                            <?php esc_html_e( 'Store Customize', 'dc-woocommerce-multi-vendor' ); ?>
+                        </a>
+                    </p>
+                </div>
+            </li>
+        </ul>
+        <?php
     }
 
 }

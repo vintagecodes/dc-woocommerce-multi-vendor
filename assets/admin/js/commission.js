@@ -1,4 +1,10 @@
 jQuery(document).ready(function($) {
+    $( '.wcmp-commission-amount a.edit_commission_amount' ).click( function( e ) {
+        e.preventDefault();
+        $('.commission-amount-view').toggle();
+        $('.commission-amount-edit').toggle();
+    });
+    
 	$('select.ajax_chosen_select_products_and_variations').ajaxChosen({
 			method: 	'GET',
 			url: 		ajaxurl,

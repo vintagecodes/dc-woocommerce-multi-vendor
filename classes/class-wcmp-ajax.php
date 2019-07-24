@@ -128,9 +128,19 @@ class WCMp_Ajax {
         add_action('wp_ajax_wcmp_list_a_product_by_name_or_gtin', array($this, 'wcmp_list_a_product_by_name_or_gtin'));
         add_action('wp_ajax_wcmp_set_classified_product_terms', array($this, 'wcmp_set_classified_product_terms'));
         //ajax call to get the product attributes
-        add_action( 'wp_ajax_wcmp_edit_product_attribute', array( $this, 'edit_product_attribute_callback' ) );
-        add_action( 'wp_ajax_wcmp_product_save_attributes', array( $this, 'save_product_attributes_callback' ) );
+        add_action('wp_ajax_wcmp_edit_product_attribute', array($this, 'edit_product_attribute_callback'));
+        add_action('wp_ajax_wcmp_product_save_attributes', array($this, 'save_product_attributes_callback'));
         
+        // Order Refund
+        add_action('wp_ajax_wcmp_do_refund', array(&$this, 'wcmp_do_refund'));
+        
+        add_action('wp_ajax_wcmp_json_search_downloadable_products_and_variations', array($this, 'wcmp_json_search_downloadable_products_and_variations'));
+        add_action('wp_ajax_wcmp_json_search_products_and_variations', array($this, 'wcmp_json_search_products_and_variations'));
+        add_action('wp_ajax_wcmp_grant_access_to_download', array($this, 'wcmp_grant_access_to_download'));
+        add_action('wp_ajax_wcmp_order_status_changed', array($this, 'wcmp_order_status_changed'));
+        
+        // ledger book
+        add_action('wp_ajax_wcmp_vendor_banking_ledger_list', array($this, 'wcmp_vendor_banking_ledger_list'));
     }
 
     /**
@@ -202,9 +212,23 @@ class WCMp_Ajax {
         $start_date = date('Y-m-d G:i:s', $_POST['start_date']);
         $end_date = date('Y-m-d G:i:s', $_POST['end_date']);
         $vendor = get_current_vendor();
-        $vendor_all_orders = $wpdb->get_results("SELECT DISTINCT order_id from `{$wpdb->prefix}wcmp_vendor_orders` where commission_id > 0 AND vendor_id = '" . $vendor->id . "' AND (`created` >= '" . $start_date . "' AND `created` <= '" . $end_date . "') and `is_trashed` != 1 ORDER BY `created` DESC", ARRAY_A);
-        $vendor_all_orders = apply_filters('wcmp_datatable_get_vendor_all_orders', $vendor_all_orders, $requestData, $_POST);
-        $vendor_all_orders = apply_filters('wcmp_datatable_get_vendor_all_orders_id', wp_list_pluck($vendor_all_orders, 'order_id'));
+        
+        $args = array(
+            'author' => $vendor->id,
+            'date_query' => array(
+                array(
+                    'after'     => $start_date,
+                    'before'    => $end_date,
+                    'inclusive' => true,
+                ),
+            )
+        );
+        $vendor_all_orders = apply_filters('wcmp_datatable_get_vendor_all_orders', wcmp_get_orders($args), $requestData, $_POST);
+
+        
+//        $vendor_all_orders = $wpdb->get_results("SELECT DISTINCT order_id from `{$wpdb->prefix}wcmp_vendor_orders` where commission_id > 0 AND vendor_id = '" . $vendor->id . "' AND (`created` >= '" . $start_date . "' AND `created` <= '" . $end_date . "') and `is_trashed` != 1 ORDER BY `created` DESC", ARRAY_A);
+//        $vendor_all_orders = apply_filters('wcmp_datatable_get_vendor_all_orders', $vendor_all_orders, $requestData, $_POST);
+//        $vendor_all_orders = apply_filters('wcmp_datatable_get_vendor_all_orders_id', wp_list_pluck($vendor_all_orders, 'order_id'));
         if (isset($requestData['order_status']) && $requestData['order_status'] != 'all' && $requestData['order_status'] != '') {
             foreach ($vendor_all_orders as $key => $value) {
                 if (wc_get_order($value)->get_status() != $requestData['order_status']) {
@@ -217,7 +241,9 @@ class WCMp_Ajax {
 
         foreach ($vendor_orders as $order_id) {
             $order = wc_get_order($order_id);
+            $vendor_order = wcmp_get_order($order_id);
             if ($order) {
+                if(in_array($order->get_status(), array('draft', 'trash'))) continue;
                 $actions = array();
                 $is_shipped = (array) get_post_meta($order->get_id(), 'dc_pv_shipped', true);
                 if (!in_array($vendor->id, $is_shipped)) {
@@ -263,7 +289,7 @@ class WCMp_Ajax {
                     'select_order' => '<input type="checkbox" class="select_' . $order->get_status() . '" name="selected_orders[' . $order->get_id() . ']" value="' . $order->get_id() . '" />',
                     'order_id' => $order->get_id(),
                     'order_date' => wcmp_date($order->get_date_created()),
-                    'vendor_earning' => wc_price(get_wcmp_vendor_order_amount(array('vendor_id' => $vendor->id, 'order_id' => $order->get_id()))['total']),
+                    'vendor_earning' => ($vendor_order->get_commission_total()) ? $vendor_order->get_commission_total() : '-',
                     'order_status' => esc_html(wc_get_order_status_name($order->get_status())), //ucfirst($order->get_status()),
                     'action' => apply_filters('wcmp_vendor_orders_row_action_html', $action_html, $actions)
                         ), $order);
@@ -391,7 +417,7 @@ class WCMp_Ajax {
         $response = array('status' => false);
         if ($duplicate_product && is_user_wcmp_vendor(get_current_user_id())) {
             // if Product title have Copy string
-            $title = str_replace(" (Copy)","",$parent_post->post_title);
+            $title = str_replace(" (Copy)", "", $parent_post->post_title);
             wp_update_post(array('ID' => $duplicate_product->get_id(), 'post_author' => get_current_vendor_id(), 'post_title' => $title));
             wp_set_object_terms($duplicate_product->get_id(), absint(get_current_vendor()->term_id), $WCMp->taxonomy->taxonomy_name);
 
@@ -541,11 +567,11 @@ class WCMp_Ajax {
                 <h2><?php echo __('Admin Message:', 'dc-woocommerce-multi-vendor'); ?> </h2>
                 <span> <?php echo $msg->post_title; ?> </span><br/>
                 <span class="mormaltext" style="font-weight:normal;"> <?php
-                    echo $short_content = substr(stripslashes(strip_tags($msg->post_content)), 0, 155);
-                    if (strlen(stripslashes(strip_tags($msg->post_content))) > 155) {
-                        echo '...';
-                    }
-                    ?> </span><br/>
+                echo $short_content = substr(stripslashes(strip_tags($msg->post_content)), 0, 155);
+                if (strlen(stripslashes(strip_tags($msg->post_content))) > 155) {
+                    echo '...';
+                }
+                ?> </span><br/>
                 <a href="<?php echo get_permalink(get_option('wcmp_product_vendor_messages_page_id')); ?>"><button><?php echo __('DETAILS', 'dc-woocommerce-multi-vendor'); ?></button></a>
                 <div class="clear"></div>
                 <a href="#" id="cross-admin" data-element = "<?php echo $msg->ID; ?>"  class="wcmp_cross wcmp_delate_message_dashboard"><i class="fa fa-times-circle"></i></a>
@@ -727,9 +753,10 @@ class WCMp_Ajax {
             if (!$vendor)
                 die('Invalid request');
             $order_data = array();
-            $customer_orders = $wpdb->get_results("SELECT DISTINCT commission_id from `{$wpdb->prefix}wcmp_vendor_orders` where vendor_id = " . $vendor->id . " AND order_id = " . $order_id, ARRAY_A);
-            if (!empty($customer_orders)) {
-                $commission_id = $customer_orders[0]['commission_id'];
+            $commission_id = get_post_meta( $order_id, '_commission_id', true );
+            //$customer_orders = $wpdb->get_results("SELECT DISTINCT commission_id from `{$wpdb->prefix}wcmp_vendor_orders` where vendor_id = " . $vendor->id . " AND order_id = " . $order_id, ARRAY_A);
+            if (!empty($commission_id)) {
+                //$commission_id = $customer_orders[0]['commission_id'];
                 $order_data[$commission_id] = $order_id;
                 $WCMp->vendor_dashboard->generate_csv($order_data, $vendor);
             }
@@ -799,78 +826,110 @@ class WCMp_Ajax {
      */
     function product_report_sort() {
         global $WCMp;
+        
+        $chart_arr = $html_chart = '';
+        $dropdown_selected = isset($_POST['sort_choosen']) ? $_POST['sort_choosen'] : '';
+        $total_sales_data = isset($_POST['total_sales_data']) ? $_POST['total_sales_data'] : array();
+        $arr_by_total_sales = $arr_by_admin_earning = $arr_by_vendor_earning = array();
 
-        $sort_choosen = isset($_POST['sort_choosen']) ? $_POST['sort_choosen'] : '';
-        $report_array = isset($_POST['report_array']) ? $_POST['report_array'] : array();
-        $report_bk = isset($_POST['report_bk']) ? $_POST['report_bk'] : array();
-        $max_total_sales = isset($_POST['max_total_sales']) ? $_POST['max_total_sales'] : 0;
-        $total_sales_sort = isset($_POST['total_sales_sort']) ? $_POST['total_sales_sort'] : array();
-        $admin_earning_sort = isset($_POST['admin_earning_sort']) ? $_POST['admin_earning_sort'] : array();
-        ;
+        if( $total_sales_data ){
+            foreach ( $total_sales_data as $key => $data ){
+                $arr_by_total_sales[$key]       = $data['total_sales'];
+                $arr_by_admin_earning[$key]     = $data['admin_earning'];
+                $arr_by_vendor_earning[$key]    = $data['vendor_earning'];
+            } 
 
-        $i = 0;
-        $max_value = 10;
-        $report_sort_arr = array();
-
-        if ($sort_choosen == 'total_sales_desc') {
-            arsort($total_sales_sort);
-            foreach ($total_sales_sort as $product_id => $value) {
-                if ($i++ < $max_value) {
-                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
-                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
-                }
-            }
-        } else if ($sort_choosen == 'total_sales_asc') {
-            asort($total_sales_sort);
-            foreach ($total_sales_sort as $product_id => $value) {
-                if ($i++ < $max_value) {
-                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
-                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
-                }
-            }
-        } else if ($sort_choosen == 'admin_earning_desc') {
-            arsort($admin_earning_sort);
-            foreach ($admin_earning_sort as $product_id => $value) {
-                if ($i++ < $max_value) {
-                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
-                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
-                }
-            }
-        } else if ($sort_choosen == 'admin_earning_asc') {
-            asort($admin_earning_sort);
-            foreach ($admin_earning_sort as $product_id => $value) {
-                if ($i++ < $max_value) {
-                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
-                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
-                }
+            if ($dropdown_selected == 'total_sales_desc') {
+                array_multisort($arr_by_total_sales, SORT_DESC, $total_sales_data);
+            } else if ($dropdown_selected == 'total_sales_asc') {
+                array_multisort($arr_by_total_sales, SORT_ASC, $total_sales_data);
+            } elseif ($dropdown_selected == 'admin_earning_desc') {
+                array_multisort($arr_by_admin_earning, SORT_DESC, $total_sales_data);
+            } elseif ($dropdown_selected == 'admin_earning_asc') {
+                array_multisort($arr_by_admin_earning, SORT_ASC, $total_sales_data);
+            } elseif($dropdown_selected == 'vendor_earning_desc') {
+                array_multisort($arr_by_vendor_earning, SORT_DESC, $total_sales_data);
+            } elseif($dropdown_selected == 'vendor_earning_asc') {
+                array_multisort($arr_by_vendor_earning, SORT_ASC, $total_sales_data);
             }
         }
+        
+        
+//        $sort_choosen = isset($_POST['sort_choosen']) ? $_POST['sort_choosen'] : '';
+//        $report_array = isset($_POST['report_array']) ? $_POST['report_array'] : array();
+//        $report_bk = isset($_POST['report_bk']) ? $_POST['report_bk'] : array();
+//        $max_total_sales = isset($_POST['max_total_sales']) ? $_POST['max_total_sales'] : 0;
+//        $total_sales_sort = isset($_POST['total_sales_sort']) ? $_POST['total_sales_sort'] : array();
+//        $admin_earning_sort = isset($_POST['admin_earning_sort']) ? $_POST['admin_earning_sort'] : array();
+//        ;
+//
+//        $i = 0;
+//        $max_value = 10;
+//        $report_sort_arr = array();
+//
+//        if ($sort_choosen == 'total_sales_desc') {
+//            arsort($total_sales_sort);
+//            foreach ($total_sales_sort as $product_id => $value) {
+//                if ($i++ < $max_value) {
+//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
+//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
+//                }
+//            }
+//        } else if ($sort_choosen == 'total_sales_asc') {
+//            asort($total_sales_sort);
+//            foreach ($total_sales_sort as $product_id => $value) {
+//                if ($i++ < $max_value) {
+//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
+//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
+//                }
+//            }
+//        } else if ($sort_choosen == 'admin_earning_desc') {
+//            arsort($admin_earning_sort);
+//            foreach ($admin_earning_sort as $product_id => $value) {
+//                if ($i++ < $max_value) {
+//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
+//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
+//                }
+//            }
+//        } else if ($sort_choosen == 'admin_earning_asc') {
+//            asort($admin_earning_sort);
+//            foreach ($admin_earning_sort as $product_id => $value) {
+//                if ($i++ < $max_value) {
+//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
+//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
+//                }
+//            }
+//        }
 
         $report_chart = $report_html = '';
 
-        if (sizeof($report_sort_arr) > 0) {
-            foreach ($report_sort_arr as $product_id => $sales_report) {
-                $width = ( $sales_report['total_sales'] > 0 ) ? ( round($sales_report['total_sales']) / round($max_total_sales) ) * 100 : 0;
-                $width2 = ( $sales_report['admin_earning'] > 0 ) ? ( round($sales_report['admin_earning']) / round($max_total_sales) ) * 100 : 0;
-
-                $product = new WC_Product($product_id);
-                $product_url = admin_url('post.php?post=' . $product_id . '&action=edit');
-
-                $report_chart .= '<tr><th><a href="' . $product_url . '">' . $product->get_title() . '</a></th>
-                    <td width="1%"><span>' . wc_price($sales_report['total_sales']) . '</span><span class="alt">' . wc_price($sales_report['admin_earning']) . '</span></td>
-                    <td class="bars">
-                        <span style="width:' . esc_attr($width) . '%">&nbsp;</span>
-                        <span class="alt" style="width:' . esc_attr($width2) . '%">&nbsp;</span>
-                    </td></tr>';
+        if (sizeof($total_sales_data) > 0) {
+            foreach ($total_sales_data as $product_id => $sales_report) {
+                $total_sales_width = ( $sales_report['total_sales'] > 0 ) ? round($sales_report['total_sales']) / round($sales_report['total_sales']) * 100 : 0;
+                $admin_earning_width = ( $sales_report['admin_earning'] > 0 ) ? ( $sales_report['admin_earning'] / round($sales_report['total_sales']) ) * 100 : 0;
+                $vendor_earning_width = ( $sales_report['vendor_earning'] > 0 ) ? ( $sales_report['vendor_earning'] / round($sales_report['total_sales']) ) * 100 : 0;
+                $product = wc_get_product($sales_report['product_id']);
+                if( $product ) {
+                    $product_url = admin_url('post.php?post=' . $product_id . '&action=edit');
+                    $report_chart .= '<tr><th><a href="' . $product_url . '">' . $product->get_title() . '</a></th>
+                                            <td width="1%"><span>' . wc_price($sales_report['total_sales']) . '</span><span class="alt">' . wc_price($sales_report['admin_earning']) . '</span><span class="alt">' . wc_price($sales_report['vendor_earning']) . '</span></td>
+                                            <td class="bars">
+                                                <span class="gross_bar" style="width:' . esc_attr($total_sales_width) . '%">&nbsp;</span>
+                                                <span class="admin_bar alt" style="width:' . esc_attr($admin_earning_width) . '%">&nbsp;</span>
+                                                <span class="vendor_bar alt" style="width:' . esc_attr($vendor_earning_width) . '%">&nbsp;</span>
+                                            </td></tr>';
+                }
             }
 
             $report_html = '
                 <h4>' . __("Sales and Earnings", 'dc-woocommerce-multi-vendor') . '</h4>
                 <div class="bar_indecator">
                     <div class="bar1">&nbsp;</div>
-                    <span class="">' . __("Gross Sales", 'dc-woocommerce-multi-vendor') . '</span>
+                    <span class="">' . __('Gross Sales', 'dc-woocommerce-multi-vendor') . '</span>
                     <div class="bar2">&nbsp;</div>
-                    <span class="">' . __("My Earnings", 'dc-woocommerce-multi-vendor') . '</span>
+                    <span class="">' . __('Admin Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+                    <div class="bar3">&nbsp;</div>
+                    <span class="">' . __('Vendor Earnings', 'dc-woocommerce-multi-vendor') . '</span>
                 </div>
                 <table class="bar_chart">
                     <thead>
@@ -908,9 +967,10 @@ class WCMp_Ajax {
     function search_product_data() {
         global $WCMp;
 
-        $product_id = $_POST['product_id'];
-        $start_date = $_POST['start_date'];
-        $end_date = $_POST['end_date'];
+        $product_id = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
+        $orders = isset($_POST['orders']) ? $_POST['orders'] : array();
+        $start_date = isset($_POST['start_date']) ? $_POST['start_date'] : '';
+        $end_date = isset($_POST['end_date']) ? $_POST['end_date'] : '';
 
         $report_chart = $report_html = '';
 
@@ -919,69 +979,96 @@ class WCMp_Ajax {
             $total_sales = $admin_earnings = array();
             $max_total_sales = 0;
 
-            $product_orders = get_wcmp_vendor_orders(array('product_id' => $product_id));
+            //$product_orders = get_wcmp_vendor_orders(array('product_id' => $product_id));
 
-            if (!empty($product_orders)) {
+            if (!empty($orders)) {
 
                 $gross_sales = $my_earning = $vendor_earning = 0;
-                foreach ($product_orders as $order_obj) {
-                    $order = new WC_Order($order_obj->order_id);
+                $pro_total = $vendor_total = array();
+                foreach ($orders as $order_obj) { 
+                    $order = wc_get_order( $order_obj['ID'] );
+                    if( $order ){
+                        if (strtotime($order->get_date_created()) > $start_date && strtotime($order->get_date_created()) < $end_date) {
+                            // Get date
+                            $date = date('Ym', strtotime($order->get_date_created()));
+                            $line_items = $order->get_items( 'line_item' );
+                            
+                            foreach ($line_items as $item_id => $item) {
+                                if( $product_id != $item->get_product_id() ) continue;
+                                $pro_total[$item->get_product_id()] = isset( $pro_total[$item->get_product_id()] ) ? $pro_total[$item->get_product_id()] + $item->get_subtotal() : $item->get_subtotal();
+                                $total_sales[$date]['total_sales'] = $pro_total[$item->get_product_id()];
+                                $meta_data = $item->get_meta_data();
+                                // get item commission
+                                foreach ( $meta_data as $meta ) {
+                                    if($meta->key == '_vendor_item_commission'){
+                                        $vendor_total[$item->get_product_id()] = isset( $vendor_total[$item->get_product_id()] ) ? $vendor_total[$item->get_product_id()] + floatval($meta->value) : floatval($meta->value);
+                                        $total_sales[$date]['vendor_earning'] = $vendor_total[$item->get_product_id()];
+                                    }
+                                }
+                                // admin part
+                                $total_sales[$date]['admin_earning'] = $total_sales[$date]['total_sales'] - $total_sales[$date]['vendor_earning'];
+                            
+                            }
+                            
+                            
 
-                    if (strtotime($order->get_date_created()) > $start_date && strtotime($order->get_date_created()) < $end_date) {
-                        // Get date
-                        $date = date('Ym', strtotime($order->get_date_created()));
-
-                        $item = new WC_Order_Item_Product($order_obj->order_item_id);
-                        $gross_sales += $item->get_subtotal();
-                        $total_sales[$date] = isset($total_sales[$date]) ? ( $total_sales[$date] + $item->get_subtotal() ) : $item->get_subtotal();
-                        $vendors_orders_amount = get_wcmp_vendor_order_amount(array('order_id' => $order->get_id(), 'product_id' => $order_obj->product_id));
-
-                        $vendor_earning = $vendors_orders_amount['commission_amount'];
-                        if ($vendor = get_wcmp_vendor(get_current_vendor_id()))
-                            $admin_earnings[$date] = isset($admin_earnings[$date]) ? ( $admin_earnings[$date] + $vendor_earning ) : $vendor_earning;
-                        else
-                            $admin_earnings[$date] = isset($admin_earnings[$date]) ? ( $admin_earnings[$date] + $item->get_subtotal() - $vendor_earning ) : $item->get_subtotal() - $vendor_earning;
-
-                        if ($total_sales[$date] > $max_total_sales)
-                            $max_total_sales = $total_sales[$date];
+//                            $item = new WC_Order_Item_Product($order_obj->order_item_id);
+//                            $gross_sales += $item->get_subtotal();
+//                            $total_sales[$date] = isset($total_sales[$date]) ? ( $total_sales[$date] + $item->get_subtotal() ) : $item->get_subtotal();
+//                            $vendors_orders_amount = get_wcmp_vendor_order_amount(array('order_id' => $order->get_id(), 'product_id' => $order_obj->product_id));
+//
+//                            $vendor_earning = $vendors_orders_amount['commission_amount'];
+//                            if ($vendor = get_wcmp_vendor(get_current_vendor_id()))
+//                                $admin_earnings[$date] = isset($admin_earnings[$date]) ? ( $admin_earnings[$date] + $vendor_earning ) : $vendor_earning;
+//                            else
+//                                $admin_earnings[$date] = isset($admin_earnings[$date]) ? ( $admin_earnings[$date] + $item->get_subtotal() - $vendor_earning ) : $item->get_subtotal() - $vendor_earning;
+//
+//                            if ($total_sales[$date] > $max_total_sales)
+//                                $max_total_sales = $total_sales[$date];
+                        }
                     }
+
                 }
             }
 
-
             if (sizeof($total_sales) > 0) {
-                foreach ($total_sales as $date => $sales) {
-                    $width = ( $sales > 0 ) ? ( round($sales) / round($max_total_sales) ) * 100 : 0;
-                    $width2 = ( $admin_earnings[$date] > 0 ) ? ( round($admin_earnings[$date]) / round($max_total_sales) ) * 100 : 0;
+                foreach ($total_sales as $date => $sales_report) {
+                    $total_sales_width = ( $sales_report['total_sales'] > 0 ) ? round($sales_report['total_sales']) / round($sales_report['total_sales']) * 100 : 0;
+                    $admin_earning_width = ( $sales_report['admin_earning'] > 0 ) ? ( $sales_report['admin_earning'] / round($sales_report['total_sales']) ) * 100 : 0;
+                    $vendor_earning_width = ( $sales_report['vendor_earning'] > 0 ) ? ( $sales_report['vendor_earning'] / round($sales_report['total_sales']) ) * 100 : 0;
+                    $product = wc_get_product($product_id);
 
-                    $report_chart .= '<tr><th>' . date_i18n('F', strtotime($date . '01')) . '</th>
-                        <td width="1%"><span>' . wc_price($sales) . '</span><span class="alt">' . wc_price($admin_earnings[$date]) . '</span></td>
-                        <td class="bars">
-                            <span style="width:' . esc_attr($width) . '%">&nbsp;</span>
-                            <span class="alt" style="width:' . esc_attr($width2) . '%">&nbsp;</span>
-                        </td></tr>';
+                    $report_chart .= '<tr><th>' .date_i18n('F', strtotime($date . '01')). '</th>
+                                            <td width="1%"><span>' . wc_price($sales_report['total_sales']) . '</span><span class="alt">' . wc_price($sales_report['admin_earning']) . '</span><span class="alt">' . wc_price($sales_report['vendor_earning']) . '</span></td>
+                                            <td class="bars">
+                                                <span class="gross_bar" style="width:' . esc_attr($total_sales_width) . '%">&nbsp;</span>
+                                                <span class="admin_bar alt" style="width:' . esc_attr($admin_earning_width) . '%">&nbsp;</span>
+                                                <span class="vendor_bar alt" style="width:' . esc_attr($vendor_earning_width) . '%">&nbsp;</span>
+                                            </td></tr>';
                 }
 
                 $report_html = '
-                    <h4>' . __("Sales and Earnings", 'dc-woocommerce-multi-vendor') . '</h4>
-                    <div class="bar_indecator">
-                        <div class="bar1">&nbsp;</div>
-                        <span class="">' . __("Gross Sales", 'dc-woocommerce-multi-vendor') . '</span>
-                        <div class="bar2">&nbsp;</div>
-                        <span class="">' . __("My Earnings", 'dc-woocommerce-multi-vendor') . '</span>
-                    </div>
-                    <table class="bar_chart">
-                        <thead>
-                            <tr>
-                                <th>' . __("Month", 'dc-woocommerce-multi-vendor') . '</th>
-                                <th colspan="2">' . __("Sales Report", 'dc-woocommerce-multi-vendor') . '</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ' . $report_chart . '
-                        </tbody>
-                    </table>
-                ';
+					<h4>' . __("Sales and Earnings", 'dc-woocommerce-multi-vendor') . '</h4>
+					<div class="bar_indecator">
+						<div class="bar1">&nbsp;</div>
+						<span class="">' . __('Gross Sales', 'dc-woocommerce-multi-vendor') . '</span>
+						<div class="bar2">&nbsp;</div>
+						<span class="">' . __('Admin Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+                                                <div class="bar3">&nbsp;</div>
+						<span class="">' . __('Vendor Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+					</div>
+					<table class="bar_chart">
+						<thead>
+							<tr>
+								<th>' . __("Month", 'dc-woocommerce-multi-vendor') . '</th>
+								<th colspan="2">' . __("Sales Report", 'dc-woocommerce-multi-vendor') . '</th>
+							</tr>
+						</thead>
+						<tbody>
+							' . $report_chart . '
+						</tbody>
+					</table>
+				';
             } else {
                 $report_html = '<tr><td colspan="3">' . __('This product was not sold in the given period.', 'dc-woocommerce-multi-vendor') . '</td></tr>';
             }
@@ -1018,7 +1105,43 @@ class WCMp_Ajax {
             }
         }
 
-        if ($vendor_id && empty($products)) {
+        $args = apply_filters('wcmp_report_admin_vendor_tab_query_args', array(
+            'post_type' => 'shop_order',
+            'posts_per_page' => -1,
+            'author' => $vendor_id,
+            'post_status' => array('wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed'),
+            'meta_query' => array(
+                array(
+                    'key' => '_commissions_processed',
+                    'value' => 'yes',
+                    'compare' => '='
+                ),
+                array(
+                    'key' => '_vendor_id',
+                    'value' => $vendor_id,
+                    'compare' => '='
+                )
+            ),
+            'date_query' => array(
+                'inclusive' => true,
+                'after' => array(
+                    'year' => date('Y', $start_date),
+                    'month' => date('n', $start_date),
+                    'day' => date('j', $start_date),
+                ),
+                'before' => array(
+                    'year' => date('Y', $end_date),
+                    'month' => date('n', $end_date),
+                    'day' => date('j', $end_date),
+                ),
+            )
+        ) );
+
+        $qry = new WP_Query($args);
+
+        $orders = apply_filters('wcmp_filter_orders_report_vendor', $qry->get_posts());
+        
+        if ( ($vendor_id && empty($products) ) || empty($orders)) {
             $no_vendor = '<h4>' . __("Sales and Earnings", 'dc-woocommerce-multi-vendor') . '</h4>
             <table class="bar_chart">
                 <thead>
@@ -1036,88 +1159,62 @@ class WCMp_Ajax {
             die;
         }
 
-        $args = array(
-            'post_type' => 'shop_order',
-            'posts_per_page' => -1,
-            'post_status' => array('wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed'),
-            'meta_query' => array(
-                array(
-                    'key' => '_commissions_processed',
-                    'value' => 'yes',
-                    'compare' => '='
-                )
-            ),
-            'date_query' => array(
-                'inclusive' => true,
-                'after' => array(
-                    'year' => date('Y', $start_date),
-                    'month' => date('n', $start_date),
-                    'day' => date('j', $start_date),
-                ),
-                'before' => array(
-                    'year' => date('Y', $end_date),
-                    'month' => date('n', $end_date),
-                    'day' => date('j', $end_date),
-                ),
-            )
-        );
-
-        $qry = new WP_Query($args);
-
-        $orders = apply_filters('wcmp_filter_orders_report_vendor', $qry->get_posts());
-
         if (!empty($orders)) {
 
             $total_sales = $admin_earning = array();
             $max_total_sales = 0;
 
             foreach ($orders as $order_obj) {
-                $order = new WC_Order($order_obj->ID);
-                $vendors_orders = get_wcmp_vendor_orders(array('order_id' => $order->get_id()));
-                $vendors_orders_amount = get_wcmp_vendor_order_amount(array('order_id' => $order->get_id()), $vendor_id);
-                $current_vendor_orders = wp_list_filter($vendors_orders, array('vendor_id' => $vendor_id));
-                $gross_sales += $vendors_orders_amount['total'] - $vendors_orders_amount['commission_amount'];
-                $vendor_earning += $vendors_orders_amount['total'];
+                try {
+                    $order = wc_get_order($order_obj->ID);
+                    if ($order) :
+                        $vendor_order = wcmp_get_order($order->get_id());
+                        $gross_sales += $order->get_total( 'edit' );
+                        $vendor_earning += $vendor_order->get_commission_total('edit');
+                        // Get date
+                        $date = date('Ym', strtotime($order->get_date_created()));
+                        // Set values
+                        $total_sales[$date]['total_sales'] = $gross_sales;
+                        $total_sales[$date]['vendor_earning'] = $vendor_earning;
+                        $total_sales[$date]['admin_earning'] = $gross_sales - $vendor_earning;
+                        
+                    endif;
+                } catch (Exception $ex) {
 
-                foreach ($current_vendor_orders as $key => $vendor_order) {
-                    $item = new WC_Order_Item_Product($vendor_order->order_item_id);
-                    $gross_sales += $item->get_subtotal();
                 }
-                // Get date
-                $date = date('Ym', strtotime($order->get_date_created()));
-
-                // Set values
-                $total_sales[$date] = $gross_sales;
-                $admin_earning[$date] = $gross_sales - $vendor_earning;
-
-                if ($total_sales[$date] > $max_total_sales)
-                    $max_total_sales = $total_sales[$date];
             }
+            
 
             $report_chart = $report_html = '';
             if (count($total_sales) > 0) {
                 foreach ($total_sales as $date => $sales) {
-                    $width = ( $sales > 0 ) ? ( round($sales) / round($max_total_sales) ) * 100 : 0;
-                    $width2 = ( $admin_earning[$date] > 0 ) ? ( round($admin_earning[$date]) / round($max_total_sales) ) * 100 : 0;
+                    $total_sales_width = ( $sales > 0 ) ? ( round($sales['total_sales']) / round( $sales['total_sales'] ) ) * 100 : 0;
+                    $admin_earning_width = ( $sales['admin_earning'] > 0 ) ? ( $sales['admin_earning'] / round($sales['total_sales']) ) * 100 : 0;
+                    $vendor_earning_width = ( $sales['vendor_earning'] > 0 ) ? ( $sales['vendor_earning'] / round($sales['total_sales']) ) * 100 : 0;
 
-                    $orders_link = admin_url('edit.php?s&post_status=all&post_type=shop_order&action=-1&s=' . urlencode(implode(' ', $chosen_product_titles)) . '&m=' . date('Ym', strtotime($date . '01')) . '&shop_order_status=' . implode(",", apply_filters('woocommerce_reports_order_statuses', array('completed', 'processing', 'on-hold'))));
-                    $orders_link = apply_filters('woocommerce_reports_order_link', $orders_link, $chosen_product_ids, $chosen_product_titles);
+                    $orders_link = admin_url('edit.php?s&post_status=all&post_type=shop_order&action=-1&m=' . date('Ym', strtotime($date . '01')) . '&shop_order_status=' . implode(",", apply_filters('woocommerce_reports_order_statuses', array('completed', 'processing', 'on-hold'))));
+                    $orders_link = apply_filters('woocommerce_reports_order_link', $orders_link, $chosen_product_ids );
 
                     $report_chart .= '<tr><th><a href="' . esc_url($orders_link) . '">' . date_i18n('F', strtotime($date . '01')) . '</a></th>
-                        <td width="1%"><span>' . wc_price($sales) . '</span><span class="alt">' . wc_price($admin_earning[$date]) . '</span></td>
+                        <td class="sales_prices" width="1%"><span>' . wc_price($sales['total_sales']) . '</span>'
+                            . '<span class="alt">' . wc_price($sales['admin_earning']) . '</span>'
+                            . '<span class="alt">' . wc_price($sales['vendor_earning']) . '</span></td>
                         <td class="bars">
-                            <span class="main" style="width:' . esc_attr($width) . '%">&nbsp;</span>
-                            <span class="alt" style="width:' . esc_attr($width2) . '%">&nbsp;</span>
+                            <span class="gross_bar main" style="width:' . esc_attr($total_sales_width) . '%">&nbsp;</span>
+                            <span class="admin_bar alt" style="width:' . esc_attr($admin_earning_width) . '%">&nbsp;</span>
+                            <span class="vendor_bar alt" style="width:' . esc_attr($vendor_earning_width) . '%">&nbsp;</span>
                         </td></tr>';
                 }
 
                 $report_html = '
-                    <h4>' . $vendor_title . '</h4>
+                    <h4>' . $vendor->page_title . '</h4>
                     <div class="bar_indecator">
                         <div class="bar1">&nbsp;</div>
-                        <span class="">' . __("Gross Sales", 'dc-woocommerce-multi-vendor') . '</span>
+                        <span class="">' . __('Gross Sales', 'dc-woocommerce-multi-vendor') . '</span>
                         <div class="bar2">&nbsp;</div>
-                        <span class="">' . __("My Earnings", 'dc-woocommerce-multi-vendor') . '</span>
+                        <span class="">' . __('Admin Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+                        <div class="bar3">&nbsp;</div>
+                        <span class="">' . __('Vendor Earnings', 'dc-woocommerce-multi-vendor') . '</span>
                     </div>
                     <table class="bar_chart">
                         <thead>
@@ -1146,66 +1243,50 @@ class WCMp_Ajax {
      */
     function vendor_report_sort() {
         global $WCMp;
-
+        $chart_arr = $html_chart = '';
         $dropdown_selected = isset($_POST['sort_choosen']) ? $_POST['sort_choosen'] : '';
-        $vendor_report = isset($_POST['report_array']) ? $_POST['report_array'] : array();
-        $report_bk = isset($_POST['report_bk']) ? $_POST['report_bk'] : array();
-        $max_total_sales = isset($_POST['max_total_sales']) ? $_POST['max_total_sales'] : 0;
-        $total_sales_sort = isset($_POST['total_sales_sort']) ? $_POST['total_sales_sort'] : array();
-        $admin_earning_sort = isset($_POST['admin_earning_sort']) ? $_POST['admin_earning_sort'] : array();
-        $report_sort_arr = array();
-        $chart_arr = '';
-        $i = 0;
-        $max_value = 10;
+        $total_sales_data = isset($_POST['total_sales_data']) ? $_POST['total_sales_data'] : array();
+        $arr_by_total_sales = $arr_by_admin_earning = $arr_by_vendor_earning = array();
+        
+        if( $total_sales_data ){
+            foreach ( $total_sales_data as $key => $data ){
+                $arr_by_total_sales[$key]       = $data['total_sales'];
+                $arr_by_admin_earning[$key]     = $data['admin_earning'];
+                $arr_by_vendor_earning[$key]    = $data['vendor_earning'];
+            } 
 
-        if ($dropdown_selected == 'total_sales_desc') {
-            arsort($total_sales_sort);
-            foreach ($total_sales_sort as $key => $value) {
-                if ($i++ < $max_value) {
-                    $report_sort_arr[$key]['total_sales'] = $report_bk[$key]['total_sales'];
-                    $report_sort_arr[$key]['admin_earning'] = $report_bk[$key]['admin_earning'];
-                }
+            if ($dropdown_selected == 'total_sales_desc') {
+                array_multisort($arr_by_total_sales, SORT_DESC, $total_sales_data);
+            } else if ($dropdown_selected == 'total_sales_asc') {
+                array_multisort($arr_by_total_sales, SORT_ASC, $total_sales_data);
+            } elseif ($dropdown_selected == 'admin_earning_desc') {
+                array_multisort($arr_by_admin_earning, SORT_DESC, $total_sales_data);
+            } elseif ($dropdown_selected == 'admin_earning_asc') {
+                array_multisort($arr_by_admin_earning, SORT_ASC, $total_sales_data);
+            } elseif($dropdown_selected == 'vendor_earning_desc') {
+                array_multisort($arr_by_vendor_earning, SORT_DESC, $total_sales_data);
+            } elseif($dropdown_selected == 'vendor_earning_asc') {
+                array_multisort($arr_by_vendor_earning, SORT_ASC, $total_sales_data);
             }
-        } else if ($dropdown_selected == 'total_sales_asc') {
-            asort($total_sales_sort);
-            foreach ($total_sales_sort as $key => $value) {
-                if ($i++ < $max_value) {
-                    $report_sort_arr[$key]['total_sales'] = $report_bk[$key]['total_sales'];
-                    $report_sort_arr[$key]['admin_earning'] = $report_bk[$key]['admin_earning'];
+            
+            foreach ($total_sales_data as $vendor_id => $report) {
+                $vendor = get_wcmp_vendor( $report['vendor_id'] );
+                if( $vendor ){
+                $total_sales_width = ( $report['total_sales'] > 0 ) ? round($report['total_sales']) / round($report['total_sales']) * 100 : 0;
+                $admin_earning_width = ( $report['admin_earning'] > 0 ) ? ( $report['admin_earning'] / round($report['total_sales']) ) * 100 : 0;
+                $vendor_earning_width = ( $report['vendor_earning'] > 0 ) ? ( $report['vendor_earning'] / round($report['total_sales']) ) * 100 : 0;
+                $chart_arr .= '<tr><th><a href="user-edit.php?user_id=' . $vendor_id . '">' . $vendor->page_title . '</a></th>
+					<td class="sales_prices" width="1%">
+                                            <span>' . wc_price($report['total_sales']) . '</span>'
+                                            . '<span class="alt">' . wc_price($report['admin_earning']) . '</span>'
+                                            . '<span class="alt">' . wc_price($report['vendor_earning']) . '</span>
+                                        </td>
+					<td class="bars">
+						<span class="gross_bar" style="width:' . esc_attr($total_sales_width) . '%">&nbsp;</span>
+						<span class="admin_bar alt" style="width:' . esc_attr($admin_earning_width) . '%">&nbsp;</span>
+                                                <span class="vendor_bar alt" style="width:' . esc_attr($vendor_earning_width) . '%">&nbsp;</span>
+					</td></tr>';
                 }
-            }
-        } else if ($dropdown_selected == 'admin_earning_desc') {
-            arsort($admin_earning_sort);
-            foreach ($admin_earning_sort as $key => $value) {
-                if ($i++ < $max_value) {
-                    $report_sort_arr[$key]['total_sales'] = $report_bk[$key]['total_sales'];
-                    $report_sort_arr[$key]['admin_earning'] = $report_bk[$key]['admin_earning'];
-                }
-            }
-        } else if ($dropdown_selected == 'admin_earning_asc') {
-            asort($admin_earning_sort);
-            foreach ($admin_earning_sort as $key => $value) {
-                if ($i++ < $max_value) {
-                    $report_sort_arr[$key]['total_sales'] = $report_bk[$key]['total_sales'];
-                    $report_sort_arr[$key]['admin_earning'] = $report_bk[$key]['admin_earning'];
-                }
-            }
-        }
-
-        if (sizeof($report_sort_arr) > 0) {
-            foreach ($report_sort_arr as $vendor_id => $sales_report) {
-                $total_sales_width = ( $sales_report['total_sales'] > 0 ) ? $sales_report['total_sales'] / round($max_total_sales) * 100 : 0;
-                $admin_earning_width = ( $sales_report['admin_earning'] > 0 ) ? ( $sales_report['admin_earning'] / round($max_total_sales) ) * 100 : 0;
-
-                $user = get_userdata($vendor_id);
-                $user_name = $user->data->display_name;
-
-                $chart_arr .= '<tr><th><a href="user-edit.php?user_id=' . $vendor_id . '">' . $user_name . '</a></th>
-                <td width="1%"><span>' . wc_price($sales_report['total_sales']) . '</span><span class="alt">' . wc_price($sales_report['admin_earning']) . '</span></td>
-                <td class="bars">
-                    <span class="main" style="width:' . esc_attr($total_sales_width) . '%">&nbsp;</span>
-                    <span class="alt" style="width:' . esc_attr($admin_earning_width) . '%">&nbsp;</span>
-                </td></tr>';
             }
 
             $html_chart = '
@@ -1244,16 +1325,33 @@ class WCMp_Ajax {
         global $WCMp;
         $transaction_id = $_POST['trans_id'];
         $vendor_id = $_POST['vendor_id'];
+        $vendor = get_wcmp_vendor_by_term( $vendor_id );
+        //if()
         update_post_meta($transaction_id, 'paid_date', date("Y-m-d H:i:s"));
         $commission_detail = get_post_meta($transaction_id, 'commission_detail', true);
         if ($commission_detail && is_array($commission_detail)) {
             foreach ($commission_detail as $commission_id) {
                 wcmp_paid_commission_status($commission_id);
+                $withdrawal_total = WCMp_Commission::commission_totals($commission_id, 'edit');
+                $order_id = get_post_meta( $commission_id, '_commission_order_id', true );
+                $data = array(
+                    'vendor_id'     => $vendor->id,
+                    'order_id'      => $order_id,
+                    'ref_id'        => $transaction_id,
+                    'ref_type'      => 'withdrawal',
+                    'ref_info'      => sprintf(__('Withdrawal generated for Commission &ndash; #%s', 'dc-woocommerce-multi-vendor'), $commission_id),
+                    'ref_status'    => 'completed',
+                    'ref_updated'   => date('Y-m-d H:i:s', current_time('timestamp')),
+                    'debit'        => $withdrawal_total,
+                );
+                $data_store = $WCMp->ledger->load_ledger_data_store();
+                $ledger_id = $data_store->create($data);
             }
             $email_admin = WC()->mailer()->emails['WC_Email_Vendor_Commission_Transactions'];
             $email_admin->trigger($transaction_id, $vendor_id);
             update_post_meta($transaction_id, '_dismiss_to_do_list', 'true');
             wp_update_post(array('ID' => $transaction_id, 'post_status' => 'wcmp_completed'));
+            do_action( 'wcmp_todo_done_pending_transaction', $transaction_id, $vendor );
         }
         die;
     }
@@ -1705,33 +1803,33 @@ class WCMp_Ajax {
                         wp_trash_post($id);
                     }
                     $notices[] = array(
-                        'message' => ((count($filterActionData['selected_products']) > 1) ? sprintf( __( '%s products', 'dc-woocommerce-multi-vendor' ), count($filterActionData['selected_products'])) : sprintf( __( '%s product', 'dc-woocommerce-multi-vendor' ), count($filterActionData['selected_products']))) .' '. __( 'moved to the Trash.', 'dc-woocommerce-multi-vendor' ),
+                        'message' => ((count($filterActionData['selected_products']) > 1) ? sprintf(__('%s products', 'dc-woocommerce-multi-vendor'), count($filterActionData['selected_products'])) : sprintf(__('%s product', 'dc-woocommerce-multi-vendor'), count($filterActionData['selected_products']))) . ' ' . __('moved to the Trash.', 'dc-woocommerce-multi-vendor'),
                         'type' => 'success'
-                        );
+                    );
                 } elseif ($requestData['bulk_action'] === 'untrash') {
                     // Untrash products
                     foreach ($filterActionData['selected_products'] as $id) {
                         wp_untrash_post($id);
                     }
                     $notices[] = array(
-                        'message' => ((count($filterActionData['selected_products']) > 1) ? sprintf( __( '%s products', 'dc-woocommerce-multi-vendor' ), count($filterActionData['selected_products'])) : sprintf( __( '%s product', 'dc-woocommerce-multi-vendor' ), count($filterActionData['selected_products']))) .' '. __( 'restored from the Trash.', 'dc-woocommerce-multi-vendor' ),
+                        'message' => ((count($filterActionData['selected_products']) > 1) ? sprintf(__('%s products', 'dc-woocommerce-multi-vendor'), count($filterActionData['selected_products'])) : sprintf(__('%s product', 'dc-woocommerce-multi-vendor'), count($filterActionData['selected_products']))) . ' ' . __('restored from the Trash.', 'dc-woocommerce-multi-vendor'),
                         'type' => 'success'
-                        );
+                    );
                 } elseif ($requestData['bulk_action'] === 'delete') {
-                    if(current_user_can('delete_published_products')) {
+                    if (current_user_can('delete_published_products')) {
                         // delete products
                         foreach ($filterActionData['selected_products'] as $id) {
                             wp_delete_post($id);
                         }
                         $notices[] = array(
-                            'message' => ((count($filterActionData['selected_products']) > 1) ? sprintf( __( '%s products', 'dc-woocommerce-multi-vendor' ), count($filterActionData['selected_products'])) : sprintf( __( '%s product', 'dc-woocommerce-multi-vendor' ), count($filterActionData['selected_products']))) .' '. __( 'deleted from the Trash.', 'dc-woocommerce-multi-vendor' ),
+                            'message' => ((count($filterActionData['selected_products']) > 1) ? sprintf(__('%s products', 'dc-woocommerce-multi-vendor'), count($filterActionData['selected_products'])) : sprintf(__('%s product', 'dc-woocommerce-multi-vendor'), count($filterActionData['selected_products']))) . ' ' . __('deleted from the Trash.', 'dc-woocommerce-multi-vendor'),
                             'type' => 'success'
-                            );
-                    }else{
+                        );
+                    } else {
                         $notices[] = array(
-                            'message' => __('Sorry! You do not have this permission.', 'dc-woocommerce-multi-vendor' ),
+                            'message' => __('Sorry! You do not have this permission.', 'dc-woocommerce-multi-vendor'),
                             'type' => 'error'
-                            );
+                        );
                     }
                 } else {
                     do_action('wcmp_products_list_do_handle_bulk_actions', $vendor->get_products(), $filterActionData['bulk_actions'], $filterActionData['selected_products'], $filterActionData, $requestData);
@@ -1818,18 +1916,18 @@ class WCMp_Ajax {
                     );
                     // Add GTIN if have
                     if (get_wcmp_vendor_settings('is_gtin_enable', 'general') == 'Enable') {
-                        $gtin_terms = wp_get_post_terms( $product->get_id(), $WCMp->taxonomy->wcmp_gtin_taxonomy);
+                        $gtin_terms = wp_get_post_terms($product->get_id(), $WCMp->taxonomy->wcmp_gtin_taxonomy);
                         $gtin_label = '';
-                        if($gtin_terms && isset($gtin_terms[0])){
+                        if ($gtin_terms && isset($gtin_terms[0])) {
                             $gtin_label = $gtin_terms[0]->name;
                         }
-                        $gtin_code = get_post_meta( $product->get_id(), '_wcmp_gtin_code', true );
+                        $gtin_code = get_post_meta($product->get_id(), '_wcmp_gtin_code', true);
 
-                        if( $gtin_code ){
-                            $actions['gtin'] = ( $gtin_label ) ? $gtin_label . ': ' . $gtin_code : __( 'GTIN', 'dc-woocommerce-multi-vendor' ) . ': ' . $gtin_code;
+                        if ($gtin_code) {
+                            $actions['gtin'] = ( $gtin_label ) ? $gtin_label . ': ' . $gtin_code : __('GTIN', 'dc-woocommerce-multi-vendor') . ': ' . $gtin_code;
                         }
                     }
-                    
+
                     $actions_col = array(
                         'view' => '<a href="' . esc_url($product->get_permalink()) . '" target="_blank" title="' . $view_title . '"><i class="wcmp-font ico-eye-icon"></i></a>',
                         'edit' => '<a href="' . esc_url($edit_product_link) . '" title="' . __('Edit', 'dc-woocommerce-multi-vendor') . '"><i class="wcmp-font ico-edit-pencil-icon"></i></a>',
@@ -1879,16 +1977,16 @@ class WCMp_Ajax {
                     $product_cats = '';
                     $termlist = array();
                     $terms = get_the_terms($product->get_id(), 'product_cat');
-                    if (!$terms ) {
+                    if (!$terms) {
                         $product_cats = '<span class="na">&ndash;</span>';
                     } else {
-                        $terms = apply_filters( 'wcmp_vendor_product_list_row_product_categories', $terms, $product );
+                        $terms = apply_filters('wcmp_vendor_product_list_row_product_categories', $terms, $product);
                         foreach ($terms as $term) {
                             $termlist[] = $term->name;
                         }
                     }
                     if ($termlist) {
-                        $product_cats = implode(' | ', $termlist );
+                        $product_cats = implode(' | ', $termlist);
                     }
                     $date = '&ndash;';
                     if ($product->get_status() == 'publish') {
@@ -1922,7 +2020,7 @@ class WCMp_Ajax {
                 "draw" => intval($requestData['draw']), // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
                 "recordsTotal" => intval(count($total_products_array)), // total number of records
                 "recordsFiltered" => intval(count($total_products_array)), // total number of records after searching, if there is no searching then totalFiltered = totalData
-                "data" => $data,   // total data array
+                "data" => $data, // total data array
                 "notices" => $notices   // set messages or motices
                     ), $filterActionData, $requestData);
             wp_send_json($json_data);
@@ -1938,8 +2036,8 @@ class WCMp_Ajax {
             $meta_query['meta_query'] = array(
                 array(
                     'key' => '_paid_status',
-                    'value' => 'unpaid',
-                    'compare' => '='
+                    'value' => array('unpaid', 'partial_refunded'),
+                    'compare' => 'IN'
                 ),
                 array(
                     'key' => '_commission_vendor',
@@ -1956,34 +2054,65 @@ class WCMp_Ajax {
             if ($vendor_unpaid_total_orders) {
                 foreach ($vendor_unpaid_total_orders as $commission_id => $order_id) {
                     $order = wc_get_order($order_id);
-                    $vendor_share = get_wcmp_vendor_order_amount(array('vendor_id' => $vendor->id, 'order_id' => $order->get_id()));
-                    if (!isset($vendor_share['total'])) {
-                        $vendor_share['total'] = 0;
+                    if( $order ) {
+                        $vendor_order = wcmp_get_order($order_id);
+                        $commission_create_date = get_the_date('U', $commission_id);
+                        $current_date = date('U');
+                        $diff = intval(($current_date - $commission_create_date) / (3600 * 24));
+                        if ($diff < $commission_threshold_time) {
+                            continue;
+                        }
+                        if (is_commission_requested_for_withdrawals($commission_id) || in_array($order->get_status('edit'), array('on-hold', 'pending', 'failed', 'refunded'))) {
+                            $disabled_reqested_withdrawals = 'disabled';
+                        } else {
+                            $disabled_reqested_withdrawals = '';
+                        }
+                        //skip withdrawal for COD order and vendor end shipping
+                        if ($order->get_payment_method() == 'cod' && $vendor->is_shipping_enable())
+                            continue;
+                        
+                        $commission_amount = get_post_meta( $commission_id, '_commission_amount', true );
+                        $shipping_amount = get_post_meta( $commission_id, '_shipping', true );
+                        $tax_amount = get_post_meta( $commission_id, '_tax', true );
+                        
+                        $row = array();
+                        $row ['select_withdrawal'] = '<input name="commissions[]" value="' . $commission_id . '" class="select_withdrawal" type="checkbox" ' . $disabled_reqested_withdrawals . '>';
+                        $row ['order_id'] = $order->get_id();
+                        $row ['commission_amount'] = wc_price($commission_amount, array('currency' => $order->get_currency()));
+                        $row ['shipping_amount'] = wc_price($shipping_amount, array('currency' => $order->get_currency()));
+                        $row ['tax_amount'] = wc_price($tax_amount, array('currency' => $order->get_currency()));
+                        $row ['total'] = ( $vendor_order ) ? $vendor_order->get_commission_total() : wc_price(0);
+                        $data[] = apply_filters('wcmp_vendor_withdrawal_list_row_data', $row, $commission_id);
                     }
-                    $commission_create_date = get_the_date('U', $commission_id);
-                    $current_date = date('U');
-                    $diff = intval(($current_date - $commission_create_date) / (3600 * 24));
-                    if ($diff < $commission_threshold_time) {
-                        continue;
-                    }
-
-                    if (is_commission_requested_for_withdrawals($commission_id)) {
-                        $disabled_reqested_withdrawals = 'disabled';
-                    } else {
-                        $disabled_reqested_withdrawals = '';
-                    }
-                    //skip withdrawal for COD order and vendor end shipping
-                    if ($order->get_payment_method() == 'cod' && $vendor->is_shipping_enable())
-                        continue;
-
-                    $row = array();
-                    $row ['select_withdrawal'] = '<input name="commissions[]" value="' . $commission_id . '" class="select_withdrawal" type="checkbox" ' . $disabled_reqested_withdrawals . '>';
-                    $row ['order_id'] = $order->get_id();
-                    $row ['commission_amount'] = wc_price($vendor_share['commission_amount']);
-                    $row ['shipping_amount'] = wc_price($vendor_share['shipping_amount']);
-                    $row ['tax_amount'] = wc_price($vendor_share['tax_amount']);
-                    $row ['total'] = wc_price($vendor_share['total']);
-                    $data[] = apply_filters('wcmp_vendor_withdrawal_list_row_data', $row, $commission_id);
+                    
+//                    $vendor_share = get_wcmp_vendor_order_amount(array('vendor_id' => $vendor->id, 'order_id' => $order->get_id()));
+//                    if (!isset($vendor_share['total'])) {
+//                        $vendor_share['total'] = 0;
+//                    }
+//                    $commission_create_date = get_the_date('U', $commission_id);
+//                    $current_date = date('U');
+//                    $diff = intval(($current_date - $commission_create_date) / (3600 * 24));
+//                    if ($diff < $commission_threshold_time) {
+//                        continue;
+//                    }
+//
+//                    if (is_commission_requested_for_withdrawals($commission_id)) {
+//                        $disabled_reqested_withdrawals = 'disabled';
+//                    } else {
+//                        $disabled_reqested_withdrawals = '';
+//                    }
+//                    //skip withdrawal for COD order and vendor end shipping
+//                    if ($order->get_payment_method() == 'cod' && $vendor->is_shipping_enable())
+//                        continue;
+//
+//                    $row = array();
+//                    $row ['select_withdrawal'] = '<input name="commissions[]" value="' . $commission_id . '" class="select_withdrawal" type="checkbox" ' . $disabled_reqested_withdrawals . '>';
+//                    $row ['order_id'] = $order->get_id();
+//                    $row ['commission_amount'] = wc_price($vendor_share['commission_amount']);
+//                    $row ['shipping_amount'] = wc_price($vendor_share['shipping_amount']);
+//                    $row ['tax_amount'] = wc_price($vendor_share['tax_amount']);
+//                    $row ['total'] = wc_price($vendor_share['total']);
+//                    $data[] = apply_filters('wcmp_vendor_withdrawal_list_row_data', $row, $commission_id);
                 }
             }
             $total_array = $data;
@@ -2825,44 +2954,24 @@ class WCMp_Ajax {
             $vendor = get_wcmp_vendor(get_current_vendor_id());
             $requestData = $_REQUEST;
             $today = @date('Y-m-d 00:00:00', strtotime("+1 days"));
-            $days_range = apply_filters( 'wcmp_widget_vendor_pending_shipping_days_range', 7, $requestData, $vendor );
+            $days_range = apply_filters('wcmp_widget_vendor_pending_shipping_days_range', 7, $requestData, $vendor);
             $last_seven_day_date = date('Y-m-d H:i:s', strtotime("-$days_range days"));
 
             $args = apply_filters('wcmp_vendor_pending_shipping_args', array(
                 'start_date' => $last_seven_day_date,
                 'end_date' => $today
             ));
-            $pending_shippings = $vendor->get_vendor_orders_reports_of('pending_shipping', $args);
-            $pending_shippings_arr = array();
-            if ($pending_shippings) {
-                foreach ($pending_shippings as $pending_orders_item) {
-                    $order = wc_get_order($pending_orders_item->order_id);
-                    // hide shipping for local pickup
-                    $vendor_shipping_method = get_wcmp_vendor_order_shipping_method($order->get_id(), $vendor->id);
-                    if ($vendor_shipping_method && in_array($vendor_shipping_method->get_method_id(), apply_filters('hide_shipping_icon_for_vendor_order_on_methods', array('local_pickup'))))
-                        continue;
-
-                    $pending_shippings_arr[] = $pending_orders_item;
-                }
-            }
+            $pending_shippings_orders = $vendor->get_vendor_orders_reports_of('pending_shipping', $args);
             $data = array();
-            if ($pending_shippings_arr) {
-                foreach ($pending_shippings_arr as $pending_orders_item) {
+            if ($pending_shippings_orders) {
+                foreach ($pending_shippings_orders as $pending_order) {
                     try {
-                        $order = wc_get_order($pending_orders_item->order_id);
-                        $pending_shipping_products = get_wcmp_vendor_orders(array('vendor_id' => $vendor->id, 'order_id' => $order->get_id(), 'shipping_status' => 0, 'is_trashed' => ''));
-                        $pending_shipping_amount = get_wcmp_vendor_order_amount(array('vendor_id' => $vendor->id, 'order_id' => $order->get_id(), 'shipping_status' => 0));
-                        $product_sku = array();
+                        $line_items = $pending_order->get_items('line_item');
                         $product_name = array();
-                        //$product_dimention = array();
-                        foreach ($pending_shipping_products as $pending_shipping_product) {
-                            $product = wc_get_product($pending_shipping_product->product_id);
+                        foreach ($line_items as $item_id => $item) {
+                            $product = $item->get_product();
                             if ($product && $product->needs_shipping()) {
-                                $product_sku[] = $product->get_sku() ? $product->get_sku() : '<span class="na">&ndash;</span>';
-                                $product_name[] = $product->get_title();
-                                if ($pending_shipping_product->variation_id != 0) {
-                                    $product = wc_get_product($pending_shipping_product->variation_id);
-                                }
+                                $product_name[] = $item->get_name();
                             }
                         }
                         if (empty($product_name))
@@ -2870,31 +2979,40 @@ class WCMp_Ajax {
 
                         $action_html = '';
                         if ($vendor->is_shipping_enable()) {
-                            $is_shipped = (array) get_post_meta($order->get_id(), 'dc_pv_shipped', true);
-                            if (!in_array($vendor->id, $is_shipped)) {
-                                $action_html .= '<a href="javascript:void(0)" title="' . __('Mark as shipped', 'dc-woocommerce-multi-vendor') . '" onclick="wcmpMarkeAsShip(this,' . $order->get_id() . ')"><i class="wcmp-font ico-shippingnew-icon action-icon"></i></a> ';
+                            $is_shipped = (array) get_post_meta($pending_order->get_id(), 'dc_pv_shipped', true);
+                            $vendor_order_shipped = get_post_meta($pending_order->get_id(), 'wcmp_vendor_order_shipped');
+                            if (!in_array($vendor->id, $is_shipped) && !$vendor_order_shipped ) {
+                                $action_html .= '<a href="javascript:void(0)" title="' . __('Mark as shipped', 'dc-woocommerce-multi-vendor') . '" onclick="wcmpMarkeAsShip(this,' . $pending_order->get_id() . ')"><i class="wcmp-font ico-shippingnew-icon action-icon"></i></a> ';
                             } else {
                                 $action_html .= '<i title="' . __('Shipped', 'dc-woocommerce-multi-vendor') . '" class="wcmp-font ico-shipping-icon"></i> ';
                             }
                         }
-                        $action_html = apply_filters('wcmp_dashboard_pending_shipping_widget_data_actions', $action_html, $order->get_id());
+                        // shipping amount
+                        $refunded = $pending_order->get_total_shipping_refunded();
+                        if ( $refunded > 0 ) {
+                            $shipping_amount = '<del>' . strip_tags( wc_price( $pending_order->get_shipping_total(), array( 'currency' => $pending_order->get_currency() ) ) ) . '</del> <ins>' . wc_price( $pending_order->get_shipping_total() - $refunded, array( 'currency' => $pending_order->get_currency() ) ) . '</ins>'; // WPCS: XSS ok.
+                        } else {
+                            $shipping_amount = wc_price( $pending_order->get_shipping_total(), array( 'currency' => $pending_order->get_currency() ) ); // WPCS: XSS ok.
+                        }
+                        $action_html = apply_filters('wcmp_dashboard_pending_shipping_widget_data_actions', $action_html, $pending_order->get_id());
                         $row = array();
-                        $row ['order_id'] = '<a href="' . esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders'), $order->get_id())) . '">#' . $order->get_id() . '</a>';
+                        $row ['order_id'] = '<a href="' . esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders'), $pending_order->get_id())) . '">#' . $pending_order->get_id() . '</a>';
                         $row ['products_name'] = implode(' , ', $product_name);
-                        $row ['order_date'] = wcmp_date($order->get_date_created());
-                        $row ['shipping_address'] = $order->get_formatted_shipping_address();
-                        $row ['shipping_amount'] = wc_price($pending_shipping_amount['shipping_amount']);
+                        $row ['order_date'] = wcmp_date($pending_order->get_date_created());
+                        $row ['shipping_address'] = $pending_order->get_formatted_shipping_address();
+                        $row ['shipping_amount'] = $shipping_amount;
                         $row ['action'] = $action_html;
-                        $data[] = apply_filters('wcmp_widget_vendor_pending_shipping_row_data', $row, $pending_orders_item, $order);
+                        $data[] = apply_filters('wcmp_widget_vendor_pending_shipping_row_data', $row, $pending_order);
                     } catch (Exception $ex) {
                         
                     }
                 }
             }
+
             $json_data = array(
                 "draw" => intval($requestData['draw']), // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
-                "recordsTotal" => intval(count($pending_shippings_arr)), // total number of records
-                "recordsFiltered" => intval(count($pending_shippings_arr)), // total number of records after searching, if there is no searching then totalFiltered = totalData
+                "recordsTotal" => intval(count($data)), // total number of records
+                "recordsFiltered" => intval(count($data)), // total number of records after searching, if there is no searching then totalFiltered = totalData
                 "data" => $data   // total data array
             );
             wp_send_json($json_data);
@@ -2909,38 +3027,60 @@ class WCMp_Ajax {
             $vendor = get_wcmp_vendor(get_current_vendor_id());
             $requestData = $_REQUEST;
             $today = @date('Y-m-d 00:00:00', strtotime("+1 days"));
-            $days_range = apply_filters( 'wcmp_widget_vendor_product_sales_report_days_range', 7, $requestData, $vendor );
+            $days_range = apply_filters('wcmp_widget_vendor_product_sales_report_days_range', 7, $requestData, $vendor);
             $last_seven_day_date = date('Y-m-d H:i:s', strtotime("-$days_range days"));
-
-            $sale_results = $wpdb->get_results(
-                    $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_vendor_orders WHERE commission_id != 0 AND vendor_id=%d AND `created` BETWEEN %s AND %s", $vendor->id, $last_seven_day_date, $today
+            
+            $query = array(
+                'author' => $vendor->id,
+                'date_query' => array(
+                    array(
+                        'after'     => $last_seven_day_date,
+                        'before'    => $today,
+                        'inclusive' => true,
+                    ),
+                ),
+                'meta_query'    => array(
+                    'relation' => 'AND',
+                    array(
+                        'key'       => '_commission_id',
+                        'value'   => 0,
+			'compare' => '!=',
                     )
+                )
             );
+            $vendor_orders = wcmp_get_orders( $query, 'object' );
+            
             $sold_product_list = array();
-            if ($sale_results) :
-                foreach ($sale_results as $key => $value) {
-                    if (array_key_exists($value->product_id, $sold_product_list)) {
-                        $sold_product_list[$value->product_id]['qty'] += $value->quantity;
-                    } else {
-                        $sold_product_list[$value->product_id]['qty'] = $value->quantity;
-                        $sold_product_list[$value->product_id]['item_id'] = $value->order_item_id;
-                        $sold_product_list[$value->product_id]['order_id'] = $value->order_id;
+            if ( $vendor_orders ) :
+                foreach ( $vendor_orders as $order ) {
+                    $line_items = $order->get_items('line_item');
+                    foreach ( $line_items as $item_id => $item ) {
+                        if (array_key_exists($item->get_product_id(), $sold_product_list)) {
+                            $sold_product_list[$item->get_product_id()]['qty'] += $item->get_quantity();
+                            $sold_product_list[$item->get_product_id()]['item_total'] += $item->get_total();
+                        } else {
+                            $sold_product_list[$item->get_product_id()]['qty'] = $item->get_quantity();
+                            $sold_product_list[$item->get_product_id()]['item'] = $item;
+                            $sold_product_list[$item->get_product_id()]['item_total'] = $item->get_total();
+                            $sold_product_list[$item->get_product_id()]['order_id'] = $order->get_id();
+                        }
                     }
                 }
             endif;
             arsort($sold_product_list);
             $data = array();
-            foreach ($sold_product_list as $product_id => $value) {
-                $product = wc_get_product($product_id);
+            foreach ($sold_product_list as $product_id => $sold_item_data) {
+                $item = $sold_item_data['item'];
+                $product = $item->get_product();
                 $row = array();
                 if ($product) {
-                    $row ['product'] = '<a href="' . $product->get_permalink($product_id) . '">' . $product->get_image(array(40, 40)) . ' ' . wp_trim_words($product->get_name(), 60, '...') . '</a>';
-                    $row ['revenue'] = wc_price($product->get_price('edit') * $value['qty']);
-                    $row ['unique_purchase'] = $value['qty'];
+                    $row ['product'] = '<a href="' . wcmp_get_product_link( $product_id ) . '">' . $product->get_image(array(40, 40)) . ' ' . wp_trim_words($item->get_name(), 60, '...') . '</a>';
+                    $row ['revenue'] = wc_price( $sold_item_data['item_total'] );
+                    $row ['unique_purchase'] = $sold_item_data['qty'];
                 } else {
                     $row ['product'] = __('This product does not exists', 'dc-woocommerce-multi-vendor');
                     $row ['revenue'] = '-';
-                    $row ['unique_purchase'] = $value['qty'];
+                    $row ['unique_purchase'] = $sold_item_data['qty'];
                 }
                 $data[] = apply_filters('wcmp_widget_vendor_product_sales_report_row_data', $row, $product_id, $value);
             }
@@ -2967,7 +3107,7 @@ class WCMp_Ajax {
             }
             $zones = WCMP_Shipping_Zone::get_zone($_POST['zoneID']);
         }
-        
+
         $show_post_code_list = $show_state_list = $show_post_code_list = false;
 
         $zone_id = $zones['data']['id'];
@@ -2980,7 +3120,7 @@ class WCMp_Ajax {
         if (!$selected_continent_codes) {
             $selected_continent_codes = array();
         }
-        
+
         $selected_country_codes = array_keys($zone_location_types, 'country');
         $all_states = WC()->countries->get_states();
 
@@ -2988,7 +3128,7 @@ class WCMp_Ajax {
         $state_key_by_country = array_intersect_key($all_states, array_flip($selected_country_codes));
 
         array_walk($state_key_by_country, 'wcmp_state_key_alter');
-        
+
         $state_key_by_country = call_user_func_array('array_merge', $state_key_by_country);
 
         $show_limit_location_link = apply_filters('show_limit_location_link', (!in_array('postcode', $zone_location_types)));
@@ -3027,17 +3167,17 @@ class WCMp_Ajax {
 
         ob_start();
         $template_data = array(
-            'zones'                     => $zones,
-            'zone_id'                   => $zone_id,
-            'want_to_limit_location'    => $want_to_limit_location,
-            'show_limit_location_link'  => $show_limit_location_link,
-            'show_state_list'           => $show_state_list,
-            'countries'                 => $countries,
-            'states'                    => $states,
-            'state_key_by_country'      => $state_key_by_country,
-            'show_post_code_list'       => $show_post_code_list,
-            'postcodes'                 => $postcodes,
-            'vendor_shipping_methods'   => $vendor_shipping_methods,
+            'zones' => $zones,
+            'zone_id' => $zone_id,
+            'want_to_limit_location' => $want_to_limit_location,
+            'show_limit_location_link' => $show_limit_location_link,
+            'show_state_list' => $show_state_list,
+            'countries' => $countries,
+            'states' => $states,
+            'state_key_by_country' => $state_key_by_country,
+            'show_post_code_list' => $show_post_code_list,
+            'postcodes' => $postcodes,
+            'vendor_shipping_methods' => $vendor_shipping_methods,
         );
         $WCMp->template->get_template('vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php', $template_data);
         $zone_html['html'] = ob_get_clean();
@@ -3085,16 +3225,16 @@ class WCMp_Ajax {
         }
         do_action( 'wcmp_before_update_shipping_method', $args );
         $result = WCMP_Shipping_Zone::update_shipping_method($args);
-        
-        $WCMp->load_class( 'shipping-gateway' );
-        WCMp_Shipping_Gateway::load_class( 'shipping-method' );
+
+        $WCMp->load_class('shipping-gateway');
+        WCMp_Shipping_Gateway::load_class('shipping-method');
         $vendor_shipping = new WCMP_Vendor_Shipping_Method();
-        $vendor_shipping->set_post_data( $args['settings'] );
+        $vendor_shipping->set_post_data($args['settings']);
         $vendor_shipping->process_admin_options();
-        
+
         // clear shipping transient
-        WC_Cache_Helper::get_transient_version( 'shipping', true );
-        
+        WC_Cache_Helper::get_transient_version('shipping', true);
+
         if (is_wp_error($result)) {
             wp_send_json_error($result->get_error_message(), 'wcmp');
         }
@@ -3162,16 +3302,16 @@ class WCMp_Ajax {
             );
             $settings_html = '';
             foreach ($vendor_shipping_methods as $vendor_shipping_method) {
-                if($vendor_shipping_method['id'] == 'free_shipping'){
+                if ($vendor_shipping_method['id'] == 'free_shipping') {
                     $settings_html = '<!-- Free shipping -->'
-                            . '<div class="shipping_form" id="'.$vendor_shipping_method['id'].'">'
+                            . '<div class="shipping_form" id="' . $vendor_shipping_method['id'] . '">'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Method Title', 'dc-woocommerce-multi-vendor' ).'</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placholder="'.__( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Minimum order amount for free shipping', 'dc-woocommerce-multi-vendor' ).'</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Minimum order amount for free shipping', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="minimum_order_amount_fs" class="form-control" type="text" name="min_amount" value="'.$vendor_shipping_method['settings']['min_amount'].'" placholder="'.__( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
@@ -3179,20 +3319,20 @@ class WCMp_Ajax {
                             . '<input type="hidden" id="method_cost_fs" name="cost" value="0" />'
                             . '<input type="hidden" id="method_tax_status_fs" name="tax_status" value="none" />'
                             . '<!--div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Description', 'dc-woocommerce-multi-vendor' ).'</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Description', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
-                            . '<textarea id="method_description_fs" class="form-control" name="method_description">'.$vendor_shipping_method['settings']['description'].'</textarea>'
+                            . '<textarea id="method_description_fs" class="form-control" name="method_description">' . $vendor_shipping_method['settings']['description'] . '</textarea>'
                             . '</div></div--></div>';
-                }elseif($vendor_shipping_method['id'] == 'local_pickup'){
+                } elseif ($vendor_shipping_method['id'] == 'local_pickup') {
                     $settings_html = '<!-- Local Pickup -->'
-                            . '<div class="shipping_form " id="'.$vendor_shipping_method['id'].'">'
+                            . '<div class="shipping_form " id="' . $vendor_shipping_method['id'] . '">'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Method Title', 'dc-woocommerce-multi-vendor' ).'</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placholder="'.__( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Cost', 'dc-woocommerce-multi-vendor' ).'</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Cost', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="method_cost_lp" class="form-control" type="text" name="cost" value="'.$vendor_shipping_method['settings']['cost'].'" placholder="'.__( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>';
@@ -3208,20 +3348,20 @@ class WCMp_Ajax {
                             }
                     $settings_html .= '<input type="hidden" id="method_description_lp" name="description" value="'.$vendor_shipping_method['settings']['description'].'" />'
                             . '<!--div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Description', 'dc-woocommerce-multi-vendor' ).'</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Description', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
-                            . '<textarea id="method_description_lp" class="form-control" name="method_description">'.$vendor_shipping_method['settings']['description'].'</textarea>'
+                            . '<textarea id="method_description_lp" class="form-control" name="method_description">' . $vendor_shipping_method['settings']['description'] . '</textarea>'
                             . '</div></div--></div>';
-                }elseif($vendor_shipping_method['id'] == 'flat_rate'){
+                } elseif ($vendor_shipping_method['id'] == 'flat_rate') {
                     $settings_html = '<!-- Flat rate -->'
-                            . '<div class="shipping_form" id="'.$vendor_shipping_method['id'].'">'
+                            . '<div class="shipping_form" id="' . $vendor_shipping_method['id'] . '">'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Method Title', 'dc-woocommerce-multi-vendor' ).'</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placholder="'.__( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Cost', 'dc-woocommerce-multi-vendor' ).'</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Cost', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="method_cost_fr" class="form-control" type="text" name="cost" value="'.$vendor_shipping_method['settings']['cost'].'" placholder="'.__( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>';
@@ -3261,19 +3401,19 @@ class WCMp_Ajax {
                                             . '</div></div>';
                                 }
                             $settings_html .= '<div class="form-group">'
-                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Calculation type', 'dc-woocommerce-multi-vendor' ).'</label>'
+                                    . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Calculation type', 'dc-woocommerce-multi-vendor') . '</label>'
                                     . '<div class="col-md-9 col-sm-9">'
                                     . '<select id="calculation_type" class="form-control" name="calculation_type">';
-                                foreach( $calculation_type as $key => $value ) {
-                                    $settings_html .= '<option value="'.$key.'">'.$value.'</option>';
-                                } 
-                            $settings_html .= '</select></div></div>';
+                            foreach ($calculation_type as $key => $value) {
+                                $settings_html .= '<option value="' . $key . '">' . $value . '</option>';
                             }
-                            $settings_html .= '</div>';
-                            } 
-                            $settings_html .= '</div>';
-                }else{
-                    $settings_html = apply_filters( 'wcmp_vendor_backend_shipping_methods_edit_form_fields', $settings_html, get_current_user_id(), $zone_id, $vendor_shipping_method );
+                            $settings_html .= '</select></div></div>';
+                        }
+                        $settings_html .= '</div>';
+                    }
+                    $settings_html .= '</div>';
+                } else {
+                    $settings_html = apply_filters('wcmp_vendor_backend_shipping_methods_edit_form_fields', $settings_html, get_current_user_id(), $zone_id, $vendor_shipping_method);
                 }
                 $config_settings[$vendor_shipping_method['id']] = $settings_html;
             }
@@ -3321,151 +3461,150 @@ class WCMp_Ajax {
         $term_id = isset($_POST['term_id']) ? (int) $_POST['term_id'] : 0;
         $taxonomy = isset($_POST['taxonomy']) ? $_POST['taxonomy'] : '';
         $cat_level = isset($_POST['cat_level']) ? $_POST['cat_level'] : 0;
-        $term = get_term( $term_id , $taxonomy );
-        $child_terms = get_term_children( $term_id, $taxonomy );
+        $term = get_term($term_id, $taxonomy);
+        $child_terms = get_term_children($term_id, $taxonomy);
         $html_level = '';
         $level = $cat_level + 1;
         $final = false;
-        $hierarchy = get_ancestors( $term_id, $taxonomy );
+        $hierarchy = get_ancestors($term_id, $taxonomy);
         $crumb = array();
-        foreach ( array_reverse($hierarchy) as $id ) {
-            $h_term = get_term( $id, $taxonomy );
+        foreach (array_reverse($hierarchy) as $id) {
+            $h_term = get_term($id, $taxonomy);
             $crumb[] = $h_term->name;
         }
         $crumb[] = $term->name;
-        $html_hierarchy = implode( ' <i class="wcmp-font ico-right-arrow-icon"></i> ', $crumb );
-        if($child_terms) {  
-            $html_level .= '<ul class="wcmp-product-categories '.$level.'-level" data-cat-level="'.$level.'">';
-            $html_level .= wcmp_list_categories( apply_filters( "wcmp_vendor_product_classify_{$level}_level_categories", array(
-                            'taxonomy' => 'product_cat', 
-                            'hide_empty' => false,
-                            'html_list' => true,
-                            'parent' => $term_id,
-                            'cat_link'  => '#',
-                            ) ) );
+        $html_hierarchy = implode(' <i class="wcmp-font ico-right-arrow-icon"></i> ', $crumb);
+        if ($child_terms) {
+            $html_level .= '<ul class="wcmp-product-categories ' . $level . '-level" data-cat-level="' . $level . '">';
+            $html_level .= wcmp_list_categories(apply_filters("wcmp_vendor_product_classify_{$level}_level_categories", array(
+                'taxonomy' => 'product_cat',
+                'hide_empty' => false,
+                'html_list' => true,
+                'parent' => $term_id,
+                'cat_link' => '#',
+                    )));
             $html_level .= '</ul>';
         } else {
             $final = true;
             //$level = 'final';
             $html_level .= '<div class="final-cat-button">'
-                        . '<p>'.$term->name.'<p>'
-                        . '<button class="classified-pro-cat-btn btn btn-default" data-term-id="'.$term->term_id.'" data-taxonomy="'.$taxonomy.'">'. strtoupper(__( 'Select', 'dc-woocommerce-multi-vendor' )).'</button>'
-                        . '</div>';
+                    . '<p>' . $term->name . '<p>'
+                    . '<button class="classified-pro-cat-btn btn btn-default" data-term-id="' . $term->term_id . '" data-taxonomy="' . $taxonomy . '">' . strtoupper(__('Select', 'dc-woocommerce-multi-vendor')) . '</button>'
+                    . '</div>';
         }
-        wp_send_json( array( 'html_level' => $html_level, 'level' => $level, 'is_final' => $final, 'hierarchy' => $html_hierarchy ) );
+        wp_send_json(array('html_level' => $html_level, 'level' => $level, 'is_final' => $final, 'hierarchy' => $html_hierarchy));
         die;
     }
-    
-    public function show_product_classify_next_level_from_searched_term(){
+
+    public function show_product_classify_next_level_from_searched_term() {
         $term_id = isset($_POST['term_id']) ? (int) $_POST['term_id'] : 0;
         $taxonomy = isset($_POST['taxonomy']) ? $_POST['taxonomy'] : '';
-        $hierarchy = get_ancestors( $term_id, $taxonomy );
+        $hierarchy = get_ancestors($term_id, $taxonomy);
         $html_level = $html_hierarchy = '';
         //print_r($hierarchy);die;
         $level = 1;
         $parent = 0;
-        if($hierarchy){
-            foreach ( array_reverse($hierarchy) as $id ) {
-                $html_level .= '<div class="wcmp-product-cat-level '.$level.'-level-cat cat-column" data-level="'.$level.'">'
-                    . '<ul class="wcmp-product-categories '.$level.'-level" data-cat-level="'.$level.'">';
-                $html_level .= wcmp_list_categories( apply_filters( 'wcmp_vendor_product_classify_'.$level.'_level_categories', array(
-                                        'taxonomy' => 'product_cat', 
-                                        'hide_empty' => false, 
-                                        'html_list' => true,
-                                        'parent' => $parent,
-                                        'cat_link'  => '#',
-                                        'selected' => $id,
-                                        ) ) );
+        if ($hierarchy) {
+            foreach (array_reverse($hierarchy) as $id) {
+                $html_level .= '<div class="wcmp-product-cat-level ' . $level . '-level-cat cat-column" data-level="' . $level . '">'
+                        . '<ul class="wcmp-product-categories ' . $level . '-level" data-cat-level="' . $level . '">';
+                $html_level .= wcmp_list_categories(apply_filters('wcmp_vendor_product_classify_' . $level . '_level_categories', array(
+                    'taxonomy' => 'product_cat',
+                    'hide_empty' => false,
+                    'html_list' => true,
+                    'parent' => $parent,
+                    'cat_link' => '#',
+                    'selected' => $id,
+                        )));
                 $html_level .= '</ul></div>';
                 $level++;
                 $parent = $id;
             }
         }
-        $html_level .= '<div class="wcmp-product-cat-level '.$level.'-level-cat cat-column" data-level="'.$level.'">'
-            . '<ul class="wcmp-product-categories '.$level.'-level" data-cat-level="'.$level.'">';
-        $html_level .= wcmp_list_categories( apply_filters( 'wcmp_vendor_product_classify_1_level_categories', array(
-                                'taxonomy' => 'product_cat', 
-                                'hide_empty' => false, 
-                                'html_list' => true,
-                                'parent' => $parent,
-                                'cat_link'  => '#',
-                                'selected' => $term_id,
-                                ) ) );
+        $html_level .= '<div class="wcmp-product-cat-level ' . $level . '-level-cat cat-column" data-level="' . $level . '">'
+                . '<ul class="wcmp-product-categories ' . $level . '-level" data-cat-level="' . $level . '">';
+        $html_level .= wcmp_list_categories(apply_filters('wcmp_vendor_product_classify_1_level_categories', array(
+            'taxonomy' => 'product_cat',
+            'hide_empty' => false,
+            'html_list' => true,
+            'parent' => $parent,
+            'cat_link' => '#',
+            'selected' => $term_id,
+                )));
         $html_level .= '</ul></div>';
         // add final level step
         $level = $level + 1;
-        $h_term = get_term( $term_id, $taxonomy );
-        $html_level .= '<div class="wcmp-product-cat-level '.$level.'-level-cat cat-column select-cat-button-holder" data-level="'.$level.'">'
-                .'<div class="final-cat-button">'
-                . '<p>'.$h_term->name.'<p>'
-                . '<button class="classified-pro-cat-btn btn btn-default" data-term-id="'.$h_term->term_id.'" data-taxonomy="'.$taxonomy.'">'. strtoupper(__( 'Select', 'dc-woocommerce-multi-vendor' )).'</button>'
+        $h_term = get_term($term_id, $taxonomy);
+        $html_level .= '<div class="wcmp-product-cat-level ' . $level . '-level-cat cat-column select-cat-button-holder" data-level="' . $level . '">'
+                . '<div class="final-cat-button">'
+                . '<p>' . $h_term->name . '<p>'
+                . '<button class="classified-pro-cat-btn btn btn-default" data-term-id="' . $h_term->term_id . '" data-taxonomy="' . $taxonomy . '">' . strtoupper(__('Select', 'dc-woocommerce-multi-vendor')) . '</button>'
                 . '</div></div>';
-            
-        wp_send_json( array( 'html_level' => $html_level ) );
+
+        wp_send_json(array('html_level' => $html_level));
         die;
     }
-    
-    public function wcmp_product_classify_search_category_level(){
+
+    public function wcmp_product_classify_search_category_level() {
         global $WCMp, $wpdb;
         $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
-        if(!empty($keyword)){
-            $query = apply_filters( "wcmp_product_classify_search_category_level_args", array(
-                'taxonomy' => 'product_cat', 
-                'search'    => $keyword,
-                'hide_empty' => false, 
+        if (!empty($keyword)) {
+            $query = apply_filters("wcmp_product_classify_search_category_level_args", array(
+                'taxonomy' => 'product_cat',
+                'search' => $keyword,
+                'hide_empty' => false,
                 'parent' => '',
-                'fields'    => 'ids',     
-            ) );
-            $search_terms = wcmp_list_categories( $query );
+                'fields' => 'ids',
+                    ));
+            $search_terms = wcmp_list_categories($query);
             $html_search_result = '';
-            if( $search_terms ){
-                foreach ( $search_terms as $term_id ) {
-                    $term = get_term( $term_id, $query['taxonomy'] );
-                    $hierarchy = get_ancestors( $term_id, $query['taxonomy'] );
+            if ($search_terms) {
+                foreach ($search_terms as $term_id) {
+                    $term = get_term($term_id, $query['taxonomy']);
+                    $hierarchy = get_ancestors($term_id, $query['taxonomy']);
                     $hierarchy = array_reverse($hierarchy);
                     $hierarchy[] = $term_id;
-                    $html_search_result .= '<li class="list-group-item" data-term-id="'.$term->term_id.'" data-taxonomy="'.$query['taxonomy'].'">'
-                        . '<p><strong>' . $term->name . '</strong></p>'
-                        . '<ul class="breadcrumb">';
+                    $html_search_result .= '<li class="list-group-item" data-term-id="' . $term->term_id . '" data-taxonomy="' . $query['taxonomy'] . '">'
+                            . '<p><strong>' . $term->name . '</strong></p>'
+                            . '<ul class="breadcrumb">';
                     foreach ($hierarchy as $id) {
-                        $h_term = get_term( $id, $query['taxonomy'] );
+                        $h_term = get_term($id, $query['taxonomy']);
                         $html_search_result .= '<li>' . $h_term->name . '</li>';
                     }
                     $html_search_result .= '</ul></li>';
-                    
+
                     //$html_search_result .= '<a class="list-group-item"><span class="add-term" data-term-id="'.$term_id.'">&plus;</span>&nbsp;&nbsp;'.implode( ' <i class="wcmp-font ico-right-arrow-icon"></i> ', $term_crumb ).'</a>';
                 }
-     
-            }else{
-                $html_search_result .= '<li class="list-group-item"><p>'.__('No results found', 'dc-woocommerce-multi-vendor').'</p></li>';
+            } else {
+                $html_search_result .= '<li class="list-group-item"><p>' . __('No results found', 'dc-woocommerce-multi-vendor') . '</p></li>';
             }
-            wp_send_json( array('results' => $html_search_result) );
+            wp_send_json(array('results' => $html_search_result));
             die;
         }
     }
-    
+
     public function wcmp_list_a_product_by_name_or_gtin() {
         global $WCMp, $wpdb;
         $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
         $html = '';
-        if(!empty($keyword)){
+        if (!empty($keyword)) {
             $ids = array();
-            $posts = $wpdb->get_col( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_wcmp_gtin_code' AND meta_value LIKE %s;", esc_sql( '%'.$keyword.'%' ) ) );
-            if ( ! $posts ) {
+            $posts = $wpdb->get_col($wpdb->prepare("SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_wcmp_gtin_code' AND meta_value LIKE %s;", esc_sql('%' . $keyword . '%')));
+            if (!$posts) {
                 $data_store = WC_Data_Store::load('product');
                 $ids = $data_store->search_products($keyword, '', false);
                 $include = array();
                 foreach ($ids as $id) {
                     $product = wc_get_product($id);
                     $product_map_id = get_post_meta($id, '_wcmp_spmv_map_id', true);
-                    if( $product && $product_map_id ){
-                        $results = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_products_map WHERE product_map_id=%d", $product_map_id) );
+                    if ($product && $product_map_id) {
+                        $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_products_map WHERE product_map_id=%d", $product_map_id));
                         $product_ids = wp_list_pluck($results, 'product_id');
                         //$first_inserted_map_pro_key = array_search(min(wp_list_pluck($results, 'ID')), wp_list_pluck($results, 'ID'));
                         if($product_ids){
                             $include[] = min($product_ids);
                         }
-                    }elseif($product) {
+                    } elseif ($product) {
                         $include[] = $id;
                     }
                 }
@@ -3475,17 +3614,17 @@ class WCMp_Ajax {
                 } else {
                     $ids = array();
                 }
-            }else{
+            } else {
                 $unique_gtin_arr = array();
                 foreach ($posts as $post_id) {
                     $unique_gtin_arr[$post_id] = get_post_meta($post_id, '_wcmp_gtin_code', true);
                 }
                 $ids = array_keys(array_unique($unique_gtin_arr));
             }
-            
-            $product_objects = apply_filters( 'wcmp_list_a_products_objects',array_map('wc_get_product', $ids) );
+
+            $product_objects = apply_filters('wcmp_list_a_products_objects', array_map('wc_get_product', $ids));
             $user_id = get_current_user_id();
-            
+
             if (count($product_objects) > 0) {
                 foreach ($product_objects as $product_object) {
                     if ($product_object) {
@@ -3500,7 +3639,7 @@ class WCMp_Ajax {
                                 $product_cats = '<span class="na">&ndash;</span>';
                             } else {
                                 $terms_arr = array();
-                                $terms = apply_filters( 'wcmp_vendor_product_list_row_product_categories', $terms, $product_object );
+                                $terms = apply_filters('wcmp_vendor_product_list_row_product_categories', $terms, $product_object);
                                 foreach ($terms as $term) {
                                     //$h_term = get_term_by('term_id', $term_id, 'product_cat');
                                     $terms_arr[] = $term->name;
@@ -3509,48 +3648,46 @@ class WCMp_Ajax {
                             }
 
                             $html .= '<div class="search-result-clm">'
-                            .  $product_object->get_image(apply_filters('wcmp_searched_name_gtin_product_list_image_size', array(98, 98)))
-                            . '<div class="result-content">'
-                            . '<p><strong>'.rawurldecode($product_object->get_formatted_name()).'</strong></p>'
-                            . '<p>'.$product_object->get_price_html().'</p>'
-                            . '<p>'.$product_cats.'</p>'
-                            . '</div>'
-                            . '<a href="javascript:void(0)" data-product_id="'.$product_object->get_id().'" class="wcmp-create-pro-duplicate-btn btn btn-default item-sell">'.__('Sell yours', 'dc-woocommerce-multi-vendor').'</a>'
-                            . '</div>';
-                            
+                                    . $product_object->get_image(apply_filters('wcmp_searched_name_gtin_product_list_image_size', array(98, 98)))
+                                    . '<div class="result-content">'
+                                    . '<p><strong>' . rawurldecode($product_object->get_formatted_name()) . '</strong></p>'
+                                    . '<p>' . $product_object->get_price_html() . '</p>'
+                                    . '<p>' . $product_cats . '</p>'
+                                    . '</div>'
+                                    . '<a href="javascript:void(0)" data-product_id="' . $product_object->get_id() . '" class="wcmp-create-pro-duplicate-btn btn btn-default item-sell">' . __('Sell yours', 'dc-woocommerce-multi-vendor') . '</a>'
+                                    . '</div>';
                         } else {
                             
                         }
                     }
                 }
-                
             } else {
                 $html .= '<div class="search-result-clm"><div class="result-content">' . __('No Suggestions found', 'dc-woocommerce-multi-vendor') . "</div></div>";
             }
-        }else{
+        } else {
             $html .= '<div class="search-result-clm"><div class="result-content">' . __('Empty search field! Enter a text to search.', 'dc-woocommerce-multi-vendor') . "</div></div>";
         }
-        wp_send_json( array( 'results' => $html ) );
+        wp_send_json(array('results' => $html));
         die;
     }
-    
-    public function wcmp_set_classified_product_terms(){
+
+    public function wcmp_set_classified_product_terms() {
         $term_id = isset($_POST['term_id']) ? (int) $_POST['term_id'] : 0;
         $taxonomy = isset($_POST['taxonomy']) ? $_POST['taxonomy'] : '';
         $user_id = get_current_user_id();
         $url = '';
-        if(is_user_wcmp_vendor($user_id)){
+        if (is_user_wcmp_vendor($user_id)) {
             $data = array(
-                'term_id'   => $term_id,
-                'taxonomy'  => $taxonomy,
+                'term_id' => $term_id,
+                'taxonomy' => $taxonomy,
             );
-            set_transient( 'classified_product_terms_vendor'.$user_id , $data, HOUR_IN_SECONDS );
+            set_transient('classified_product_terms_vendor' . $user_id, $data, HOUR_IN_SECONDS);
             $url = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product')));
         }
-        wp_send_json( array( 'url' => $url ) );
+        wp_send_json(array('url' => $url));
         die;
     }
-    
+
     /**
      * Add an attribute row.
      */
@@ -3558,22 +3695,22 @@ class WCMp_Ajax {
         global $WCMp;
         ob_start();
 
-        check_ajax_referer( 'add-attribute', 'security' );
+        check_ajax_referer('add-attribute', 'security');
 
-        if ( ! current_user_can( 'edit_products' ) || ( ! apply_filters( 'wcmp_vendor_can_add_custom_attribute', true ) && empty( sanitize_text_field( $_POST['taxonomy'] ) ) ) ) {
-            wp_die( -1 );
+        if (!current_user_can('edit_products') || (!apply_filters('wcmp_vendor_can_add_custom_attribute', true) && empty(sanitize_text_field($_POST['taxonomy'])) )) {
+            wp_die(-1);
         }
 
-        $i = absint( $_POST['i'] );
+        $i = absint($_POST['i']);
         $metabox_class = array();
         $attribute = new WC_Product_Attribute();
 
-        $attribute->set_id( wc_attribute_taxonomy_id_by_name( sanitize_text_field( $_POST['taxonomy'] ) ) );
-        $attribute->set_name( sanitize_text_field( $_POST['taxonomy'] ) );
-        $attribute->set_visible( apply_filters( 'woocommerce_attribute_default_visibility', 1 ) );
-        $attribute->set_variation( apply_filters( 'woocommerce_attribute_default_is_variation', 0 ) );
+        $attribute->set_id(wc_attribute_taxonomy_id_by_name(sanitize_text_field($_POST['taxonomy'])));
+        $attribute->set_name(sanitize_text_field($_POST['taxonomy']));
+        $attribute->set_visible(apply_filters('woocommerce_attribute_default_visibility', 1));
+        $attribute->set_variation(apply_filters('woocommerce_attribute_default_is_variation', 0));
 
-        if ( $attribute->is_taxonomy() ) {
+        if ($attribute->is_taxonomy()) {
             $metabox_class[] = 'taxonomy';
             $metabox_class[] = $attribute->get_name();
         }
@@ -3581,30 +3718,341 @@ class WCMp_Ajax {
         include( $WCMp->plugin_path . 'templates/vendor-dashboard/product-manager/views/html-product-attribute.php' );
         wp_die();
     }
-    
+
     /**
      * Save attributes
      */
     public function save_product_attributes_callback() {
-        check_ajax_referer( 'save-attributes', 'security' );
+        check_ajax_referer('save-attributes', 'security');
 
-        if ( ! current_user_can( 'edit_products' ) ) {
-            wp_die( -1 );
+        if (!current_user_can('edit_products')) {
+            wp_die(-1);
         }
 
-        parse_str( $_POST['data'], $data );
+        parse_str($_POST['data'], $data);
 
-        $attr_data = isset( $data['wc_attributes'] ) ? $data['wc_attributes'] : array();
+        $attr_data = isset($data['wc_attributes']) ? $data['wc_attributes'] : array();
 
-        $attributes = wcmp_woo()->prepare_attributes( $attr_data );
-        $product_id = absint( $_POST['post_id'] );
-        $product_type = ! empty( $_POST['product_type'] ) ? wc_clean( $_POST['product_type'] ) : 'simple';
-        $classname = WC_Product_Factory::get_product_classname( $product_id, $product_type );
-        $product = new $classname( $product_id );
+        $attributes = wcmp_woo()->prepare_attributes($attr_data);
+        $product_id = absint($_POST['post_id']);
+        $product_type = !empty($_POST['product_type']) ? wc_clean($_POST['product_type']) : 'simple';
+        $classname = WC_Product_Factory::get_product_classname($product_id, $product_type);
+        $product = new $classname($product_id);
 
-        $product->set_attributes( $attributes );
+        $product->set_attributes($attributes);
         $product->save();
         wp_die();
+    }
+
+    /**
+     * Handle a refund via the edit order screen.
+     *
+     * @throws Exception To return errors.
+     */
+    public function wcmp_do_refund() {
+        ob_start();
+
+        check_ajax_referer('wcmp-order-item', 'security');
+
+//		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+//			wp_die( -1 );
+//		}
+
+        $order_id = absint($_POST['order_id']);
+        $refund_amount = wc_format_decimal(sanitize_text_field(wp_unslash($_POST['refund_amount'])), wc_get_price_decimals());
+        $refunded_amount = wc_format_decimal(sanitize_text_field(wp_unslash($_POST['refunded_amount'])), wc_get_price_decimals());
+        $refund_reason = sanitize_text_field($_POST['refund_reason']);
+        $line_item_qtys = json_decode(sanitize_text_field(wp_unslash($_POST['line_item_qtys'])), true);
+        $line_item_totals = json_decode(sanitize_text_field(wp_unslash($_POST['line_item_totals'])), true);
+        $line_item_tax_totals = json_decode(sanitize_text_field(wp_unslash($_POST['line_item_tax_totals'])), true);
+        $api_refund = 'true' === $_POST['api_refund'];
+        $restock_refunded_items = 'true' === $_POST['restock_refunded_items'];
+        $refund = false;
+        $response_data = array();
+
+        try {
+            $order = wc_get_order($order_id);
+            $order_items = $order->get_items();
+            $max_refund = wc_format_decimal($order->get_total() - $order->get_total_refunded(), wc_get_price_decimals());
+
+            if (!$refund_amount || $max_refund < $refund_amount || 0 > $refund_amount) {
+                throw new exception(__('Invalid refund amount', 'woocommerce'));
+            }
+
+            if ($refunded_amount !== wc_format_decimal($order->get_total_refunded(), wc_get_price_decimals())) {
+                throw new exception(__('Error processing refund. Please try again.', 'woocommerce'));
+            }
+
+            // Prepare line items which we are refunding.
+            $line_items = array();
+            $item_ids = array_unique(array_merge(array_keys($line_item_qtys, $line_item_totals)));
+
+            foreach ($item_ids as $item_id) {
+                $line_items[$item_id] = array(
+                    'qty' => 0,
+                    'refund_total' => 0,
+                    'refund_tax' => array(),
+                );
+            }
+            foreach ($line_item_qtys as $item_id => $qty) {
+                $line_items[$item_id]['qty'] = max($qty, 0);
+            }
+            foreach ($line_item_totals as $item_id => $total) {
+                $line_items[$item_id]['refund_total'] = wc_format_decimal($total);
+            }
+            foreach ($line_item_tax_totals as $item_id => $tax_totals) {
+                $line_items[$item_id]['refund_tax'] = array_filter(array_map('wc_format_decimal', $tax_totals));
+            }
+
+            // Create the refund object.
+            $refund = wc_create_refund(
+                    array(
+                        'amount' => $refund_amount,
+                        'reason' => $refund_reason,
+                        'order_id' => $order_id,
+                        'line_items' => $line_items,
+                        'refund_payment' => $api_refund,
+                        'restock_items' => $restock_refunded_items,
+                    )
+            );
+
+            if (is_wp_error($refund)) {
+                throw new Exception($refund->get_error_message());
+            }
+
+            if (did_action('woocommerce_order_fully_refunded')) {
+                $response_data['status'] = 'fully_refunded';
+            }
+
+            wp_send_json_success($response_data);
+            die;
+        } catch (Exception $e) {
+            wp_send_json_error(array('error' => $e->getMessage()));
+            die;
+        }
+    }
+    
+    /**
+     * Search for downloadable product variations and return json.
+     *
+     * @see WCMP_AJAX::json_search_products()
+     */
+    public function wcmp_json_search_downloadable_products_and_variations() {
+        check_ajax_referer( 'search-products', 'security' );
+
+            $term       = (string) wc_clean( wp_unslash( $_GET['term'] ) );
+            $data_store = WC_Data_Store::load( 'product' );
+            $ids        = $data_store->search_products( $term, 'downloadable', true );
+
+            if ( ! empty( $_GET['exclude'] ) ) {
+                    $ids = array_diff( $ids, (array) $_GET['exclude'] );
+            }
+
+            if ( ! empty( $_GET['include'] ) ) {
+                    $ids = array_intersect( $ids, (array) $_GET['include'] );
+            }
+
+            if ( ! empty( $_GET['limit'] ) ) {
+                    $ids = array_slice( $ids, 0, absint( $_GET['limit'] ) );
+            }
+            
+            if (is_user_wcmp_vendor(get_current_user_id() ) ) {
+                $vendor = get_wcmp_vendor(get_current_user_id() );
+                $vendor_product_ids = wp_list_pluck( $vendor->get_products(), 'ID' );
+                $ids = array_intersect( $ids, (array) $vendor_product_ids );
+            }
+
+            $product_objects = array_filter( array_map( 'wc_get_product', $ids ), 'wc_products_array_filter_readable' );
+            $products        = array();
+
+            foreach ( $product_objects as $product_object ) {
+                    $products[ $product_object->get_id() ] = rawurldecode( $product_object->get_formatted_name() );
+            }
+
+            wp_send_json( $products );
+    }
+    
+    /**
+     * Search for products and echo json.
+     *
+     * @param string $term (default: '')
+     * @param bool   $include_variations in search or not
+     */
+    public static function wcmp_json_search_products_and_variations() {
+        check_ajax_referer('search-products', 'security');
+
+        $term = wc_clean(empty($term) ? wp_unslash($_GET['term']) : $term);
+
+        if (empty($term)) {
+            wp_die();
+        }
+
+        if (!empty($_GET['limit'])) {
+            $limit = absint($_GET['limit']);
+        } else {
+            $limit = absint(apply_filters('woocommerce_json_search_limit', 30));
+        }
+
+        $data_store = WC_Data_Store::load('product');
+        $ids = $data_store->search_products($term, '', (bool) false, false, $limit);
+
+        if (!empty($_GET['exclude'])) {
+            $ids = array_diff($ids, (array) $_GET['exclude']);
+        }
+
+        if (!empty($_GET['include'])) {
+            $ids = array_intersect($ids, (array) $_GET['include']);
+        }
+        
+        if (is_user_wcmp_vendor(get_current_user_id() ) ) {
+            $vendor = get_wcmp_vendor(get_current_user_id() );
+            $vendor_product_ids = wp_list_pluck( $vendor->get_products(), 'ID' );
+            $ids = array_intersect( $ids, (array) $vendor_product_ids );
+        }
+
+        $product_objects = array_filter(array_map('wc_get_product', $ids), 'wc_products_array_filter_readable');
+        $products = array();
+
+        foreach ($product_objects as $product_object) {
+            $formatted_name = $product_object->get_formatted_name();
+            $managing_stock = $product_object->managing_stock();
+
+            if ($managing_stock && !empty($_GET['display_stock'])) {
+                $formatted_name .= ' &ndash; ' . wc_format_stock_for_display($product_object);
+            }
+
+            $products[$product_object->get_id()] = rawurldecode($formatted_name);
+        }
+
+        wp_send_json(apply_filters('wcmp_json_search_found_products', $products));
+    }
+
+    /**
+     * Grant download permissions via ajax function.
+     */
+    public function wcmp_grant_access_to_download(){
+        global $WCMp;
+        check_ajax_referer( 'grant-access', 'security' );
+
+        if ( ! current_user_can( 'edit_shop_orders' ) ) {
+                wp_die( -1 );
+        }
+
+        global $wpdb;
+
+        $wpdb->hide_errors();
+
+        $order_id     = intval( $_POST['order_id'] );
+        $product_ids  = $_POST['product_ids'];
+        $loop         = intval( $_POST['loop'] );
+        $file_counter = 0;
+        $order        = wc_get_order( $order_id );
+
+        if ( ! is_array( $product_ids ) ) {
+                $product_ids = array( $product_ids );
+        }
+
+        foreach ( $product_ids as $product_id ) {
+                $product = wc_get_product( $product_id );
+                $files   = $product->get_downloads();
+
+                if ( ! $order->get_billing_email() ) {
+                        wp_die();
+                }
+
+                if ( ! empty( $files ) ) {
+                        foreach ( $files as $download_id => $file ) {
+                                if ( $inserted_id = wc_downloadable_file_permission( $download_id, $product_id, $order ) ) {
+                                        $download = new WC_Customer_Download( $inserted_id );
+                                        $loop ++;
+                                        $file_counter ++;
+
+                                        if ( $file->get_name() ) {
+                                                $file_count = $file->get_name();
+                                        } else {
+                                                $file_count = sprintf( __( 'File %d', 'woocommerce' ), $file_counter );
+                                        }
+                                        include $WCMp->plugin_path . 'templates/vendor-dashboard/vendor-orders/views/html-order-download-permission.php';
+                                }
+                        }
+                }
+        }
+        wp_die();
+    }
+    
+    public function wcmp_order_status_changed(){
+        $order_id = isset( $_POST['order_id'] ) ? (int) $_POST['order_id'] : 0;
+        $status = isset( $_POST['selected_status'] ) ? $_POST['selected_status'] : '';
+        $order = wc_get_order( $order_id );
+        if( $order ) {
+            // fetch actual status
+            $status = str_replace( 'wc-', '', $status );
+            $order->update_status( $status );
+            echo esc_html( wc_get_order_status_name( $order->get_status() ) );
+        }
+        die;
+    }
+    
+    public function wcmp_vendor_banking_ledger_list(){
+        global $WCMp;
+        if (is_user_logged_in() && is_user_wcmp_vendor(get_current_vendor_id())) {
+            $vendor = get_wcmp_vendor(get_current_vendor_id());
+            $requestData = $_REQUEST;
+            $data_store = $WCMp->ledger->load_ledger_data_store();
+            $vendor_ledgers = $data_store->get_ledger( array( 'vendor_id' => $vendor->id ), '', $requestData );
+            $initial_balance = $ending_balance = $total_credit = $total_debit = 0;
+            // get initial balance
+            $inital_data = end( $vendor_ledgers );
+            $initial_balance = ( $inital_data->balance && $inital_data->balance != '' ) ? $inital_data->balance : 0;
+            //get ending balance
+            $ending_data = reset( $vendor_ledgers );
+            $ending_balance = ( $ending_data->balance && $ending_data->balance != '' ) ? $ending_data->balance : 0;
+            $data = array();
+            if ( $vendor_ledgers ) {
+                foreach ($vendor_ledgers as $ledger ) {
+                    // total credited balance
+                    $total_credit += floatval( $ledger->credit );
+                    // total debited balance
+                    $total_debit += floatval( $ledger->debit );
+                    
+                    $order = wc_get_order( $ledger->order_id );
+                    $currency = '';
+                    if( $order ){
+                        $currency = $order->get_currency();
+                    }
+
+                    $type = '<mark class="type ' . $ledger->ref_type . '"><span>' . ucfirst( $ledger->ref_type ). '</span></mark>';
+                    $status = $ledger->ref_status;
+                    if( $ledger->ref_status == 'unpaid' ){
+                        $status = '<i class="'. $ledger->ref_status .' wcmp-font ico-processing-status-icon" title="'. ucfirst($ledger->ref_status).'"></i>';
+                    }elseif( $ledger->ref_status == 'completed' ){
+                        $status = '<i class="'. $ledger->ref_status.' wcmp-font ico-completed-status-icon" title="'. ucfirst($ledger->ref_status).'"></i>';
+                    }
+                    $row = array();
+                    $row ['status'] = $status;
+                    $row ['date'] = wcmp_date($ledger->created);
+                    $row ['ref_type'] = $type;
+                    $row ['ref_info'] = $ledger->ref_info;
+                    $row ['credit'] = ( $ledger->credit ) ? wc_price($ledger->credit, array('currency' => $currency)) : '';
+                    $row ['debit'] = ( $ledger->debit ) ? wc_price($ledger->debit, array('currency' => $currency)) : '';
+                    $row ['balance'] = wc_price($ledger->balance, array('currency' => $currency));
+                    $data[] = apply_filters( 'wcmp_vendor_banking_ledger_list_row_data', $row, $ledger );
+                }
+            }
+
+            $json_data = array(
+                "initial_bal" => wc_price( $initial_balance ),
+                "ending_bal" => wc_price( $ending_balance ),
+                "total_credit" => wc_price( $total_credit ),
+                "total_debit" => wc_price( $total_debit ),
+                "draw" => intval($requestData['draw']), // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
+                "recordsTotal" => intval(count($data)), // total number of records
+                "recordsFiltered" => intval(count($data)), // total number of records after searching, if there is no searching then totalFiltered = totalData
+                "data" => $data   // total data array
+            );
+            wp_send_json($json_data);
+            die;
+        }
     }
 
 }

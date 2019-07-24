@@ -54,6 +54,7 @@ class WCMp_Settings_Vendor_General {
                         'wcmp_vendor_billing_endpoint' => array('title' => __('Vendor Billing', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'wcmp_vendor_billing_endpoint', 'label_for' => 'wcmp_vendor_billing_endpoint', 'name' => 'wcmp_vendor_billing_endpoint', 'hints' => __('Set endpoint for vendor billing page', 'dc-woocommerce-multi-vendor'), 'placeholder' => 'vendor-billing'),
                         'wcmp_vendor_shipping_endpoint' => array('title' => __('Vendor Shipping', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'wcmp_vendor_shipping_endpoint', 'label_for' => 'wcmp_vendor_shipping_endpoint', 'name' => 'wcmp_vendor_shipping_endpoint', 'hints' => __('Set endpoint for vendor shipping page', 'dc-woocommerce-multi-vendor'), 'placeholder' => 'vendor-shipping'),
                         'wcmp_vendor_report_endpoint' => array('title' => __('Vendor Report', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'wcmp_vendor_report_endpoint', 'label_for' => 'wcmp_vendor_report_endpoint', 'name' => 'wcmp_vendor_report_endpoint', 'hints' => __('Set endpoint for vendor report page', 'dc-woocommerce-multi-vendor'), 'placeholder' => 'vendor-report'),
+                        'wcmp_vendor_banking_overview_endpoint' => array('title' => __('Banking Overview', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'wcmp_vendor_banking_overview_endpoint', 'label_for' => 'wcmp_vendor_banking_overview_endpoint', 'name' => 'wcmp_vendor_banking_overview_endpoint', 'hints' => __('Set endpoint for vendor banking overview page', 'dc-woocommerce-multi-vendor'), 'placeholder' => 'banking-overview'),
                         
                         'wcmp_add_product_endpoint' => array('title' => __('Add Product', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'wcmp_add_product_endpoint', 'label_for' => 'wcmp_add_product_endpoint', 'name' => 'wcmp_add_product_endpoint', 'hints' => __('Set endpoint for add new product page', 'dc-woocommerce-multi-vendor'), 'placeholder' => 'add-product'),
                         'wcmp_edit_product_endpoint' => array('title' => __('Edit Product', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'wcmp_edit_product_endpoint', 'label_for' => 'wcmp_edit_product_endpoint', 'name' => 'wcmp_edit_product_endpoint', 'hints' => __('Set endpoint for edit product page', 'dc-woocommerce-multi-vendor'), 'placeholder' => 'edit-product'),
@@ -111,6 +112,9 @@ class WCMp_Settings_Vendor_General {
         }
         if (isset($input['wcmp_vendor_report_endpoint']) && !empty($input['wcmp_vendor_report_endpoint'])) {
             $new_input['wcmp_vendor_report_endpoint'] = sanitize_text_field($input['wcmp_vendor_report_endpoint']);
+        }
+        if (isset($input['wcmp_vendor_banking_overview_endpoint']) && !empty($input['wcmp_vendor_banking_overview_endpoint'])) {
+            $new_input['wcmp_vendor_banking_overview_endpoint'] = sanitize_text_field($input['wcmp_vendor_banking_overview_endpoint']);
         }
         if (isset($input['wcmp_vendor_orders_endpoint']) && !empty($input['wcmp_vendor_orders_endpoint'])) {
             $new_input['wcmp_vendor_orders_endpoint'] = sanitize_text_field($input['wcmp_vendor_orders_endpoint']);

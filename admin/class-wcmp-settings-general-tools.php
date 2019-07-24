@@ -61,7 +61,12 @@ class WCMp_Settings_General_Tools {
                 'name'   => __( 'Reset visitors stats table', 'dc-woocommerce-multi-vendor' ),
                 'button' => __( 'Reset database', 'dc-woocommerce-multi-vendor' ),
                 'desc'   => __( 'This tool will clear ALL the table data of WCMp visitors stats.', 'dc-woocommerce-multi-vendor' ),
-            ),   
+            ), 
+            'force_wcmp_orders_migration'   => array(
+                'name'   => __( 'Force WCMp order migrate', 'dc-woocommerce-multi-vendor' ),
+                'button' => __( 'Order migrate', 'dc-woocommerce-multi-vendor' ),
+                'desc'   => __( 'This will regenerate all vendors older orders to individual orders', 'dc-woocommerce-multi-vendor' ),
+            ),
         );
 
         return apply_filters( 'wcmp_settings_general_tools', $tools );
@@ -91,6 +96,11 @@ class WCMp_Settings_General_Tools {
                         $message = __( 'There was an error calling this tool. There is no callback present.', 'woocommerce' );
                     }
                     break;
+                case 'force_wcmp_orders_migration':
+                    delete_option('wcmp_orders_table_migrated');
+                    wp_schedule_event( time(), 'hourly', 'wcmp_orders_migration' );
+                    $message = __( 'Force order migration started.', 'dc-woocommerce-multi-vendor' );
+                    break;
                 default:
                     do_action( 'wcmp_settings_tools_action_default_case', $action, $_REQUEST );
                     $ran     = false;
@@ -103,6 +113,7 @@ class WCMp_Settings_General_Tools {
             } else {
                     echo '<div class="error inline"><p>' . esc_html( $message ) . '</p></div>';
             }
+            $message = '';
         }
     }
 }

@@ -13,9 +13,8 @@ class WCMp_Email {
         global $WCMp;
         // Intialize WCMp Emails
         add_filter('woocommerce_email_classes', array($this, 'wcmp_email_classes'));
-        
         add_action( 'woocommerce_email_customer_details', array( $this, 'wcmp_vendor_messages_customer_support' ), 30, 3 );	
-	  	// Intialize WCMp Email Footer text settings
+        // Intialize WCMp Email Footer text settings
         add_filter('woocommerce_get_settings_email', array($this, 'wcmp_settings_email'));
         // WCMp Email Footer hook
         add_action( 'wcmp_email_footer', array( $this, 'wcmp_email_footer' ) );

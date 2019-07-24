@@ -30,10 +30,12 @@ class WCMp_Frontend {
         add_filter('woocommerce_cart_shipping_packages', array(&$this, 'wcmp_split_shipping_packages'), 0);
         // Rename woocommerce shipping packages
         add_filter('woocommerce_shipping_package_name', array(&$this, 'woocommerce_shipping_package_name'), 10, 3);
-        // Add extra vendor_id to shipping packages
-        add_action('woocommerce_checkout_create_order_shipping_item', array(&$this, 'add_meta_date_in_shipping_package'), 10, 4);
-        // processed woocomerce checkout order data
-        add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_checkout_order_processed'), 30, 3);
+        if (is_wcmp_version_less_3_4_0()) {
+            // Add extra vendor_id to shipping packages
+            add_action('woocommerce_checkout_create_order_shipping_item', array(&$this, 'add_meta_date_in_shipping_package'), 10, 4);
+            // processed woocomerce checkout order data
+            add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_checkout_order_processed'), 30, 3);
+        }
         // store visitors stats
         if(!apply_filters('wcmp_is_disable_store_visitors_stats', false))
             add_action('template_redirect', array(&$this, 'wcmp_store_visitors_stats'), 99);
@@ -127,9 +129,23 @@ class WCMp_Frontend {
      */
     function wcmp_validate_extra_register_fields($username, $email, $validation_errors) {
         $wcmp_vendor_registration_form_data = get_option('wcmp_vendor_registration_form_data');
-        if (isset($_POST['g-recaptcha-response']) && empty($_POST['g-recaptcha-response'])) {
-            $validation_errors->add('recaptcha is not validate', __('Please Verify  Recaptcha', 'dc-woocommerce-multi-vendor'));
+        if(isset($_POST['g-recaptchatype']) && $_POST['g-recaptchatype'] == 'v2'){
+            if (isset($_POST['g-recaptcha-response']) && empty($_POST['g-recaptcha-response'])) {
+                $validation_errors->add('recaptcha is not validate', __('Please Verify  Recaptcha', 'dc-woocommerce-multi-vendor'));
+            }
+        }elseif(isset($_POST['g-recaptchatype']) && $_POST['g-recaptchatype'] == 'v3') {
+            $recaptcha_secret = isset($_POST['recaptchav3_secretkey']) ? $_POST['recaptchav3_secretkey'] : '';
+            $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
+            $recaptcha_response = isset($_POST['recaptchav3Response']) ? $_POST['recaptchav3Response'] : '';
+
+            $recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
+            $recaptcha = json_decode($recaptcha);
+
+            if ( !$recaptcha->success || $recaptcha->score < 0.5 ) {
+                $validation_errors->add('recaptcha is not validate', __('Please Verify  Recaptcha', 'dc-woocommerce-multi-vendor'));
+            }
         }
+        
         if (isset($_FILES['wcmp_vendor_fields'])) {
             $attacment_files = $_FILES['wcmp_vendor_fields'];
             if (!empty($attacment_files) && is_array($attacment_files)) {
