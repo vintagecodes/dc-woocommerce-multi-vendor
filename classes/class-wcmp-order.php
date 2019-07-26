@@ -59,6 +59,8 @@ class WCMp_Order {
             add_action( 'admin_enqueue_scripts', array( $this, 'wcmp_vendor_order_backend_restriction' ), 99 );
             add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 99 );
             add_action( 'admin_menu', array( $this, 'remove_admin_menu' ), 99 );
+            // restrict stock managements for sub-orders
+            add_filter( 'woocommerce_can_reduce_order_stock', array($this, 'woocommerce_can_reduce_order_stock'), 99, 2 );
         }
     }
 
@@ -111,7 +113,6 @@ class WCMp_Order {
     public function init_prevent_trigger_vendor_order_emails(){
         $prevent_vendor_order_emails = apply_filters('wcmp_prevent_vendor_order_emails_trigger', array(
             'recipient' => array(
-                'new_order', 
                 'cancelled_order'
                 ),
             'enabled' => array(
@@ -120,7 +121,10 @@ class WCMp_Order {
                 'customer_refunded_order', 
                 'customer_partially_refunded_order', 
                 'customer_completed_order'
-                )
+                ),
+            'disabled' => array(
+                'new_order',
+            )
         ));
         if($prevent_vendor_order_emails) :
             foreach ($prevent_vendor_order_emails as $prevent => $email_ids) {
@@ -128,14 +132,21 @@ class WCMp_Order {
                     case 'recipient':
                         if($email_ids){
                             foreach ($email_ids as $email_id) {
-                                add_filter( 'woocommerce_email_recipient_'.$email_id, array($this, 'woocommerce_email_recipient_prevent'), 99, 2 );
+                                add_filter( 'woocommerce_email_recipient_'.$email_id, array($this, 'woocommerce_email_recipient'), 99, 2 );
                             }
                         }
                         break;
                     case 'enabled':
                         if($email_ids){
                             foreach ($email_ids as $email_id) {
-                                add_filter( 'woocommerce_email_enabled_'.$email_id, array($this, 'woocommerce_email_enabled_prevent'), 99, 2 );
+                                add_filter( 'woocommerce_email_enabled_'.$email_id, array($this, 'woocommerce_email_enabled'), 99, 2 );
+                            }
+                        }
+                        break;
+                    case 'disabled':
+                        if($email_ids){
+                            foreach ($email_ids as $email_id) {
+                                add_filter( 'woocommerce_email_enabled_'.$email_id, array($this, 'woocommerce_email_disabled'), 99, 2 );
                             }
                         }
                         break;
@@ -147,11 +158,20 @@ class WCMp_Order {
         endif;
     }
     
-    public function woocommerce_email_recipient_prevent($recipient, $object ){
+    public function woocommerce_email_recipient($recipient, $object ){
+        $is_migrated_order = get_post_meta($object->get_id(), '_order_migration', true);
+        if($is_migrated_order) return false;
         return $object instanceof WC_Order && wp_get_post_parent_id( $object->get_id() ) ? false : $recipient;
     }
     
-    public function woocommerce_email_enabled_prevent($enabled, $object ){
+    public function woocommerce_email_disabled($enabled, $object ){
+        $is_vendor_order = ($object) ? wcmp_get_order($object->get_id()) : false;
+        $is_migrated_order = get_post_meta($object->get_id(), '_order_migration', true);
+        if($is_migrated_order) return false;
+        return $object instanceof WC_Order && wp_get_post_parent_id( $object->get_id() ) && $is_vendor_order ? false : $enabled;
+    }
+    
+    public function woocommerce_email_enabled($enabled, $object ){
 //        $is_editpost_action = ! empty( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array('editpost','edit') );
 //
 //        if ( $is_editpost_action && ! empty( $_REQUEST['post_ID'] ) && wp_get_post_parent_id( $_REQUEST['post_ID'] ) == 0 && $object instanceof WC_Order && $_REQUEST['post_ID'] != $object->get_id() ) {
@@ -159,6 +179,8 @@ class WCMp_Order {
 //        }
         
         $is_vendor_order = ($object) ? wcmp_get_order($object->get_id()) : false;
+        $is_migrated_order = get_post_meta($object->get_id(), '_order_migration', true);
+        if($is_migrated_order) return false;
         
         if ( $object instanceof WC_Order && wp_get_post_parent_id( $object->get_id() ) && $is_vendor_order ) return $enabled;
 
@@ -1137,6 +1159,11 @@ class WCMp_Order {
             $body_classes .= ' wcmp_vendor_admin';
         }
         return $body_classes;
+    }
+    
+    public function woocommerce_can_reduce_order_stock( $reduce_stock, $order ){
+        $is_vendor_order = ( $order ) ? wcmp_get_order( $order->get_id() ) : false;
+        return $order instanceof WC_Order && wp_get_post_parent_id( $order->get_id() ) && $is_vendor_order ? false : $reduce_stock;
     }
 
 }

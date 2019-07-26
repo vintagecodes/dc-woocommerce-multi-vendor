@@ -107,7 +107,7 @@ class WCMp_Report {
 					$get_key = "order_items.{$key}";
 					break;
 				default:
-					continue;
+					break;
 			}
 
 			if ( $value['function'] ) {
