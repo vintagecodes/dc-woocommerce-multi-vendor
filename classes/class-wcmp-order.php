@@ -75,7 +75,7 @@ class WCMp_Order {
             $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
             $vendor = get_wcmp_product_vendors($item['product_id']);
             if ($vendor) {
-                wc_add_order_item_meta($item_id, $general_cap, $vendor->page_titl);
+                wc_add_order_item_meta($item_id, $general_cap, $vendor->page_title);
                 wc_add_order_item_meta($item_id, '_vendor_id', $vendor->id);
             }
         }
@@ -443,10 +443,10 @@ class WCMp_Order {
                 if ($product) {
                     $item->set_props(
                             array(
-                                'name' => $product->get_name(),
-                                'tax_class' => $product->get_tax_class(),
-                                'product_id' => $product->is_type('variation') ? $product->get_parent_id() : $product->get_id(),
-                                'variation_id' => $product->is_type('variation') ? $product->get_id() : 0,
+                                'name' => $order_item->get_name(),
+                                'tax_class' => $order_item->get_tax_class(),
+                                'product_id' => $order_item->get_product_id(),
+                                'variation_id' => $order_item->get_variation_id(),
                             )
                     );
                 }
@@ -455,12 +455,19 @@ class WCMp_Order {
                 $item->add_meta_data('_vendor_order_item_id', $item_id);
                 // Add commission data
                 $item->add_meta_data('_vendor_item_commission', $order_item['commission']);
+                
+                $metadata = $order_item->get_meta_data();
+                if ( $metadata ) {
+                    foreach ( $metadata as $meta ) {
+                        $item->add_meta_data( $meta->key, $meta->value );
+                    }
+                }
 
-                $item->add_meta_data('_vendor_id', $args['vendor_id']);
-                // BW compatibility with old meta.
-                $vendor = get_wcmp_vendor($args['vendor_id']);
-                $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
-                $item->add_meta_data($general_cap, $vendor->page_title);
+//                $item->add_meta_data('_vendor_id', $args['vendor_id']);
+//                // BW compatibility with old meta.
+//                $vendor = get_wcmp_vendor($args['vendor_id']);
+//                $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
+//                $item->add_meta_data($general_cap, $vendor->page_title);
 
 
                 do_action('wcmp_vendor_create_order_line_item', $item, $item_id, $order_item, $order);
