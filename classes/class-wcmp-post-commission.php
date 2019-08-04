@@ -196,10 +196,10 @@ class WCMp_Commission {
             // transfer tax charges
             foreach ( $order->get_items( 'tax' ) as $key => $tax ) { 
                 if ($WCMp->vendor_caps->vendor_payment_settings('give_tax') && $WCMp->vendor_caps->vendor_payment_settings('give_shipping') && !get_user_meta($vendor_id, '_vendor_give_shipping', true) && !get_user_meta($vendor_id, '_vendor_give_tax', true)) {
-                    $tax_amount = $tax->get_tax_total();
+                    $tax_amount += $tax->get_tax_total();
                     $shipping_tax_amount = $tax->get_shipping_tax_total();
                 } else if ($WCMp->vendor_caps->vendor_payment_settings('give_tax') && !get_user_meta($vendor_id, '_vendor_give_tax', true)) {
-                    $tax_amount = $tax->get_tax_total();
+                    $tax_amount += $tax->get_tax_total();
                     $shipping_tax_amount = 0;
                 } else {
                     $tax_amount = 0;
@@ -1103,8 +1103,13 @@ class WCMp_Commission {
                             <td class="label"><?php echo esc_html($tax->label); ?>:</td>
                             <td width="1%"></td>
                             <td class="total">
-                                <?php $tax_amount = get_post_meta( $post_id, '_tax', true );
-                                echo wc_price($tax_amount, array('currency' => $order->get_currency()));
+                                <?php
+                                $refunded = $order->get_total_tax_refunded_by_rate_id($tax->rate_id);
+                                if ($refunded > 0) {
+                                    echo '<del>' . strip_tags($tax->formatted_amount) . '</del> <ins>' . wc_price(WC_Tax::round($tax->amount, wc_get_price_decimals()) - WC_Tax::round($refunded, wc_get_price_decimals()), array('currency' => $order->get_currency())) . '</ins>'; // WPCS: XSS ok.
+                                } else {
+                                    echo wp_kses_post($tax->formatted_amount);
+                                }
                                 ?>
                             </td>
                         </tr>

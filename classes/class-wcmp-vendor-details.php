@@ -665,7 +665,7 @@ class WCMp_Vendor {
             'label' => __('Total:', 'dc-woocommerce-multi-vendor'),
             'value' => $vendor_order->get_commission_total()
         );
-        return $order_item_totals;
+        return apply_filters( 'wcmp_vendor_get_order_item_totals', $order_item_totals, $order, $vendor );
     }
 
     /**

@@ -113,17 +113,19 @@ class WCMp_Order {
     public function init_prevent_trigger_vendor_order_emails(){
         $prevent_vendor_order_emails = apply_filters('wcmp_prevent_vendor_order_emails_trigger', array(
             'recipient' => array(
-                'cancelled_order'
+                'cancelled_order',
                 ),
             'enabled' => array(
                 'customer_on_hold_order', 
                 'customer_processing_order', 
                 'customer_refunded_order', 
                 'customer_partially_refunded_order', 
-                'customer_completed_order'
+                'customer_completed_order',
                 ),
             'disabled' => array(
                 'new_order',
+                'customer_on_hold_order',
+                'customer_processing_order',
             )
         ));
         if($prevent_vendor_order_emails) :

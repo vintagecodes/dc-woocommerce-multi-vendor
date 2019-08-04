@@ -80,7 +80,7 @@ class WCMp_Vendor_Order {
         if($commission_amount != WCMp_Commission::commission_amount_totals($commission_id, 'edit')){
             return '<del>' . wc_price($commission_amount, array('currency' => $this->order->get_currency())) . '</del> <ins>' . WCMp_Commission::commission_amount_totals($commission_id, $context).'</ins>'; 
         }else{
-            return WCMp_Commission::commission_amount_totals($commission_amount, $context);
+            return WCMp_Commission::commission_amount_totals($commission_id, $context);
         }
     }
     
