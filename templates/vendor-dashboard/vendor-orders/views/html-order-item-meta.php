@@ -16,7 +16,12 @@ $hidden_order_itemmeta = apply_filters(
     'method_id',
     '_vendor_item_commission',
     'cost',
-        )
+    'commission',
+    '_vendor_id',
+    'vendor_id',
+    '_vendor_order_item_id',
+    'Sold By',
+    )
 );
 if ( $meta_data = $item->get_formatted_meta_data( '' ) ) : 
     foreach ( $meta_data as $meta_id => $meta ) :

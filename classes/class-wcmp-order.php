@@ -17,9 +17,11 @@ class WCMp_Order {
         global $WCMp;
         // Init WCMp Vendor Order class
         $WCMp->load_class('vendor-order');
-        add_action('woocommerce_new_order_item', array(&$this, 'order_item_meta_2'), 20, 3);
+        //add_action('woocommerce_new_order_item', array(&$this, 'order_item_meta_2'), 20, 3);
         // Add extra vendor_id to shipping packages
+        add_action('woocommerce_checkout_create_order_line_item', array(&$this, 'add_meta_date_in_order_line_item'), 10, 4);
         add_action('woocommerce_checkout_create_order_shipping_item', array(&$this, 'add_meta_date_in_shipping_package'), 10, 4);
+        
         if (is_wcmp_version_less_3_4_0()) {
             
         } else {
@@ -61,6 +63,7 @@ class WCMp_Order {
             add_action( 'admin_menu', array( $this, 'remove_admin_menu' ), 99 );
             // restrict stock managements for sub-orders
             add_filter( 'woocommerce_can_reduce_order_stock', array($this, 'woocommerce_can_reduce_order_stock'), 99, 2 );
+            add_filter( 'woocommerce_hidden_order_itemmeta', array($this, 'woocommerce_hidden_order_itemmeta'), 99 );
         }
     }
 
@@ -77,6 +80,17 @@ class WCMp_Order {
             if ($vendor) {
                 wc_add_order_item_meta($item_id, $general_cap, $vendor->page_title);
                 wc_add_order_item_meta($item_id, '_vendor_id', $vendor->id);
+            }
+        }
+    }
+    
+    public function add_meta_date_in_order_line_item($item, $item_key, $values, $order) {
+        if ($order && !wcmp_get_order($order->get_id())) {
+            $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
+            $vendor = get_wcmp_product_vendors($item['product_id']);
+            if ($vendor) {
+                $item->add_meta_data($general_cap, $vendor->page_title);
+                $item->add_meta_data('_vendor_id', $vendor->id);
             }
         }
     }
@@ -161,12 +175,14 @@ class WCMp_Order {
     }
     
     public function woocommerce_email_recipient($recipient, $object ){
+        if(!$object) return $recipient;
         $is_migrated_order = get_post_meta($object->get_id(), '_order_migration', true);
         if($is_migrated_order) return false;
         return $object instanceof WC_Order && wp_get_post_parent_id( $object->get_id() ) ? false : $recipient;
     }
     
     public function woocommerce_email_disabled($enabled, $object ){
+        if(!$object) return $enabled;
         $is_vendor_order = ($object) ? wcmp_get_order($object->get_id()) : false;
         $is_migrated_order = get_post_meta($object->get_id(), '_order_migration', true);
         if($is_migrated_order) return false;
@@ -179,7 +195,7 @@ class WCMp_Order {
 //        if ( $is_editpost_action && ! empty( $_REQUEST['post_ID'] ) && wp_get_post_parent_id( $_REQUEST['post_ID'] ) == 0 && $object instanceof WC_Order && $_REQUEST['post_ID'] != $object->get_id() ) {
 //            return false;
 //        }
-        
+        if(!$object) return $enabled;
         $is_vendor_order = ($object) ? wcmp_get_order($object->get_id()) : false;
         $is_migrated_order = get_post_meta($object->get_id(), '_order_migration', true);
         if($is_migrated_order) return false;
@@ -1173,6 +1189,18 @@ class WCMp_Order {
     public function woocommerce_can_reduce_order_stock( $reduce_stock, $order ){
         $is_vendor_order = ( $order ) ? wcmp_get_order( $order->get_id() ) : false;
         return $order instanceof WC_Order && wp_get_post_parent_id( $order->get_id() ) && $is_vendor_order ? false : $reduce_stock;
+    }
+    
+    public function woocommerce_hidden_order_itemmeta( $itemmeta ) {
+        if ( is_user_wcmp_vendor(get_current_user_id() ) ) {
+            $itemmeta[] = '_vendor_item_commission';
+            $itemmeta[] = 'commission';
+            $itemmeta[] = '_vendor_id';
+            $itemmeta[] = 'vendor_id';
+            $itemmeta[] = '_vendor_order_item_id';
+            $itemmeta[] = 'Sold By';
+        }
+        return $itemmeta;
     }
 
 }

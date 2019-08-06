@@ -3985,8 +3985,7 @@ if (!function_exists('is_wcmp_version_less_3_4_0')) {
      */
     function is_wcmp_version_less_3_4_0() {
         $current_wcmp = get_option('dc_product_vendor_plugin_db_version');
-        //return version_compare( $current_wcmp, '3.4.0', '<' );
-        return false;
+        return version_compare( $current_wcmp, '3.4.0', '<' );
     }
 }
 

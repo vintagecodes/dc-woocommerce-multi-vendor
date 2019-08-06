@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.2.2
 Requires PHP: 5.6
-Stable tag: 3.4.0
+Stable tag: 3.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,7 +39,7 @@ Lastly, you get all the goodness of WCMp and much more **simply for free.**
 
 ## So, the answer is simple - From why choose WC Marketplace to why not choose WC Marketplace?
 An eCommerce multivendor marketplace solution is all about simpler and better user (customer's, vendor's and admin's) experience. Interested? Read on to find out more.
-### <a name="customer-benefits"></a>What is the customer experience like?
+### <a id="customer-benefits"></a>What is the customer experience like?
 - _Customers can not only see all the products, categories listed on your store but they also get an exclusive list of vendors listed on your site, so that they know whom to choose from ( This is termed as the **Vendor List** )._
 - _Customers can also search for a vendor by their nearest location or by product categories or even alphabetically ( technically, it is called **Vendor Search** or **Vendor Filter** )._
 - _If the customer has a particular vendor in mind, they can view all the products belonging to the vendor on one single page ( termed as: **Vendor Shop page** )._
@@ -55,7 +55,7 @@ An eCommerce multivendor marketplace solution is all about simpler and better us
 > - **Return and Refund Module**
 > - **Support Ticket Module**
 
-### <a name="vendor-benefits"></a>With so much for customers, what's in store for the vendors?
+### <a id="vendor-benefits"></a>With so much for customers, what's in store for the vendors?
 - _An entirely separate frontend dashboard, where they can manage their products, coupons, orders, commissions, customer questions and much more ( technically termed as: **The Vendor Dashboard** )_.
 - _Vendors get their dedicated store ( or vendor's shop ) and their equivalent store settings which they can manage themselves._
 - _Vendors get a **weekly and monthly sales report** in the vendor dashboard itself._
@@ -92,7 +92,7 @@ An eCommerce multivendor marketplace solution is all about simpler and better us
 > - **Vendor Notification Module**
 > - **Deactivate Vendor account Module**
 
-### <a name="admin-benefits"></a>What would the admin's experience be with WC Marketplace?
+### <a id="admin-benefits"></a>What would the admin's experience be with WC Marketplace?
 ###### _Simply hassle-free with just initial setups._
 - _**Automatic setup wizard** for a perfect online store setup._
 - _Admin can easily **customise the vendor's registration form** with innumerable built in form elements._
@@ -189,6 +189,14 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.4.1 - 2019-08-06 =
+* Tweak - Disabled order migration emails.
+* Tweak - Restrict suborders email for order on-hold and processing.
+* Fix - Admin woocommerce report issue.
+* Fix - Stock reduce issue.
+* Fix - Vencor commission multiple taxes issue.
+* Updated - Stripe library.
+
 = 3.4.0 - 2019-07-24 =
 * Added - WCMp Split order.
 * Added - WCMp Vendor wise banking overview ( ledger ).
@@ -706,5 +714,5 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Upgrade Notice ==
 
-= 3.4.0 =
-WC Marketplace 3.4.0 is a significantly major update and hence please make a full site backup or follow some standard steps(staging to live) before upgrading your marketplace to avoid any undesirable situations.
+= 3.4.1 =
+WC Marketplace 3.4+ is a significantly major update and hence please make a full site backup or follow some standard steps(staging to live) before upgrading your marketplace to avoid any undesirable situations.
