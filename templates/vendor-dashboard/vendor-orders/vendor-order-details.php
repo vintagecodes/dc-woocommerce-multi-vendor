@@ -50,6 +50,7 @@ $subtotal = 0;
                     <i class="wcmp-font ico-pendingpayment-status-icon"></i>
                     <span class="order_status_lbl"><?php echo esc_html( wc_get_order_status_name( $order->get_status() ) ); ?></span>
                 </div>
+                <?php if( $order->get_status( 'edit' ) != 'cancelled' ) : ?>
                 <div class="dropdown-order-statuses dropdown pull-left clearfix">
                     <span class="order-status-edit-button pull-left dropdown-toggle" data-toggle="dropdown"><u><?php _e( 'Edit', 'dc-woocommerce-multi-vendor' ); ?></u></span>
                     <input type="hidden" id="order_current_status" value="<?php echo 'wc-' . $order->get_status( 'edit' ); ?>" />
@@ -61,7 +62,8 @@ $subtotal = 0;
                             }
                             ?>
                     </ul>   
-                </div>        
+                </div>   
+                <?php endif; ?>
             </div>
         </div>
         <?php

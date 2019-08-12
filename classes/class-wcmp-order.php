@@ -64,6 +64,7 @@ class WCMp_Order {
             // restrict stock managements for sub-orders
             add_filter( 'woocommerce_can_reduce_order_stock', array($this, 'woocommerce_can_reduce_order_stock'), 99, 2 );
             add_filter( 'woocommerce_hidden_order_itemmeta', array($this, 'woocommerce_hidden_order_itemmeta'), 99 );
+            add_action( 'woocommerce_order_status_changed', array($this, 'wcmp_vendor_order_status_changed_actions'), 99, 3);
         }
     }
 
@@ -1201,6 +1202,14 @@ class WCMp_Order {
             $itemmeta[] = 'Sold By';
         }
         return $itemmeta;
+    }
+    
+    public function wcmp_vendor_order_status_changed_actions( $order_id, $old_status, $new_status ){
+        if( !$order_id || !is_wcmp_vendor_order( $order_id ) ) return;
+        if( $new_status == 'cancelled' ){
+            $commission_id = get_post_meta( $order_id, '_commission_id', true );
+            if( $commission_id ) wp_trash_post( $commission_id );
+        }
     }
 
 }

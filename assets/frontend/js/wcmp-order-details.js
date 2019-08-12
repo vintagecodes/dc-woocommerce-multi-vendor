@@ -104,6 +104,11 @@ jQuery(function ($) {
                 $('.change-status').removeClass('loaderOverlay');
                 $(".dropdown-order-statuses").removeClass('open');
                 return false;
+            }else if( selected_status == 'wc-cancelled' ){
+                var status_cnf = window.confirm(wcmp_order_details_js_script_data.i18n_do_cancel);
+                if(!status_cnf) return false;
+            }else if( current_status == 'wc-cancelled' ){
+                return false;
             }
             $('.change-status').addClass('loaderOverlay');
             var data = {
@@ -115,8 +120,11 @@ jQuery(function ($) {
             $.post(wcmp_order_details_js_script_data.ajax_url, data, function (response) {
                 if (response) {
                     $('.order_status_lbl').html('');
-                    $('.order_status_lbl').html(response);
-                    $('#order_current_status').val(selected_status);
+                    if( response.status_key == 'wc-cancelled' ){
+                        $('.dropdown-order-statuses').hide();
+                    }
+                    $('.order_status_lbl').html(response.status_name);
+                    $('#order_current_status').val(response.status_key);
                     $('.change-status').removeClass('loaderOverlay');
                 }
             });

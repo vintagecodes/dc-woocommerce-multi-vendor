@@ -640,6 +640,7 @@ class WCMp_Vendor_Hooks {
                         'rounding_precision'            => wc_get_rounding_precision(),
                         'i18n_download_permission_fail' => __( 'Could not grant access - the user may already have permission for this file or billing email is not set. Ensure the billing email is set, and the order has been saved.', 'woocommerce' ),
                         'i18n_permission_revoke'        => __( 'Are you sure you want to revoke access to this download?', 'woocommerce' ),
+                        'i18n_do_cancel'                => __( 'Are you sure you want to cancel this order? This action cannot be undone.', 'dc-woocommerce-multi-vendor' ),
                     )
             );
             $WCMp->template->get_template( 'vendor-dashboard/vendor-orders/vendor-order-details.php', array( 'order_id' => $vendor_order ) );

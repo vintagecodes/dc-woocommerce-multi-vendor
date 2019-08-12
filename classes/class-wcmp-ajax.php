@@ -3982,13 +3982,14 @@ class WCMp_Ajax {
     
     public function wcmp_order_status_changed(){
         $order_id = isset( $_POST['order_id'] ) ? (int) $_POST['order_id'] : 0;
-        $status = isset( $_POST['selected_status'] ) ? $_POST['selected_status'] : '';
+        $selected_status = isset( $_POST['selected_status'] ) ? $_POST['selected_status'] : '';
         $order = wc_get_order( $order_id );
         if( $order ) {
             // fetch actual status
-            $status = str_replace( 'wc-', '', $status );
+            $status = str_replace( 'wc-', '', $selected_status );
             $order->update_status( $status );
-            echo esc_html( wc_get_order_status_name( $order->get_status() ) );
+            wp_send_json( array( 'status_name' => esc_html( wc_get_order_status_name( $order->get_status() ) ), 'status_key' => $selected_status ) );
+            //echo esc_html( wc_get_order_status_name( $order->get_status() ) );
         }
         die;
     }
