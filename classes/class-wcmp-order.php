@@ -64,7 +64,8 @@ class WCMp_Order {
             // restrict stock managements for sub-orders
             add_filter( 'woocommerce_can_reduce_order_stock', array($this, 'woocommerce_can_reduce_order_stock'), 99, 2 );
             add_filter( 'woocommerce_hidden_order_itemmeta', array($this, 'woocommerce_hidden_order_itemmeta'), 99 );
-            add_action( 'woocommerce_order_status_changed', array($this, 'wcmp_vendor_order_status_changed_actions'), 99, 3);
+            add_action( 'woocommerce_order_status_changed', array($this, 'wcmp_vendor_order_status_changed_actions'), 99, 3 );
+            add_action( 'woocommerce_rest_shop_order_object_query', array($this, 'wcmp_exclude_suborders_from_rest_api_call'), 99, 2 );
         }
     }
 
@@ -1210,6 +1211,14 @@ class WCMp_Order {
             $commission_id = get_post_meta( $order_id, '_commission_id', true );
             if( $commission_id ) wp_trash_post( $commission_id );
         }
+    }
+    
+    public function wcmp_exclude_suborders_from_rest_api_call( $args, $request ){
+        if( apply_filters( 'wcmp_exclude_suborders_from_rest_api_call', true, $args, $request ) )
+            $args['parent'] = ( isset( $args['parent'] ) && $args['parent'] ) ? $args['parent'][] = 0 : array( 0 );
+        if( apply_filters( 'wcmp_fetch_all_suborders_from_rest_api_call', false, $args, $request ) )
+            $args['parent_exclude'] = ( isset( $args['parent_exclude'] ) && $args['parent_exclude'] ) ? $args['parent_exclude'][] = 0 : array( 0 );
+        return apply_filters( 'wcmp_exclude_suborders_from_rest_api_call_query_args', $args, $request );
     }
 
 }
