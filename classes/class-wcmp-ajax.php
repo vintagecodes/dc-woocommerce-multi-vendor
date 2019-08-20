@@ -1839,7 +1839,7 @@ class WCMp_Ajax {
             if (isset($requestData['post_status']) && $requestData['post_status'] != 'all') {
                 $df_post_status = $requestData['post_status'];
             }
-            $args = apply_filters( '', array(
+            $args = apply_filters( 'wcmp_get_vendor_product_list_query_args', array(
                 'posts_per_page' => -1,
                 'offset' => 0,
                 'category' => '',
