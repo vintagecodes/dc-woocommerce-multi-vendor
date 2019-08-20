@@ -1839,7 +1839,7 @@ class WCMp_Ajax {
             if (isset($requestData['post_status']) && $requestData['post_status'] != 'all') {
                 $df_post_status = $requestData['post_status'];
             }
-            $args = array(
+            $args = apply_filters( '', array(
                 'posts_per_page' => -1,
                 'offset' => 0,
                 'category' => '',
@@ -1856,7 +1856,7 @@ class WCMp_Ajax {
                 'author' => get_current_vendor_id(),
                 'post_status' => $df_post_status,
                 'suppress_filters' => true
-            );
+            ), $vendor, $requestData );
             $tax_query = array();
             if (isset($filterActionData['product_cat']) && $filterActionData['product_cat'] != '') {
                 $tax_query[] = array('taxonomy' => 'product_cat', 'field' => 'term_id', 'terms' => $filterActionData['product_cat']);
@@ -2133,7 +2133,7 @@ class WCMp_Ajax {
         if (is_user_logged_in() && is_user_wcmp_vendor(get_current_vendor_id())) {
             $vendor = get_wcmp_vendor(get_current_vendor_id());
             $requestData = $_REQUEST;
-            $args = array(
+            $args = apply_filters( 'wcmp_get_vendor_coupon_list_query_args', array(
                 'posts_per_page' => -1,
                 'offset' => 0,
                 'category' => '',
@@ -2150,7 +2150,7 @@ class WCMp_Ajax {
                 'author' => get_current_vendor_id(),
                 'post_status' => array('publish', 'pending', 'draft', 'trash'),
                 'suppress_filters' => true
-            );
+            ), $vendor, $requestData );
             $vendor_total_coupons = get_posts($args);
             $args['offset'] = $requestData['start'];
             $args['posts_per_page'] = $requestData['length'];

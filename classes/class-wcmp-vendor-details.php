@@ -330,7 +330,7 @@ class WCMp_Vendor {
         );
 
         $args = wp_parse_args($args, $default);
-        return get_posts($args);
+        return get_posts( apply_filters( 'wcmp_get_vendor_products_query_args', $args, $this->term_id ) );
     }
 
     /**

@@ -605,15 +605,26 @@ class WCMp_Commission {
             'post_status' => array('publish', 'private'),
             'posts_per_page' => -1,
             'fields' => 'ids',
-            'meta_query' => array(
+	);
+        
+        $args = wp_parse_args( $args, $default_args );
+        
+        if( isset( $args['meta_query'] ) ) {
+            $args['meta_query'][] = array(
+                'key' => '_paid_status',
+                'value' => array('unpaid', 'partial_refunded'),
+                'compare' => 'IN'
+            );
+        } else {
+            $args['meta_query'] = array(
                 array(
                     'key' => '_paid_status',
                     'value' => array('unpaid', 'partial_refunded'),
                     'compare' => 'IN'
                 ),
-            )
-	);
-        $args = wp_parse_args( $args, $default_args );
+            );
+        }
+   
         $commissions = new WP_Query( $args );
         if( $commissions->get_posts() ) :
             $commission_amount = $shipping_amount = $tax_amount = $total = 0;
