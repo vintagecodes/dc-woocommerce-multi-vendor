@@ -559,6 +559,21 @@ class WCMp_Commission {
     }
     
     /**
+     * Calculate commission refunded amount total
+     * @param int $commission_id
+     * @param string $context
+     * @return value 
+     */
+    public static function commission_items_refunded_totals( $commission_id, $context = 'view' ) {
+        if($commission_id){
+            $order_id = get_post_meta($commission_id, '_commission_order_id', true);
+            $order = wc_get_order($order_id);
+            $commission_refunded = get_post_meta( $commission_id, '_commission_refunded_items', true );
+            return $context == 'view' ? wc_price($commission_refunded, array('currency' => $order->get_currency())) : $commission_refunded;
+        }
+    }
+    
+    /**
      * Calculate commission shipping total including refunds
      * @param int $commission_id
      * @param string $context
@@ -669,6 +684,7 @@ class WCMp_Commission {
         global $post_id, $WCMp;
         $order_id = get_post_meta($post_id, '_commission_order_id', true);
         $order = wc_get_order($order_id);
+        $vendor_order = wcmp_get_order($order_id);
         if( $order ) :
         // Get line items
         $line_items = $order->get_items(apply_filters('wcmp_admin_commission_order_item_types', 'line_item'));
@@ -1052,7 +1068,8 @@ class WCMp_Commission {
 
                                 <td class="line_cost" width="1%">
                                     <div class="view">
-                                        <?php $refund_amt = ($commission_refunds && isset($commission_refunds[$post_id])) ? $commission_refunds[$post_id] : 0;
+                                        <?php $refund_amt_data = ($commission_refunds && isset($commission_refunds[$post_id])) ? $commission_refunds[$post_id] : array();
+                                        $refund_amt = array_sum($refund_amt_data);
                                         echo wc_price( $refund_amt ) ?>
                                     </div>
                                 </td>
@@ -1089,7 +1106,7 @@ class WCMp_Commission {
                         <td class="label"><?php if ( 0 < $order->get_total_discount() && get_post_meta($post_id, '_commission_include_coupon', true) ) : ?>*<?php endif; ?><?php esc_html_e('Commission:', 'dc-woocommerce-multi-vendor'); ?></td>
                         <td width="1%"></td>
                         <td class="total">
-                            <?php echo wc_price($commission_amount, array('currency' => $order->get_currency())); ?>
+                            <?php echo $vendor_order->get_formatted_commission_total(); ?>
                         </td>
                     </tr>
                 <?php endif; ?>
@@ -1099,8 +1116,13 @@ class WCMp_Commission {
                         <td class="label"><?php esc_html_e('Shipping:', 'dc-woocommerce-multi-vendor'); ?></td>
                         <td width="1%"></td>
                         <td class="total">
-                            <?php $shipping_amount = get_post_meta( $post_id, '_shipping', true );
-                            echo wc_price($shipping_amount, array('currency' => $order->get_currency()));
+                            <?php 
+                            $refunded = $order->get_total_shipping_refunded();
+                            if ($refunded > 0) {
+                                echo '<del>' . strip_tags(wc_price($order->get_shipping_total(), array('currency' => $order->get_currency()))) . '</del> <ins>' . wc_price($order->get_shipping_total() - $refunded, array('currency' => $order->get_currency())) . '</ins>'; // WPCS: XSS ok.
+                            } else {
+                                echo wc_price($order->get_shipping_total(), array('currency' => $order->get_currency())); // WPCS: XSS ok.
+                            }
                             ?>
                         </td>
                     </tr>

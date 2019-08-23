@@ -81,12 +81,12 @@ class WCMp_Calculate_Commission {
         $included_tax = get_post_meta($commission_id, '_commission_total_include_tax', true) ? true : false;
         $items_commission_rates = get_post_meta($vendor_order_id, 'order_items_commission_rates', true);
         
-        $refunded_total = $refunds = $global_refunds = array();
+        $refunded_total = $refunds = $global_refunds = $commission_refunded_items = array();
 
         if($commission_id){
             $line_items_commission_refund = $global_commission_refund = 0;
             foreach ($order->get_refunds() as $_refund) {
-                $line_items_refund = $shipping_item_refund = $tax_item_refund = $amount = 0;
+                $line_items_refund = $shipping_item_refund = $tax_item_refund = $amount = $refund_item_totals = 0;
                 // if commission refund exists
                 if (get_post_meta($_refund->get_id(), '_refunded_commissions', true)) {
                     $commission_amt = get_post_meta($_refund->get_id(), '_refunded_commissions', true);
@@ -116,40 +116,50 @@ class WCMp_Calculate_Commission {
                                 $amount = (float) $refund_amount - (float) $amount;
                             }
                             $line_items_commission_refund += $amount;
-                            $refunds[$_refund->get_id()][$commission_id] = $amount;
+                            $refund_item_totals += $amount;
+                            $commission_refunded_items[$_refund->get_id()][$refunded_item_id] = $amount;
                         }
                     }
                 }
+                // add items total refunds
+                $refunds[$_refund->get_id()][$commission_id]['line_item'] = $refund_item_totals;
                 
                 if($line_items_commission_refund != 0){
                     update_post_meta( $commission_id, '_commission_refunded_items', $line_items_commission_refund );
+                    update_post_meta( $commission_id, '_commission_refunded_items_data', $commission_refunded_items );
                 }
                 
                 /** WC_Order_Refund shipping **/
+                $refund_shipping_totals = 0;
                 foreach ($_refund->get_items('shipping') as $item_id => $item) { 
                     if ( 0 < get_post_meta($commission_id, '_shipping', true) && get_post_meta($commission_id, '_commission_total_include_shipping', true) ){
                         if($item['total'] != 0){
                             $shipping_item_refund += $item['total'];
+                            $refund_shipping_totals += $item['total'];
                         }
                     }
                 }
                 if($shipping_item_refund != 0){
                     $amount = $shipping_item_refund;
-                    $refunds[$_refund->get_id()][$commission_id] = $shipping_item_refund;
+                    if( $refund_shipping_totals )
+                        $refunds[$_refund->get_id()][$commission_id]['shipping'] = $refund_shipping_totals;
                     update_post_meta( $commission_id, '_commission_refunded_shipping', $shipping_item_refund );
                 }
                 
                 /** WC_Order_Refund tax **/
+                $refund_tax_totals = 0;
                 foreach ($_refund->get_items('tax') as $item_id => $item) { 
                     if ( 0 < get_post_meta($commission_id, '_tax', true) && get_post_meta($commission_id, '_commission_total_include_tax', true) ){
                         if($item['tax_total'] != 0 || $item['shipping_tax_total'] != 0){
                             $tax_item_refund += $item['tax_total'] + $item['shipping_tax_total'];
+                            $refund_tax_totals += $item['tax_total'] + $item['shipping_tax_total'];
                         }
                     }
                 }
                 if($tax_item_refund != 0){
                     $amount = $tax_item_refund;
-                    $refunds[$_refund->get_id()][$commission_id] = $tax_item_refund;
+                    if( $refund_tax_totals )
+                        $refunds[$_refund->get_id()][$commission_id]['tax'] = $refund_tax_totals;
                     update_post_meta( $commission_id, '_commission_refunded_tax', $tax_item_refund );
                 }
                 
@@ -167,11 +177,12 @@ class WCMp_Calculate_Commission {
                 //$commission_total = WCMp_Commission::commission_totals($commission_id, 'edit');
 
                 if(!get_post_meta($_refund->get_id(), '_refunded_commissions', true)){
-                    $refunds[$_refund->get_id()][$commission_id] = $_refund->get_amount() * -1;
+                    $refunds[$_refund->get_id()][$commission_id]['global'] = $_refund->get_amount() * -1;
                     $global_commission_refund += $_refund->get_amount() * -1;
                 }else{
                     $refunded_commission = get_post_meta($_refund->get_id(), '_refunded_commissions', true);
-                    $refunded_commission_amt = isset($refunded_commission[$commission_id]) ? $refunded_commission[$commission_id] : 0;
+                    $refunded_commission_amt_data = isset($refunded_commission[$commission_id]) ? $refunded_commission[$commission_id] : array();
+                    $refunded_commission_amt = array_sum($refunded_commission_amt_data);
                     $global_commission_refund += $refunded_commission_amt;
                 }
             }
@@ -183,8 +194,10 @@ class WCMp_Calculate_Commission {
             $refunded_amt_total = 0;
             if($refunds) :
                 foreach ( $refunds as $_refund_id => $commissions_refunded ) {
-                    $comm_refunded_amt = 0;
-                    foreach ( $commissions_refunded as $commission_id => $amount ) {
+                    $comm_refunded_amt = $commissions_refunded_total = 0;
+                    foreach ( $commissions_refunded as $commission_id => $data_amount ) {
+                        $amount = array_sum($data_amount);
+                        $commissions_refunded_total = $amount;
                         if( -($amount) != 0 ){
                             $comm_refunded_amt += $amount;
                             $note = sprintf( __( 'Refunded %s from commission', 'dc-woocommerce-multi-vendor' ), wc_price( abs( $amount ) ) );
@@ -205,6 +218,7 @@ class WCMp_Calculate_Commission {
                     $refunded_amt_total += $comm_refunded_amt;
 
                     update_post_meta( $_refund_id, '_refunded_commissions', $commissions_refunded );
+                    update_post_meta( $_refund_id, '_refunded_commissions_total', $commissions_refunded_total );
                 }
                 
                 update_post_meta( $commission_id, '_commission_refunded_data', $refunds );

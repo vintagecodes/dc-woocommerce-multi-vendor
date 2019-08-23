@@ -19,10 +19,10 @@ class WCMp_Ajax {
         add_action('wp_ajax_send_report_abuse', array(&$this, 'send_report_abuse'));
         add_action('wp_ajax_nopriv_send_report_abuse', array(&$this, 'send_report_abuse'));
         add_action('wp_ajax_dismiss_vendor_to_do_list', array(&$this, 'dismiss_vendor_to_do_list'));
-        add_action('wp_ajax_get_more_orders', array(&$this, 'get_more_orders'));
+        //add_action('wp_ajax_get_more_orders', array(&$this, 'get_more_orders'));
         add_action('wp_ajax_withdrawal_more_orders', array(&$this, 'withdrawal_more_orders'));
         add_action('wp_ajax_show_more_transaction', array(&$this, 'show_more_transaction'));
-        add_action('wp_ajax_nopriv_get_more_orders', array(&$this, 'get_more_orders'));
+        //add_action('wp_ajax_nopriv_get_more_orders', array(&$this, 'get_more_orders'));
 //        add_action('wp_ajax_order_mark_as_shipped', array(&$this, 'order_mark_as_shipped'));
 //        add_action('wp_ajax_nopriv_order_mark_as_shipped', array(&$this, 'order_mark_as_shipped'));
         add_action('wp_ajax_transaction_done_button', array(&$this, 'transaction_done_button'));

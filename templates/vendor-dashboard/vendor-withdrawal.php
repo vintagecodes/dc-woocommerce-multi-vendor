@@ -35,7 +35,7 @@ $withdrawal_list_table_headers = apply_filters('wcmp_datatable_vendor_withdrawal
 <?php endif; ?>
 <div class="col-md-12">
     <div class="panel panel-default">
-        <h3 class="panel-heading"><?php _e('Completed Orders', 'dc-woocommerce-multi-vendor'); ?></h3>
+        <h3 class="panel-heading"><?php _e('Withdrawal Orders', 'dc-woocommerce-multi-vendor'); ?></h3>
         <div class="panel-body">
             <form method="post" name="get_paid_form">
                 <table id="vendor_withdrawal" class="table table-striped table-bordered" width="100%">
@@ -62,7 +62,8 @@ $withdrawal_list_table_headers = apply_filters('wcmp_datatable_vendor_withdrawal
                     <?php if (count($vendor_unpaid_orders) > 0) { 
                         if (isset($WCMp->vendor_caps->payment_cap['wcmp_disbursal_mode_vendor']) && $WCMp->vendor_caps->payment_cap['wcmp_disbursal_mode_vendor'] == 'Enable') {
                             $total_vendor_due = $vendor->wcmp_vendor_get_total_amount_due();
-                            if ($total_vendor_due > $get_vendor_thresold) { ?>
+                            if ( (isset($WCMp->vendor_caps->payment_cap['commission_threshold']) && $total_vendor_due > $get_vendor_thresold ) || 
+                                  ( !isset($WCMp->vendor_caps->payment_cap['commission_threshold']) && $total_vendor_due ) ){ ?>
                             <div class="wcmp-action-container">
                                 <button name="vendor_get_paid" type="submit" class="btn btn-default"><?php _e('Request Withdrawals', 'dc-woocommerce-multi-vendor'); ?></button>
                             </div>

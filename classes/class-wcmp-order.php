@@ -892,10 +892,54 @@ class WCMp_Order {
             foreach ($child_refund_ids as $child_refund_id) {
                 if ($child_refund_id && 'shop_order_refund' === get_post_type($child_refund_id)) {
                     $order_id = wp_get_post_parent_id($child_refund_id);
+                    $assoc_commission_id = get_post_meta( $order_id, '_commission_id', true );
+                    // delete associated refund commission meta data
+                    $commission_refunded_data = get_post_meta( $assoc_commission_id, '_commission_refunded_data', true );
+                    if( isset($commission_refunded_data[$child_refund_id]) ) unset($commission_refunded_data[$child_refund_id]);
+                    $commission_refunded_data = ( $commission_refunded_data ) ? $commission_refunded_data : array();
+                    update_post_meta( $assoc_commission_id, '_commission_refunded_data', $commission_refunded_data );
+                    $commission_refunded_items_data = get_post_meta( $assoc_commission_id, '_commission_refunded_items_data', true );
+                    if( isset($commission_refunded_items_data[$child_refund_id]) ) unset($commission_refunded_items_data[$child_refund_id]);
+                    $commission_refunded_items_data = ( $commission_refunded_items_data ) ? $commission_refunded_items_data : array();
+                    update_post_meta( $assoc_commission_id, '_commission_refunded_items_data', $commission_refunded_items_data );
+                    $refunded_commission_amount = get_refund_commission_amount($child_refund_id);
+                    $commission_refunded_items = get_post_meta( $assoc_commission_id, '_commission_refunded_items', true );
+                    if( $commission_refunded_items ){
+                        update_post_meta( $assoc_commission_id, '_commission_refunded_items', ($commission_refunded_items - $refunded_commission_amount) );
+                    }
+                    $commission_refunded = get_post_meta( $assoc_commission_id, '_commission_refunded', true );
+                    if( $commission_refunded ){
+                        update_post_meta( $assoc_commission_id, '_commission_refunded', ($commission_refunded - $refunded_commission_amount) );
+                    }
+                    
                     wc_delete_shop_order_transients($order_id);
                     wp_delete_post($child_refund_id);
                 }
             }
+        }elseif(is_wcmp_vendor_order($parent_order_id)){
+            $order_id = $parent_order_id;
+            $assoc_commission_id = get_post_meta( $order_id, '_commission_id', true );
+            // delete associated refund commission meta data
+            $commission_refunded_data = get_post_meta( $assoc_commission_id, '_commission_refunded_data', true );
+            if( isset($commission_refunded_data[$refund_id]) ) unset($commission_refunded_data[$refund_id]);
+            $commission_refunded_data = ( $commission_refunded_data ) ? $commission_refunded_data : array();
+            update_post_meta( $assoc_commission_id, '_commission_refunded_data', $commission_refunded_data );
+            $commission_refunded_items_data = get_post_meta( $assoc_commission_id, '_commission_refunded_items_data', true );
+            if( isset($commission_refunded_items_data[$refund_id]) ) unset($commission_refunded_items_data[$refund_id]);
+            $commission_refunded_items_data = ( $commission_refunded_items_data ) ? $commission_refunded_items_data : array();
+            update_post_meta( $assoc_commission_id, '_commission_refunded_items_data', $commission_refunded_items_data );
+            $refunded_commission_amount = get_refund_commission_amount($refund_id);
+            $commission_refunded_items = get_post_meta( $assoc_commission_id, '_commission_refunded_items', true );
+            if( $commission_refunded_items ){
+                update_post_meta( $assoc_commission_id, '_commission_refunded_items', ($commission_refunded_items - $refunded_commission_amount) );
+            }
+            $commission_refunded = get_post_meta( $assoc_commission_id, '_commission_refunded', true );
+            if( $commission_refunded ){
+                update_post_meta( $assoc_commission_id, '_commission_refunded', ($commission_refunded - $refunded_commission_amount) );
+            }
+
+            wc_delete_shop_order_transients($order_id);
+            wp_delete_post($refund_id);
         }
     }
     

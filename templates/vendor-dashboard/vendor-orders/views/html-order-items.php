@@ -231,7 +231,7 @@ if ( wc_tax_enabled() ) {
                                         <tr>
                                             <td class="label refunded-total"><?php esc_html_e('Commission Refunded', 'dc-woocommerce-multi-vendor'); ?>:</td>
                                             <td width="1%"></td>
-                                            <td class="total refunded-total"><?php echo $vendor_order->get_commission_refunded_amount(); // WPCS: XSS ok.  ?></td>
+                                            <td class="total refunded-total"><?php echo $vendor_order->get_items_commission_refunded_amount(); // WPCS: XSS ok.  ?></td>
                                         </tr>
                                     <?php endif; ?>
 

@@ -155,7 +155,14 @@ $row_class    = apply_filters( 'wcmp_vendor_dash_html_order_item_class', ! empty
     }
     ?>
     <td class="wcmp-item-commission">
+        <div class="view">
         <?php $commission = $item->get_meta('_vendor_item_commission', true);
-        echo '<div class="commission">' . wc_price($commission) . '</div>'; ?>
+        echo '<div class="commission">' . wc_price($commission) . '</div>'; 
+        
+        if ( $refunded_commission = wcmp_get_total_refunded_for_item( $item_id, $order->get_id() ) ) {
+            echo '<small class="refunded">' . wc_price( $refunded_commission, array( 'currency' => $order->get_currency() ) ) . '</small>';
+        }
+        ?>
+        </div>
     </td>
 </tr>
