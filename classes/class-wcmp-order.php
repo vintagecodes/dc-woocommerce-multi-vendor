@@ -64,6 +64,7 @@ class WCMp_Order {
             // restrict stock managements for sub-orders
             add_filter( 'woocommerce_can_reduce_order_stock', array($this, 'woocommerce_can_reduce_order_stock'), 99, 2 );
             add_filter( 'woocommerce_hidden_order_itemmeta', array($this, 'woocommerce_hidden_order_itemmeta'), 99 );
+            add_filter( 'woocommerce_order_item_get_formatted_meta_data', array($this, 'woocommerce_hidden_order_item_get_formatted_meta_data'), 99 );
             add_action( 'woocommerce_order_status_changed', array($this, 'wcmp_vendor_order_status_changed_actions'), 99, 3 );
             add_action( 'woocommerce_rest_shop_order_object_query', array($this, 'wcmp_exclude_suborders_from_rest_api_call'), 99, 2 );
         }
@@ -718,20 +719,24 @@ class WCMp_Order {
                      * If the parent order have only 1 suborder I can sync it with the same status.
                      * Otherwise I set the parent order to processing
                      */
+                    $status = array_unique(array_keys($suborder_statuses));
                     if ( $suborder_count == 1 ) {
-                            $parent_order->update_status( $new_status, _x( "Sync from vendor's suborders: ", 'Order note', 'dc-woocommerce-multi-vendor' ) );
+                        $new_status = isset($status[0]) ? $status[0] : $new_status;
+                        $parent_order->update_status( $new_status, _x( "Sync from vendor's suborders: ", 'Order note', 'dc-woocommerce-multi-vendor' ) );
                     } /**
                      * Check only for suborder > 1 to exclude orders without suborder
                      */
                     elseif ( $suborder_count > 1 ) {
                         $check = 0;
-                        foreach ( $status_to_sync as $status ) {
-                            if ( ! empty( $suborder_statuses[ $status ] ) ) {
-                                $check += $suborder_statuses[ $status ];
-                            }
-                        }
+//                        foreach ( $status_to_sync as $status ) {
+//                            if ( ! empty( $suborder_statuses[ $status ] ) ) {
+//                                $check += $suborder_statuses[ $status ];
+//                            }
+//                        }
+                        
+                        $new_status = (count($status == 1) && isset($status[0])) ? $status[0] : $new_status;
 
-                        $parent_order->update_status( $check == $suborder_count ? 'completed' : 'processing', _x( "Sync from vendor's suborders: ", 'Order note', 'dc-woocommerce-multi-vendor' ) );
+                        $parent_order->update_status( $new_status, _x( "Sync from vendor's suborders: ", 'Order note', 'dc-woocommerce-multi-vendor' ) );
                     }
                 }
             }
@@ -1245,8 +1250,19 @@ class WCMp_Order {
             $itemmeta[] = 'vendor_id';
             $itemmeta[] = '_vendor_order_item_id';
             $itemmeta[] = 'Sold By';
+        }elseif (current_user_can( 'administrator' ) ){
+            $itemmeta[] = 'commission';
         }
         return $itemmeta;
+    }
+    
+    public function woocommerce_hidden_order_item_get_formatted_meta_data( $formatted_meta ) {
+        if( $formatted_meta ){
+            foreach ( $formatted_meta as $key => $meta ) {
+                if( $meta->key == 'commission' ) unset($formatted_meta[$key]);
+            }
+        }
+        return $formatted_meta;
     }
     
     public function wcmp_vendor_order_status_changed_actions( $order_id, $old_status, $new_status ){
