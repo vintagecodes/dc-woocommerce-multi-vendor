@@ -582,12 +582,25 @@ class WCMp_Vendor {
         global $WCMp;
         $order_id = $order->get_id();
         $vendor = get_wcmp_vendor_by_term($vendor_term_id);
-        $vendor_part = get_wcmp_vendor_order_amount(array('order_id' => $order_id, 'vendor_id' => $vendor->id));
+        $args = array(
+            'meta_query' => array(
+                array(
+                    'key' => '_commission_vendor',
+                    'value' => absint($vendor->term_id),
+                    'compare' => '='
+                ),
+                array(
+                    'key' => '_commission_order_id',
+                    'value' => absint($order_id),
+                    'compare' => '='
+                ),
+            ),
+        );
+        $unpaid_commission_total = WCMp_Commission::get_commissions_total_data( $args, $vendor->id );
         $vendor_due = array(
-            'commission' => $vendor_part['commission_amount'],
-            'shipping' => $vendor_part['shipping_amount'],
-            'tax' => $vendor_part['tax_amount'],
-            'shipping_tax' => $vendor_part['shipping_tax_amount']
+            'commission' => $unpaid_commission_total['commission_amount'],
+            'shipping' => $unpaid_commission_total['shipping_amount'],
+            'tax' => $unpaid_commission_total['tax_amount']
         );
         return apply_filters('vendor_due_per_order', $vendor_due, $order, $vendor_term_id);
     }
@@ -600,8 +613,17 @@ class WCMp_Vendor {
     public function wcmp_vendor_get_total_amount_due() {
         global $WCMp;
         $vendor = get_wcmp_vendor_by_term($this->term_id);
-        $vendor_orders = get_wcmp_vendor_order_amount(array('vendor_id' => $vendor->id, 'commission_status' => 'unpaid'));
-        return (float) ($vendor_orders['commission_amount'] + $vendor_orders['shipping_amount'] + $vendor_orders['tax_amount'] + $vendor_orders['shipping_tax_amount']);
+        $args = array(
+            'meta_query' => array(
+                array(
+                    'key' => '_commission_vendor',
+                    'value' => absint($vendor->term_id),
+                    'compare' => '='
+                ),
+            ),
+        );
+        $unpaid_commission_total = WCMp_Commission::get_commissions_total_data( $args, $vendor->id );
+        return (float) ($unpaid_commission_total['total']);
     }
 
     /**
@@ -1087,17 +1109,18 @@ class WCMp_Vendor {
     public function get_vendor_order_item_totals($order_id, $split_tax = false, $html_price = true) {
         if($order_id){
             $order = wc_get_order(absint($order_id));
+            $vendor_order = wcmp_get_order($order_id);
+            if(!$vendor_order) return false;
             $order_total_arr = array();
-            $vendor_items = get_wcmp_vendor_orders(array('order_id' => $order_id, 'vendor_id' => $this->id));
-            $vendor_order_amount = get_wcmp_vendor_order_amount(array('order_id' => $order_id, 'vendor_id' => $this->id));
+            $vendor_items = $order->get_items( 'line_item' );
+            //$vendor_items = get_wcmp_vendor_orders(array('order_id' => $order_id, 'vendor_id' => $this->id));
             $vendor_shipping_method = get_wcmp_vendor_order_shipping_method($order_id, $this->id);
             $total_rows  = array();
             // items subtotals
             if($vendor_items){
                 $subtotal = 0;
                 foreach ($vendor_items as $item) {
-                    $item_obj = $order->get_item($item->order_item_id); 
-                    $subtotal += $item_obj->get_subtotal();
+                    $subtotal += $item->get_subtotal();
                 }
                 $order_total_arr[] = $subtotal;
                 $total_rows['order_subtotal'] = array(
@@ -1113,30 +1136,33 @@ class WCMp_Vendor {
                 );
             }
             // shipping cost
-            if ( $this->is_shipping_enable() && $vendor_order_amount['shipping_amount'] ) {
-                $order_total_arr[] = $vendor_order_amount['shipping_amount'];
+            $shipping_amount = $order->get_shipping_total();
+            if ( $this->is_shipping_enable() && $shipping_amount ) {
+                $order_total_arr[] = $shipping_amount;
                 $total_rows['shipping_cost'] = array(
                     'label' => __( 'Shipping cost:', 'dc-woocommerce-multi-vendor' ),
-                    'value' => ($html_price) ? wc_price($vendor_order_amount['shipping_amount']) : $vendor_order_amount['shipping_amount'],
+                    'value' => ($html_price) ? wc_price($shipping_amount) : $shipping_amount,
                 );
             }
             // tax
-            if(!apply_filters('wcmp_get_vendor_order_item_totals_split_taxes', $split_tax, $order_id, $vendor_order_amount, $this->id)){
-                $order_total_arr[] = $vendor_order_amount['tax_amount'] + $vendor_order_amount['shipping_tax_amount'];
+            $shipping_tax_amount = $order->get_shipping_tax();
+            $tax_amount = $order->get_total_tax();
+            if(!apply_filters('wcmp_get_vendor_order_item_totals_split_taxes', $split_tax, $order_id, array(), $this->id)){
+                $order_total_arr[] = $tax_amount + $shipping_tax_amount;
                 $total_rows['tax'] = array(
                     'label' => WC()->countries->tax_or_vat() . ':',
-                    'value' => ($html_price) ? wc_price($vendor_order_amount['tax_amount'] + $vendor_order_amount['shipping_tax_amount']) : $vendor_order_amount['tax_amount'] + $vendor_order_amount['shipping_tax_amount'],
+                    'value' => ($html_price) ? wc_price($tax_amount + $shipping_tax_amount) : $tax_amount + $shipping_tax_amount,
                 );
             }else{
-                $order_total_arr[] = $vendor_order_amount['shipping_tax_amount'];
+                $order_total_arr[] = $shipping_tax_amount;
                 $total_rows['shipping_tax'] = array(
                     'label' => __( 'Shipping:', 'woocommerce' ).' '.WC()->countries->tax_or_vat() . ':',
-                    'value' => ($html_price) ? wc_price($vendor_order_amount['shipping_tax_amount']) : $vendor_order_amount['shipping_tax_amount'],
+                    'value' => ($html_price) ? wc_price($shipping_tax_amount) : $shipping_tax_amount,
                 );
-                $order_total_arr[] = $vendor_order_amount['tax_amount'];
+                $order_total_arr[] = $tax_amount;
                 $total_rows['tax'] = array(
                     'label' => WC()->countries->tax_or_vat() . ':',
-                    'value' => ($html_price) ? wc_price($vendor_order_amount['tax_amount']) : $vendor_order_amount['tax_amount'],
+                    'value' => ($html_price) ? wc_price($tax_amount) : $tax_amount,
                 );
             }
             // payment methods

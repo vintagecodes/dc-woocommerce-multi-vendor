@@ -685,6 +685,7 @@ class WCMp_Vendor_Hooks {
                 )
             );
             $vendor_unpaid_orders = $vendor->get_orders( false, false, $meta_query );
+            
             // withdrawal table init
             $table_init = apply_filters( 'wcmp_vendor_dashboard_payment_withdrawal_table_init', array(
                 'ordering'    => 'false',

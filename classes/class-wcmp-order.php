@@ -329,6 +329,7 @@ class WCMp_Order {
 
         $args = wp_parse_args($args, $default_args);
         $order = wc_get_order($args['order_id']);
+        if (!$order) return false;
         $data = array();
 
         if ($args['vendor_order_id'] > 0) {
