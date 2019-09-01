@@ -115,6 +115,8 @@ class WCMp_Product {
             add_filter( 'woocommerce_admin_product_term_list', array($this, 'show_default_product_cats_in_wp_backend'), 99, 5);
             add_filter( 'term_links-product_cat', array($this, 'show_default_product_cats_product_single'), 99);
         }
+        // Woocommerce Block 
+        add_filter( 'woocommerce_blocks_product_grid_item_html', array( $this, 'woocommerce_blocks_product_grid_item_html' ), 99, 3 );
     }
     
     public function override_wc_product_post_parent( $data, $postarr ){
@@ -1831,6 +1833,28 @@ class WCMp_Product {
     
     public function wcmp_product_duplicate_before_save($duplicate, $product){
         $duplicate->set_name( $product->get_name() ); // remove duplicate (copy) strings
+    }
+    
+    public function woocommerce_blocks_product_grid_item_html( $html, $data, $product ) {
+        $vendor = get_wcmp_product_vendors( $product->get_id() );
+        if( !$vendor ) return $html;
+        if ( 'Enable' === get_wcmp_vendor_settings('sold_by_catalog', 'general') && apply_filters( 'wcmp_enable_sold_by_on_wc_blocks_product_grid', true, $product ) ) {
+            $sold_by_text = apply_filters( 'wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'), $product->get_id() );
+            $html = "<li class=\"wc-block-grid__product\">
+                    <a href=\"{$data->permalink}\" class=\"wc-block-grid__product-link\">
+                            {$data->image}
+                            {$data->title}
+                    </a>
+                    {$data->badge}
+                    {$data->price}
+                    {$data->rating}
+                    <a href=\"{$vendor->permalink}\" class=\"by-vendor-name-link\" style=\"display: block;\">
+                        {$sold_by_text} {$vendor->page_title}
+                    </a>
+                    {$data->button}
+            </li>";
+        }
+        return $html;
     }
     
 }

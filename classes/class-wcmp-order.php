@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 /**
  * @class 		WCMp Order Class
  *
- * @version		3.1.2.0
+ * @version		3.4.0
  * @package		WCMp
  * @author 		WC Marketplace
  */
@@ -17,7 +17,6 @@ class WCMp_Order {
         global $WCMp;
         // Init WCMp Vendor Order class
         $WCMp->load_class('vendor-order');
-        //add_action('woocommerce_new_order_item', array(&$this, 'order_item_meta_2'), 20, 3);
         // Add extra vendor_id to shipping packages
         add_action('woocommerce_checkout_create_order_line_item', array(&$this, 'add_meta_date_in_order_line_item'), 10, 4);
         add_action('woocommerce_checkout_create_order_shipping_item', array(&$this, 'add_meta_date_in_shipping_package'), 10, 4);
@@ -71,24 +70,14 @@ class WCMp_Order {
     }
 
     /**
-     * Save sold by text in database
+     * Add order line item meta
      *
      * @param item_id, cart_item
      * @return void 
      */
-    public function order_item_meta_2($item_id, $item, $order_id) {
-        if (!wcmp_get_order($order_id)) {
-            $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
-            $vendor = get_wcmp_product_vendors($item['product_id']);
-            if ($vendor) {
-                wc_add_order_item_meta($item_id, $general_cap, $vendor->page_title);
-                wc_add_order_item_meta($item_id, '_vendor_id', $vendor->id);
-            }
-        }
-    }
-    
+
     public function add_meta_date_in_order_line_item($item, $item_key, $values, $order) {
-        if ($order && !wcmp_get_order($order->get_id())) {
+        if ( $order && wp_get_post_parent_id( $order->get_id() ) == 0 ) {
             $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
             $vendor = get_wcmp_product_vendors($item['product_id']);
             if ($vendor) {
@@ -550,7 +539,7 @@ class WCMp_Order {
                     /**
                      * Action hook to adjust item before save.
                      *
-                     * @since 3.1.2.0
+                     * @since 3.4.0
                      */
                     do_action('wcmp_vendor_create_order_shipping_item', $item, $package_key, $package, $order);
 
@@ -734,10 +723,9 @@ class WCMp_Order {
 //                                $check += $suborder_statuses[ $status ];
 //                            }
 //                        }
-                        
-                        $new_status = (count($status == 1) && isset($status[0])) ? $status[0] : $new_status;
-
-                        $parent_order->update_status( $new_status, _x( "Sync from vendor's suborders: ", 'Order note', 'dc-woocommerce-multi-vendor' ) );
+                        if( count($status == 1) && isset($status[0]) ) {
+                            $parent_order->update_status( $new_status, _x( "Sync from vendor's suborders: ", 'Order note', 'dc-woocommerce-multi-vendor' ) );
+                        }
                     }
                 }
             }

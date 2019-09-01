@@ -184,7 +184,7 @@ class WCMp_Commission {
             /**
              * Action hook to adjust items commission rates before save.
              *
-             * @since 3.1.2.0
+             * @since 3.4.0
             */
             update_post_meta($order->get_id(), 'order_items_commission_rates', apply_filters('wcmp_vendor_order_items_commission_rates', $commission_rates, $order));
             
