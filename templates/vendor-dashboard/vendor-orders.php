@@ -128,7 +128,12 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
         $filter_by_status = apply_filters('wcmp_vendor_dashboard_order_filter_status_arr',array(
             'all' => __('All', 'dc-woocommerce-multi-vendor'),
             'processing' => __('Processing', 'dc-woocommerce-multi-vendor'),
-            'completed' => __('Completed', 'dc-woocommerce-multi-vendor')
+            'completed' => __('Completed', 'dc-woocommerce-multi-vendor'),
+            'pending' => __('Pending', 'dc-woocommerce-multi-vendor'),
+            'on-hold' => __('On-hold', 'dc-woocommerce-multi-vendor'),
+            'cancelled' => __('Cancelled', 'dc-woocommerce-multi-vendor'),
+            'refunded' => __('Refunded', 'dc-woocommerce-multi-vendor'),
+            'failed' => __('Failed', 'dc-woocommerce-multi-vendor')
         ));
         foreach ($filter_by_status as $key => $label) { ?>
             obj = {};
