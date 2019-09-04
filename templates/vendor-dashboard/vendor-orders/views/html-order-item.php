@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $WCMp;
 $product      = $item->get_product();
 $edit_product_link = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $product->get_id()));
-$product_link = $product ? esc_url($edit_product_link) : '';
+$product_link = ( $product && current_vendor_can( 'edit_product' ) ) ? esc_url($edit_product_link) : '';
 $thumbnail    = $product ? apply_filters( 'wcmp_vendor_dash_order_item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), false ), $item_id, $item ) : '';
 $row_class    = apply_filters( 'wcmp_vendor_dash_html_order_item_class', ! empty( $class ) ? $class : '', $item, $order );
 ?>
