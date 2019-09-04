@@ -125,16 +125,25 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
         columns.push(obj);
      <?php }
         }
-        $filter_by_status = apply_filters('wcmp_vendor_dashboard_order_filter_status_arr',array(
-            'all' => __('All', 'dc-woocommerce-multi-vendor'),
-            'processing' => __('Processing', 'dc-woocommerce-multi-vendor'),
-            'completed' => __('Completed', 'dc-woocommerce-multi-vendor'),
-            'pending' => __('Pending', 'dc-woocommerce-multi-vendor'),
-            'on-hold' => __('On-hold', 'dc-woocommerce-multi-vendor'),
-            'cancelled' => __('Cancelled', 'dc-woocommerce-multi-vendor'),
-            'refunded' => __('Refunded', 'dc-woocommerce-multi-vendor'),
-            'failed' => __('Failed', 'dc-woocommerce-multi-vendor')
-        ));
+        /* Replace key of an array with new key */
+        function replaceKey(&$array, $curkey, $newkey) {
+            if(array_key_exists($curkey, $array)) {
+                $array[$newkey] = $array[$curkey];
+                unset($array[$curkey]);
+                return true;
+            }
+            return false;
+
+        }
+        
+        $order_statuses = wc_get_order_statuses();
+        foreach($order_statuses as $key => $value ) {
+            $new_key = str_replace('wc-', '', $key);
+            replaceKey($order_statuses , $key, $new_key); 
+        }   
+        $all = array('all' => __('All', 'dc-woocommerce-multi-vendor'));
+        $statuses = array_merge($all, $order_statuses);
+        $filter_by_status = apply_filters('wcmp_vendor_dashboard_order_filter_status_arr', $statuses);
         foreach ($filter_by_status as $key => $label) { ?>
             obj = {};
             obj['key'] = "<?php echo trim($key); ?>";
