@@ -18,7 +18,7 @@
  * @version     3.3.0
  */
 defined( 'ABSPATH' ) || exit;
-$vendor = get_wcmp_vendor( get_current_user_id() );
+$vendor = apply_filters( 'wcmp_vendor_select_product_for_add_coupon' , get_wcmp_vendor( get_current_user_id() ) );
 ?>
 <div role="tabpanel" class="tab-pane fade" id="usage_restriction_coupon_data">
     <div class="row-padding">

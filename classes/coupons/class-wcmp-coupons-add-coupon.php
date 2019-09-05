@@ -53,7 +53,7 @@ class WCMp_Coupons_Add_Coupon {
                 }
                 return true;
             case 'edit':
-                if ( ! ( current_vendor_can( 'edit_shop_coupon' ) && current_vendor_can( 'edit_published_shop_coupons' ) && $coupon_id && is_current_vendor_coupon( $coupon_id ) ) ) {
+                if ( ! ( current_vendor_can( 'edit_shop_coupon' ) && current_vendor_can( 'edit_published_shop_coupons' ) && $coupon_id && apply_filters( 'wcmp_vendor_capability_to_edit_coupons' , is_current_vendor_coupon( $coupon_id ) ) ) ) {
                     $this->error_msg = __( 'You do not have permission to view this content. Please contact site administrator.', 'dc-woocommerce-multi-vendor' );
                     return false;
                 }
