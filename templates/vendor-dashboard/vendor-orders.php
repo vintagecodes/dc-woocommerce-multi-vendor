@@ -125,11 +125,7 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
         columns.push(obj);
      <?php }
         }
-        $filter_by_status = apply_filters('wcmp_vendor_dashboard_order_filter_status_arr',array(
-            'all' => __('All', 'dc-woocommerce-multi-vendor'),
-            'processing' => __('Processing', 'dc-woocommerce-multi-vendor'),
-            'completed' => __('Completed', 'dc-woocommerce-multi-vendor')
-        ));
+        $filter_by_status = apply_filters( 'wcmp_vendor_dashboard_order_filter_status_arr', array_merge( array( 'all' => __('All', 'dc-woocommerce-multi-vendor') ), wc_get_order_statuses() ) );
         foreach ($filter_by_status as $key => $label) { ?>
             obj = {};
             obj['key'] = "<?php echo trim($key); ?>";
