@@ -230,10 +230,9 @@ class WCMp_Ajax {
 //        $vendor_all_orders = apply_filters('wcmp_datatable_get_vendor_all_orders', $vendor_all_orders, $requestData, $_POST);
 //        $vendor_all_orders = apply_filters('wcmp_datatable_get_vendor_all_orders_id', wp_list_pluck($vendor_all_orders, 'order_id'));
         if (isset($requestData['order_status']) && $requestData['order_status'] != 'all' && $requestData['order_status'] != '') {
-            foreach ($vendor_all_orders as $key => $value) {
-                if (wc_get_order($value)->get_status() != $requestData['order_status']) {
-                    unset($vendor_all_orders[$key]);
-                }
+            foreach ($vendor_all_orders as $key => $id) { 
+                if (get_post_status( $id ) != $requestData['order_status']) { unset($vendor_all_orders[$key]);
+                 }
             }
         }
         $vendor_orders = array_slice($vendor_all_orders, $requestData['start'], $requestData['length']);
