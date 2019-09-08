@@ -148,7 +148,7 @@ class WCMp_Ledger {
                         'ref_info'      => sprintf(__('Withdrawal generated for Commission &ndash; <a href="%s" target="_blank">#%s</a>', 'dc-woocommerce-multi-vendor'), esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_transaction_details_endpoint', 'vendor', 'general', 'transaction-details'), $transaction_id)), $commission_id),
                         'ref_status'    => 'completed',
                         'ref_updated'   => date('Y-m-d H:i:s', current_time('timestamp')),
-                        'debit'        => $withdrawal_total,
+                        'debit'         => $withdrawal_total,
                         'balance'       => $unpaid_commission_total['total'],
                     );
                     $data_store = $this->load_ledger_data_store();

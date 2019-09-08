@@ -225,14 +225,11 @@ class WCMp_Ajax {
         );
         $vendor_all_orders = apply_filters('wcmp_datatable_get_vendor_all_orders', wcmp_get_orders($args), $requestData, $_POST);
 
-        
-//        $vendor_all_orders = $wpdb->get_results("SELECT DISTINCT order_id from `{$wpdb->prefix}wcmp_vendor_orders` where commission_id > 0 AND vendor_id = '" . $vendor->id . "' AND (`created` >= '" . $start_date . "' AND `created` <= '" . $end_date . "') and `is_trashed` != 1 ORDER BY `created` DESC", ARRAY_A);
-//        $vendor_all_orders = apply_filters('wcmp_datatable_get_vendor_all_orders', $vendor_all_orders, $requestData, $_POST);
-//        $vendor_all_orders = apply_filters('wcmp_datatable_get_vendor_all_orders_id', wp_list_pluck($vendor_all_orders, 'order_id'));
         if (isset($requestData['order_status']) && $requestData['order_status'] != 'all' && $requestData['order_status'] != '') {
             foreach ($vendor_all_orders as $key => $id) { 
-                if (get_post_status( $id ) != $requestData['order_status']) { unset($vendor_all_orders[$key]);
-                 }
+                if (get_post_status( $id ) != $requestData['order_status']) { 
+                    unset($vendor_all_orders[$key]);
+                }
             }
         }
         $vendor_orders = array_slice($vendor_all_orders, $requestData['start'], $requestData['length']);
@@ -1333,6 +1330,16 @@ class WCMp_Ajax {
                 wcmp_paid_commission_status($commission_id);
                 $withdrawal_total = WCMp_Commission::commission_totals($commission_id, 'edit');
                 $order_id = get_post_meta( $commission_id, '_commission_order_id', true );
+                $args = array(
+                    'meta_query' => array(
+                        array(
+                            'key' => '_commission_vendor',
+                            'value' => absint($vendor->term_id),
+                            'compare' => '='
+                        ),
+                    ),
+                );
+                $unpaid_commission_total = WCMp_Commission::get_commissions_total_data( $args, $vendor->id );
                 $data = array(
                     'vendor_id'     => $vendor->id,
                     'order_id'      => $order_id,
@@ -1341,7 +1348,8 @@ class WCMp_Ajax {
                     'ref_info'      => sprintf(__('Withdrawal generated for Commission &ndash; #%s', 'dc-woocommerce-multi-vendor'), $commission_id),
                     'ref_status'    => 'completed',
                     'ref_updated'   => date('Y-m-d H:i:s', current_time('timestamp')),
-                    'debit'        => $withdrawal_total,
+                    'debit'         => $withdrawal_total,
+                    'balance'       => $unpaid_commission_total['total'],
                 );
                 $data_store = $WCMp->ledger->load_ledger_data_store();
                 $ledger_id = $data_store->create($data);

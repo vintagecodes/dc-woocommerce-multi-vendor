@@ -21,15 +21,13 @@ global $WCMp;
             $vendor_meta = get_user_meta($vendor_id);
             $vendor = get_wcmp_vendor($vendor_id);
             $vendor_message_to_buyer = apply_filters('wcmp_display_vendor_message_to_buyer', get_user_meta($vendor_id, '_vendor_message_to_buyers', true), $vendor_id);
-//            if (!empty($vendor_message_to_buyer) ||
-//                    (isset($vendor_meta['_vendor_customer_phone'][0]) && isset($vendor_meta['_vendor_customer_email'][0])) ||
-//                    (isset($vendor_meta['_vendor_csd_return_address1'][0]) && isset($vendor_meta['_vendor_csd_return_city'][0]) && isset($vendor_meta['_vendor_csd_return_state'][0]) && isset($vendor_meta['_vendor_csd_return_zip'][0]) )
-//            ) {
-                ?>
+            ?>
         <?php if ($cc == 0) { ?>
                     <tr>
                         <th style="padding:10px 10px; background:none; border-right: 1px solid #e4e4e4; border-bottom: 1px solid #e4e4e4; width:50%;" align="left" valign="top"><?php echo __('Vendor Details', 'dc-woocommerce-multi-vendor'); ?></th>
+                    <?php if( $vendor_message_to_buyer ) : ?>    
                         <th style="padding:10px 10px;width: 50%; border-bottom: 1px solid #e4e4e4;  background:none;" align="left" valign="top"><?php echo __('Message', 'dc-woocommerce-multi-vendor'); ?></th>
+                    <?php endif; ?>
                     </tr>
         <?php } ?>
                 <tr>
@@ -43,7 +41,9 @@ global $WCMp;
                         if (get_wcmp_vendor_settings('is_customer_support_details', 'general') == 'Enable') {
                             if (apply_filters('wcmp_vendor_can_overwrite_customer_support', true)) {
                                 ?>
+                            <?php if( isset( $vendor_meta['_vendor_customer_email'][0] ) || isset( $vendor_meta['_vendor_customer_phone'][0] ) ) : ?>
                                 <p style="border-bottom:1px solid #eeeeee; padding-bottom:10px"> <strong><?php echo __('Customer Support Details', 'dc-woocommerce-multi-vendor'); ?></strong></p>
+                            <?php endif; ?>
                                 <?php if (isset($vendor_meta['_vendor_customer_email'][0])) { ?>
                                     <p><strong><?php echo __('Email : ', 'dc-woocommerce-multi-vendor'); ?></strong><br>
                                         <a style="color:#505050;font-weight:normal;text-decoration:underline" href="mailto:<?php echo $vendor_meta['_vendor_customer_email'][0]; ?>" target="_blank"><?php echo $vendor_meta['_vendor_customer_email'][0]; ?></a>
@@ -53,7 +53,9 @@ global $WCMp;
                                     <p><strong><?php echo __('Phone : ', 'dc-woocommerce-multi-vendor'); ?></strong> <br>
                                         <?php echo $vendor_meta['_vendor_customer_phone'][0]; ?></p>
                                     <?php } ?>
+                                <?php if( isset( $vendor_meta['_vendor_csd_return_address1'][0] ) || isset( $vendor_meta['_vendor_csd_return_city'][0] ) || isset( $vendor_meta['_vendor_csd_return_country'][0] ) ) : ?>
                                 <p><strong><?php echo __('Return Address ', 'dc-woocommerce-multi-vendor'); ?></strong></p>
+                                <?php endif; ?>
                                 <p>
                                     <?php if (isset($vendor_meta['_vendor_csd_return_address1'][0])) {
                                         echo $vendor_meta['_vendor_csd_return_address1'][0]; ?><br> <?php } ?>
@@ -70,7 +72,9 @@ global $WCMp;
                                 } ?>
                                 </p>
                             <?php } else { ?>
+                                <?php if( isset( $customer_support_details_settings['csd_email'] ) || isset( $customer_support_details_settings['csd_phone'] ) ) : ?>
                                 <p style="border-bottom:1px solid #eeeeee; padding-bottom:10px"> <strong><?php echo __('Customer Support Details', 'dc-woocommerce-multi-vendor'); ?></strong></p>
+                                <?php endif; ?>
                                     <?php if (isset($customer_support_details_settings['csd_email'])) { ?>
                                     <p><strong><?php echo __('Email : ', 'dc-woocommerce-multi-vendor'); ?></strong><br>
                                         <a style="color:#505050;font-weight:normal;text-decoration:underline" href="mailto:<?php echo $customer_support_details_settings['csd_email']; ?>" target="_blank"><?php echo $customer_support_details_settings['csd_email']; ?></a>					
@@ -80,7 +84,9 @@ global $WCMp;
                                     <p><strong><?php echo __('Phone : ', 'dc-woocommerce-multi-vendor'); ?></strong> <br>
                                         <?php echo $customer_support_details_settings['csd_phone']; ?></p>
                                     <?php } ?>
+                                <?php if( isset( $customer_support_details_settings['csd_return_address_1'] ) || isset( $customer_support_details_settings['csd_return_city'] ) || isset( $customer_support_details_settings['csd_return_country'] ) ) : ?>
                                 <p><strong><?php echo __('Return Address ', 'dc-woocommerce-multi-vendor'); ?></strong></p>
+                                <?php endif; ?>
                                 <p>
                                     <?php if (isset($customer_support_details_settings['csd_return_address_1'])) { ?>
                                         <?php echo $customer_support_details_settings['csd_return_address_1']; ?><br>
@@ -104,9 +110,11 @@ global $WCMp;
             <?php }
         } ?>							
                     </td>
+                    <?php if( $vendor_message_to_buyer ) : ?>   
                     <td style="padding:10px 10px;width: 50%; border-bottom: 1px solid #e4e4e4;  background:none;" align="left" valign="top">					
         <?php echo $vendor_message_to_buyer; ?>
                     </td>
+                    <?php endif; ?>
                 </tr>
         <?php $cc++;
     }

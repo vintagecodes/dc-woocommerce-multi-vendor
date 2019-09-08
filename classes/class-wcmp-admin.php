@@ -21,10 +21,6 @@ class WCMp_Admin {
         add_action('admin_bar_menu', array(&$this, 'add_toolbar_items'), 100);
         add_action('admin_head', array(&$this, 'admin_header'));
         add_action('current_screen', array($this, 'conditonal_includes'));
-        add_action('delete_post', array($this, 'remove_commission_from_sales_report'), 10);
-        add_action('trashed_post', array($this, 'remove_commission_from_sales_report'), 10);
-        add_action('untrashed_post', array($this, 'restore_commission_from_sales_report'), 10);
-        //add_action('woocommerce_order_status_changed', array($this, 'change_commission_status'), 20, 3);
         if (get_wcmp_vendor_settings('is_singleproductmultiseller', 'general') == 'Enable') {
             add_action('admin_enqueue_scripts', array($this, 'wcmp_kill_auto_save'));
         }
@@ -50,111 +46,6 @@ class WCMp_Admin {
         $order_items[] = '_give_shipping_to_vendor';
         // and so on...
         return $order_items;
-    }
-
-    public function change_commission_status($order_id, $old_status, $new_status) {
-        global $wpdb;
-        $myorder = get_post($order_id);
-        $post_type = $myorder->post_type;
-        if ($old_status == 'on-hold' || $old_status == 'pending' || $old_status == 'cancelled' || $old_status == 'refunded' || $old_status == 'failed') {
-            if ($new_status == 'processing' || $new_status == 'completed') {
-                if ($post_type == 'shop_order') {
-                    $args = array(
-                        'posts_per_page' => -1,
-                        'offset' => 0,
-                        'meta_key' => '_commission_order_id',
-                        'meta_value' => $order_id,
-                        'post_type' => 'dc_commission',
-                        'post_status' => 'trash',
-                        'suppress_filters' => true
-                    );
-                    $commission_array = get_posts($args);
-                    foreach ($commission_array as $commission) {
-                        $to_be_restore_commission = array();
-                        $to_be_restore_commission['ID'] = $commission->ID;
-                        $to_be_restore_commission['post_status'] = 'private';
-                        wp_update_post($to_be_restore_commission);
-                    }
-                    $order_query = "update " . $wpdb->prefix . "wcmp_vendor_orders set 	is_trashed = '' where `order_id` = " . $order_id;
-                    $wpdb->query($order_query);
-                }
-            }
-        } elseif ($old_status == 'processing' || $old_status == 'completed') {
-            if ($new_status == 'on-hold' || $new_status == 'pending' || $new_status == 'cancelled' || $new_status == 'refunded' || $new_status == 'failed') {
-                if ($post_type == 'shop_order') {
-                    $args = array(
-                        'posts_per_page' => -1,
-                        'offset' => 0,
-                        'meta_key' => '_commission_order_id',
-                        'meta_value' => $order_id,
-                        'post_type' => 'dc_commission',
-                        'post_status' => array('publish', 'private'),
-                        'suppress_filters' => true
-                    );
-                    $commission_array = get_posts($args);
-                    foreach ($commission_array as $commission) {
-                        $to_be_deleted_commission = array();
-                        $to_be_deleted_commission['ID'] = $commission->ID;
-                        $to_be_deleted_commission['post_status'] = 'trash';
-                        wp_update_post($to_be_deleted_commission);
-                    }
-                    $order_query = "update " . $wpdb->prefix . "wcmp_vendor_orders set 	is_trashed = '1' where `order_id` = " . $order_id;
-                    $wpdb->query($order_query);
-                }
-            }
-        }
-    }
-
-    public function remove_commission_from_sales_report($order_id) {
-        global $wpdb;
-        $order = get_post($order_id);
-        $post_type = $order->post_type;
-        if ($post_type == 'shop_order') {
-            $args = array(
-                'posts_per_page' => -1,
-                'offset' => 0,
-                'meta_key' => '_commission_order_id',
-                'meta_value' => $order_id,
-                'post_type' => 'dc_commission',
-                'post_status' => array('publish', 'private'),
-                'suppress_filters' => true
-            );
-            $commission_array = get_posts($args);
-            foreach ($commission_array as $commission) {
-                $to_be_deleted_commission = array();
-                $to_be_deleted_commission['ID'] = $commission->ID;
-                $to_be_deleted_commission['post_status'] = 'trash';
-                wp_update_post($to_be_deleted_commission);
-            }
-            $order_query = "update " . $wpdb->prefix . "wcmp_vendor_orders set 	is_trashed = '1' where `order_id` = " . $order_id;
-            $wpdb->query($order_query);
-        }
-    }
-
-    public function restore_commission_from_sales_report($order_id) {
-        global $wpdb;
-        $myorder = get_post($order_id);
-        $post_type = $myorder->post_type;
-        if ($post_type == 'shop_order') {
-            $args = array(
-                'posts_per_page' => -1,
-                'offset' => 0,
-                'meta_key' => '_commission_order_id',
-                'meta_value' => $order_id,
-                'post_type' => 'dc_commission',
-                'post_status' => 'trash',
-                'suppress_filters' => true
-            );
-            $commission_array = get_posts($args);
-            foreach ($commission_array as $commission) {
-                $to_be_restore_commission = array();
-                $to_be_restore_commission['ID'] = $commission->ID;
-                $to_be_restore_commission['post_status'] = 'private';
-                wp_update_post($to_be_restore_commission);
-            }
-            $order_query = "update " . $wpdb->prefix . "wcmp_vendor_orders set 	is_trashed = '' where `order_id` = " . $order_id;
-            $wpdb->query($order_query);
-        }
     }
 
     function conditonal_includes() {
@@ -544,9 +435,11 @@ class WCMp_Admin {
     }
 
     public function woocommerce_order_actions($actions) {
-        $actions['regenerate_order_commissions'] = __('Regenerate order commissions', 'dc-woocommerce-multi-vendor');
+        global $post;
+        if( $post && wp_get_post_parent_id( $post->ID ) )
+            $actions['regenerate_order_commissions'] = __('Regenerate order commissions', 'dc-woocommerce-multi-vendor');
         if(is_user_wcmp_vendor(get_current_user_id())){
-            unset($actions['regenerate_order_commissions']);
+            if(isset($actions['regenerate_order_commissions'])) unset($actions['regenerate_order_commissions']);
             if(isset($actions['send_order_details'])) unset( $actions['send_order_details'] );
             if(isset($actions['send_order_details_admin'])) unset( $actions['send_order_details_admin'] );
         }
@@ -560,21 +453,30 @@ class WCMp_Admin {
      */
     public function regenerate_order_commissions($order) {
         global $wpdb, $WCMp;
+        if ( !wp_get_post_parent_id( $order->get_id() ) ) {
+            return;
+        }
         if (!in_array($order->get_status(), $WCMp->commission->completed_statuses)) {
             return;
         }
-        $table_name = $wpdb->prefix . 'wcmp_vendor_orders';
         delete_post_meta($order->get_id(), '_commissions_processed');
-        delete_post_meta($order->get_id(), '_wcmp_order_processed');
-        $commission_ids = get_post_meta($order->get_id(), '_commission_ids', true) ? get_post_meta($order->get_id(), '_commission_ids', true) : array();
-        if ($commission_ids && is_array($commission_ids)) {
-            foreach ($commission_ids as $commission_id) {
-                wp_delete_post($commission_id, true);
-            }
+        $commission_id = get_post_meta($order->get_id(), '_commission_id', true) ? get_post_meta($order->get_id(), '_commission_id', true) : '';
+        if ($commission_id) {
+            wp_delete_post($commission_id, true);
         }
-        delete_post_meta($order->get_id(), '_commission_ids');
-        $wpdb->delete($table_name, array('order_id' => $order->get_id()), array('%d'));
-        $WCMp->commission->wcmp_process_commissions($order->get_id());
+        delete_post_meta($order->get_id(), '_commission_id');
+        // create vendor commission
+        $commission_id = WCMp_Commission::create_commission($order->get_id());
+        if ($commission_id) {
+            // Calculate commission
+            WCMp_Commission::calculate_commission($commission_id, $order);
+            update_post_meta($commission_id, '_paid_status', 'unpaid');
+
+            // add commission id with associated vendor order
+            update_post_meta($order->get_id(), '_commission_id', $commission_id);
+            // Mark commissions as processed
+            update_post_meta($order->get_id(), '_commissions_processed', 'yes');
+        }
     }
     
     public function add_wcmp_screen_ids($screen_ids){

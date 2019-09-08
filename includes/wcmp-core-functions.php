@@ -4002,6 +4002,7 @@ if (!function_exists('wcmp_get_commission_statuses')) {
             'unpaid'            => __( 'Unpaid', 'dc-woocommerce-multi-vendor' ),
             'refunded'          => __( 'Refunded', 'dc-woocommerce-multi-vendor' ),
             'partial_refunded'  => __( 'Partial refunded', 'dc-woocommerce-multi-vendor' ),
+            'reverse'           => __( 'Reverse', 'dc-woocommerce-multi-vendor' ),
         );
         return apply_filters( 'wcmp_get_commission_statuses', $commission_statuses );
     }

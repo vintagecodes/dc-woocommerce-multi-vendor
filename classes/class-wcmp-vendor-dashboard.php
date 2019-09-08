@@ -1653,13 +1653,6 @@ Class WCMp_Admin_Dashboard {
                         'compare' => '='
                     ),
                 ),
-//                'date_query' => array(
-//                    array(
-//                        'after'     => $start_date,
-//                        'before'    => $end_date,
-//                        'inclusive' => true,
-//                    ),
-//                ),
             );
             $unpaid_commission_total = WCMp_Commission::get_commissions_total_data( $args, $vendor->id );
 
@@ -1676,7 +1669,7 @@ Class WCMp_Admin_Dashboard {
                 $total_amount = $total_amount + $details['total_amount'];
             }
             //print_r($total_amount);
-            $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_vendor_transaction_details.php', array('total_amount' => $unpaid_commission_total['total'], 'transaction_display_array' => $transaction_display_array));
+            $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_vendor_transaction_details.php', apply_filters( 'wcmp_widget_vendor_transaction_details_data', array('total_amount' => $unpaid_commission_total['total'], 'transaction_display_array' => $transaction_display_array), $vendor, $requestData ) );
         }
 
         public function wcmp_vendor_products_cust_qna() {

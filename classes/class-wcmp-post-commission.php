@@ -133,6 +133,7 @@ class WCMp_Commission {
             if ($commission_id) {
                 // add order id with commission meta
                 update_post_meta($commission_id, '_commission_order_id', $order_id);
+                update_post_meta($commission_id, '_paid_status', 'unpaid');
                 // for BW supports
                 $vendor = get_wcmp_vendor( $vendor_id );
                 update_post_meta($commission_id, '_commission_vendor', $vendor->term_id);
@@ -1346,18 +1347,6 @@ class WCMp_Commission {
             update_post_meta($post_id, '_paid_status', $_POST['commission_status']);
         }
         
-//        if ($is_updated) {
-//            $new_commission_amount = floatval($_POST['_commission_amount']);
-//            $commission_order = get_wcmp_vendor_orders(array('commission_id' => $post_id));
-//            if ($commission_order) {
-//                $total_line_quentity = array_sum(wp_list_pluck($commission_order, 'quantity'));
-//                $line_commission_amount = (float) round(($new_commission_amount / $total_line_quentity), 2);
-//                foreach ($commission_order as $commission) {
-//                    $item_commission = $line_commission_amount * $commission->quantity;
-//                    $wpdb->query("UPDATE `{$wpdb->prefix}wcmp_vendor_orders` SET commission_amount = '" . $item_commission . "' WHERE commission_id =" . $commission->commission_id . " AND  product_id = " . $commission->product_id);
-//                }
-//            }
-//        }
         do_action('wcmp_save_vendor_commission', $post_id, $is_updated, $_POST);
     }
 
@@ -1377,7 +1366,7 @@ class WCMp_Commission {
             } else if ($status == 'paid') {
                 echo '<input type="checkbox" name="_paid_status" id="_paid_status-reverse" value="reverse" ' . checked($status, 'reverse', false) . '/> <label for="_paid_status-reverse" class="select-it">' . __("Mark as Reverse", 'dc-woocommerce-multi-vendor') . '</label>';
             } else if ($status == 'reverse') {
-                echo '<label class="select-it">Reversed</label>';
+                echo '<label class="select-it">'.__( "Reversed", 'dc-woocommerce-multi-vendor' ).'</label>';
             }
             echo '</div>';
         }
@@ -1740,9 +1729,11 @@ class WCMp_Commission {
         ?>
         <select name='commission_status' id='dropdown_commission_status'>
             <option value=""><?php _e('Show Commission Status', 'dc-woocommerce-multi-vendor'); ?></option>
-            <option value="paid"><?php _e('Paid', 'dc-woocommerce-multi-vendor'); ?></option>
-            <option value="unpaid"><?php _e('Unpaid', 'dc-woocommerce-multi-vendor'); ?></option>
-            <option value="reverse"><?php _e('Reverse', 'dc-woocommerce-multi-vendor'); ?></option>
+            <?php $commission_statuses = wcmp_get_commission_statuses(); 
+            foreach( $commission_statuses as $key => $label ) { 
+                echo "<option value='{$key}'>{$label}</option>";
+            }
+            ?>
         </select>
         <?php
         // By Commission vendor

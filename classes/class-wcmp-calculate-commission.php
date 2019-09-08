@@ -29,7 +29,7 @@ class WCMp_Calculate_Commission {
         }
 
         // support of WooCommerce subscription plugin
-        add_filter('wcs_renewal_order_meta_query', array(&$this, 'wcs_renewal_order_meta_query'), 10, 1);
+        //add_filter('wcs_renewal_order_meta_query', array(&$this, 'wcs_renewal_order_meta_query'), 10, 1);
     }
 
     /**
@@ -52,7 +52,7 @@ class WCMp_Calculate_Commission {
             if ($commission_id) {
                 // Calculate commission
                 WCMp_Commission::calculate_commission($commission_id, $vendor_order);
-                update_post_meta($commission_id, '_paid_status', 'unpaid');
+                //update_post_meta($commission_id, '_paid_status', 'unpaid'); // moved to create_commission() for proper ledger update
                 
                 // add commission id with associated vendor order
                 update_post_meta($vendor_order_id, '_commission_id', $commission_id);
