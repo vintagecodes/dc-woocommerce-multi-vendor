@@ -3,9 +3,9 @@ Contributors: Dualcube, greyparrots, purnendu, itzmekhokan
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.2.2
+Tested up to: 5.2.3
 Requires PHP: 5.6
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,18 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.4.2 - 2019-09-09 =
+* Added - Sold by vendor support in WooCommerce Blocks. #61
+* Tweak - Vendor dashboard order list filter by statuses. #71
+* Tweak - Admin commission list filter by statuses. #74
+* Fix - Remove commission order item meta from shipping email. #60
+* Fix - Vendor dashboard Withdrawal issue.
+* Fix - Parent order status issue. #62
+* Fix - Vendor dashboard order details product link. #70
+* Fix - Vendor dashboard Banking overview. #68
+* Fix - Vendor message to buyer display depending on filter. #78
+* Updated - Language file.
+
 = 3.4.1 - 2019-08-06 =
 * Tweak - Disabled order migration emails.
 * Tweak - Restrict suborders email for order on-hold and processing.
