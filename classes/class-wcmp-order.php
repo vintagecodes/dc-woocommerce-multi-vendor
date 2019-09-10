@@ -723,7 +723,7 @@ class WCMp_Order {
 //                                $check += $suborder_statuses[ $status ];
 //                            }
 //                        }
-                        if( count($status == 1) && isset($status[0]) ) {
+                        if( count($status) == 1 && isset($status[0]) ) {
                             $parent_order->update_status( $new_status, _x( "Sync from vendor's suborders: ", 'Order note', 'dc-woocommerce-multi-vendor' ) );
                         }
                     }
