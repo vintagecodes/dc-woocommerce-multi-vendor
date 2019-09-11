@@ -98,6 +98,7 @@ do_action('before_wcmp_customer_qna_form');
             }
             ?>
             </div>
+            <div class="clear"></div>
             <?php if( !is_user_logged_in() ) : ?>
             <div id="qna_user_msg_wrap" class="simplePopup">
                 <div class="qna_msg" style="text-align: center;">
