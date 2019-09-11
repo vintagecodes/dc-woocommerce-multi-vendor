@@ -98,15 +98,13 @@ do_action('before_wcmp_customer_qna_form');
             }
             ?>
             </div>
-            <?php if( is_user_logged_in() == 0 ) { ?>
-            <div class="clear"></div>
+            <?php if( !is_user_logged_in() ) : ?>
             <div id="qna_user_msg_wrap" class="simplePopup">
                 <div class="qna_msg" style="text-align: center;">
                     <p><?php _e('You are not logged in', 'dc-woocommerce-multi-vendor'); ?></p>
                 </div>
             </div>
-        </div>
-        <?php } ?>
+            <?php endif; ?>
     </div>
 </div>
 <?php do_action('after_wcmp_customer_qna_form');
