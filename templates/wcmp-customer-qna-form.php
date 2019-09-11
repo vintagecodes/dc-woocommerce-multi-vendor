@@ -106,6 +106,7 @@ do_action('before_wcmp_customer_qna_form');
                 </div>
             </div>
             <?php endif; ?>
+        </div>
     </div>
 </div>
 <?php do_action('after_wcmp_customer_qna_form');
