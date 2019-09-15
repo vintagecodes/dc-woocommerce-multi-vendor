@@ -3042,7 +3042,7 @@ class WCMp_Ajax {
                     $row ['revenue'] = '-';
                     $row ['unique_purchase'] = $sold_item_data['qty'];
                 }
-                $data[] = apply_filters('wcmp_widget_vendor_product_sales_report_row_data', $row, $product_id, $value);
+                $data[] = apply_filters( 'wcmp_widget_vendor_product_sales_report_row_data', $row, $product_id, $sold_item_data );
             }
 
             $json_data = array(
