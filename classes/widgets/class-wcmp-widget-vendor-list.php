@@ -64,8 +64,10 @@ class DC_Widget_Vendor_List extends WP_Widget {
             $vendors = get_wcmp_vendors(apply_filters( 'wcmp_widget_vendor_list_query_args', array('exclude'   => $block_vendors)));
 
             if (!empty($vendors) && is_array($vendors)) {
+                // enqueue scripts
+                wp_enqueue_script( 'frontend_js' );
                 // Set up widget title
-                if ($instance['title']) {
+                if ( isset( $instance['title'] ) ) {
                     $title = apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
                 } else {
                     $title = false;
