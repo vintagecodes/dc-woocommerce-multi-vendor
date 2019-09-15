@@ -15,7 +15,7 @@ global $WCMp;
 $vendor = get_wcmp_vendor( absint( $vendor_id ) );
 echo $email_heading . "\n\n";
 
-echo sprintf( __( 'A new order was received and marked as completed from %s. Their order is as follows:',  'dc-woocommerce-multi-vendor' ), $order->get_billing_first_name() . ' ' . $order->get_billing_last_name() ) . "\n\n";
+echo sprintf( __( 'A new order was received and marked as %s from %s. Their order is as follows:',  'dc-woocommerce-multi-vendor' ), $order->get_status( 'edit' ), $order->get_billing_first_name() . ' ' . $order->get_billing_last_name() ) . "\n\n";
 
 echo "****************************************************\n\n";
 

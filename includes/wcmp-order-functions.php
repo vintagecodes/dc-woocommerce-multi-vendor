@@ -15,7 +15,8 @@ defined( 'ABSPATH' ) || exit;
  * Get all orders.
  *
  * @since 3.4.0
- * @used-by WC_Order::set_status
+ * @param $args query_args
+ * @param $return_type return types
  * @return array
  */
 function wcmp_get_orders($args = array(), $return_type = 'ids') {
@@ -128,4 +129,28 @@ function wcmp_get_total_refunded_for_item( $item_id, $order_id ) {
         return $item_total;
     }
     return false;
+}
+
+/**
+ * Get WCMp suborders if available.
+ *
+ * @param int $order_id.
+ * @param array $args.
+ * @param boolean $object.
+ * @return object suborders.
+ */
+function get_wcmp_suborders( $order_id, $args = array(), $object = true ) {
+    $default = array(
+        'post_parent' => $order_id,
+        'post_type' => 'shop_order',
+        'numberposts' => -1,
+        'post_status' => 'any'
+    );
+    $args = ( $args ) ? wp_parse_args( $args, $default ) : $default;
+    $orders = array();
+    $posts = get_posts( $args );
+    foreach ( $posts as $post ) {
+        $orders[] = ( $object ) ? wc_get_order( $post->ID ) : $post->ID;
+    }
+    return $orders;
 }

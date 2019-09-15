@@ -30,13 +30,9 @@ class WCMp_Vendor_Dashboard_Shortcode {
             if (( 'no' === get_option('woocommerce_registration_generate_password') && !is_user_logged_in())) {
                 wp_enqueue_script('wc-password-strength-meter');
             }
-            // Remove default registration form from WCMp dashboard endpoint for logged out vendor
-            update_option( 'woocommerce_enable_myaccount_registration', 'no' );
             echo '<div class="wcmp-dashboard woocommerce">';
             wc_get_template('myaccount/form-login.php');
             echo '</div>';
-            // Undo WCMp changes
-            update_option( 'woocommerce_enable_myaccount_registration', 'yes' );
         } else if (!is_user_wcmp_vendor(get_current_vendor_id())) {
         	$user = wp_get_current_user();
         	

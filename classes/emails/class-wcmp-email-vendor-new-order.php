@@ -86,7 +86,8 @@ if (!class_exists('WC_Email_Vendor_New_Order')) :
                     return;
                 }
 
-                $this->send($this->get_recipient(), $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments());
+                $result = $this->send($this->get_recipient(), $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments());
+                return $result;
             }
         }
 

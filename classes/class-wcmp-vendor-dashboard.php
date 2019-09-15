@@ -490,16 +490,9 @@ Class WCMp_Admin_Dashboard {
         $vendor = get_wcmp_vendor($user->ID);
         $vendor = apply_filters('wcmp_vendor_dashboard_pages_vendor', $vendor);
         if ($vendor) {
-//            $order_page = apply_filters('wcmp_vendor_view_order_page', true);
-//            if ($order_page) {
-//                $hook = add_menu_page(__('Orders', 'dc-woocommerce-multi-vendor'), __('Orders', 'dc-woocommerce-multi-vendor'), 'read', 'dc-vendor-orders', array($this, 'wcmp_vendor_orders_page'));
-//                add_action("load-$hook", array($this, 'add_order_page_options'));
-//            }
-
             $shipping_page = apply_filters('wcmp_vendor_view_shipping_page', true);
             if ($vendor->is_shipping_enable() && $shipping_page) {
                 $shipping_hook = add_menu_page(__('Shipping', 'dc-woocommerce-multi-vendor'), __('Shipping', 'dc-woocommerce-multi-vendor'), 'read', 'dc-vendor-shipping', array($this, 'shipping_page'));
-                add_action("load-$shipping_hook", array($this, 'load_wcmp_shipping_handlers'));
             }
         }
     }
@@ -940,27 +933,6 @@ Class WCMp_Admin_Dashboard {
         if ($option == 'orders_per_page') {
             return $value;
         }
-    }
-
-    /**
-     * Add order page options
-     * Defined cores in Vendor Order Page class
-     */
-    public function add_order_page_options() {
-        global $WCMp;
-        $args = array(
-            'label' => 'Rows',
-            'default' => 10,
-            'option' => 'orders_per_page'
-        );
-        add_screen_option('per_page', $args);
-
-        $WCMp->load_class('vendor-order-page');
-        $this->wcmp_vendor_order_page = new WCMp_Vendor_Order_Page();
-    }
-
-    public function load_wcmp_shipping_handlers() {
-        
     }
 
     /**

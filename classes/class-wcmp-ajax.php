@@ -19,12 +19,6 @@ class WCMp_Ajax {
         add_action('wp_ajax_send_report_abuse', array(&$this, 'send_report_abuse'));
         add_action('wp_ajax_nopriv_send_report_abuse', array(&$this, 'send_report_abuse'));
         add_action('wp_ajax_dismiss_vendor_to_do_list', array(&$this, 'dismiss_vendor_to_do_list'));
-        //add_action('wp_ajax_get_more_orders', array(&$this, 'get_more_orders'));
-        add_action('wp_ajax_withdrawal_more_orders', array(&$this, 'withdrawal_more_orders'));
-        add_action('wp_ajax_show_more_transaction', array(&$this, 'show_more_transaction'));
-        //add_action('wp_ajax_nopriv_get_more_orders', array(&$this, 'get_more_orders'));
-//        add_action('wp_ajax_order_mark_as_shipped', array(&$this, 'order_mark_as_shipped'));
-//        add_action('wp_ajax_nopriv_order_mark_as_shipped', array(&$this, 'order_mark_as_shipped'));
         add_action('wp_ajax_transaction_done_button', array(&$this, 'transaction_done_button'));
         add_action('wp_ajax_wcmp_vendor_csv_download_per_order', array(&$this, 'wcmp_vendor_csv_download_per_order'));
         add_filter('ajax_query_attachments_args', array(&$this, 'show_current_user_attachments'), 10, 1);
@@ -704,35 +698,6 @@ class WCMp_Ajax {
         die;
     }
 
-    function show_more_transaction() {
-        global $WCMp;
-        $data_to_show = $_POST['data_to_show'];
-        $WCMp->template->get_template('vendor-dashboard/vendor-transactions/vendor-transaction-items.php', array('transactions' => $data_to_show));
-        die;
-    }
-
-    function withdrawal_more_orders() {
-        global $WCMp;
-        $user = wp_get_current_user();
-        $vendor = get_wcmp_vendor($user->ID);
-        $offset = $_POST['offset'];
-        $meta_query['meta_query'] = array(
-            array(
-                'key' => '_paid_status',
-                'value' => 'unpaid',
-                'compare' => '='
-            ),
-            array(
-                'key' => '_commission_vendor',
-                'value' => absint($vendor->term_id),
-                'compare' => '='
-            )
-        );
-        $customer_orders = $vendor->get_orders(6, $offset, $meta_query);
-        $WCMp->template->get_template('vendor-dashboard/vendor-withdrawal/vendor-withdrawal-items.php', array('vendor' => $vendor, 'commissions' => $customer_orders));
-        die;
-    }
-
     function wcmp_vendor_csv_download_per_order() {
         global $WCMp, $wpdb;
 
@@ -1360,18 +1325,6 @@ class WCMp_Ajax {
             wp_update_post(array('ID' => $transaction_id, 'post_status' => 'wcmp_completed'));
             do_action( 'wcmp_todo_done_pending_transaction', $transaction_id, $vendor );
         }
-        die;
-    }
-
-    /**
-     * WCMp get more orders
-     */
-    function get_more_orders() {
-        global $WCMp;
-        $data_to_show = isset($_POST['data_to_show']) ? $_POST['data_to_show'] : '';
-        $order_status = isset($_POST['order_status']) ? $_POST['order_status'] : '';
-        $vendor = get_wcmp_vendor(get_current_vendor_id());
-        $WCMp->template->get_template('vendor-dashboard/vendor-orders/vendor-orders-item.php', array('vendor' => $vendor, 'orders' => $data_to_show, 'order_status' => $order_status));
         die;
     }
 

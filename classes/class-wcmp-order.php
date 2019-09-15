@@ -216,7 +216,7 @@ class WCMp_Order {
     public function wcmp_show_shop_order_columns($column, $post_id) {
         switch ($column) {
             case 'wcmp_suborder' :
-                $wcmp_suborders = $this->get_suborders($post_id);
+                $wcmp_suborders = get_wcmp_suborders($post_id);
 
                 if ($wcmp_suborders) {
                     echo '<ul class="wcmp-order-vendor" style="margin:0px;">';
@@ -403,7 +403,7 @@ class WCMp_Order {
             update_post_meta($vendor_order_id, $key, get_post_meta($order->get_id(), $key, true));
         }
 
-        update_post_meta($vendor_order_id, '_order_version', $WCMp->version);
+        update_post_meta($vendor_order_id, '_wcmp_order_version', $WCMp->version);
         update_post_meta($vendor_order_id, '_vendor_id', absint($args['vendor_id']));
         update_post_meta($vendor_order_id, '_created_via', 'wcmp_vendor_order');
         
@@ -623,29 +623,6 @@ class WCMp_Order {
         }
     }
 
-    /**
-     * Get suborders if available.
-     *
-     * @param int $order_id.
-     * @param array $args.
-     * @return object suborders.
-     */
-    public function get_suborders($order_id, $args = array()) {
-        $default = array(
-            'post_parent' => $order_id,
-            'post_type' => 'shop_order',
-            'numberposts' => -1,
-            'post_status' => 'any'
-        );
-        $args = wp_parse_args($args, $default);
-        $orders = array();
-        $posts = get_posts($args);
-        foreach ($posts as $post) {
-            $orders[] = wc_get_order($post->ID);
-        }
-        return $orders;
-    }
-
     public function wcmp_parent_order_to_vendor_order_status_synchronization($order_id, $old_status, $new_status) {
         if(!$order_id) return;
         // Check order have status
@@ -654,14 +631,14 @@ class WCMp_Order {
             $new_status = $order->get_status('edit');
         }
         
-        $status_to_sync = apply_filters('wcmp_parent_order_to_vendor_order_statuses_to_sync',array('on-hold', 'pending', 'processing'));
+        $status_to_sync = apply_filters('wcmp_parent_order_to_vendor_order_statuses_to_sync',array('on-hold', 'pending', 'processing', 'cancelled'));
         if( in_array($new_status, $status_to_sync) ) :
             if (wp_get_post_parent_id( $order_id ) || get_post_meta($order_id, 'wcmp_vendor_order_status_synchronized', true))
                 return false;
             
             remove_action( 'woocommerce_order_status_completed', 'wc_paying_customer' );
             // Check if order have sub-order
-            $wcmp_suborders = $this->get_suborders($order_id);
+            $wcmp_suborders = get_wcmp_suborders($order_id);
 
             if ($wcmp_suborders) {
                 foreach ($wcmp_suborders as $suborder) {
@@ -681,7 +658,7 @@ class WCMp_Order {
             remove_action('woocommerce_order_status_changed', array($this, 'wcmp_parent_order_to_vendor_order_status_synchronization'), 90, 3);
             $status_to_sync = apply_filters('wcmp_vendor_order_to_parent_order_statuses_to_sync',array('completed', 'refunded'));
 
-            $wcmp_suborders = $this->get_suborders( $parent_order_id );
+            $wcmp_suborders = get_wcmp_suborders( $parent_order_id );
             $new_status_count  = 0;
             $suborder_count    = count( $wcmp_suborders );
             $suborder_statuses = array();
@@ -741,7 +718,7 @@ class WCMp_Order {
         if ($order_id > 0) {
             $order = wc_get_order($order_id);
             if ($order->has_status(array('pending', 'failed'))) {
-                $wcmp_suborders = $this->get_suborders($order_id);
+                $wcmp_suborders = get_wcmp_suborders($order_id);
                 if ($wcmp_suborders) {
                     foreach ($wcmp_suborders as $suborder) {
                         $commission_id = get_post_meta( $suborder->get_id(), '_commission_id', true );
@@ -777,7 +754,7 @@ class WCMp_Order {
             $restock_refunded_items = !empty($_POST['restock_refunded_items']) && $_POST['restock_refunded_items'] === 'true' ? true : false;
             $order = wc_get_order($order_id);
             $parent_order_total = wc_format_decimal($order->get_total());
-            $wcmp_suborders = $this->get_suborders($order_id);
+            $wcmp_suborders = get_wcmp_suborders($order_id);
 
             //calculate line items total from parent order
             foreach ($line_item_totals as $item_id => $total) {
@@ -1049,7 +1026,7 @@ class WCMp_Order {
     
     public function trash_wcmp_suborder( $order_id ) {
         if ( wp_get_post_parent_id( $order_id ) == 0 ) {
-            $wcmp_suborders = $this->get_suborders($order_id);
+            $wcmp_suborders = get_wcmp_suborders($order_id);
             if ( $wcmp_suborders ) {
                 foreach ( $wcmp_suborders as $suborder ) {
                     wp_trash_post( $suborder->get_id() );
@@ -1060,7 +1037,7 @@ class WCMp_Order {
     
     public function delete_wcmp_suborder( $order_id ) {
         if ( wp_get_post_parent_id( $order_id ) == 0 ) {
-            $wcmp_suborders = $this->get_suborders($order_id);
+            $wcmp_suborders = get_wcmp_suborders($order_id);
             if ( $wcmp_suborders ) {
                 foreach ( $wcmp_suborders as $suborder ) {
                     $commission_id = get_post_meta( $suborder->get_id(), '_commission_id', true );
@@ -1119,7 +1096,7 @@ class WCMp_Order {
     }
     
     public function woocommerce_my_account_my_orders_column_wcmp_suborder( $order ) {
-        $wcmp_suborders = $this->get_suborders($order->get_id());
+        $wcmp_suborders = get_wcmp_suborders($order->get_id());
 
         if ($wcmp_suborders) {
             echo '<ul class="wcmp-order-vendor" style="margin:0px;list-style:none;">';

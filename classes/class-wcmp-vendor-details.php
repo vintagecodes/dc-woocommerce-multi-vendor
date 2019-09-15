@@ -305,7 +305,25 @@ class WCMp_Vendor {
             $link = get_term_link(absint($this->term_id), $WCMp->taxonomy->taxonomy_name);
         }
 
-        return $link;
+        return apply_filters( 'wcmp_vendor_permalink', $link, $this );
+    }
+    
+    /**
+     * get_id function
+     * @access public
+     * @return integer 
+     */
+    public function get_id() {
+        return $this->id;
+    }
+    
+    /**
+     * get_term_id function
+     * @access public
+     * @return integer 
+     */
+    public function get_term_id() {
+        return $this->term_id;
     }
 
     /**
@@ -342,38 +360,38 @@ class WCMp_Vendor {
         if (!$no_of) {
             $no_of = -1;
         }
-        $vendor_id = $this->term_id;
-        $commissions = false;
-        $order_id = array();
+        $vendor_id = $this->id;
+        $order_ids = $vendor_orders = array();
         if ($vendor_id > 0) {
             $args = array(
-                'post_type' => 'dc_commission',
-                'post_status' => array('publish', 'private'),
-                'posts_per_page' => (int) $no_of,
+                'author'            => $vendor_id,
+                'posts_per_page'    => $no_of,
                 'meta_query' => array(
                     array(
-                        'key' => '_commission_vendor',
-                        'value' => absint($vendor_id),
+                        'key' => '_commissions_processed',
+                        'value' => 'yes',
                         'compare' => '='
                     )
                 )
             );
-            if ($offset) {
+            if ( $offset ) {
                 $args['offset'] = $offset;
             }
-            if ($more_args) {
-                $args = wp_parse_args($more_args, $args);
+            if ( $more_args ) {
+                $args = wp_parse_args( $more_args, $args );
             }
-            $commissions = get_posts($args);
+            
+            $vendor_orders = wcmp_get_orders( $args );
         }
 
-        if ($commissions) {
-            $order_id = array();
-            foreach ($commissions as $commission) {
-                $order_id[$commission->ID] = get_post_meta($commission->ID, '_commission_order_id', true);
+        if ( $vendor_orders ) {
+            foreach ( $vendor_orders as $order_id ) {
+                if(get_post_status( $order_id ) === 'wc-cancelled') continue;
+                $commission_id = get_post_meta( $order_id, '_commission_id', true );
+                $order_ids[$commission_id] = $order_id;
             }
         }
-        return $order_id;
+        return $order_ids;
     }
 
     /**

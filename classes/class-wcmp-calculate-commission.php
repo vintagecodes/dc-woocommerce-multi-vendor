@@ -27,6 +27,7 @@ class WCMp_Calculate_Commission {
             add_action( 'wcmp_checkout_vendor_order_processed', array( $this, 'wcmp_create_commission' ), 10, 3);
             add_action( 'woocommerce_order_refunded', array( $this, 'wcmp_create_commission_refunds' ), 99, 2);
         }
+        add_action( 'woocommerce_order_status_changed', array( $this, 'wcmp_vendor_new_order_mail' ), 99, 3 );
 
         // support of WooCommerce subscription plugin
         //add_filter('wcs_renewal_order_meta_query', array(&$this, 'wcs_renewal_order_meta_query'), 10, 1);
@@ -59,10 +60,42 @@ class WCMp_Calculate_Commission {
                 // Mark commissions as processed
                 update_post_meta($vendor_order_id, '_commissions_processed', 'yes');
                 
-                $email_admin = WC()->mailer()->emails['WC_Email_Vendor_New_Order'];
-                $email_admin->trigger($vendor_order_id);
+                do_action( 'after_wcmp_calculate_commission', $commission_id, $vendor_order_id );
             }
         }
+    }
+    
+    public function wcmp_vendor_new_order_mail( $order_id, $from_status, $to_status ){
+        if( !$order_id ) return;
+        if( !in_array( $from_status, apply_filters( '', array(
+            'pending',
+            'failed',
+            'cancelled',
+        ), $order_id, $from_status, $to_status ) ) ) return;
+        
+        if( !wp_get_post_parent_id( $order_id ) && get_post_meta( $order_id, 'has_wcmp_sub_order', true ) ) {
+            $suborders = get_wcmp_suborders( $order_id, false, false);
+            if( $suborders ) {
+                foreach ( $suborders as $v_order_id ) {
+                    $wcmp_order_version = get_post_meta( $v_order_id, '_wcmp_order_version', true );
+                    $already_triggered = get_post_meta( $v_order_id, '_wcmp_vendor_new_order_mail_triggered', true );
+                    if( version_compare( $wcmp_order_version, '3.4.2', '>=') && !$already_triggered ){
+                        $email_admin = WC()->mailer()->emails['WC_Email_Vendor_New_Order'];
+                        $result = $email_admin->trigger( $v_order_id );
+                        if( $result ) update_post_meta( $v_order_id, '_wcmp_vendor_new_order_mail_triggered', true );
+                    }
+                }
+            }
+        }elseif( is_wcmp_vendor_order( $order_id ) ){
+            $wcmp_order_version = get_post_meta( $order_id, '_wcmp_order_version', true );
+            $already_triggered = get_post_meta( $order_id, '_wcmp_vendor_new_order_mail_triggered', true );
+            if( version_compare( $wcmp_order_version, '3.4.2', '>=') && !$already_triggered ){
+                $email_admin = WC()->mailer()->emails['WC_Email_Vendor_New_Order'];
+                $result = $email_admin->trigger( $order_id );
+                if( $result ) update_post_meta( $order_id, '_wcmp_vendor_new_order_mail_triggered', true );
+            }
+        }
+        
     }
 
     /**
