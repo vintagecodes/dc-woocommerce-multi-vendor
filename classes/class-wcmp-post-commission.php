@@ -1474,7 +1474,8 @@ class WCMp_Commission {
                     $line_items = $order->get_items( 'line_item' );
                     foreach ($line_items as $item_id => $item) {
                         $product = $item->get_product();
-                        echo ' &nbsp;[&nbsp;<a href="' . esc_url(get_edit_post_link($item->get_product_id())) . '">' . $product->get_formatted_name() . '</a>&nbsp;]&nbsp;';
+                        $name = ( $product ) ? $product->get_formatted_name() : $item->get_name();
+                        echo ' &nbsp;[&nbsp;<a href="' . esc_url(get_edit_post_link($item->get_product_id())) . '">' . $name . '</a>&nbsp;]&nbsp;';
                     }
                 }else{ // BW compatibilities
                     if (is_array($data)) {
