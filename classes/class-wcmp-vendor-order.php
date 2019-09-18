@@ -134,6 +134,21 @@ class WCMp_Vendor_Order {
         return $this->order ? $this->order : false;
     }
     
+    /**
+     * Get formatted order total earned.
+     *
+     * @since 3.4.3
+     */
+    public function get_formatted_order_total_earned($context = 'view') {
+        $commission_id = $this->get_prop('_commission_id');
+        $commission_total = get_post_meta( $commission_id, '_commission_total', true );
+        if($commission_total != WCMp_Commission::commission_totals($commission_id, 'edit')){
+            return '<del>' . wc_price($commission_total, array('currency' => $this->order->get_currency())) . '</del> <ins>' . WCMp_Commission::commission_totals($commission_id, $context).'</ins>'; 
+        }else{
+            return WCMp_Commission::commission_totals($commission_id, $context);
+        }
+    }
+    
 }
 
 

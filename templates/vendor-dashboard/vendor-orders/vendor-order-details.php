@@ -25,7 +25,6 @@ if (!$order) {
     <?php
     return;
 }
-print_r($vendor->get_orders());
 // Get the payment gateway
 $payment_gateway = wc_get_payment_gateway_by_order( $order );
 $vendor_order = wcmp_get_order($order_id);

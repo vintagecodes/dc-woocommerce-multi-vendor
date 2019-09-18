@@ -219,6 +219,14 @@ if ( wc_tax_enabled() ) {
                                             <?php echo $order->get_formatted_order_total(); // WPCS: XSS ok.  ?>
                                         </td>
                                     </tr>
+                                    
+                                    <tr>
+                                        <td class="label"><?php esc_html_e('Total Earned', 'dc-woocommerce-multi-vendor'); ?>:</td>
+                                        <td width="1%"></td>
+                                        <td class="total">
+                                            <?php echo $vendor_order->get_formatted_order_total_earned(); // WPCS: XSS ok.  ?>
+                                        </td>
+                                    </tr>
 
                                     <?php do_action('wcmp_vendor_order_totals_after_total', $order->get_id()); ?>
 

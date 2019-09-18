@@ -67,7 +67,7 @@ class WCMp_Calculate_Commission {
     
     public function wcmp_vendor_new_order_mail( $order_id, $from_status, $to_status ){
         if( !$order_id ) return;
-        if( !in_array( $from_status, apply_filters( '', array(
+        if( !in_array( $from_status, apply_filters( 'wcmp_vendor_new_order_mail_statuses_transition_from', array(
             'pending',
             'failed',
             'cancelled',
