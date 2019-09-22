@@ -393,6 +393,50 @@ class WCMp_Vendor {
         }
         return $order_ids;
     }
+    
+    /**
+     * get_unpaid_orders function
+     * @access public
+     * @return array with order id
+     */
+    public function get_unpaid_orders($no_of = false, $offset = false, $more_args = false) {
+        if (!$no_of) {
+            $no_of = -1;
+        }
+        $vendor_id = $this->id;
+        $order_ids = $commissions = array();
+        if ($vendor_id > 0) {
+            $args = array(
+                'post_type'         => 'dc_commission',
+                'post_status'       => array('publish', 'private'),
+                'posts_per_page'    => (int) $no_of,
+                'fields'            => 'ids',
+                'meta_query'        => array(
+                    array(
+                        'key'       => '_commission_vendor',
+                        'value'     => absint( $this->term_id ),
+                        'compare'   => '='
+                    )
+                )
+            );
+            if ( $offset ) {
+                $args['offset'] = $offset;
+            }
+            if ( $more_args ) {
+                $args = wp_parse_args( $more_args, $args );
+            }
+            
+            $commissions = get_posts($args);
+        }
+
+        if ( $commissions ) {
+            foreach ( $commissions as $commission_id ) {
+                $order_id = get_post_meta( $commission_id, '_commission_order_id', true );
+                $order_ids[$commission_id] = $order_id;
+            }
+        }
+        return $order_ids;
+    }
 
     /**
      * get_vendor_items_from_order function get items of a order belongs to a vendor
@@ -545,9 +589,12 @@ class WCMp_Vendor {
                 </td>
                 <td scope="col" style="text-align:left; border: 1px solid #eee;">
                     <?php
-                    $commission = $item->get_meta('_vendor_item_commission', true);
-                    echo wc_price($commission);
-                   
+                    if ($is_ship) {
+                        echo $order->get_formatted_line_subtotal($item);
+                    } else {
+                        $commission = $item->get_meta('_vendor_item_commission', true);
+                        echo wc_price($commission);
+                    }
                     ?>
                 </td>
                 <?php do_action('wcmp_after_vendor_order_item_table', $item, $order, $vendor_id, $is_ship); ?>

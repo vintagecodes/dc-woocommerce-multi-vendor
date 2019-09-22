@@ -2005,10 +2005,8 @@ class WCMp_Ajax {
                     'compare' => '='
                 )
             );
-            $vendor_unpaid_total_orders = $vendor->get_orders(false, false, $meta_query);
-//            if (isset($requestData['start']) && isset($requestData['length'])) {
-//                $vendor_unpaid_orders = $vendor->get_orders($requestData['length'], $requestData['start'], $meta_query);
-//            }
+            $vendor_unpaid_total_orders = $vendor->get_unpaid_orders(false, false, $meta_query);
+
             $data = array();
             $commission_threshold_time = isset($WCMp->vendor_caps->payment_cap['commission_threshold_time']) && !empty($WCMp->vendor_caps->payment_cap['commission_threshold_time']) ? $WCMp->vendor_caps->payment_cap['commission_threshold_time'] : 0;
             if ($vendor_unpaid_total_orders) {
@@ -2044,35 +2042,6 @@ class WCMp_Ajax {
                         $row ['total'] = ( $vendor_order ) ? $vendor_order->get_commission_total() : wc_price(0);
                         $data[] = apply_filters('wcmp_vendor_withdrawal_list_row_data', $row, $commission_id);
                     }
-                    
-//                    $vendor_share = get_wcmp_vendor_order_amount(array('vendor_id' => $vendor->id, 'order_id' => $order->get_id()));
-//                    if (!isset($vendor_share['total'])) {
-//                        $vendor_share['total'] = 0;
-//                    }
-//                    $commission_create_date = get_the_date('U', $commission_id);
-//                    $current_date = date('U');
-//                    $diff = intval(($current_date - $commission_create_date) / (3600 * 24));
-//                    if ($diff < $commission_threshold_time) {
-//                        continue;
-//                    }
-//
-//                    if (is_commission_requested_for_withdrawals($commission_id)) {
-//                        $disabled_reqested_withdrawals = 'disabled';
-//                    } else {
-//                        $disabled_reqested_withdrawals = '';
-//                    }
-//                    //skip withdrawal for COD order and vendor end shipping
-//                    if ($order->get_payment_method() == 'cod' && $vendor->is_shipping_enable())
-//                        continue;
-//
-//                    $row = array();
-//                    $row ['select_withdrawal'] = '<input name="commissions[]" value="' . $commission_id . '" class="select_withdrawal" type="checkbox" ' . $disabled_reqested_withdrawals . '>';
-//                    $row ['order_id'] = $order->get_id();
-//                    $row ['commission_amount'] = wc_price($vendor_share['commission_amount']);
-//                    $row ['shipping_amount'] = wc_price($vendor_share['shipping_amount']);
-//                    $row ['tax_amount'] = wc_price($vendor_share['tax_amount']);
-//                    $row ['total'] = wc_price($vendor_share['total']);
-//                    $data[] = apply_filters('wcmp_vendor_withdrawal_list_row_data', $row, $commission_id);
                 }
             }
             $total_array = $data;

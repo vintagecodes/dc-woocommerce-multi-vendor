@@ -217,25 +217,11 @@ class WCMp_Transaction {
         $title = array();
         if (is_array($commissions)) {
             foreach ($commissions as $commission_id) {
-                $commission_products = get_post_meta($commission_id, '_commission_product', true);
-                if (!is_array($commission_products)) {
-                    $commission_products = array($commission_products);
-                }
-                if (!empty($commission_products)) {
-                    foreach ($commission_products as $commission_product) {
-                        if (function_exists('wc_get_product')) {
-                            $product = wc_get_product($commission_product);
-                        } else {
-                            $product = new WC_Product($commission_product);
-                        }
-                        if (is_object($product)) {
-                            if ($product->get_formatted_name()) {
-                                $title[] = $product->get_formatted_name();
-                            } else {
-                                $title[] = $product->get_title();
-                            }
-                        }
-                    }
+                $wcmp_order = get_wcmp_order_by_commission( $commission_id );
+                $order = $wcmp_order->get_order();
+                $line_items = $order->get_items( 'line_item' );
+                foreach ( $line_items as $item_id => $item ) {
+                    $title[] = esc_html( $item->get_name() );
                 }
             }
         }
@@ -254,7 +240,7 @@ class WCMp_Transaction {
         $commission_details['body'][$commission_id][]['Status'] = $transaction_status;
         $commission_details['body'][$commission_id][]['Amount'] = wc_price($amount);
         $commission_details['header'] = array(__('Commission ID', 'dc-woocommerce-multi-vendor'), __('Products', 'dc-woocommerce-multi-vendor'), __('Status', 'dc-woocommerce-multi-vendor'), __('Amount', 'dc-woocommerce-multi-vendor'));
-        return apply_filters('wcmp_transaction_item_details', $commission_details);
+        return apply_filters( 'wcmp_transaction_item_details', $commission_details, $transaction_id );
     }
 
     /**

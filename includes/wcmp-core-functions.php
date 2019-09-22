@@ -3204,7 +3204,7 @@ if (!function_exists('do_wcmp_spmv_set_object_terms')) {
                                 }
                                 wp_set_object_terms($top_rated_vendor_product, (int) $term->term_id, $WCMp->taxonomy->wcmp_spmv_taxonomy, true);
                             } else {
-                                do_action('wcmp_spmv_set_object_terms_handler', $term, $map_id, $products_map_data_ids);
+                                do_action('wcmp_spmv_set_object_terms_handler', $term, $map_id, $products_map_data);
                             }
                         }
                     }
@@ -3595,14 +3595,14 @@ if ( ! function_exists( 'wcmp_get_post_permalink_html' ) ) {
 
         $return = '';
         if ( $post_type === 'shop_coupon' ) {
-            $type = 'coupon';
+            $type = __('coupon', 'dc-woocommerce-multi-vendor');
         } else {
-            $type = 'product';
+            $type = __('product', 'dc-woocommerce-multi-vendor');
         }
         if ( false === strpos( $view_link, 'preview=true' ) ) {
-            $return .= '<label>' . __( sprintf( 'View %s:', $type ) ) . "</label>\n";
+            $return .= '<label>' . __( sprintf( __('View %s:', 'dc-woocommerce-multi-vendor'), $type ) ) . "</label>\n";
         } else {
-            $return .= '<label>' . __( sprintf( 'View %s:', $type ) ) . "</label>\n";
+            $return .= '<label>' . __( sprintf( __('View %s:', 'dc-woocommerce-multi-vendor'), $type ) ) . "</label>\n";
         }
         $return .= '<span id="afm-' . $post_type . '-permalink"><a href="' . esc_url( $view_link ) . '"' . $preview_target . '>' . $display_link . "</a></span>";
 

@@ -674,9 +674,9 @@ class WCMp_Vendor_Hooks {
             $WCMp->library->load_dataTable_lib();
             $meta_query['meta_query'] = array(
                 array(
-                    'key'     => '_paid_status',
-                    'value'   => 'unpaid',
-                    'compare' => '='
+                    'key' => '_paid_status',
+                    'value' => array('unpaid', 'partial_refunded'),
+                    'compare' => 'IN'
                 ),
                 array(
                     'key'     => '_commission_vendor',
@@ -684,7 +684,7 @@ class WCMp_Vendor_Hooks {
                     'compare' => '='
                 )
             );
-            $vendor_unpaid_orders = $vendor->get_orders( false, false, $meta_query );
+            $vendor_unpaid_orders = $vendor->get_unpaid_orders( false, false, $meta_query );
             
             // withdrawal table init
             $table_init = apply_filters( 'wcmp_vendor_dashboard_payment_withdrawal_table_init', array(

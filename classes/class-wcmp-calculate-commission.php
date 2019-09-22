@@ -241,7 +241,7 @@ class WCMp_Calculate_Commission {
                                  *
                                  * @since 3.4.0
                                  */
-                                do_action( 'wcmp_create_commission_refund_after_commission_note', $commission_id, $commissions_refunded, $refund_id, $order );
+                                do_action( 'wcmp_create_commission_refund_after_commission_note', $commission_id, $data_amount, $refund_id, $order );
                             }
                             //update_post_meta( $commission_id, '_commission_amount', $amount );
 

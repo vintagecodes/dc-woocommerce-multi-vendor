@@ -89,10 +89,10 @@ class WCMp_Ledger {
         endif;
     }
     
-    public function wcmp_create_commission_refund_after_commission_note( $commission_id, $commissions_refunded, $refund_id, $order ) {
+    public function wcmp_create_commission_refund_after_commission_note( $commission_id, $commissions_refunded_amt, $refund_id, $order ) {
         if( $order ){
             $vendor_id = get_post_meta( $order->get_id(), '_vendor_id', true);
-            $refund_total = isset( $commissions_refunded[$commission_id] ) ? abs( $commissions_refunded[$commission_id] ) : 0;
+            $refund_total = ( $commissions_refunded_amt ) ? abs( array_sum( $commissions_refunded_amt) ) : 0;
             $refund = new WC_Order_Refund($refund_id);
             $vendor = get_wcmp_vendor( $vendor_id );
             $args = array(
@@ -110,7 +110,7 @@ class WCMp_Ledger {
                 'order_id'      => $order->get_id(),
                 'ref_id'        => $refund_id,
                 'ref_type'      => 'refund',
-                'ref_info'      => sprintf(__('Refund generated for Commission &ndash; <a href="%s" target="_blank">#%s</a>', 'dc-woocommerce-multi-vendor'), esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders'), $order->get_id())),  $commission_id),
+                'ref_info'      => sprintf(__('Refund generated for Commission &ndash; #%s', 'dc-woocommerce-multi-vendor'), $commission_id),
                 'ref_status'    => $refund->get_status(),
                 'ref_updated'   => date('Y-m-d H:i:s', current_time('timestamp')),
                 'debit'         => $refund_total,

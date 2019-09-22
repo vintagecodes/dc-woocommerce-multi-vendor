@@ -154,3 +154,18 @@ function get_wcmp_suborders( $order_id, $args = array(), $object = true ) {
     }
     return $orders;
 }
+
+/**
+ * Get WCMp commisssion order
+ *
+ * @param int $commission_id.
+ * @return object WCMp vendor order class object.
+ */
+function get_wcmp_order_by_commission( $commission_id ) {
+    $order_id = get_post_meta( $commission_id, '_commission_order_id', true );
+    if( $order_id ){
+        $vendor_order = wcmp_get_order( $order_id );
+        return $vendor_order;
+    }
+    return false;
+}
