@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.2.3
 Requires PHP: 5.6
-Stable tag: 3.4.2
+Stable tag: 3.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,18 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.4.3 - 2019-09-24 =
+* Added - Vendor total earned on order details section. #93
+* Tweak - Vendor search list scripts. #83
+* Tweak - Vendor New Order email trigger. #91
+* Fix - 'You are not logged in' message on Product Q&As tab. #81
+* Fix - Undefine variable issue. #89
+* Fix - WooCommerce registration settings overriden issue. #90
+* Fix - Debited amount value on Refund creation in banking overview. #95
+* Fix - Vendor Notify as Shipped email item price commission. #96
+* Fix - Missing products name on transaction details. #100
+* Updated - Language file.
+
 = 3.4.2 - 2019-09-09 =
 * Added - Sold by vendor support in WooCommerce Blocks. #61
 * Tweak - Vendor dashboard order list filter by statuses. #71
