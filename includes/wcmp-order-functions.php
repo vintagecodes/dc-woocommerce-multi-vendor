@@ -66,16 +66,20 @@ function wcmp_get_order($id){
  * Checking order is vendor order or not.
  *
  * @since 3.4.0
+ * @param $order integer/object
+ * @param $current_vendor boolean. Default false
  * @return boolean
  */
-function is_wcmp_vendor_order($order) {
+function is_wcmp_vendor_order( $order, $current_vendor = false ) {
     $order_id = 0;
-    if(is_object($order)){
+    if( is_object( $order ) ){
         $order_id = $order->get_id();
     }else{
         $order_id = absint($order);
     }
-    return (wcmp_get_order($order_id)) ? true : false;
+    $vendor_order = wcmp_get_order( $order_id );
+    return ( $current_vendor && $vendor_order->vendor_id === get_current_user_id() ) ? true : false;
+    return ( $vendor_order ) ? true : false;
 }
 
 /**

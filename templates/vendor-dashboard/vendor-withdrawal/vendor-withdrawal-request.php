@@ -12,6 +12,19 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 global $WCMp;
+$transaction = get_post($transaction_id);
+$vendor = get_current_vendor();
+if ( !$transaction || (isset($transaction->post_type) && $transaction->post_type != 'wcmp_transaction') || $vendor->id !== get_current_user_id() ) {
+    $vendor = get_wcmp_vendor_by_term($transaction->post_author) ? get_wcmp_vendor_by_term($transaction->post_author) : get_wcmp_vendor($transaction->post_author);
+    ?>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <?php _e('Invalid Withdrawal details', 'dc-woocommerce-multi-vendor'); ?>
+        </div>
+    </div>
+    <?php
+    return;
+}
 ?>
 <div class="col-md-12">
     <div class="panel panel-default">
@@ -20,7 +33,6 @@ global $WCMp;
             <?php $transaction = get_post($transaction_id);
             $amount = (float) get_post_meta($transaction_id, 'amount', true) - (float) get_post_meta($transaction_id, 'transfer_charge', true) - (float) get_post_meta($transaction_id, 'gateway_charge', true);
             if (isset($transaction->post_type) && $transaction->post_type == 'wcmp_transaction') {
-                $vendor = get_wcmp_vendor_by_term($transaction->post_author) ? get_wcmp_vendor_by_term($transaction->post_author) : get_wcmp_vendor($transaction->post_author);
                 $commission_details = $WCMp->transaction->get_transaction_item_details($transaction_id);
             ?>
             <table class="table table-bordered">

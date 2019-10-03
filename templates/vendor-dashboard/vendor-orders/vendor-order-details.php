@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
 global $woocommerce, $WCMp;
 $vendor = get_current_vendor();
 $order = wc_get_order($order_id);
-if (!$order) {
+if (!$order || !is_wcmp_vendor_order($order, true)) {
     ?>
     <div class="col-md-12">
         <div class="panel panel-default">
