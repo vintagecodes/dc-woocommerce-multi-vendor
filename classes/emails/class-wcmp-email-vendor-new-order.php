@@ -27,8 +27,10 @@ if (!class_exists('WC_Email_Vendor_New_Order')) :
             $this->title = __('Vendor New order', 'dc-woocommerce-multi-vendor');
             $this->description = __('New order notification emails are sent when order is processing.', 'dc-woocommerce-multi-vendor');
 
-            //$this->heading = __('New Vendor Order', 'dc-woocommerce-multi-vendor');
-            //$this->subject = __('[{site_title}] New vendor order ({order_number}) - {order_date}', 'dc-woocommerce-multi-vendor');
+            $this->placeholders = array(
+                '{order_date}'   => '',
+                '{order_number}' => '',
+            );
 
             $this->template_html = 'emails/vendor-new-order.php';
             $this->template_plain = 'emails/plain/vendor-new-order.php';
@@ -72,11 +74,8 @@ if (!class_exists('WC_Email_Vendor_New_Order')) :
                     $this->object = $this->order = wc_get_order($order_id);
                     $vendor_email = $vendor->user_data->user_email;
 
-                    $this->find[] = '{order_date}';
-                    $this->replace[] = date_i18n(wc_date_format(), strtotime($this->order->get_date_created()));
-
-                    $this->find[] = '{order_number}';
-                    $this->replace[] = $this->order->get_order_number();
+                    $this->placeholders['{order_date}']   = wc_format_datetime( $this->object->get_date_created() );
+                    $this->placeholders['{order_number}'] = $this->object->get_order_number();
                     $this->vendor_email = $vendor_email;
                     $this->vendor_id = $vendor_id;
                     $this->recipient = $vendor_email;

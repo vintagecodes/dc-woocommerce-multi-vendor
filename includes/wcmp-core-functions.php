@@ -4088,3 +4088,18 @@ if (!function_exists('is_wcmp_vendor_completed_store_setup')) {
         return false;
     }
 }
+
+if (!function_exists('get_wcmp_ledger_types')) {
+    /**
+     * Get available ledger types.
+     *
+     * @return array types 
+     */
+    function get_wcmp_ledger_types() {
+        return apply_filters( 'wcmp_ledger_types', array(
+            'commission'    => __( 'Commission', 'dc-woocommerce-multi-vendor' ),
+            'refund'        => __( 'Refund', 'dc-woocommerce-multi-vendor' ),
+            'withdrawal'    => __( 'Withdrawal', 'dc-woocommerce-multi-vendor' ),
+        ) );
+    }
+}

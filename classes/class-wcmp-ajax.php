@@ -3950,8 +3950,10 @@ class WCMp_Ajax {
                     if( $order ){
                         $currency = $order->get_currency();
                     }
-
-                    $type = '<mark class="type ' . $ledger->ref_type . '"><span>' . ucfirst( $ledger->ref_type ). '</span></mark>';
+                    
+                    $ref_types = get_wcmp_ledger_types();
+                    $ref_type = isset($ref_types[$ledger->ref_type]) ? $ref_types[$ledger->ref_type] : ucfirst( $ledger->ref_type );
+                    $type = '<mark class="type ' . $ledger->ref_type . '"><span>' . $ref_type . '</span></mark>';
                     $status = $ledger->ref_status;
                     if( $ledger->ref_status == 'unpaid' ){
                         $status = '<i class="'. $ledger->ref_status .' wcmp-font ico-processing-status-icon" title="'. ucfirst($ledger->ref_status).'"></i>';

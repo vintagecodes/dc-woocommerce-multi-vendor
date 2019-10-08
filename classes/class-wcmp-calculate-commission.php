@@ -674,9 +674,48 @@ class WCMp_Calculate_Commission {
                 $category_wise_commission->commission_percentage = get_term_meta($terms[0]->term_id, 'commission_percentage', true) ? get_term_meta($terms[0]->term_id, 'commission_percentage', true) : 0;
                 $category_wise_commission->fixed_with_percentage = get_term_meta($terms[0]->term_id, 'fixed_with_percentage', true) ? get_term_meta($terms[0]->term_id, 'fixed_with_percentage', true) : 0;
                 $category_wise_commission->fixed_with_percentage_qty = get_term_meta($terms[0]->term_id, 'fixed_with_percentage_qty', true) ? get_term_meta($terms[0]->term_id, 'fixed_with_percentage_qty', true) : 0;
+            }else{
+                $category_wise_commission = $this->get_multiple_category_wise_commission( $terms, $product_id );
             }
         }
         return apply_filters('wcmp_category_wise_commission', $category_wise_commission, $product_id);
+    }
+    
+    /**
+     * Fetch multiple category wise commission
+     * @param terms $terms
+     * @param id $product_id
+     * @return Object
+     */
+    public function get_multiple_category_wise_commission( $terms, $product_id = 0 ) {
+        global $WCMp;
+        $terms_commission_values = array();
+        foreach ( $terms as $term ) {
+            if ( $WCMp->vendor_caps->payment_cap['commission_type'] == 'fixed_with_percentage' ) {
+                $commission_percentage = get_term_meta( $term->term_id, 'commission_percentage', true ) ? get_term_meta( $term->term_id, 'commission_percentage', true ) : 0;
+                $fixed_with_percentage = get_term_meta( $term->term_id, 'fixed_with_percentage', true ) ? get_term_meta( $term->term_id, 'fixed_with_percentage', true ) : 0;
+                $terms_commission_values[$term->term_id] = $commission_percentage + $fixed_with_percentage;
+            } else if ($WCMp->vendor_caps->payment_cap['commission_type'] == 'fixed_with_percentage_qty') {
+                $commission_percentage = get_term_meta( $term->term_id, 'commission_percentage', true ) ? get_term_meta( $term->term_id, 'commission_percentage', true ) : 0;
+                $fixed_with_percentage_qty = get_term_meta( $term->term_id, 'fixed_with_percentage_qty', true ) ? get_term_meta( $term->term_id, 'fixed_with_percentage_qty', true ) : 0;
+                $terms_commission_values[$term->term_id] = $commission_percentage + $fixed_with_percentage_qty;
+            } else {
+                $commision = get_term_meta( $term->term_id, 'commision', true ) ? get_term_meta( $term->term_id, 'commision', true ) : 0;
+                $terms_commission_values[$term->term_id] = $commision;
+            }
+        }
+        $max_comm_val_term_id = '';
+        if( $terms_commission_values ){
+            $max_comm_val = max( $terms_commission_values );
+            $max_comm_val_term_id = array_search ( $max_comm_val, $terms_commission_values );
+        }
+        $term_id = apply_filters( 'wcmp_get_multiple_category_wise_max_commission_term_id', $max_comm_val_term_id, $terms_commission_values, $product_id );
+        $category_wise_commission = new stdClass();
+        $category_wise_commission->commision = get_term_meta( $term_id, 'commision', true ) ? get_term_meta( $term_id, 'commision', true ) : 0;
+        $category_wise_commission->commission_percentage = get_term_meta( $term_id, 'commission_percentage', true ) ? get_term_meta( $term_id, 'commission_percentage', true ) : 0;
+        $category_wise_commission->fixed_with_percentage = get_term_meta( $term_id, 'fixed_with_percentage', true ) ? get_term_meta( $term_id, 'fixed_with_percentage', true ) : 0;
+        $category_wise_commission->fixed_with_percentage_qty = get_term_meta( $term_id, 'fixed_with_percentage_qty', true ) ? get_term_meta( $term_id, 'fixed_with_percentage_qty', true ) : 0;
+        return apply_filters( 'wcmp_multiple_category_wise_commission', $category_wise_commission, $product_id );
     }
 
 }

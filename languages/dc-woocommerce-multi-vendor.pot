@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: WC Marketplace 3.0.5\n"
 "Report-Msgid-Bugs-To: https://github.com/dualcube/dc-woocommerce-multi-"
 "vendor/issues\n"
-"POT-Creation-Date: 2019-09-22 13:07+0000\n"
+"POT-Creation-Date: 2019-10-08 17:47+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1217,7 +1217,7 @@ msgstr ""
 #: classes/class-wcmp-vendor-dashboard.php:697
 #: classes/class-wcmp-vendor-dashboard.php:838
 #: classes/class-wcmp-vendor-dashboard.php:838
-#: templates/vendor-dashboard/vendor-orders/vendor-order-details.php:57
+#: templates/vendor-dashboard/vendor-orders/vendor-order-details.php:55
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:85
 #: templates/vendor-dashboard/product-manager/views/html-product-highlights.php:125
 #: templates/vendor-dashboard/product-manager/views/html-product-highlights.php:147
@@ -1284,6 +1284,7 @@ msgstr ""
 #: classes/class-wcmp-product.php:1143 classes/class-wcmp-product.php:1473
 #: classes/class-wcmp-product.php:1510
 #: classes/class-wcmp-vendor-dashboard.php:166
+#: includes/wcmp-core-functions.php:4100
 #: templates/emails/vendor-new-order.php:28
 #: templates/vendor-dashboard/vendor-orders/views/html-order-items.php:77
 msgid "Commission"
@@ -2205,6 +2206,7 @@ msgstr ""
 #: admin/class-wcmp-settings-vendors.php:925
 #: classes/class-wcmp-vendor-dashboard.php:1389
 #: classes/class-wcmp-vendor-hooks.php:205
+#: includes/wcmp-core-functions.php:4102
 #: templates/vendor-dashboard/dashboard-widgets/wcmp_vendor_stats_reports.php:49
 msgid "Withdrawal"
 msgstr ""
@@ -2357,7 +2359,7 @@ msgstr ""
 
 #: admin/class-wcmp-settings.php:281 classes/class-wcmp-product.php:837
 #: classes/class-wcmp-product.php:1196 classes/class-wcmp-vendor-hooks.php:84
-#: classes/products/class-wcmp-products-edit-product.php:217
+#: classes/products/class-wcmp-products-edit-product.php:222
 msgid "Policies"
 msgstr ""
 
@@ -5153,6 +5155,10 @@ msgstr ""
 msgid "Reverse"
 msgstr ""
 
+#: includes/wcmp-core-functions.php:4101
+msgid "Refund"
+msgstr ""
+
 #: templates/archive_vendor_info.php:81 templates/archive_vendor_info.php:132
 msgid "External Store URL"
 msgstr ""
@@ -5295,15 +5301,17 @@ msgid "There are no reviews yet."
 msgstr ""
 
 #: classes/coupons/class-wcmp-coupons-add-coupon.php:44
-#: classes/coupons/class-wcmp-coupons-add-coupon.php:57
+#: classes/coupons/class-wcmp-coupons-add-coupon.php:48
+#: classes/coupons/class-wcmp-coupons-add-coupon.php:60
 #: classes/products/class-wcmp-products-edit-product.php:58
+#: classes/products/class-wcmp-products-edit-product.php:63
 msgid ""
 "You do not have permission to view this content. Please contact site "
 "administrator."
 msgstr ""
 
-#: classes/coupons/class-wcmp-coupons-add-coupon.php:51
-#: classes/products/class-wcmp-products-edit-product.php:65
+#: classes/coupons/class-wcmp-coupons-add-coupon.php:54
+#: classes/products/class-wcmp-products-edit-product.php:70
 msgid ""
 "You do not have enough permission to submit a new coupon. Please contact "
 "site administrator."
@@ -5333,7 +5341,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:148
 #: classes/emails/class-wcmp-email-vendor-direct-bank.php:145
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:138
-#: classes/emails/class-wcmp-email-vendor-new-order.php:140
+#: classes/emails/class-wcmp-email-vendor-new-order.php:139
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:164
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:156
 #: classes/emails/class-wcmp-email-vendor-transaction.php:146
@@ -5342,7 +5350,7 @@ msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:164
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:133
-#: classes/emails/class-wcmp-email-vendor-new-order.php:142
+#: classes/emails/class-wcmp-email-vendor-new-order.php:141
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:166
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:158
 msgid "Enable this email notification."
@@ -5353,7 +5361,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:154
 #: classes/emails/class-wcmp-email-vendor-direct-bank.php:151
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:144
-#: classes/emails/class-wcmp-email-vendor-new-order.php:146
+#: classes/emails/class-wcmp-email-vendor-new-order.php:145
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:177
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:162
 #: classes/emails/class-wcmp-email-vendor-transaction.php:152
@@ -5366,7 +5374,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:156
 #: classes/emails/class-wcmp-email-vendor-direct-bank.php:153
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:146
-#: classes/emails/class-wcmp-email-vendor-new-order.php:148
+#: classes/emails/class-wcmp-email-vendor-new-order.php:147
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:179
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:164
 #: classes/emails/class-wcmp-email-vendor-transaction.php:154
@@ -5381,7 +5389,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:161
 #: classes/emails/class-wcmp-email-vendor-direct-bank.php:158
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:151
-#: classes/emails/class-wcmp-email-vendor-new-order.php:153
+#: classes/emails/class-wcmp-email-vendor-new-order.php:152
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:184
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:169
 #: classes/emails/class-wcmp-email-vendor-transaction.php:159
@@ -5390,7 +5398,7 @@ msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:177
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:153
-#: classes/emails/class-wcmp-email-vendor-new-order.php:155
+#: classes/emails/class-wcmp-email-vendor-new-order.php:154
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:186
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:171
 #, php-format
@@ -5404,7 +5412,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:168
 #: classes/emails/class-wcmp-email-vendor-direct-bank.php:165
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:158
-#: classes/emails/class-wcmp-email-vendor-new-order.php:160
+#: classes/emails/class-wcmp-email-vendor-new-order.php:159
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:191
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:176
 #: classes/emails/class-wcmp-email-vendor-transaction.php:166
@@ -5413,7 +5421,7 @@ msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:184
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:160
-#: classes/emails/class-wcmp-email-vendor-new-order.php:162
+#: classes/emails/class-wcmp-email-vendor-new-order.php:161
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:193
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:178
 msgid "Choose which format of email to be sent."
@@ -5421,7 +5429,7 @@ msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:188
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:164
-#: classes/emails/class-wcmp-email-vendor-new-order.php:166
+#: classes/emails/class-wcmp-email-vendor-new-order.php:165
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:197
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:182
 msgid "Plain Text"
@@ -5429,7 +5437,7 @@ msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:189
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:165
-#: classes/emails/class-wcmp-email-vendor-new-order.php:167
+#: classes/emails/class-wcmp-email-vendor-new-order.php:166
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:198
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:183
 msgid "HTML"
@@ -5437,7 +5445,7 @@ msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:190
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:166
-#: classes/emails/class-wcmp-email-vendor-new-order.php:168
+#: classes/emails/class-wcmp-email-vendor-new-order.php:167
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:199
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:184
 msgid "Multipart"
@@ -5617,11 +5625,11 @@ msgstr ""
 msgid "New order notification emails are sent when order is processing."
 msgstr ""
 
-#: classes/emails/class-wcmp-email-vendor-new-order.php:48
+#: classes/emails/class-wcmp-email-vendor-new-order.php:50
 msgid "[{site_title}] New vendor order ({order_number}) - {order_date}"
 msgstr ""
 
-#: classes/emails/class-wcmp-email-vendor-new-order.php:58
+#: classes/emails/class-wcmp-email-vendor-new-order.php:60
 msgid "New vendor order"
 msgstr ""
 
@@ -5765,24 +5773,24 @@ msgstr ""
 msgid "Unable to disconnect your account please try again"
 msgstr ""
 
-#: classes/products/class-wcmp-products-edit-product.php:73
+#: classes/products/class-wcmp-products-edit-product.php:78
 msgid ""
 "You can&#8217;t edit this item because it is in the Trash. Please restore it "
 "and try again."
 msgstr ""
 
-#: classes/products/class-wcmp-products-edit-product.php:78
 #: classes/products/class-wcmp-products-edit-product.php:83
+#: classes/products/class-wcmp-products-edit-product.php:88
 msgid "Sorry, you are not allowed to edit this item."
 msgstr ""
 
-#: classes/products/class-wcmp-products-edit-product.php:93
+#: classes/products/class-wcmp-products-edit-product.php:98
 msgid ""
 "You attempted to edit an item that doesn&#8217;t exist. Perhaps it was "
 "deleted?"
 msgstr ""
 
-#: classes/products/class-wcmp-products-edit-product.php:97
+#: classes/products/class-wcmp-products-edit-product.php:102
 msgid "No allowed Product types found. Please contact site administrator."
 msgstr ""
 
@@ -7290,7 +7298,7 @@ msgid "Invalid order"
 msgstr ""
 
 #. 1: order type 2: order number
-#: templates/vendor-dashboard/vendor-orders/vendor-order-details.php:45
+#: templates/vendor-dashboard/vendor-orders/vendor-order-details.php:43
 #, php-format
 msgid "Order details #%1$s"
 msgstr ""
@@ -7327,12 +7335,16 @@ msgstr ""
 msgid "Add Shipping Method"
 msgstr ""
 
-#: templates/vendor-dashboard/vendor-withdrawal/vendor-withdrawal-request.php:18
+#: templates/vendor-dashboard/vendor-withdrawal/vendor-withdrawal-request.php:22
+msgid "Invalid Withdrawal details"
+msgstr ""
+
+#: templates/vendor-dashboard/vendor-withdrawal/vendor-withdrawal-request.php:31
 #, php-format
 msgid "Withdrawal #%s details"
 msgstr ""
 
-#: templates/vendor-dashboard/vendor-withdrawal/vendor-withdrawal-request.php:57
+#: templates/vendor-dashboard/vendor-withdrawal/vendor-withdrawal-request.php:69
 #, php-format
 msgid ""
 "Hello,<br>Unfortunately your request for withdrawal amount could not be "
