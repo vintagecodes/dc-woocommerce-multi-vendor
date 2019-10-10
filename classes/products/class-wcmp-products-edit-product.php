@@ -59,7 +59,7 @@ class WCMp_Products_Edit_Product {
             return false;
         }
         $product_vendor = get_wcmp_product_vendors( $product_id );
-        if ( $current_vendor_id !== $product_vendor->id ) {
+        if ( $product_vendor && $current_vendor_id !== $product_vendor->id ) {
             $this->error_msg = __( 'You do not have permission to view this content. Please contact site administrator.', 'dc-woocommerce-multi-vendor' );
             return false;
         }
