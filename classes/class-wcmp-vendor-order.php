@@ -30,7 +30,7 @@ class WCMp_Vendor_Order {
         }else{
             $this->id = 0;
         }
-        $this->vendor_id = get_post_meta($this->id, '_vendor_id', true);
+        $this->vendor_id = absint( get_post_meta($this->id, '_vendor_id', true) );
         
         $this->order = wc_get_order( $this->id );
     }

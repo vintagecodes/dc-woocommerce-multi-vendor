@@ -75,10 +75,12 @@ function is_wcmp_vendor_order( $order, $current_vendor = false ) {
     if( is_object( $order ) ){
         $order_id = $order->get_id();
     }else{
-        $order_id = absint($order);
+        $order_id = absint( $order );
     }
     $vendor_order = wcmp_get_order( $order_id );
-    return ( $current_vendor && $vendor_order->vendor_id === get_current_user_id() ) ? true : false;
+    if( $current_vendor ){
+        return ( $vendor_order && $vendor_order->vendor_id === get_current_user_id() ) ? true : false;
+    }
     return ( $vendor_order ) ? true : false;
 }
 

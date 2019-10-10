@@ -44,7 +44,7 @@ class WCMp_Coupons_Add_Coupon {
             $this->error_msg = __( 'You do not have permission to view this content. Please contact site administrator.', 'dc-woocommerce-multi-vendor' );
             return false;
         }
-        if ( $current_vendor_id !== absint( get_post_field( 'post_author', $coupon_id ) ) ) {
+        if ( $coupon_id && $current_vendor_id !== absint( get_post_field( 'post_author', $coupon_id ) ) ) {
             $this->error_msg = __( 'You do not have permission to view this content. Please contact site administrator.', 'dc-woocommerce-multi-vendor' );
             return false;
         }
