@@ -36,8 +36,8 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
     		'products' => __( 'Products', 'dc-woocommerce-multi-vendor' ),
     		'status' => __( 'Status', 'dc-woocommerce-multi-vendor' ),
 		];
-	
-		return $columns;
+		
+		return apply_filters( 'wcmp_extra_fields_vendor_tab_header' , $columns );	
 	}
 	
 	/**
@@ -181,7 +181,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 			}
 			
 			
-			$user_list[$user->data->ID] = array(
+			$user_list[$user->data->ID] = apply_filters( 'wcmp_vendor_tab_extra_field_value' , array(
 							'ID' => $user->data->ID,
 							'name' => $user->data->display_name,
 							'email' => $user->data->user_email,
@@ -190,7 +190,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 							'status' => $status,
 							'permalink' => $vendor_permalink,
 							'username' => $user->data->user_login
-							);
+							) , $user );
 		}
 		$this->_column_headers = array($columns, $hidden, $sortable);
 		usort( $user_list, array( &$this, 'usort_reorder' ) );
