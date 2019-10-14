@@ -191,65 +191,13 @@ class WCMp_Product {
 
     function get_multiple_vendors_array_for_single_product($post_id) {
         global $woocommerce, $WCMp, $wpdb;
-        $post = get_post($post_id);
-        $product = wc_get_product($post_id);
+        $product = wc_get_product( $post_id );
         $more_product_array = $mapped_products = array();
-        $has_product_map_id = get_post_meta($product->get_id(), '_wcmp_spmv_map_id', true);
-        if($has_product_map_id){
-            $products_map_data_ids = get_wcmp_spmv_products_map_data($has_product_map_id);
-            $mapped_products = array_diff($products_map_data_ids, array($product->get_id()));
-            if($mapped_products && count($mapped_products) >= 1){
-                $i = 0;
-                foreach ($mapped_products as $result) {
-                    $result = wc_get_product($result);
-                    if( $result ) :
-                    $result_post = get_post($result->get_id());
-                    $vendor_data = get_wcmp_product_vendors($result->get_id());
-                    //$_product = wc_get_product($result->ID);
-                    $_product = $result;
-                    $other_user = new WP_User($result_post->post_author);
-                    if ($_product->is_visible() && !is_user_wcmp_pending_vendor($other_user) && !is_user_wcmp_rejected_vendor($other_user) && $post->post_author != $result_post->post_author) {
-                        if ($vendor_data) {
-                            if (isset($vendor_data->page_title)) {
-                                $more_product_array[$i]['seller_name'] = $vendor_data->page_title;
-                                $more_product_array[$i]['is_vendor'] = 1;
-    //                            $terms = get_the_terms($result, $WCMp->taxonomy->taxonomy_name);
-    //                            if (!empty($terms)) {
-                                    $more_product_array[$i]['shop_link'] = $vendor_data->permalink;
-                                    $more_product_array[$i]['rating_data'] = wcmp_get_vendor_review_info($vendor_data->term_id);
-                                //}
-                            }
-                        } else {
-                            $more_product_array[$i]['seller_name'] = isset($other_user->data->display_name) ? $other_user->data->display_name : '';
-                            $more_product_array[$i]['is_vendor'] = 0;
-                            $more_product_array[$i]['shop_link'] = get_permalink(wc_get_page_id('shop'));
-                            $more_product_array[$i]['rating_data'] = 'admin';
-                        }
-                        $currency_symbol = get_woocommerce_currency_symbol();
-                        $regular_price_val = $result->get_regular_price();
-                        $sale_price_val = $result->get_sale_price();
-                        $price_val = $result->get_price();
-                        $more_product_array[$i]['product_name'] = $result->get_title();
-                        $more_product_array[$i]['regular_price_val'] = $regular_price_val;
-                        $more_product_array[$i]['sale_price_val'] = $sale_price_val;
-                        $more_product_array[$i]['price_val'] = $price_val;
-                        $more_product_array[$i]['product_id'] = $result->get_id();
-                        $more_product_array[$i]['product_type'] = $result->get_type();
-                        if ($result->get_type() == 'variable') {
-                            $more_product_array[$i]['_min_variation_price'] = get_post_meta($result->get_id(), '_min_variation_price', true);
-                            $more_product_array[$i]['_max_variation_price'] = get_post_meta($result->get_id(), '_max_variation_price', true);
-                            $variable_min_sale_price = get_post_meta($result->get_id(), '_min_variation_sale_price', true);
-                            $variable_max_sale_price = get_post_meta($result->get_id(), '_max_variation_sale_price', true);
-                            $more_product_array[$i]['_min_variation_sale_price'] = $variable_min_sale_price ? $variable_min_sale_price : $more_product_array[$i]['_min_variation_price'];
-                            $more_product_array[$i]['_max_variation_sale_price'] = $variable_max_sale_price ? $variable_max_sale_price : $more_product_array[$i]['_max_variation_price'];
-                            $more_product_array[$i]['_min_variation_regular_price'] = get_post_meta($result->get_id(), '_min_variation_regular_price', true);
-                            $more_product_array[$i]['_max_variation_regular_price'] = get_post_meta($result->get_id(), '_max_variation_regular_price', true);
-                        }
-                        $i++;
-                    }
-                    endif;
-                }
-            }
+        $has_product_map_id = get_post_meta( $product->get_id(), '_wcmp_spmv_map_id', true );
+        if( $has_product_map_id ){
+            $products_map_data_ids = get_wcmp_spmv_products_map_data( $has_product_map_id );
+            $mapped_products = array_diff( $products_map_data_ids, array( $product->get_id() ) );
+            $more_product_array = get_wcmp_more_spmv_products( $product->get_id() );
         }
         return array('results' => $mapped_products, 'more_product_array' => $more_product_array);
     }

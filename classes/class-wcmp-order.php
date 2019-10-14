@@ -366,6 +366,7 @@ class WCMp_Order {
         }else{
             self::create_wcmp_order_shipping_lines($vendor_order, WC()->session->get('chosen_shipping_methods'), WC()->shipping->get_packages(), $args, $data_migration);
         }
+        self::create_wcmp_order_coupon_lines( $vendor_order, WC()->cart, $args );
         
         //self::create_wcmp_order_tax_lines( $vendor_order, $args );
         // Add customer checkout fields data to vendor order
@@ -580,6 +581,42 @@ class WCMp_Order {
                 }
             }
         }
+    }
+    
+    /**
+     * Add coupon lines to the order.
+     *
+     * @param WC_Order $order Order Instance.
+     * @param WC_Cart  $cart  Cart instance.
+     * @param WCMp Order $args  Arguments.
+     */
+    public static function create_wcmp_order_coupon_lines( $order, $cart, $args ) {
+        if( $cart->get_coupons() ) :
+            foreach ( $cart->get_coupons() as $code => $coupon ) {
+                if( !in_array( $coupon->get_discount_type(), apply_filters( 'wcmp_order_available_coupon_types', array( 'fixed_product', 'percent' ), $order, $cart ) ) ) continue;
+                if( absint( $args['vendor_id'] ) !== absint( get_post_field( 'post_author', $coupon->get_id() ) ) ) continue;
+                $item = new WC_Order_Item_Coupon();
+                $item->set_props(
+                    array(
+                        'code'         => $code,
+                        'discount'     => $cart->get_coupon_discount_amount( $code ),
+                        'discount_tax' => $cart->get_coupon_discount_tax_amount( $code ),
+                    )
+                );
+                // Avoid storing used_by - it's not needed and can get large.
+                $coupon_data = $coupon->get_data();
+                unset( $coupon_data['used_by'] );
+                $item->add_meta_data( 'coupon_data', $coupon_data );
+                /**
+                 * Action hook to adjust item before save.
+                 *
+                 * @since 3.4.3
+                 */
+                do_action( 'wcmp_checkout_create_order_coupon_item', $item, $code, $coupon, $order, $args );
+                // Add item to order and save.
+                $order->add_item( $item );
+            }
+        endif;
     }
 
     /**
