@@ -207,7 +207,7 @@ class DC_Widget_Quick_Info_Widget extends WP_Widget {
             }else{
                 wc_add_notice(__('Unable to send email. Please try again.', 'dc-woocommerce-multi-vendor'), 'error');
             }
-            wp_redirect($vendor->permalink);
+            wp_redirect($_POST['_wp_http_referer']);
             exit;
         }
     }
