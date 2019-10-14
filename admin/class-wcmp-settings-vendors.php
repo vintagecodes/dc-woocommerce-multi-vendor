@@ -36,8 +36,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
     		'products' => __( 'Products', 'dc-woocommerce-multi-vendor' ),
     		'status' => __( 'Status', 'dc-woocommerce-multi-vendor' ),
 		];
-	
-		return $columns;
+		return apply_filters('wcmp_list_table_vendors_columns', $columns);	
 	}
 	
 	/**
@@ -178,10 +177,8 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 				$status = "<p class='vendor-status rejected-vendor'>" . __('Rejected', 'dc-woocommerce-multi-vendor') . "</p>";
 			} else if(in_array('dc_pending_vendor', $user->roles)) {
 				$status = "<p class='vendor-status pending-vendor'>" . __('Pending', 'dc-woocommerce-multi-vendor') . "</p>";
-			}
-			
-			
-			$user_list[$user->data->ID] = array(
+			}	
+			$user_list[$user->data->ID] = apply_filters('wcmp_list_table_vendors_columns_data', array(
 							'ID' => $user->data->ID,
 							'name' => $user->data->display_name,
 							'email' => $user->data->user_email,
@@ -190,7 +187,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 							'status' => $status,
 							'permalink' => $vendor_permalink,
 							'username' => $user->data->user_login
-							);
+							), $user);
 		}
 		$this->_column_headers = array($columns, $hidden, $sortable);
 		usort( $user_list, array( &$this, 'usort_reorder' ) );
