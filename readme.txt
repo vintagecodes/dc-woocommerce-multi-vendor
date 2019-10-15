@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.2.3
 Requires PHP: 5.6
-Stable tag: 3.4.3
+Stable tag: 3.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,16 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.4.4 - 2019-10-15 =
+* Added - Multiple categories products category wise commission. #111
+* Tweak - Vendor access capabilities for different posts. #112
+* Tweak - Widget contact vendor redirect url. #124
+* Fix - Vendor new order email find & replace issue. #107
+* Fix - Vendor sales_stat_overview issue. #122
+* Fix - Pending products showing under more products (SPMV). #119
+* Dev - Backend vendors list table extra column filters. #105
+* Updated - Language file.
+
 = 3.4.3 - 2019-09-24 =
 * Added - Vendor total earned on order details section. #93
 * Tweak - Vendor search list scripts. #83

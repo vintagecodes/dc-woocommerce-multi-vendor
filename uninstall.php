@@ -53,6 +53,12 @@ if (defined('WCMP_REMOVE_ALL_DATA') && true === WCMP_REMOVE_ALL_DATA) {
     $wpdb->query("DELETE FROM {$wpdb->posts} WHERE post_type IN ( 'dc_commission', 'wcmp_vendor_notice', 'wcmp_transaction', 'wcmp_university', 'wcmp_vendorrequest' );");
     $wpdb->query("DELETE meta FROM {$wpdb->postmeta} meta LEFT JOIN {$wpdb->posts} posts ON posts.ID = meta.post_id WHERE posts.ID IS NULL;");
     
+    // Delete suborders
+    $wpdb->query("DELETE wp_post, wp_postmeta, wp_woocommerce_order_items, wp_woocommerce_order_itemmeta FROM JOIN wp_post.ID = wp_postmeta.post_id, 
+        wp_postmeta.post_id = wp_woocommerce_order_itemmeta.order_item_id,
+        wp_post.ID = wp_woocommerce_order_items.order_item_id
+        WHERE wp_post.post_type = 'shop_order' 
+        AND wp_postmeta.meta_key = '_created_via' AND wp_postmeta.meta_value  = 'wcmp_vendor_order';");
 
     // Delete terms if > WP 4.2 (term splitting was added in 4.2)
     if (version_compare($wp_version, '4.2', '>=')) {
