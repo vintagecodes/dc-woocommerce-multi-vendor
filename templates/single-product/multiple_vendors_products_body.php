@@ -60,9 +60,13 @@ if(isset($more_product_array) && is_array($more_product_array) && count($more_pr
                 <?php echo $_product->get_price_html(); ?>
 			</div>
 			<div class="rowsub">
-				<?php if($more_product['product_type'] == 'simple') {?>
-					<a href="<?php echo '?add-to-cart='.$more_product['product_id']; ?>" class="buttongap button" ><?php echo apply_filters('add_to_cart_text', __('Add to Cart','dc-woocommerce-multi-vendor')); ?></a>
-				<?php } ?>
+				<?php 
+                                woocommerce_template_loop_add_to_cart( array(
+                                    'quantity' => 1,
+                                ) );
+                                //if($more_product['product_type'] == 'simple') { ?>
+<!--					<a href="<?php echo '?add-to-cart='.$more_product['product_id']; ?>" class="buttongap button" ><?php echo apply_filters('add_to_cart_text', __('Add to Cart','dc-woocommerce-multi-vendor')); ?></a>-->
+				<?php //} ?>
 				<a href="<?php echo get_permalink($more_product['product_id']); ?>" class="buttongap button" ><?php echo __('Details','dc-woocommerce-multi-vendor'); ?></a>
 			</div>
 			<div style="clear:both;"></div>							

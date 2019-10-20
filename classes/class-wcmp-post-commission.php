@@ -1344,6 +1344,9 @@ class WCMp_Commission {
                 set_transient('wcmp_comm_save_status_'.$post_id, __('Please make order refundable first.', 'dc-woocommerce-multi-vendor'), MINUTE_IN_SECONDS);
             }
         }elseif(isset($_POST['commission_status'])){
+            if( $_POST['commission_status'] == 'paid' ) {
+                $this->wcmp_mark_commission_paid( array( $post_id ) ) ;
+            }
             update_post_meta($post_id, '_paid_status', $_POST['commission_status']);
         }
         
