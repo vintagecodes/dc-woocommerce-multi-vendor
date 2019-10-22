@@ -135,6 +135,14 @@ if ( WC()->payment_gateways() ) {
                         }
                         ?>
                     </div>
+                    <div class="address">
+                        <?php
+                        $order_customer_note = $order->get_customer_note();
+                        if ( apply_filters( 'wcmp_enable_customer_order_notes_field', 'yes' == get_option( 'woocommerce_enable_order_comments', 'yes' ) ) && $order_customer_note ) {
+                            echo '<p class="order_note"><strong>' . __( 'Customer provided note:', 'woocommerce' ) . '</strong> ' . nl2br( $order_customer_note ) . '</p>';
+                        }
+                        ?>
+                    </div>
                     <?php endif; ?>
                 </div>
             </div>
