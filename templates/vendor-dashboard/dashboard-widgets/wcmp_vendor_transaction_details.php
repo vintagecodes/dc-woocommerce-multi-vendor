@@ -9,7 +9,7 @@
 		foreach ($transaction_display_array as $key => $value) {
                     //print_r($value);
                     
-			echo "<li><p>".$value['transaction_date']."<span class='order-id'>#".$key."</span></p><span class='pull-right'>".wc_price($value['total_amount'])."</span></li>";	
+			echo "<li><p>".$value['transaction_date']."<span class='order-id'><a href=" . esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_transaction_details_endpoint', 'vendor', 'general', 'transaction-details'), $key)) . ">#".$key."</a></span></p><span class='pull-right'>".wc_price($value['total_amount'])."</span></li>";	
 		}?>
 	</ul>
     <?php endif; ?>
