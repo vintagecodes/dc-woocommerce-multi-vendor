@@ -2533,7 +2533,7 @@ body.admin-bar .wcmp-action-container {
       .wcmp_vendor_transaction_details .transaction-details .transaction-list p .order-id {
         display: block;
         opacity: 0.65; }
-        .wcmp_vendor_transaction_details .transaction-details .transaction-list p .order-id a:link {
+        .wcmp_vendor_transaction_details .transaction-details .transaction-list p .order-id a {
             color:inherit; }
   .wcmp_vendor_transaction_details .wcmp_dashboard_widget_total_transaction {
     font-weight: 600;
@@ -4554,6 +4554,18 @@ label .tool_tip {
 #wcmp-vendor-orders_wrapper .row > .col-sm-6, #vendor_transactions_wrapper .row > .col-sm-6 {
   width: auto; }
 
+.wcmp-order-totals-items .wc-used-coupons .wc_coupon_list .code {
+    display: inline-block;
+    position: relative;
+    padding: 0 .5em;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    box-shadow: 0 1px 0 #dfdfdf;
+    border-radius: 4px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+#wcmp_order_data_refunds .wcmp-order-actions { padding-top: 20px; }
 select[name="wcmp-vendor-orders_length"] {
   margin-right: 10px;
   margin-left: 10px; }
@@ -4754,6 +4766,9 @@ select[name="wcmp-vendor-orders_length"] {
 
 .order-address-info {
   border-top: 0 !important; }
+.order-address-info hr { 
+    margin: 9px 0 15px;
+}
   @media screen and (min-width: 992px) {
     .order-address-info > .row {
       display: flex; } }
