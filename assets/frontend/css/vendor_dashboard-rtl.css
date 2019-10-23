@@ -2533,6 +2533,8 @@ body.admin-bar .wcmp-action-container {
       .wcmp_vendor_transaction_details .transaction-details .transaction-list p .order-id {
         display: block;
         opacity: 0.65; }
+        .wcmp_vendor_transaction_details .transaction-details .transaction-list p .order-id a:link {
+            color:inherit; }
   .wcmp_vendor_transaction_details .wcmp_dashboard_widget_total_transaction {
     font-weight: 600;
     color: inherit;
