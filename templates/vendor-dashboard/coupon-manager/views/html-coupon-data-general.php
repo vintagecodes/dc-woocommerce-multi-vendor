@@ -43,7 +43,7 @@ defined( 'ABSPATH' ) || exit;
                     <span class="img_tip" data-desc="<?php esc_html_e( 'Value of the coupon.', 'woocommerce' ); ?>"></span>
                 </label>
                 <div class="col-md-6 col-sm-9">
-                    <input id="coupon_amount" name="coupon_amount" value="<?php esc_attr_e( $coupon->get_amount( 'edit' ) ); ?>" type="number" placeholder="<?php esc_attr_e( wc_format_localized_price( 0 ) ); ?>" class="form-control">
+                    <input id="coupon_amount" name="coupon_amount" value="<?php esc_attr_e( $coupon->get_amount( 'edit' ) ); ?>" type="text" placeholder="<?php esc_attr_e( wc_format_localized_price( 0 ) ); ?>" class="form-control">
                 </div>
             </div> 
             <?php

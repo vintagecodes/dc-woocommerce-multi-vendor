@@ -166,13 +166,13 @@ class WCMp_User {
                                 }
                             }
                             foreach ($attacment_files['type'][$key] as $file_key => $file_value) {
-                                if (!in_array($file_value, $file_type)) {
+                                if ($wcmp_vendor_registration_form_data[$key]['required'] && !in_array($file_value, $file_type)) {
                                     $validation_errors->add('file type error', __('Please Upload valid file', 'dc-woocommerce-multi-vendor'));
                                 }
                             }
                             foreach ($attacment_files['size'][$key] as $file_size_key => $file_size_value) {
                                 if (!empty($wcmp_vendor_registration_form_data[$key]['fileSize'])) {
-                                    if ($file_size_value > $wcmp_vendor_registration_form_data[$key]['fileSize']) {
+                                    if ($wcmp_vendor_registration_form_data[$key]['required'] && $file_size_value > $wcmp_vendor_registration_form_data[$key]['fileSize']) {
                                         $validation_errors->add('file size error', __('File upload limit exceeded', 'dc-woocommerce-multi-vendor'));
                                     }
                                 }
@@ -633,23 +633,12 @@ class WCMp_User {
                 $_wp_editor_settings['media_buttons'] = false;
             }
             $_wp_editor_settings = apply_filters('wcmp_vendor_policies_wp_editor_settings', $_wp_editor_settings);
-
-//            $fields['vendor_policy_tab_title'] = array(
-//                'label' => __('Enter the title of Policies Tab', 'dc-woocommerce-multi-vendor'),
-//                'type' => 'text',
-//                'value' => $vendor->policy_tab_title,
-//                'class' => 'user-profile-fields regular-text'
-//            );
-        //}
-        //if (get_wcmp_vendor_settings('is_policy_on', 'general') == 'Enable' && isset($policies_settings['can_vendor_edit_cancellation_policy']) && isset($policies_settings['is_cancellation_on'])) {
             $fields['vendor_cancellation_policy'] = array(
                 'label' => __('Cancellation/Return/Exchange Policy', 'dc-woocommerce-multi-vendor'),
                 'type' => 'wpeditor',
                 'value' => $vendor->cancellation_policy,
                 'class' => 'user-profile-fields'
             );
-        //}
-        //if (get_wcmp_vendor_settings('is_policy_on', 'general') == 'Enable' && isset($policies_settings['can_vendor_edit_refund_policy']) && isset($policies_settings['is_refund_on'])) {
             $fields['vendor_refund_policy'] = array(
                 'label' => __('Refund Policy', 'dc-woocommerce-multi-vendor'),
                 'type' => 'wpeditor',
@@ -657,8 +646,6 @@ class WCMp_User {
                 'class' => 'user-profile-fields',
                 'settings' => $_wp_editor_settings
             );
-        //}
-        //if (get_wcmp_vendor_settings('is_policy_on', 'general') == 'Enable' && isset($policies_settings['can_vendor_edit_shipping_policy']) && isset($policies_settings['is_shipping_on'])) {
             $fields['vendor_shipping_policy'] = array(
                 'label' => __('Shipping Policy', 'dc-woocommerce-multi-vendor'),
                 'type' => 'wpeditor',
@@ -666,9 +653,6 @@ class WCMp_User {
                 'class' => 'user-profile-fields regular-text',
                 'settings' => $_wp_editor_settings
             );
-        //}
-        //if (apply_filters('can_vendor_add_message_on_email_and_thankyou_page', true)) {
-            
         }
         $_wp_editor_settings = array('tinymce' => true);
         if (!$WCMp->vendor_caps->vendor_can('is_upload_files')) {

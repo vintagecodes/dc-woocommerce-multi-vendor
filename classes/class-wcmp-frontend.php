@@ -158,14 +158,14 @@ class WCMp_Frontend {
                     }
                     foreach ($attacment_files['type'][$key] as $file_key => $file_value) {
                         if (!empty($attacment_files['name'][$key][$file_key])) {
-                            if (!in_array($file_value, $file_type)) {
+                            if ($wcmp_vendor_registration_form_data[$key]['required'] && !in_array($file_value, $file_type)) {
                                 $validation_errors->add('file type error', __('Please Upload valid file', 'dc-woocommerce-multi-vendor'));
                             }
                         }
                     }
                     foreach ($attacment_files['size'][$key] as $file_size_key => $file_size_value) {
                         if (!empty($wcmp_vendor_registration_form_data[$key]['fileSize'])) {
-                            if ($file_size_value > $wcmp_vendor_registration_form_data[$key]['fileSize']) {
+                            if ($wcmp_vendor_registration_form_data[$key]['required'] && $file_size_value > $wcmp_vendor_registration_form_data[$key]['fileSize']) {
                                 $validation_errors->add('file size error', __('File upload limit exceeded', 'dc-woocommerce-multi-vendor'));
                             }
                         }
