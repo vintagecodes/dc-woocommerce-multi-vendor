@@ -39,6 +39,108 @@ class WCMp_Admin {
         add_filter('woocommerce_screen_ids', array(&$this, 'add_wcmp_screen_ids'));
         // Admin notice for advance frontend modules (Temp)
         add_action('admin_notices', array(&$this, 'advance_frontend_manager_notice'));
+        $this->actions_handler();
+    }
+    
+    public function actions_handler(){
+        // Export pending bank transfers request in admin end
+        if ( ! empty( $_POST ) && isset( $_REQUEST[ 'wcmp_admin_bank_transfer_export_nonce' ] ) && wp_verify_nonce( $_REQUEST[ 'wcmp_admin_bank_transfer_export_nonce' ], 'wcmp_todo_pending_bank_transfer_export' ) ) {
+            $transactions_ids = isset( $_POST['transactions_ids'] ) ? json_decode( $_POST['transactions_ids'] ) : array();
+            if( !$transactions_ids ) return false;
+            // Set filename
+            $date = date('Y-m-d H:i:s');
+            $filename = apply_filters( 'wcmp_admin_export_pending_bank_transfer_file_name', 'Admin-Pending-Bank-Transfer-' . $date, $_POST );
+            $filename = $filename.'.csv';
+            // Set page headers to force download of CSV
+            header("Pragma: public");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("Content-type: text/x-csv");
+            header("Content-Disposition: File Transfar");
+            //header("Content-Type: application/octet-stream");
+            //header("Content-Type: application/download");
+            header("Content-Disposition: attachment;filename={$filename}");
+            header("Content-Transfer-Encoding: binary");
+            // Set CSV headers
+            $headers = apply_filters( 'wcmp_admin_export_pending_bank_transfer_csv_headers',array(
+                'dor'               => __( 'Date of request', 'dc-woocommerce-multi-vendor' ),
+                'trans_id'          => __( 'Transaction ID', 'dc-woocommerce-multi-vendor' ),
+                'commission_ids'    => __( 'Commission IDs', 'dc-woocommerce-multi-vendor' ),
+                'vendor'            => __( 'Vendor', 'dc-woocommerce-multi-vendor' ),
+                'amount'            => __( 'Amount', 'dc-woocommerce-multi-vendor' ),
+                'bank_details'      => __( 'Bank Details', 'dc-woocommerce-multi-vendor' ),
+            ), $transactions_ids, $_POST );
+            $exporter_data = array();
+            foreach ( $transactions_ids as $trans_id ) {
+                $commission_ids = (array)get_post_meta( $trans_id, 'commission_detail', true );
+                $vendor = get_wcmp_vendor_by_term( get_post_field( 'post_author', $trans_id ) );
+                $account_details = array();
+                if ( $vendor ) :
+                    $account_details = apply_filters( 'wcmp_admin_export_pending_bank_transfer_vendor_account_details', array(
+                        'account_name'   => get_user_meta( $vendor->id, '_vendor_account_holder_name', true ),
+                        'account_number' => get_user_meta( $vendor->id, '_vendor_bank_account_number', true ),
+                        'account_type'   => get_user_meta( $vendor->id, '_vendor_bank_account_type', true ),
+                        'bank_name'      => get_user_meta( $vendor->id, '_vendor_bank_name', true ),
+                        'iban'           => get_user_meta( $vendor->id, '_vendor_iban', true ),
+                        'routing_number' => get_user_meta( $vendor->id, '_vendor_aba_routing_number', true ),
+                    ), $transactions_ids, $_POST, $vendor );
+                endif;
+                $bank_details = '';
+                if( $account_details ) {
+                    foreach ( $account_details as $key => $value ) {
+                        if( $key == 'account_name' ) {
+                            $bank_details .= __( 'Account Holder Name', 'dc-woocommerce-multi-vendor' ) . ': ' . $value . ' | ';
+                        }elseif( $key == 'account_number' ){
+                            $bank_details .= __( 'Account Number', 'dc-woocommerce-multi-vendor' ) . ': ' . $value . ' | ';;
+                        }elseif( $key == 'account_type' ){
+                            $bank_details .= __( 'Account Type', 'dc-woocommerce-multi-vendor' ) . ': ' . $value . ' | ';
+                        }elseif( $key == 'bank_name' ){
+                            $bank_details .= __( 'Bank Name', 'dc-woocommerce-multi-vendor' ) . ': ' . $value . ' | ';
+                        }elseif( $key == 'iban' ){
+                            $bank_details .= __( 'IBAN', 'dc-woocommerce-multi-vendor' ) . ': ' . $value . ' | ';
+                        }elseif( $key == 'routing_number' ){
+                            $bank_details .= __( 'Routing Number', 'dc-woocommerce-multi-vendor' ) . ': ' . $value;
+                        }else{
+                            $bank_details .= apply_filters( 'wcmp_admin_export_pending_bank_transfer_vendor_bank_details', $bank_details, $account_details, $_POST );
+                        }
+                    }
+                }
+                $amount = get_post_meta( $trans_id, 'amount', true );
+                $transfer_charge = get_post_meta( $trans_id, 'transfer_charge', true );
+                $gateway_charge = get_post_meta( $trans_id, 'gateway_charge', true );
+                $transaction_amt = $amount - $transfer_charge - $gateway_charge;
+                $exporter_data[] = apply_filters( 'wcmp_admin_export_pending_bank_transfer_csv_row_data', array(
+                    'date'              => get_the_date( 'Y-m-d', $trans_id ),
+                    'trans_id'          => '#' . $trans_id,
+                    'commission_ids'    => '#' . implode(', #', $commission_ids),
+                    'vendor'            => get_user_meta( $vendor->id, '_vendor_page_title', true ),
+                    'amount'            => $transaction_amt,
+                    'bank_details'      => $bank_details,
+                ), $transactions_ids, $_POST, $vendor );
+            }
+            
+            // Initiate output buffer and open file
+            ob_start();
+            $file = fopen("php://output", 'w');
+
+            // Add headers to file
+            fputcsv( $file, $headers );
+            // Add data to file
+            if ( $exporter_data ) {
+                foreach ( $exporter_data as $edata ) {
+                    fputcsv( $file, $edata );
+                }
+            } else {
+                fputcsv( $file, array( __('Sorry, no pending bank transaction data is available.', 'dc-woocommerce-multi-vendor') ) );
+            }
+
+            // Close file and get data from output buffer
+            fclose($file);
+            $csv = ob_get_clean();
+            // Send CSV to browser for download
+            echo $csv;
+            die();
+        }
     }
     
     function add_hidden_order_items($order_items) {

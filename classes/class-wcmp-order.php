@@ -48,7 +48,7 @@ class WCMp_Order {
             add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_create_orders'), 10, 3);
             add_action('woocommerce_after_checkout_validation', array($this, 'wcmp_check_order_awaiting_payment'));
             // Order Refund
-            add_action('woocommerce_order_refunded', array($this, 'wcmp_order_refunded'), 10, 2);
+            add_action('woocommerce_order_refunded', array($this, 'woocommerce_order_refunded'), 10, 2);
             add_action('woocommerce_refund_deleted', array($this, 'wcmp_refund_deleted'), 10, 2);
             add_action('woocommerce_create_refund', array( $this, 'wcmp_create_refund' ), 10, 2);
             $this->init_prevent_trigger_vendor_order_emails();
@@ -668,7 +668,7 @@ class WCMp_Order {
             $new_status = $order->get_status('edit');
         }
         
-        $status_to_sync = apply_filters('wcmp_parent_order_to_vendor_order_statuses_to_sync',array('on-hold', 'pending', 'processing', 'cancelled'));
+        $status_to_sync = apply_filters('wcmp_parent_order_to_vendor_order_statuses_to_sync',array('on-hold', 'pending', 'processing', 'cancelled', 'failed'));
         if( in_array($new_status, $status_to_sync) ) :
             if (wp_get_post_parent_id( $order_id ) || get_post_meta($order_id, 'wcmp_vendor_order_status_synchronized', true))
                 return false;

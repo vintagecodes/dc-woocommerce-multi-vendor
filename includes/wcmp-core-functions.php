@@ -192,6 +192,10 @@ if (!function_exists('get_wcmp_vendor')) {
         $vendor = false;
         $vendor_id = $vendor_id ? $vendor_id : get_current_vendor_id();
         if (is_user_wcmp_vendor($vendor_id)) {
+            if( !class_exists( 'WCMp_Vendor' ) ) {
+                global $WCMp;
+                include_once ( $WCMp->plugin_path . "/classes/class-wcmp-vendor-details.php" );
+            }
             $vendor = new WCMp_Vendor(absint($vendor_id));
         }
         return $vendor;

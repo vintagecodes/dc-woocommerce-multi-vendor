@@ -188,7 +188,7 @@ Class WCMp_Admin_Dashboard {
                             $order_datas[] = array(
                                 'date' => get_the_date('Y-m-d', $transaction_id),
                                 'trans_id' => '#' . $transaction_id,
-                                'order_ids' => '#' . implode(', #', $commission_details),
+                                'commission_ids' => '#' . implode(', #', $commission_details),
                                 'mode' => $transaction_mode,
                                 'commission' => $transaction_commission,
                                 'fee' => $transfer_charge,

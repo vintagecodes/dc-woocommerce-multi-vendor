@@ -227,7 +227,18 @@ class WCMp_Settings_To_Do_List {
 
         if (!empty($transactions)) {
             ?>
-            <h3><?php _e('Pending Bank Transfer', 'dc-woocommerce-multi-vendor'); ?></h3>
+            <h3>
+                <?php _e('Pending Bank Transfer', 'dc-woocommerce-multi-vendor'); ?>
+                <form method="post" style="display: inline-flex;">
+                    <?php wp_nonce_field( 'wcmp_todo_pending_bank_transfer_export','wcmp_admin_bank_transfer_export_nonce' ); ?>
+                    <?php 
+                    $transactions_ids = wp_list_pluck( $transactions, 'ID' );
+                    echo '<input type="hidden" name="transactions_ids" value="'. wp_json_encode( $transactions_ids ) .'">';
+                    do_action( 'wcmp_todo_pending_bank_transfer_exporter_form_fields' );
+                    ?>
+                    <button class="button"><?php _e('Export', 'woocommerce'); ?></button>
+                </form>
+            </h3>
             <table class="form-table" id="to_do_list">
                 <tbody>
                     <tr>
