@@ -120,6 +120,7 @@ class WCMp_Report_Product extends WC_Admin_Report {
                                 $pro_total[$item->get_product_id()] = isset( $pro_total[$item->get_product_id()] ) ? $pro_total[$item->get_product_id()] + $item->get_subtotal() : $item->get_subtotal();
                                 $total_sales[$item->get_product_id()]['product_id'] = $item->get_product_id();
                                 $total_sales[$item->get_product_id()]['total_sales'] = $pro_total[$item->get_product_id()];
+                                $total_sales[$item->get_product_id()]['quantities'] = $item->get_quantity();
                                 $meta_data = $item->get_meta_data();
                                 // get item commission
                                 foreach ( $meta_data as $meta ) {

@@ -48,7 +48,7 @@ class WCMp_Order {
             add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_create_orders'), 10, 3);
             add_action('woocommerce_after_checkout_validation', array($this, 'wcmp_check_order_awaiting_payment'));
             // Order Refund
-            add_action('woocommerce_order_refunded', array($this, 'woocommerce_order_refunded'), 10, 2);
+            add_action('woocommerce_order_refunded', array($this, 'wcmp_order_refunded'), 10, 2);
             add_action('woocommerce_refund_deleted', array($this, 'wcmp_refund_deleted'), 10, 2);
             add_action('woocommerce_create_refund', array( $this, 'wcmp_create_refund' ), 10, 2);
             $this->init_prevent_trigger_vendor_order_emails();
@@ -363,10 +363,11 @@ class WCMp_Order {
         self::create_wcmp_order_line_items($vendor_order, $args);
         if( $data_migration ){
             self::create_wcmp_order_shipping_lines($vendor_order, array(), array(), $args, $data_migration);
+            self::create_wcmp_order_coupon_lines( $vendor_order, array(), $args );
         }else{
             self::create_wcmp_order_shipping_lines($vendor_order, WC()->session->get('chosen_shipping_methods'), WC()->shipping->get_packages(), $args, $data_migration);
+            self::create_wcmp_order_coupon_lines( $vendor_order, WC()->cart, $args );
         }
-        self::create_wcmp_order_coupon_lines( $vendor_order, WC()->cart, $args );
         
         //self::create_wcmp_order_tax_lines( $vendor_order, $args );
         // Add customer checkout fields data to vendor order
@@ -536,7 +537,10 @@ class WCMp_Order {
                     $item->add_meta_data('vendor_id', $package_key, true);
                     $package_qty = array_sum(wp_list_pluck($package['contents'], 'quantity'));
                     $item->add_meta_data('package_qty', $package_qty, true);
-
+                    // add parent item_id in meta
+                    $parent_shipping_item_id = get_vendor_parent_shipping_item_id( $parent_order_id, $vendor_id );
+                    if( $parent_shipping_item_id ) $item->add_meta_data('_vendor_order_shipping_item_id', $parent_shipping_item_id );
+                    
                     /**
                      * Action hook to adjust item before save.
                      *
@@ -575,7 +579,8 @@ class WCMp_Order {
                         $shipping->add_meta_data('vendor_id', $vendor_id, true);
                         $package_qty = $item->get_meta('package_qty', true);
                         $shipping->add_meta_data('package_qty', $package_qty, true);
-
+                        // add parent item_id in meta
+                        $item->add_meta_data('_vendor_order_shipping_item_id', $item_id );
                         $order->add_item($shipping);
                     }
                 }
@@ -591,7 +596,7 @@ class WCMp_Order {
      * @param WCMp Order $args  Arguments.
      */
     public static function create_wcmp_order_coupon_lines( $order, $cart, $args ) {
-        if( $cart->get_coupons() ) :
+        if( $cart && $cart->get_coupons() ) :
             foreach ( $cart->get_coupons() as $code => $coupon ) {
                 if( !in_array( $coupon->get_discount_type(), apply_filters( 'wcmp_order_available_coupon_types', array( 'fixed_product', 'percent' ), $order, $cart ) ) ) continue;
                 if( absint( $args['vendor_id'] ) !== absint( get_post_field( 'post_author', $coupon->get_id() ) ) ) continue;
@@ -802,7 +807,7 @@ class WCMp_Order {
             }
             
             foreach ($wcmp_suborders as $suborder) {
-                $suborder_items_ids = array_keys($suborder->get_items());
+                $suborder_items_ids = array_keys($suborder->get_items( array( 'line_item', 'fee', 'shipping' ) ));
                 $suborder_total = wc_format_decimal($suborder->get_total());
                 $max_refund = wc_format_decimal($suborder_total - $suborder->get_total_refunded());
                 $child_line_item_refund = 0;

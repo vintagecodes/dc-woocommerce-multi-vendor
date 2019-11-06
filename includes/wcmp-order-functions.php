@@ -175,3 +175,21 @@ function get_wcmp_order_by_commission( $commission_id ) {
     }
     return false;
 }
+
+/**
+ * Get Parent shipping item id
+ *
+ * @param int $commission_id.
+ * @return object WCMp vendor order class object.
+ */
+function get_vendor_parent_shipping_item_id( $order_id, $vendor_id ) {
+    if( $order_id ){
+        $order = wc_get_order( $order_id );
+        $line_items_shipping = $order->get_items( 'shipping' );
+        foreach ( $line_items_shipping as $item_id => $item ){
+            $shipping_vendor_id = $item->get_meta('vendor_id', true);
+            if( $shipping_vendor_id == $vendor_id ) return $item_id;
+        }
+    }
+    return false;
+}

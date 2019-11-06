@@ -20,7 +20,7 @@ echo sprintf(  __( "Product title: %s",  'dc-woocommerce-multi-vendor' ), $produ
 echo '\n'; 
 echo sprintf(  __( "Submitted by: %s",  'dc-woocommerce-multi-vendor' ), $vendor_name ); 
 echo '\n'; 
-$product_link = apply_filters( 'wcmp_email_vendor_new_product_link', esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $post_id)));
+$product_link = apply_filters( 'wcmp_email_vendor_new_product_link', esc_url( get_edit_post_link( $post_id )));
 echo sprintf(  __( "Edit product: %s",  'dc-woocommerce-multi-vendor' ), $product_link ); 
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 echo apply_filters( 'wcmp_email_footer_text', get_option( 'wcmp_email_footer_text' ) );
