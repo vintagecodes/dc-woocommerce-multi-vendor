@@ -621,21 +621,21 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 					if($is_approved_vendor || $is_new_vendor_form) { ?>
 					<div id="personal-detail">
 						<h2><?php echo __('Personal Information', 'dc-woocommerce-multi-vendor'); ?></h2>
-						<?php $WCMp->wcmp_wp_fields->dc_generate_form_field(apply_filters("settings_{$this->tab}_personal_tab_options", $personal_tab_options));?>
+						<?php $WCMp->wcmp_wp_fields->dc_generate_form_field(apply_filters("settings_{$this->tab}_personal_tab_options", $personal_tab_options, $vendor_obj));?>
 					</div>
 					<?php } ?>
 					<?php if($is_approved_vendor) { ?>
 					<div id="store">
 						<h2><?php echo __('Store Settings', 'dc-woocommerce-multi-vendor'); ?></h2>
-						<?php $WCMp->wcmp_wp_fields->dc_generate_form_field(apply_filters("settings_{$this->tab}_store_tab_options", $store_tab_options));?>
+						<?php $WCMp->wcmp_wp_fields->dc_generate_form_field(apply_filters("settings_{$this->tab}_store_tab_options", $store_tab_options, $vendor_obj));?>
 					</div>
 					<div id="social">
 						<h2><?php echo __('Social Information', 'dc-woocommerce-multi-vendor'); ?></h2>
-						<?php $WCMp->wcmp_wp_fields->dc_generate_form_field(apply_filters("settings_{$this->tab}_social_tab_options", $social_tab_options));?>
+						<?php $WCMp->wcmp_wp_fields->dc_generate_form_field(apply_filters("settings_{$this->tab}_social_tab_options", $social_tab_options, $vendor_obj));?>
 					</div>
 					<div id="payment">
 						<h2><?php echo __('Payment Method', 'dc-woocommerce-multi-vendor'); ?></h2>
-						<?php $WCMp->wcmp_wp_fields->dc_generate_form_field(apply_filters("settings_{$this->tab}_payment_tab_options", $payment_tab_options));?>
+						<?php $WCMp->wcmp_wp_fields->dc_generate_form_field(apply_filters("settings_{$this->tab}_payment_tab_options", $payment_tab_options, $vendor_obj));?>
 					</div>
 					<?php } ?>
 					<?php if(!$is_new_vendor_form) { ?>

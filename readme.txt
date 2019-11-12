@@ -3,9 +3,9 @@ Contributors: Dualcube, greyparrots, purnendu, itzmekhokan
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.2.3
+Tested up to: 5.2.4
 Requires PHP: 5.6
-Stable tag: 3.4.4
+Stable tag: 3.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,17 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.4.5 - 2019-11-12 =
+* Fix - Failed order to suborders statuses sync issue. #146
+* Fix - Admin new product email edit product url issue. #149
+* Fix - WCMp cron call to a member function get_coupons issue. #152
+* Fix - Vendor dashboard coupon amount decimal issue. #144
+* Fix - Vendor order details customer order notes issue. #137
+* Fix - Vendor registration form attachment non required setting issue. #132
+* Fix - Backend commission paid transaction issue . #135
+* Fix - More products (SPMV) external products link issue. #136
+* Dev - Vendor application resubmit hook `wcmp_before_reapply_vendor_application_save` added. #106
+
 = 3.4.4 - 2019-10-15 =
 * Added - Multiple categories products category wise commission. #111
 * Tweak - Vendor access capabilities for different posts. #112
