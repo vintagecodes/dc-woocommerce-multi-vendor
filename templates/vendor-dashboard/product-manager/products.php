@@ -128,7 +128,7 @@ do_action('before_wcmp_vendor_dashboard_product_list_table');
         </table>
         <div class="wcmp-action-container">
             <?php do_action('before_wcmp_vendor_dash_product_list_page_header_action_btn'); ?>
-            <a href="<?php echo wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_add_product_endpoint', 'vendor', 'general', 'add-product'));?>" class="btn btn-default"><i class="wcmp-font ico-add-booking"></i><?php echo __('Add Product', 'dc-woocommerce-multi-vendor');?></a>
+            <a href="<?php echo apply_filters('wcmp_vendor_dashboard_add_product_url', wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_add_product_endpoint', 'vendor', 'general', 'add-product')));?>" class="btn btn-default"><i class="wcmp-font ico-add-booking"></i><?php echo __('Add Product', 'dc-woocommerce-multi-vendor');?></a>
             <?php do_action('after_wcmp_vendor_dash_product_list_page_header_action_btn'); ?>
         </div>
         </form>

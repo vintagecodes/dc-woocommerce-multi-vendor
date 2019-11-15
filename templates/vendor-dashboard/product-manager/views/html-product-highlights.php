@@ -22,7 +22,12 @@ global $WCMp;
 ?>
 <div class="cat-step3">
     <div class="panel-heading">
-        <h1><span class="primary-color"><span><?php _e( 'Step 2 of', 'dc-woocommerce-multi-vendor' );?></span> <?php _e( '2:', 'dc-woocommerce-multi-vendor' );?></span> <?php _e( 'Add Product Details', 'dc-woocommerce-multi-vendor' );?></h1>
+        <h1>
+            <?php if( !get_wcmp_vendor_settings('is_singleproductmultiseller', 'general') == 'Enable' && get_wcmp_vendor_settings('is_disable_marketplace_plisting', 'general') != 'Enable' ) : ?>
+            <span class="primary-color"><span><?php _e( 'Step 2 of', 'dc-woocommerce-multi-vendor' );?></span> <?php _e( '2:', 'dc-woocommerce-multi-vendor' );?></span> 
+            <?php endif; ?>
+            <?php _e( 'Add Product Details', 'dc-woocommerce-multi-vendor' );?>
+        </h1>
         <?php if( get_transient( 'classified_product_terms_vendor'. get_current_user_id() ) || ($self->is_spmv() && $post) || $is_update ) : ?>
         <?php do_action( 'wcmp_afm_before_product_highlights_category_wrap', $post->ID, $product_object, $post ); ?> 
         <div class="cat-breadcrumb-wrap">
