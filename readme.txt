@@ -3,9 +3,9 @@ Contributors: Dualcube, greyparrots, purnendu, itzmekhokan
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.2.4
+Tested up to: 5.3.0
 Requires PHP: 5.6
-Stable tag: 3.4.5
+Stable tag: 3.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,13 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.4.6 - 2019-11-28 =
+* Fix - Product category issues. #157,#158
+* Fix - SPMV products vendor name. #161
+* Fix - Hidden customer info on vendor order email. #159
+* Fix - SPMV products add to cart overriden issue. #168
+* Fix - Vendor setup wizard user restriction. #169
+
 = 3.4.5 - 2019-11-12 =
 * Fix - Failed order to suborders statuses sync issue. #146
 * Fix - Admin new product email edit product url issue. #149

@@ -181,6 +181,10 @@ var wcmpAfmProductEditor = ( function ( $ ) {
                 .on( 'click', '.notice-wrapper button.notice-dismiss', this.dismissNotice );
             //save
             $( '#wcmp-edit-product-form' ).on( 'click', '#wcmp_afm_product_submit, #wcmp_afm_product_draft', this.saveProduct.bind( this ) );
+            // reset taxonomy on change trigger
+            $( '#wcmp-edit-product-form' )
+                .on( 'change', 'ul.taxonomy-widget input[name^="tax_input"]', this.taxInputChanged.bind( this ) )
+                ;
             //library = this.loadLibraryComponents();
             media = this.mediaController();
             downloads = this.downloadsController();
@@ -1888,6 +1892,12 @@ var wcmpAfmProductEditor = ( function ( $ ) {
             $( 'textarea#product_description' ).val( this.getTinymceContent( 'product_description' ) );
             $( 'textarea#product_excerpt' ).val( this.getTinymceContent( 'product_excerpt' ) );
             return true;
+        },
+        taxInputChanged: function( e ) { 
+            var ischecked= $( this ).is( ':checked' );
+            if( !ischecked ) {
+                $( this ).prop( 'checked', false );
+            }
         }
     };
 } )( jQuery );

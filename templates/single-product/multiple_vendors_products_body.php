@@ -18,7 +18,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-global $WCMp;
+global $WCMp, $product;
+$single_pro = $product;
 if(isset($more_product_array) && is_array($more_product_array) && count($more_product_array) > 0) {
 	if(isset($sorting) && !empty($sorting)) {	
 		/*function wcmp_sort_by_price($a, $b) {
@@ -61,6 +62,9 @@ if(isset($more_product_array) && is_array($more_product_array) && count($more_pr
 			</div>
 			<div class="rowsub">
 				<?php 
+                                // reset global $product variable
+                                global $product;
+                                $product = $_product;
                                 woocommerce_template_loop_add_to_cart( array(
                                     'quantity' => 1,
                                 ) );
@@ -73,5 +77,8 @@ if(isset($more_product_array) && is_array($more_product_array) && count($more_pr
 		
 	<?php
 	}
+        // reset again with global product
+        global $product;
+        $product = $single_pro;
 }
 ?>

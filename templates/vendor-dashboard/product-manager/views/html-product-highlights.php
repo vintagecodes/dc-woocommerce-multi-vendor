@@ -110,11 +110,11 @@ global $WCMp;
                     <?php }
                 }
                 // save terms for post save handler 
-                if( $terms ){
-                    foreach ( $terms as $term_id ) {
-                        echo '<input type="hidden" name="tax_input[' . $term_tax . '][]" value="' . $term_id . '" />';
-                    }
-                }
+//                if( $terms ){
+//                    foreach ( $terms as $term_id ) {
+//                        echo '<input type="hidden" name="tax_input[' . $term_tax . '][]" value="' . $term_id . '" />';
+//                    }
+//                }
             }
         ?>
         </div>

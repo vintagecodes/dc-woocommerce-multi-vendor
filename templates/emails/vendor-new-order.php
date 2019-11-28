@@ -54,7 +54,7 @@ if (apply_filters('show_cust_order_calulations_field', true, $vendor->id)) {
     </table>
     <?php
     }
-    if (apply_filters('show_cust_address_field', true, $vendor->id)) {
+    if (apply_filters('show_cust_address_field', true, $vendor->id) || apply_filters( 'is_vendor_can_see_customer_details', true, $vendor->id, $order ) ) {
     ?>
     <h2><?php _e('Customer Details', 'dc-woocommerce-multi-vendor'); ?></h2>
     <?php if ($order->get_billing_email()) { ?>
