@@ -50,6 +50,12 @@ if (apply_filters('show_cust_order_calulations_field', true, $vendor->id)) {
                 </tr><?php
             }
         }
+        if ($additional_content) {
+            ?><tr>
+                <th scope="row" colspan="2" style="text-align:left; border: 1px solid #eee;"><?php _e('Note:', 'dc-woocommerce-multi-vendor'); ?></th>
+                <td style="text-align:<?php echo $text_align; ?>; border: 1px solid #eee;"><?php echo $additional_content; ?></td>
+            </tr><?php
+        }
         ?>
     </table>
     <?php
