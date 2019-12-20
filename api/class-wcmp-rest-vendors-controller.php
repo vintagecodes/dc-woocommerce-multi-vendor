@@ -390,7 +390,15 @@ class WCMp_REST_API_Vendors_Controller extends WC_REST_Controller {
 			'role' => $this->post_type
 		);
 		
-		$user_id = wp_insert_user( $userdata ) ;
+                if( email_exists( $request['email'] ) || username_exists( $request['login'] ) ) {
+                    $user = ( email_exists( $request['email'] ) && get_user_by( 'email',  $request['email'] ) ) ? get_user_by( 'email',  $request['email'] ) : get_user_by( 'login',  $request['login'] );
+                    if( $user ) {
+                        $user->set_role( $this->post_type );
+                        $user_id = $user->ID;
+                    }
+                } else {
+                    $user_id = wp_insert_user( $userdata ) ;
+                }
 		
 		if ( is_wp_error( $user_id ) ) {
 			return $user_id;

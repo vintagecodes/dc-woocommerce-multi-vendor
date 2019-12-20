@@ -3686,7 +3686,7 @@ class WCMp_Ajax {
 //		if ( ! current_user_can( 'edit_shop_orders' ) ) {
 //			wp_die( -1 );
 //		}
-
+        
         $order_id = absint($_POST['order_id']);
         $refund_amount = wc_format_decimal(sanitize_text_field(wp_unslash($_POST['refund_amount'])), wc_get_price_decimals());
         $refunded_amount = wc_format_decimal(sanitize_text_field(wp_unslash($_POST['refunded_amount'])), wc_get_price_decimals());
@@ -3744,10 +3744,12 @@ class WCMp_Ajax {
                         'restock_items' => $restock_refunded_items,
                     )
             );
-
+            
             if (is_wp_error($refund)) {
                 throw new Exception($refund->get_error_message());
             }
+            
+            do_action( 'wcmp_order_refunded', $order_id, $refund->get_id() );
 
             if (did_action('woocommerce_order_fully_refunded')) {
                 $response_data['status'] = 'fully_refunded';

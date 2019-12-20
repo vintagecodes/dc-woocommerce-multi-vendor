@@ -137,6 +137,9 @@ if ( WC()->payment_gateways() ) {
                     </div>
                     <?php endif; ?>
                 </div>
+                <?php
+                if( $order->get_customer_note() ) :
+                ?>
                 <hr>
                 <h3><?php echo __( 'Customer provided note:', 'woocommerce' ); ?></h3>
                 <div class="order_note">
@@ -147,6 +150,7 @@ if ( WC()->payment_gateways() ) {
                     }
                     ?>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
         <?php endif; ?>

@@ -35,6 +35,7 @@ if ( !$transaction || (isset($transaction->post_type) && $transaction->post_type
             if (isset($transaction->post_type) && $transaction->post_type == 'wcmp_transaction') {
                 $commission_details = $WCMp->transaction->get_transaction_item_details($transaction_id);
             ?>
+            <div class="withdrawal-transaction-wrapper">
             <table class="table table-bordered">
                 <?php if (!empty($commission_details['header'])) { 
                     echo '<thead><tr>';
@@ -65,6 +66,7 @@ if ( !$transaction || (isset($transaction->post_type) && $transaction->post_type
                 echo '</tbody>';
                 ?>
             </table>
+            </div>
         <?php } else { ?>
             <p class="wcmp_headding3"><?php printf(__('Hello,<br>Unfortunately your request for withdrawal amount could not be completed. You may try again later, or check you PayPal settings in your account page, or contact the admin at <b>%s</b>', 'dc-woocommerce-multi-vendor'), get_option('admin_email')); ?></p>
         <?php } ?>

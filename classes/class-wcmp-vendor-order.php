@@ -105,6 +105,16 @@ class WCMp_Vendor_Order {
     }
     
     /**
+     * Get total commission refunded amount.
+     *
+     * @since 3.4.7
+     */
+    public function get_total_commission_refunded_amount($context = 'view') {
+        $commission_id = $this->get_prop('_commission_id');
+        return WCMp_Commission::commission_refunded_totals($commission_id, $context);
+    }
+    
+    /**
      * Get vendor shipping amount.
      *
      * @since 3.4.0

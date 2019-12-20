@@ -47,10 +47,10 @@ class WCMp_Order {
             add_action('woocommerce_saved_order_items', array(&$this, 'wcmp_create_orders_from_backend'), 10, 2 );
             add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_create_orders'), 10, 3);
             add_action('woocommerce_after_checkout_validation', array($this, 'wcmp_check_order_awaiting_payment'));
+            add_action('woocommerce_new_order', array($this, 'wcmp_create_orders_via_rest'), 10, 2);
             // Order Refund
             add_action('woocommerce_order_refunded', array($this, 'wcmp_order_refunded'), 10, 2);
             add_action('woocommerce_refund_deleted', array($this, 'wcmp_refund_deleted'), 10, 2);
-            add_action('woocommerce_create_refund', array( $this, 'wcmp_create_refund' ), 10, 2);
             $this->init_prevent_trigger_vendor_order_emails();
             // Order Trash 
             add_action( 'trashed_post', array( $this, 'trash_wcmp_suborder' ), 10, 1 );
@@ -293,6 +293,11 @@ class WCMp_Order {
         if(!$order) return;
         $has_sub_order = get_post_meta($order_id, 'has_wcmp_sub_order', true) ? true : false;
         if($has_sub_order) return;
+        $this->wcmp_create_orders($order_id, array(), $order, true);
+    }
+    
+    public function wcmp_create_orders_via_rest( $order_id, $order ) {
+        if( $order && get_post_meta( $order_id, '_created_via', true ) !== 'rest-api' ) return;
         $this->wcmp_create_orders($order_id, array(), $order, true);
     }
 
@@ -802,7 +807,7 @@ class WCMp_Order {
             foreach ($line_item_totals as $item_id => $total) {
                 // check if there have vendor line item to refund
                 $item = $order->get_item($item_id);
-                if($item->get_meta('_vendor_id') && $total != 0) $create_vendor_refund = true;
+                if( ( $item->get_meta('_vendor_id') || $item->get_meta('vendor_id') ) && $total != 0) $create_vendor_refund = true;
                 $parent_line_item_refund += wc_format_decimal($total);
             }
             
@@ -835,7 +840,6 @@ class WCMp_Order {
                 }
 
                 foreach ($line_item_totals as $item_id => $total) {
-                    
                     $child_item_id = $this->get_vendor_order_item_id($item_id);
                     if ($child_item_id && in_array($child_item_id, $suborder_items_ids)) {
                         $total = wc_format_decimal($total);
@@ -881,6 +885,7 @@ class WCMp_Order {
                         'line_items' => $line_items,
                         )
                     );
+                    do_action( 'wcmp_order_refunded', $order->get_id(), $refund->get_id() );
                     if($refund)
                         add_post_meta($refund->get_id(), '_parent_refund_id', $parent_refund_id);
                 }
@@ -956,41 +961,13 @@ class WCMp_Order {
         }
     }
     
-    /**
-     * Handle a refund before save.
-     */
-    public static function wcmp_create_refund($refund, $args) {
-        
-        $order = wc_get_order( $args['order_id'] );
-        
-        if ( ! $order ) {
-            throw new Exception( __( 'Invalid vendor order ID.', 'dc-woocommerce-multi-vendor' ) );
-        }
-        if(is_wcmp_vendor_order($order)) :
-            
-            $remaining_refund_amount = $order->get_remaining_refund_amount();
-            $remaining_refund_items  = $order->get_remaining_refund_items();
-            $refund_item_count       = 0;
-
-            // Trigger notification emails.
-            if ( ( $remaining_refund_amount - $args['amount'] ) > 0 || ( $order->has_free_item() && ( $remaining_refund_items - $refund_item_count ) > 0 ) ) {
-                $email_refund = WC()->mailer()->emails['WC_Email_Customer_Refunded_Order'];
-                $email_refund->trigger_partial( $order->get_id(), $refund->get_id() );
-                do_action( 'wcmp_vendor_order_partially_refunded', $order->get_id(), $refund->get_id() );
-            } else {
-                if ( is_null( $args['reason'] ) ) {
-                    $refund->set_reason( __( 'Order fully refunded', 'dc-woocommerce-multi-vendor' ) );
-                }
-                $email_refund = WC()->mailer()->emails['WC_Email_Customer_Refunded_Order'];
-                $email_refund->trigger_full( $order->get_id(), $refund->get_id() );
-                do_action( 'wcmp_vendor_order_fully_refunded', $order->get_id(), $refund->get_id() );
-            }
-        endif;
-    }
-    
     public function get_vendor_order_item_id( $item_id ) {
         global $wpdb;
         $vendor_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT order_item_id FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND meta_value=%d", '_vendor_order_item_id', absint( $item_id ) ) );
+        // check for shipping
+        if( !$vendor_item_id ){
+            $vendor_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT order_item_id FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND meta_value=%d", '_vendor_order_shipping_item_id', absint( $item_id ) ) );
+        }
         return $vendor_item_id;
     }
 
