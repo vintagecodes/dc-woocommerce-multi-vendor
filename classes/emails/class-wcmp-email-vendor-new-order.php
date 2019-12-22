@@ -61,6 +61,16 @@ if (!class_exists('WC_Email_Vendor_New_Order')) :
         }
 
         /**
+         * Get customer note.
+         *
+         * @since  3.1.0
+         * @return string
+         */
+        public function get_default_additional_content() {
+            return __( 'Congratulations on the sale.', 'dc-woocommerce-multi-vendor' );
+        }
+
+        /**
          * trigger function.
          *
          * @access public
@@ -79,6 +89,7 @@ if (!class_exists('WC_Email_Vendor_New_Order')) :
                     $this->vendor_email = $vendor_email;
                     $this->vendor_id = $vendor_id;
                     $this->recipient = $vendor_email;
+                    $this->additional_content = $this->object->customer_message;
                 }
 
                 if (!$this->is_enabled() || !$this->get_recipient()) {
@@ -101,6 +112,7 @@ if (!class_exists('WC_Email_Vendor_New_Order')) :
                 'email_heading' => $this->get_heading(),
                 'vendor_id' => $this->vendor_id,
                 'order' => $this->order,
+                'additional_content' => $this->additional_content,
                 'blogname' => $this->get_blogname(),
                 'sent_to_admin' => false,
                 'plain_text' => false,
@@ -119,6 +131,7 @@ if (!class_exists('WC_Email_Vendor_New_Order')) :
                 'email_heading' => $this->get_heading(),
                 'vendor_id' => $this->vendor_id,
                 'order' => $this->order,
+                'additional_content' => $this->additional_content,
                 'blogname' => $this->get_blogname(),
                 'sent_to_admin' => false,
                 'plain_text' => true,
@@ -152,6 +165,14 @@ if (!class_exists('WC_Email_Vendor_New_Order')) :
                     'title' => __('Email Heading', 'dc-woocommerce-multi-vendor'),
                     'type' => 'text',
                     'description' => sprintf(__('This controls the main heading contained within the email notification. Leave it blank to use the default heading: <code>%s</code>.', 'dc-woocommerce-multi-vendor'), $this->get_default_heading()),
+                    'placeholder' => '',
+                    'default' => ''
+                ),
+                'additional_content' => array(
+                    'title'       => __( 'Additional content', 'dc-woocommerce-multi-vendor' ),
+                    'type'        => 'textarea',
+                    'description' => sprintf(__('This controls the customer note contained within the email notification. Leave it blank to use the default note: <code>%s</code>.', 'dc-woocommerce-multi-vendor'), $this->get_default_additional_content()),
+                    'css'         => 'width:400px; height: 75px;',
                     'placeholder' => '',
                     'default' => ''
                 ),
