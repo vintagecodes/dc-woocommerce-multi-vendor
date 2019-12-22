@@ -38,9 +38,6 @@ if(apply_filters('show_cust_order_calulations_field', true, $vendor->id)) {
 			echo $total['label'] . "\t " . $total['value'] . "\n";
 		}
 	}
-	if ($additional_content) {
-		echo __('Note:', 'dc-woocommerce-multi-vendor') . "\t " . $additional_content . "\n";
-    }
 }
 
 echo "\n****************************************************\n\n";
