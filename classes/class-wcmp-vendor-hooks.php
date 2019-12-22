@@ -658,8 +658,27 @@ class WCMp_Vendor_Hooks {
             } else {
                 $end_date = date( 'Y-m-d' );
             }
-            //wp_localize_script('vendor_orders_js', 'vendor_orders_args', array('start_date' => strtotime($start_date), 'end_date' => strtotime($end_date . ' +1 day')));
-            $WCMp->template->get_template( 'vendor-dashboard/vendor-orders.php', array( 'vendor' => $vendor, 'start_date' => strtotime( $start_date ), 'end_date' => strtotime( $end_date . ' +1 day' ) ) );
+            
+            /**
+             * Action hook befor order list.
+             *
+             * @since 3.4.7
+             */
+            do_action('wcmp_befor_vendor_dashboard_order_list_actions', $_POST );
+            
+            // bulk actions
+            $bulk_actions = apply_filters( 'wcmp_bulk_actions_vendor_order_list', array(
+                'mark_processing'   => __( 'Change status to processing', 'woocommerce' ),
+                'mark_on-hold'      => __( 'Change status to on-hold', 'woocommerce' ),
+                'mark_completed'   => __( 'Change status to completed', 'woocommerce' ),
+            ) );
+                
+            $WCMp->template->get_template( 'vendor-dashboard/vendor-orders.php', array( 
+                'vendor' => $vendor, 
+                'start_date'    => strtotime( $start_date ), 
+                'end_date'      => strtotime( $end_date . ' +1 day' ),
+                'bulk_actions'  => $bulk_actions,
+            ) );
         }
     }
 

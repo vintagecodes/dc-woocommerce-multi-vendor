@@ -40,7 +40,35 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
                 </div>
                 <button class="wcmp_black_btn btn btn-default" type="submit" name="wcmp_order_submit"><?php _e('Show', 'dc-woocommerce-multi-vendor'); ?></button>
             </form>
-            <form method="post" name="wcmp_vendor_dashboard_completed_stat_export">
+            <form method="post" name="wcmp_vendor_dashboard_completed_stat_export" id="wcmp_order_list_form">
+                <div class="order-filter-actions alignleft actions">
+                    <select id="order_bulk_actions" name="bulk_action" class="bulk-actions form-control inline-input">
+                        <option value=""><?php _e('Bulk Actions', 'dc-woocommerce-multi-vendor'); ?></option>
+                        <?php 
+                        if( $bulk_actions ) :
+                            foreach ( $bulk_actions as $key => $action ) {
+                                echo '<option value="' . $key . '">' . $action . '</option>';
+                            }
+                        endif;
+                        ?>
+                    </select>
+                    <button class="wcmp_black_btn btn btn-secondary" type="button" id="order_list_do_bulk_action"><?php _e('Apply', 'dc-woocommerce-multi-vendor'); ?></button>
+                    <?php 
+                    $filter_by_status = apply_filters( 'wcmp_vendor_dashboard_order_filter_status_arr', array_merge( 
+                        array( 'all' => __('All', 'dc-woocommerce-multi-vendor') ), 
+                        wc_get_order_statuses()
+                    ) ); 
+                    echo '<select id="filter_by_order_status" name="order_status" class="wcmp-filter-dtdd wcmp_filter_order_status form-control inline-input">';
+                    if( $filter_by_status ) :
+                    foreach ( $filter_by_status as $key => $status ) {
+                        echo '<option value="' . $key . '">' . $status . '</option>';
+                    }
+                    endif;
+                    echo '</select>';
+                    ?>
+                    <?php do_action( 'wcmp_vendor_order_list_add_extra_filters' ); ?>
+                    <button class="wcmp_black_btn btn btn-secondary" type="button" id="order_list_do_filter"><?php _e('Filter', 'dc-woocommerce-multi-vendor'); ?></button>
+                </div>
                 <table class="table table-striped table-bordered" id="wcmp-vendor-orders" style="width:100%;">
                     <thead>
                         <tr>
@@ -115,40 +143,41 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         var orders_table;
-        var statuses = [];
         var columns = [];
         <?php if($orders_list_table_headers) {
-     foreach ($orders_list_table_headers as $key => $header) { ?>
+        foreach ($orders_list_table_headers as $key => $header) { ?>
         obj = {};
         obj['data'] = '<?php echo esc_js($key); ?>';
         obj['className'] = '<?php if(isset($header['class'])) echo esc_js($header['class']); ?>';
         columns.push(obj);
-     <?php }
+        <?php }
         }
-        $filter_by_status = apply_filters( 'wcmp_vendor_dashboard_order_filter_status_arr', array_merge( 
-            array( 'all' => __('All', 'dc-woocommerce-multi-vendor') ), 
-            wc_get_order_statuses()
-        ) );
-        foreach ($filter_by_status as $key => $label) { ?>
-            obj = {};
-            obj['key'] = "<?php echo trim($key); ?>";
-            obj['label'] = "<?php echo addslashes($label); ?>";
-            statuses.push(obj);
-        <?php } ?>
+        ?>
         orders_table = $('#wcmp-vendor-orders').DataTable({
             processing: true,
             serverSide: true,
             searching: false,
             ordering: false,
+            lengthChange: false,
             responsive: true,
             drawCallback: function (settings) {
-                $( "#filter_by_order_status" ).detach();
-                var order_status_sel = $('<select id="filter_by_order_status" class="wcmp-filter-dtdd wcmp_filter_order_status form-control">').appendTo("#wcmp-vendor-orders_length");
-                $(statuses).each(function () {
-                    order_status_sel.append($("<option>").attr('value', this.key).text(this.label));
-                });
-                if(settings.oAjaxData.order_status){
-                    order_status_sel.val(settings.oAjaxData.order_status);
+//                $( "#filter_by_order_status" ).detach();
+//                var order_status_sel = $('<select id="filter_by_order_status" class="wcmp-filter-dtdd wcmp_filter_order_status form-control">').appendTo("#wcmp-vendor-orders_length");
+//                $(statuses).each(function () {
+//                    order_status_sel.append($("<option>").attr('value', this.key).text(this.label));
+//                });
+//                if(settings.oAjaxData.order_status){
+//                    order_status_sel.val(settings.oAjaxData.order_status);
+//                }
+                if(settings.json.notices.length > 0 ){
+                    $('.wcmp-wrapper .notice-wrapper').html('');
+                    $.each(settings.json.notices, function( index, notice ) {
+                        if(notice.type == 'success'){
+                            $('.wcmp-wrapper .notice-wrapper').append('<div class="woocommerce-message" role="alert">'+notice.message+'</div>');
+                        }else{
+                            $('.wcmp-wrapper .notice-wrapper').append('<div class="woocommerce-error" role="alert">'+notice.message+'</div>');
+                        }
+                    });
                 }
             },
             language: {
@@ -167,8 +196,10 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
                 url: '<?php echo add_query_arg( 'action', 'wcmp_datatable_get_vendor_orders', $WCMp->ajax_url() ); ?>',
                 type: "post",
                 data: function (data) {
+                    data.orders_filter_action = $('form#wcmp_order_list_form').serialize();
                     data.start_date = '<?php echo $start_date; ?>';
                     data.end_date = '<?php echo $end_date; ?>';
+                    data.bulk_action = $('#order_bulk_actions').val();
                     data.order_status = $('#filter_by_order_status').val();
                 },
                 error: function(xhr, status, error) {
@@ -179,7 +210,10 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
             columns: columns
         });
         new $.fn.dataTable.FixedHeader( orders_table );
-        $(document).on('change', '#filter_by_order_status', function () {
+        $(document).on('click', '#order_list_do_filter', function (e) {
+            orders_table.ajax.reload();
+        });
+        $(document).on('click', '#order_list_do_bulk_action', function (e) {
             orders_table.ajax.reload();
         });
     });
