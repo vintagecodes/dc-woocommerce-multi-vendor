@@ -58,7 +58,7 @@
                 zoneID = $(event.currentTarget).data('zoneId');
             }
 
-            let ajaxRequest = $.ajax({
+            var ajaxRequest = $.ajax({
                 method: 'post',
                 url: wcmp_vendor_shipping_script_data.ajaxurl,
                 data: {

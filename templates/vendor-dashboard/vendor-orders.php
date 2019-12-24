@@ -66,7 +66,7 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
                     endif;
                     echo '</select>';
                     ?>
-                    <?php do_action( 'wcmp_vendor_order_list_add_extra_filters' ); ?>
+                    <?php do_action( 'wcmp_vendor_order_list_add_extra_filters', get_current_user_id() ); ?>
                     <button class="wcmp_black_btn btn btn-secondary" type="button" id="order_list_do_filter"><?php _e('Filter', 'dc-woocommerce-multi-vendor'); ?></button>
                 </div>
                 <table class="table table-striped table-bordered" id="wcmp-vendor-orders" style="width:100%;">

@@ -671,7 +671,7 @@ class WCMp_Vendor_Hooks {
                 'mark_processing'   => __( 'Change status to processing', 'woocommerce' ),
                 'mark_on-hold'      => __( 'Change status to on-hold', 'woocommerce' ),
                 'mark_completed'   => __( 'Change status to completed', 'woocommerce' ),
-            ) );
+            ), $vendor );
                 
             $WCMp->template->get_template( 'vendor-dashboard/vendor-orders.php', array( 
                 'vendor' => $vendor, 

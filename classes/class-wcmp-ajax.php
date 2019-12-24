@@ -221,7 +221,7 @@ class WCMp_Ajax {
         
         $filterActionData = array();
         parse_str($requestData['orders_filter_action'], $filterActionData);
-        do_action('before_wcmp_orders_list_query_bind', $filterActionData, $requestData);
+        do_action('before_wcmp_orders_list_query_bind', $filterActionData, $requestData, $vendor_all_orders);
         $notices = array();
         
         // Do bulk handle
@@ -245,7 +245,7 @@ class WCMp_Ajax {
                 );
                
             } else {
-                do_action('wcmp_orders_list_do_handle_bulk_actions', $requestData['bulk_action'], $ids, $requestData );
+                do_action('wcmp_orders_list_do_handle_bulk_actions', $requestData['bulk_action'], $ids, $requestData, $vendor_all_orders );
             }
         }else{
             if (isset($filterActionData['order_status']) && $filterActionData['order_status'] != 'all') {
@@ -255,7 +255,7 @@ class WCMp_Ajax {
                     }
                 }
             }
-            do_action('wcmp_orders_list_handle_filter_actions', $filterActionData, $ids, $requestData );
+            do_action('wcmp_orders_list_do_handle_filter_actions', $filterActionData, $ids, $requestData, $vendor_all_orders );
         }
         
         $vendor_orders = array_slice($vendor_all_orders, $requestData['start'], $requestData['length']);
@@ -3994,6 +3994,8 @@ class WCMp_Ajax {
                         $status = '<i class="'. $ledger->ref_status .' wcmp-font ico-processing-status-icon" title="'. ucfirst($ledger->ref_status).'"></i>';
                     }elseif( $ledger->ref_status == 'completed' ){
                         $status = '<i class="'. $ledger->ref_status.' wcmp-font ico-completed-status-icon" title="'. ucfirst($ledger->ref_status).'"></i>';
+                    }elseif( $ledger->ref_status == 'cancelled' ){
+                        $status = '<i class="'. $ledger->ref_status .' wcmp-font ico-processing-status-icon" title="'. ucfirst($ledger->ref_status).'"></i>';
                     }
                     $row = array();
                     $row ['status'] = $status;

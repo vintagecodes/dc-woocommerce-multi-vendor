@@ -417,6 +417,8 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 					echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
                                         $user_id = null;
 				} else {
+                                        $email = WC()->mailer()->emails['WC_Email_Vendor_New_Account'];
+                                        $email->trigger( $user_id, $userdata['user_pass'], false);
 					if(isset($_POST['vendor_profile_image']) && $_POST['vendor_profile_image'] != '') update_user_meta($user_id, "_vendor_profile_image", $_POST['vendor_profile_image']);
 					echo '<div class="notice notice-success"><p>' . __( 'Vendor successfully created!', 'dc-woocommerce-multi-vendor' ) . '</p></div>';
 				}
