@@ -40,8 +40,6 @@ img {
 
 .multi_input_block {
     border: 1px solid #dfdfdf;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
@@ -121,9 +119,6 @@ label[for=give_tax] {
 }
 
 .wcmp_vendors_settings #to_do_list {
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -ms-border-radius: 5px;
     border-radius: 5px;
 }
 
@@ -355,6 +350,7 @@ a.wcmp_sub_sction {
         border-left: 1px solid #ccc;
     }
     #vendor_preview_tabs {
+        display: -webkit-box;
         display: flex;
     }
     .wcmpsubtabadmin li:last-child a.wcmp_sub_sction {
@@ -440,6 +436,7 @@ h4.wcmp-tab-description.success {
     background: transparent;
     padding: 13px 35px;
     color: #fff;
+    -webkit-transition: color 0.3s;
     transition: color 0.3s;
     position: relative;
 }
@@ -454,6 +451,7 @@ h4.wcmp-tab-description.success {
     height: 2px;
     background: #fff;
     margin: auto;
+    -webkit-transition: all 0.3s;
     transition: all 0.3s;
 }
 
@@ -1244,13 +1242,13 @@ body .wcmp-vendor-modal-content article p span.woocommerce-Price-currencySymbol 
     animation: roundAnimation 2s infinite;
 }
 @-webkit-keyframes roundAnimation {
-    0%   {transform: rotate(360deg);}
-    100% {transform: rotate(0deg);}
+    0%   {-webkit-transform: rotate(360deg);transform: rotate(360deg);}
+    100% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
 }
 
 @keyframes roundAnimation {
-    0%   {transform: rotate(360deg);}
-    100% {transform: rotate(0deg);}
+    0%   {-webkit-transform: rotate(360deg);transform: rotate(360deg);}
+    100% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
 }
 
 
@@ -1413,9 +1411,12 @@ body .wcmp-vendor-modal-content article p span.woocommerce-Price-currencySymbol 
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
+    display: -webkit-box;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    -webkit-box-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+            align-items: center;
     margin: 15px 0;
 }
 
@@ -1878,9 +1879,7 @@ footer .pending-vendor-note {
     border-color: #ccc;
     background: #fff;
     -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
     transform: rotate(45deg);
     content: "";
     position: absolute;

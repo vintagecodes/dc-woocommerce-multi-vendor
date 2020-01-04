@@ -87,7 +87,7 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
             
             wp_enqueue_script('frontend_js');
             wp_enqueue_script('wcmp_vendor_list');
-            
+            wp_style_add_data('wcmp_vendor_list', 'rtl', 'replace');
             wp_enqueue_style('wcmp_vendor_list');
             extract(shortcode_atts(array('orderby' => 'registered', 'order' => 'ASC'), $atts));
             $order_by = isset($_REQUEST['vendor_sort_type']) ? $_REQUEST['vendor_sort_type'] : $orderby;

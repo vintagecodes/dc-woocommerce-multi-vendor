@@ -135,7 +135,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: '<%= dirs.frontend_css %>/',
-                        src: ['*.css', '!*.min.css'],
+                        src: ['*.css', '!lib/.*', '!*.min.css'],
                         dest: '<%= dirs.frontend_css %>/',
                         ext: '.min.css'
                     }
@@ -160,7 +160,7 @@ module.exports = function (grunt) {
                     '!<%= dirs.admin_js %>/*.min.js',
                     '!<%= dirs.frontend_js %>/*.min.js'
                 ],
-                tasks: ['jshint', 'uglify']
+                tasks: ['uglify']
             }
         },
 
@@ -258,7 +258,7 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('js', [
-        'jshint',
+        //'jshint',
         'uglify:admin',
         'uglify:frontend'
     ]);

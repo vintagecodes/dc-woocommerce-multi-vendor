@@ -393,13 +393,16 @@ class WCMp_Frontend {
 
         wp_register_style('frontend_css', $frontend_style_path . 'frontend' . $suffix . '.css', array(), $WCMp->version);
         wp_register_style('product_css', $frontend_style_path . 'product' . $suffix . '.css', array(), $WCMp->version);
-        wp_register_style('vendor_order_by_product_css', $frontend_style_path . 'vendor_order_by_product' . $suffix . '.css', array(), $WCMp->version);
         wp_register_style('vandor-dashboard-style', $frontend_style_path . 'vendor_dashboard' . $suffix . '.css', array(), $WCMp->version);
+        wp_register_style('multiple_vendor', $frontend_style_path . 'multiple-vendor' . $suffix . '.css', array(), $WCMp->version);
+        wp_register_style('wcmp_custom_scroller', $frontend_style_path . 'lib/jquery.mCustomScrollbar.css', array(), $WCMp->version);
+        wp_register_style( 'advance-product-manager', $frontend_style_path . 'advance-product-manager.css', array(), $WCMp->version );
+        
         // Add RTL support
         wp_style_add_data('vandor-dashboard-style', 'rtl', 'replace');
-        wp_register_style('multiple_vendor', $frontend_style_path . 'multiple-vendor' . $suffix . '.css', array(), $WCMp->version);
-        wp_register_style('wcmp_custom_scroller', $frontend_style_path . 'jquery.mCustomScrollbar.css', array(), $WCMp->version);
-        wp_register_style( 'advance-product-manager', $frontend_style_path . 'advance-product-manager.css', array(), $WCMp->version );
+        wp_style_add_data('frontend_css', 'rtl', 'replace');
+        wp_style_add_data('product_css', 'rtl', 'replace');
+        wp_style_add_data('advance-product-manager', 'rtl', 'replace');
 
         if (is_vendor_dashboard() && is_user_logged_in() && (is_user_wcmp_vendor(get_current_user_id()) || is_user_wcmp_pending_vendor(get_current_user_id()) || is_user_wcmp_rejected_vendor(get_current_user_id()))) {
             wp_enqueue_style('dashicons');

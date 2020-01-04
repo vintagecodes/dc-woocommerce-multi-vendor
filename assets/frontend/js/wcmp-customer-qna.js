@@ -21,17 +21,17 @@
     };
 
     var keyup_timeout;
-    $('#cust_question').on('keyup', function () {
+    $( '#cust_question' ).on( 'keyup' , function () {
         var this_ele_val = $(this).val();
-   	clearTimeout(keyup_timeout);
-   	keyup_timeout = setTimeout(function(){
-            $('#qna-result-msg').html('');
-            block( $('#cust_qna_form') );
-            if(this_ele_val.length > 3){
+   	clearTimeout( keyup_timeout );
+   	keyup_timeout = setTimeout( function() {
+            $( '#qna-result-msg' ).html('');
+            block( $( '#cust_qna_form' ) );
+            if( this_ele_val.length > 3 ){
                 var data = {
                     action: 'wcmp_customer_ask_qna_handler',
                     handler: 'search',
-                    product_ID: $('#product_ID').val(),
+                    product_ID: $( '#product_ID' ).val(),
                     keyword: this_ele_val
                 };
                 $.post(wcmp_customer_qna_js_script_data.ajax_url, data, function (response) { 

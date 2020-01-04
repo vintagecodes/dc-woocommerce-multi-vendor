@@ -416,6 +416,7 @@ a.wcmp_vendor_detail{
     width: auto;
 }
 .wcmp_vendor_banner_template.template3 .vendor_img_add{
+    display: -webkit-box;
     display: flex;
 }
 @media screen and (max-width: 991px) {

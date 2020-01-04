@@ -108,13 +108,15 @@ global $WCMp;
                         </div>
                     </div>
                     <?php }
+                    if( get_wcmp_vendor_settings('is_disable_marketplace_plisting', 'general') != 'Enable' ) :
+                    // save terms for post save handler 
+                    if( $terms ){
+                        foreach ( $terms as $term_id ) {
+                            echo '<input type="hidden" name="tax_input[' . $term_tax . '][]" value="' . $term_id . '" />';
+                        }
+                    }
+                    endif;
                 }
-                // save terms for post save handler 
-//                if( $terms ){
-//                    foreach ( $terms as $term_id ) {
-//                        echo '<input type="hidden" name="tax_input[' . $term_tax . '][]" value="' . $term_id . '" />';
-//                    }
-//                }
             }
         ?>
         </div>
