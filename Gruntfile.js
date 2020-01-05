@@ -128,14 +128,14 @@ module.exports = function (grunt) {
                 files: [{
                         expand: true,
                         cwd: '<%= dirs.admin_css %>/',
-                        src: ['*.css', '!*.min.css'],
+                        src: ['*.css', '!*-rtl.css', '!*.min.css'],
                         dest: '<%= dirs.admin_css %>/',
                         ext: '.min.css'
                     },
                     {
                         expand: true,
                         cwd: '<%= dirs.frontend_css %>/',
-                        src: ['*.css', '!lib/.*', '!*.min.css'],
+                        src: ['*.css', '!lib/.*', '!*-rtl.css', '!*.min.css'],
                         dest: '<%= dirs.frontend_css %>/',
                         ext: '.min.css'
                     }
@@ -265,9 +265,9 @@ module.exports = function (grunt) {
 
     grunt.registerTask('css', [
         'sass',
-        'rtlcss',
+        'cssmin',
         'postcss',
-        'cssmin'
+        'rtlcss',
     ]);
 
     // Only an alias to 'default' task.
