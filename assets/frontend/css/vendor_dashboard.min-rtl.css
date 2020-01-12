@@ -870,7 +870,10 @@ body .mCSB_scrollTools {
 
 mark {
   padding: 0 7px 2px;
-  font-weight: 600; }
+  font-weight: 600;
+  display: block;
+  text-align: center;
+}
   mark.mark-green {
     background: #42b64d;
     color: #fff; }

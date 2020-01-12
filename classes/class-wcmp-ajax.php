@@ -2039,7 +2039,7 @@ class WCMp_Ajax {
                 )
             );
             $vendor_unpaid_total_orders = $vendor->get_unpaid_orders(false, false, $meta_query);
-
+            $vendor_unpaid_total_orders = apply_filters( 'wcmp_before_unpaid_order_vendor_withdrawal_list_data', $vendor_unpaid_total_orders, $vendor, $requestData );
             $data = array();
             $commission_threshold_time = isset($WCMp->vendor_caps->payment_cap['commission_threshold_time']) && !empty($WCMp->vendor_caps->payment_cap['commission_threshold_time']) ? $WCMp->vendor_caps->payment_cap['commission_threshold_time'] : 0;
             if ($vendor_unpaid_total_orders) {

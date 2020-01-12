@@ -188,7 +188,7 @@ class WCMp_Ledger {
                 'ref_status'    => 'cancelled',
                 'ref_updated'   => date('Y-m-d H:i:s', current_time('timestamp')),
                 'debit'         => $commission_total,
-                'balance'       => $unpaid_commission_total['total'],
+                'balance'       => ( $unpaid_commission_total['total'] - $commission_total ),
             );
             $data_store = $this->load_ledger_data_store();
             $data_store->create($data);

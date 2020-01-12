@@ -1641,7 +1641,6 @@ Class WCMp_Admin_Dashboard {
 
                 $total_amount = $total_amount + $details['total_amount'];
             }
-            //print_r($total_amount);
             $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_vendor_transaction_details.php', apply_filters( 'wcmp_widget_vendor_transaction_details_data', array('total_amount' => $unpaid_commission_total['total'], 'transaction_display_array' => $transaction_display_array), $vendor, $requestData ) );
         }
 
