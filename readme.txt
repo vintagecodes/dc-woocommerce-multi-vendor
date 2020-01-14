@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.3.2
 Requires PHP: 5.6
-Stable tag: 3.4.7
+Stable tag: 3.4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,14 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.4.8 - 2020-01-14 =
+* Added - Banking overview updated on unpaid commission deletion. #162
+* Added - Order note in vendor new order email. #191
+* Added - Order notes on regenerate order commission.
+* Fix - Undefined vendor object on add new vendor in backend. #196
+* Fix - Advance product listing default categories reset issue. #198
+* Fix - Vendor dashboard header RTL issue.
+
 = 3.4.7 - 2019-12-24 =
 * Added - Vendor orders list bulk actions filters. #103
 * Added - Vendor email on `Add Vendor` via backend. #189
