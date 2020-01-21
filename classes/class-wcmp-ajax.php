@@ -1894,14 +1894,7 @@ class WCMp_Ajax {
                     $product = wc_get_product($product_single->ID);
                     $edit_product_link = '';
 
-                    /* check if the product ID is the one of the current language in WPML */ 
-                    if ( function_exists('icl_object_id') ) { // WPML activated
-                        $correct_product_id = apply_filters( 'wpml_object_id',$product_single->ID , 'product', false, ICL_LANGUAGE_CODE );
-                        if($correct_product_id != $product_single->ID){
-                            continue; // skip the current loop and go to the next product
-                        }
-                    }
-                    
+  
                     if ((current_vendor_can('edit_published_products') && get_wcmp_vendor_settings('is_edit_delete_published_product', 'capabilities', 'product') == 'Enable') || in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending')))) {
                         $edit_product_link = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $product->get_id()));
                     }
