@@ -1456,7 +1456,7 @@ class WCMp_Product {
         <?php if ('fixed' === get_wcmp_vendor_settings('commission_type', 'payment', '', 'fixed') || 'percent' === get_wcmp_vendor_settings('commission_type', 'payment', '', 'fixed')): ?>
             <tr class="form-field">
                 <th scope="row" valign="top"><label for="commision"><?php _e('Commission', 'dc-woocommerce-multi-vendor'); ?></label></th>
-                <td><input type="number" class="short" style="" name="commision" id="commision" value="<?php echo $commision; ?>" placeholder=""></td>
+                <td><input type="text" class="short" style="" name="commision" id="commision" value="<?php echo $commision; ?>" placeholder=""></td>
             </tr>
         <?php endif; ?>
         <?php if ('fixed_with_percentage' === get_wcmp_vendor_settings('commission_type', 'payment', '', 'fixed') || 'fixed_with_percentage_qty' === get_wcmp_vendor_settings('commission_type', 'payment', '', 'fixed')): ?>
