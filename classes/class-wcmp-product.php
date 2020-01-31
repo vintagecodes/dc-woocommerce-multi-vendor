@@ -1576,7 +1576,7 @@ class WCMp_Product {
      */
     public function wcmp_gtin_product_search( $query  ) {
         global $wpdb;
-        $search_keyword = (isset($query->query['s']) && !empty($query->query['s'])) ? $query->query['s'] : (isset($_REQUEST['s']) && !empty($_REQUEST['s'])) ? $_REQUEST['s'] : '';
+        $search_keyword = ((isset($query->query['s']) && !empty($query->query['s'])) ? $query->query['s'] : (isset($_REQUEST['s']) && !empty($_REQUEST['s']))) ? $_REQUEST['s'] : '';
         if( empty($search_keyword) || !isset( $query->query['post_type'] ) || $query->query['post_type'] != 'product'){
             return;
         }
