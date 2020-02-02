@@ -1793,7 +1793,7 @@ Class WCMp_Admin_Dashboard {
                 $product->set_date_created( current_time( 'timestamp', true ) );
             }
 
-            $title = ( is_product_wcmp_spmv($product_id) && isset( $_POST['original_post_title'] ) ) ? wc_clean( $_POST['original_post_title'] ) : isset( $_POST['post_title'] ) ? wc_clean( $_POST['post_title'] ) : '';
+            $title = ( ( is_product_wcmp_spmv($product_id) && isset( $_POST['original_post_title'] ) ) ? wc_clean( $_POST['original_post_title'] ) : isset( $_POST['post_title'] ) ) ? wc_clean( $_POST['post_title'] ) : '';
 
             if ( isset( $_POST['status'] ) && $_POST['status'] === 'draft' ) {
                 $status = 'draft';
