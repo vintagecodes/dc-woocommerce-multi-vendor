@@ -1897,7 +1897,7 @@ class WCMp_Ajax {
                     /* check if the product ID is the one of the current language in WPML */ 
                     if ( function_exists('icl_object_id') ) { // WPML activated
                         $correct_product_id = apply_filters( 'wpml_object_id',$product_single->ID , 'product', false, ICL_LANGUAGE_CODE );
-                        if($correct_product_id != $product_single->ID){
+                        if( $correct_product_id != $product_single->ID ){
                             continue; // skip the current loop and go to the next product
                         }
                     }
@@ -2062,7 +2062,7 @@ class WCMp_Ajax {
                         if ($diff < $commission_threshold_time) {
                             continue;
                         }
-                        if (is_commission_requested_for_withdrawals($commission_id) || in_array($order->get_status('edit'), array('on-hold', 'pending', 'failed', 'refunded'))) {
+                        if (is_commission_requested_for_withdrawals($commission_id) || in_array($order->get_status('edit'), array('on-hold', 'pending', 'failed', 'refunded', 'cancelled'))) {
                             $disabled_reqested_withdrawals = 'disabled';
                         } else {
                             $disabled_reqested_withdrawals = '';

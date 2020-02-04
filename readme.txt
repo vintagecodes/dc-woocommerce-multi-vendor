@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.3.2
 Requires PHP: 5.6
-Stable tag: 3.4.8
+Stable tag: 3.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,15 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.4.9 - 2020-02-04 =
+* Added - WPML supports on vendor product list. #221
+* Tweak - Vendor dashboard widget withdrawable balance functionalities on transaction details.
+* Fix - Vendor dashboard product stats widget product link. #209
+* Fix - Backend vendor registration form builder state issue. #210
+* Fix - PHP-7.4 conflict syntax. #217
+* Fix - Decimal commission value on category wise commission settings in backend. #218
+* Updated - Language file.
+
 = 3.4.8 - 2020-01-14 =
 * Added - Banking overview updated on unpaid commission deletion. #162
 * Added - Order note in vendor new order email. #191

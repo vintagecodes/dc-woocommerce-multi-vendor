@@ -1617,17 +1617,7 @@ Class WCMp_Admin_Dashboard {
             $start_date = isset($requestData['from_date']) ? $requestData['from_date'] : date('01-m-Y');
             $end_date = isset($requestData['to_date']) ? $requestData['to_date'] : date('t-m-Y');
             $transaction_details = $WCMp->transaction->get_transactions($vendor->term_id);
-            //$unpaid_orders = get_wcmp_vendor_order_amount(array('commission_status' => 'unpaid'), $vendor->id);
-            $args = array(
-                'meta_query' => array(
-                    array(
-                        'key' => '_commission_vendor',
-                        'value' => absint($vendor->term_id),
-                        'compare' => '='
-                    ),
-                ),
-            );
-            $unpaid_commission_total = WCMp_Commission::get_commissions_total_data( $args, $vendor->id );
+            $unpaid_commission_total = WCMp_Commission::get_unpaid_commissions_total_data( 'withdrawable' );
 
             $count = 0; // varible for counting 5 transaction details
             foreach ($transaction_details as $transaction_id => $details) {

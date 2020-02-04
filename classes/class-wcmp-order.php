@@ -1254,6 +1254,7 @@ class WCMp_Order {
         if( !$order_id || !is_wcmp_vendor_order( $order_id ) ) return;
         if( $new_status == 'cancelled' ){
             $commission_id = get_post_meta( $order_id, '_commission_id', true );
+            do_action( 'wcmp_vendor_order_on_cancelled_commission', $commission_id, $order_id );
             if( $commission_id ) wp_trash_post( $commission_id );
         }
     }
