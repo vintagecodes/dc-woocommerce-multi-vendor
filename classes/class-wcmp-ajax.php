@@ -1091,7 +1091,7 @@ class WCMp_Ajax {
 
         if ($vendor_id) {
             if ($vendor)
-                $products = $vendor->get_products();
+                $products = $vendor->get_products_ids();
             if (!empty($products)) {
                 foreach ($products as $product) {
                     $chosen_product_ids[] = $product->ID;
@@ -1825,7 +1825,7 @@ class WCMp_Ajax {
                         );
                     }
                 } else {
-                    do_action('wcmp_products_list_do_handle_bulk_actions', $vendor->get_products(), $filterActionData['bulk_actions'], $filterActionData['selected_products'], $filterActionData, $requestData);
+                    do_action('wcmp_products_list_do_handle_bulk_actions', $vendor->get_products_ids(), $filterActionData['bulk_actions'], $filterActionData['selected_products'], $filterActionData, $requestData);
                 }
             }
             $df_post_status = apply_filters('wcmp_vendor_dashboard_default_product_list_statues', array('publish', 'pending', 'draft'), $requestData, $vendor);
@@ -2726,7 +2726,7 @@ class WCMp_Ajax {
             if ($vendor) {
                 $vendor_term_id = get_user_meta($vendor_id, '_vendor_term_id', true);
 
-                $vendor_products = $vendor->get_products();
+                $vendor_products = $vendor->get_products_ids();
 
                 $vendor_review_info = wcmp_get_vendor_review_info($vendor_term_id);
                 if (isset($vendor_review_info['total_rating'])) {
@@ -3831,7 +3831,7 @@ class WCMp_Ajax {
             
             if (is_user_wcmp_vendor(get_current_user_id() ) ) {
                 $vendor = get_wcmp_vendor(get_current_user_id() );
-                $vendor_product_ids = wp_list_pluck( $vendor->get_products(), 'ID' );
+                $vendor_product_ids = wp_list_pluck( $vendor->get_products_ids(), 'ID' );
                 $ids = array_intersect( $ids, (array) $vendor_product_ids );
             }
 
@@ -3879,7 +3879,7 @@ class WCMp_Ajax {
         
         if (is_user_wcmp_vendor(get_current_user_id() ) ) {
             $vendor = get_wcmp_vendor(get_current_user_id() );
-            $vendor_product_ids = wp_list_pluck( $vendor->get_products(), 'ID' );
+            $vendor_product_ids = wp_list_pluck( $vendor->get_products_ids(), 'ID' );
             $ids = array_intersect( $ids, (array) $vendor_product_ids );
         }
 

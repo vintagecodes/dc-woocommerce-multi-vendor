@@ -1578,18 +1578,18 @@ Class WCMp_Admin_Dashboard {
             $args = array('post_status' => array('publish', 'pending', 'draft', 'trash'));
             $product_stats = array();
             if($vendor) :
-                $products = $vendor->get_products($args);
+                $where = "AND (wp_posts.post_status = 'publish' OR wp_posts.post_status = 'draft' OR wp_posts.post_status = 'pending' OR wp_posts.post_status = 'trash')";
+                $products = $vendor->get_products_ids( array( 'where' => $where ) );
                 $product_stats['total_products'] = count($products);
-                foreach ($products as $key => $value) {
-                    if ($value->post_status == 'publish')
+                foreach ( $products as $product) {
+                    if ( get_post_status( $product->ID ) == 'publish' )
                         $publish_products_count += 1;
-                    if ($value->post_status == 'pending')
+                    if ( get_post_status( $product->ID ) == 'pending' )
                         $pending_products_count += 1;
-                    if ($value->post_status == 'draft')
+                    if ( get_post_status( $product->ID ) == 'draft' )
                         $draft_products_count += 1;
-                    if ($value->post_status == 'trash') {
+                    if ( get_post_status( $product->ID ) == 'trash' )
                         $trashed_products_count += 1;
-                    }
                 }
             endif;
             $product_stats['publish_products_count'] = $publish_products_count;

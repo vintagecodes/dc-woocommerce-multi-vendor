@@ -33,9 +33,10 @@ do_action('before_wcmp_vendor_dashboard_product_list_table');
                     //$array_keys = array_keys($statuses);
                     foreach ($statuses as $key => $label) {
                         if($key == 'all'){
-                            $count_pros = count($vendor->get_products(array('post_status'=> array('publish', 'pending','draft'))));
+                            $where = "AND (wp_posts.post_status = 'publish' OR wp_posts.post_status = 'draft' OR wp_posts.post_status = 'pending')";
+                            $count_pros = count( $vendor->get_products_ids( array( 'where' => $where ) ) );
                         }else{
-                            $count_pros = count($vendor->get_products(array('post_status'=> $key)));
+                            $count_pros = count( $vendor->get_products_ids( array( 'where' => "AND wp_posts.post_status = '$key' " ) ) );
                         }
                         if($count_pros){
                             echo '<li><a href="' . add_query_arg(array('post_status' => sanitize_title($key)), wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_products_endpoint', 'vendor', 'general', 'products'))) . '" class="' . ( $current_status == $key ? 'current' : '' ) . '">' . $label .' ( <span id="count-'.$key.'" data-status="'.$key.'" data-count="'.$count_pros.'">'. $count_pros .'</span> ) </a></li>';

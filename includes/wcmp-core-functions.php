@@ -1974,7 +1974,7 @@ if (!function_exists('wcmp_get_vendor_profile_completion')) {
             foreach ($progress_fields as $key => $value) {
                 $has_value = get_user_meta($vendor->id, $key, true);
                 if ($key == '_vendor_added_product') {
-                    if ($has_value || count($vendor->get_products()) > 0) {
+                    if ($has_value || count($vendor->get_products_ids()) > 0) {
                         $progress++;
                     } else {
                         $todo[] = $value;

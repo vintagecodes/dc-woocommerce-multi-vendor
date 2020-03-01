@@ -62,6 +62,9 @@ class WCMp_Shipping_Gateway {
      */
     public static function load_class($class_name = '', $dir = '') {
         global $WCMp;
+        if ( !isset( $WCMp->token ) ) {
+            $WCMp->token = 'wcmp';
+        }
         if ('' != $class_name && '' != $WCMp->token) {
             if($dir)
                 require_once ('shipping-gateways/' . trailingslashit( $dir ) . 'class-' . esc_attr($WCMp->token) . '-' . esc_attr($class_name) . '.php');

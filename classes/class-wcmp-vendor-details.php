@@ -350,6 +350,45 @@ class WCMp_Vendor {
         $args = wp_parse_args($args, $default);
         return get_posts( apply_filters( 'wcmp_get_vendor_products_query_args', $args, $this->term_id ) );
     }
+    
+    /**
+     * Get all products ids belonging to vendor
+     * @param $clauses SQL clauses
+     * @return arr Array of product ids
+     */
+    public function get_products_ids( $clauses = array() ) {
+        global $wpdb;
+        $default_clauses = array(
+            'fields'    => 'wp_posts.ID',
+            'where'     => "AND wp_posts.post_status = 'publish' ",
+            'groupby'   => 'wp_posts.ID',
+            'orderby'   => 'wp_posts.post_date DESC',
+            'limits'    => ''
+        );
+        $clauses = apply_filters( 'wcmp_get_products_ids_clauses_request', wp_parse_args( $clauses, $default_clauses ) );
+        $fields   = isset( $clauses['fields'] ) ? $clauses['fields'] : '';
+        $where    = isset( $clauses['where'] ) ? $clauses['where'] : '';
+        $groupby  = isset( $clauses['groupby'] ) ? $clauses['groupby'] : '';
+        $orderby  = isset( $clauses['orderby'] ) ? $clauses['orderby'] : '';
+        $limits   = isset( $clauses['limits'] ) ? $clauses['limits'] : '';
+        $sql = "SELECT
+                $fields
+            FROM
+                wp_posts
+            LEFT JOIN wp_term_relationships ON(
+                    wp_posts.ID = wp_term_relationships.object_id
+                )
+            WHERE
+                1 = 1 AND(
+                    wp_term_relationships.term_taxonomy_id IN( $this->term_id )
+                ) AND wp_posts.post_author IN( $this->id ) AND wp_posts.post_type = 'product' $where
+            GROUP BY
+                $groupby
+            ORDER BY
+                $orderby $limits";
+
+        return apply_filters( 'wcmp_get_products_ids', $wpdb->get_results( $sql ), $clauses, $this->id );
+    }
 
     /**
      * get_orders function
