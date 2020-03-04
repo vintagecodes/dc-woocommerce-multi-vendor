@@ -3973,7 +3973,7 @@ class WCMp_Ajax {
             $vendor = get_wcmp_vendor(get_current_vendor_id());
             $requestData = $_REQUEST;
             $data_store = $WCMp->ledger->load_ledger_data_store();
-            $vendor_ledgers = $data_store->get_ledger( array( 'vendor_id' => $vendor->id ), '', $requestData );
+            $vendor_all_ledgers = $data_store->get_ledger( array( 'vendor_id' => $vendor->id ), '', $requestData );
             $initial_balance = $ending_balance = $total_credit = $total_debit = 0;
             // get initial balance
             $inital_data = end( $vendor_ledgers );
@@ -3981,6 +3981,7 @@ class WCMp_Ajax {
             //get ending balance
             $ending_data = reset( $vendor_ledgers );
             $ending_balance = ( $ending_data->balance && $ending_data->balance != '' ) ? $ending_data->balance : 0;
+            $vendor_ledgers = array_slice( $vendor_all_ledgers, $requestData['start'], $requestData['length'] );
             $data = array();
             if ( $vendor_ledgers ) {
                 foreach ($vendor_ledgers as $ledger ) {
@@ -4024,8 +4025,8 @@ class WCMp_Ajax {
                 "total_credit" => wc_price( $total_credit ),
                 "total_debit" => wc_price( $total_debit ),
                 "draw" => intval($requestData['draw']), // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
-                "recordsTotal" => intval(count($data)), // total number of records
-                "recordsFiltered" => intval(count($data)), // total number of records after searching, if there is no searching then totalFiltered = totalData
+                "recordsTotal" => intval(count($vendor_all_ledgers)), // total number of records
+                "recordsFiltered" => intval(count($vendor_all_ledgers)), // total number of records after searching, if there is no searching then totalFiltered = totalData
                 "data" => $data   // total data array
             );
             wp_send_json($json_data);
