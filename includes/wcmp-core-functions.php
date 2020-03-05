@@ -3604,9 +3604,9 @@ if ( ! function_exists( 'wcmp_get_post_permalink_html' ) ) {
             $type = __('product', 'dc-woocommerce-multi-vendor');
         }
         if ( false === strpos( $view_link, 'preview=true' ) ) {
-            $return .= '<label>' . __( sprintf( __('View %s:', 'dc-woocommerce-multi-vendor'), $type ) ) . "</label>\n";
+            $return .= '<label>' . __( sprintf( __('View %s', 'dc-woocommerce-multi-vendor'), $type ) ) . ":</label>\n";
         } else {
-            $return .= '<label>' . __( sprintf( __('View %s:', 'dc-woocommerce-multi-vendor'), $type ) ) . "</label>\n";
+            $return .= '<label>' . __( sprintf( __('View %s', 'dc-woocommerce-multi-vendor'), $type ) ) . ":</label>\n";
         }
         $return .= '<span id="afm-' . $post_type . '-permalink"><a href="' . esc_url( $view_link ) . '"' . $preview_target . '>' . $display_link . "</a></span>";
 
