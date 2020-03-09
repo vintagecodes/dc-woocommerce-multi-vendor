@@ -1999,7 +1999,8 @@ Class WCMp_Admin_Dashboard {
                 wp_redirect( apply_filters( 'wcmp_vendor_save_product_redirect_url', wcmp_get_vendor_dashboard_endpoint_url( get_wcmp_vendor_settings( 'wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product' ), $post_id ) ) );
                 exit;
             } else {
-                wc_add_notice( $post_id->get_error_message(), 'error' );
+                $error_msg = ( $post_id->get_error_code() === 'empty_content' ) ? __( 'Content, title, and excerpt are empty.', 'dc-woocommerce-multi-vendor' ) : $post_id->get_error_message();
+                wc_add_notice( $error_msg, 'error' );
             }
         }
     }
@@ -2022,12 +2023,9 @@ Class WCMp_Admin_Dashboard {
             wp_die( -1 );
         }
 
-        if ( empty( $_POST['post_title'] ) || empty( $_POST['product_ids'] ) ) {
+        if ( empty( $_POST['post_title'] ) ) {
             if ( empty( $_POST['post_title'] ) ) {
                 wc_add_notice( __( "Coupon code can't be empty.", 'dc-woocommerce-multi-vendor' ), 'error' );
-            }
-            if ( empty( $_POST['product_ids'] ) ) {
-                wc_add_notice( __( 'Select atleast one product.', 'dc-woocommerce-multi-vendor' ), 'error' );
             }
             return;
         }

@@ -1292,7 +1292,8 @@ class WCMp_Product {
         if (get_transient('wcmp_spmv_exclude_products_data')) {
             $spmv_excludes = get_transient('wcmp_spmv_exclude_products_data');
             $excluded_order = (get_wcmp_vendor_settings('singleproductmultiseller_show_order', 'general')) ? get_wcmp_vendor_settings('singleproductmultiseller_show_order', 'general') : 'min-price';
-            $q->set('post__not_in', $spmv_excludes[$excluded_order]);
+            $post__not_in = ( isset( $spmv_excludes[$excluded_order] ) ) ? $spmv_excludes[$excluded_order] : array();
+            $q->set('post__not_in', $post__not_in );
         }
     }
 

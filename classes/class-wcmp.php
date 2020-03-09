@@ -528,7 +528,20 @@ final class WCMp {
                     ),
                 );
                 break;
-
+            case 'wcmp-meta-boxes' :
+                $params = array(
+                    'coupon_meta' => array( 
+                        'coupon_code' => array(
+                            'generate_button_text' => esc_html__( 'Generate coupon code', 'woocommerce' ),
+                            'characters'           => apply_filters( 'wcmp_coupon_code_generator_characters', 'ABCDEFGHJKMNPQRSTUVWXYZ23456789' ),
+                            'char_length'          => apply_filters( 'wcmp_coupon_code_generator_character_length', 8 ),
+                            'prefix'               => apply_filters( 'wcmp_coupon_code_generator_prefix', '' ),
+                            'suffix'               => apply_filters( 'wcmp_coupon_code_generator_suffix', '' ),
+                        )
+                    )
+                );
+                break;
+                
             default:
                 $params = array('ajax_url' => $this->ajax_url());
         }

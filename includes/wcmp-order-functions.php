@@ -30,7 +30,7 @@ function wcmp_get_orders($args = array(), $return_type = 'ids') {
 	'fields'           => 'ids',
     );
     $args = wp_parse_args($args, $default);
-    $query = new WP_Query( $args );
+    $query = new WP_Query( apply_filters( 'wcmp_get_orders_query_args', $args ) );
     if(strtolower($return_type) == 'object'){
         $orders = array();
         foreach ($query->get_posts() as $post_id) {
