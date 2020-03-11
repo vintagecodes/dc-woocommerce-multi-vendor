@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.3.2
 Requires PHP: 5.6
-Stable tag: 3.4.9
+Stable tag: 3.4.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,21 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.4.10 - 2020-03-11 =
+* Added - Generate coupon code supports in vendor dashboard.
+* Tweak - Query optimization for vendor products. #231
+* Fix - Undefine index issue in SPMV product query. #216
+* Fix - Banking overview pagination. #219
+* Fix - Admin new product email product link. #227
+* Fix - Order status change dropdown issue on mobile. #230
+* Fix - Coupon category issues. #232
+* Fix - Per product shipping issue. #233
+* Fix - Rest API vendor controller return filter name variable ref. #241
+* Fix - Commission mass payment issue for unsuccessful orders. #247
+* Dev - Added `wcmp_get_orders_query_args` filter . #238
+* Dev - Added `wcmp_vendor_product_excerpt_richedit` and `wcmp_vendor_product_description_richedit` filter . #245
+* Updated - Language file.
+
 = 3.4.9 - 2020-02-04 =
 * Added - WPML supports on vendor product list. #221
 * Tweak - Vendor dashboard widget withdrawable balance functionalities on transaction details.
