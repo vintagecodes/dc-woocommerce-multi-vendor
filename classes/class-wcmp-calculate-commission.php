@@ -497,6 +497,10 @@ class WCMp_Calculate_Commission {
         } else {
             $line_total = $order->get_item_subtotal($item, false, false) * $item['qty'];
         }
+
+        // Filter the item total before calculating item commission.
+        $line_total = apply_filters('wcmp_get_commission_line_total', $line_total, $product_id, $variation_id, $item, $order_id, $item_id);
+
         if ($product_id) {
             $vendor_id = wc_get_order_item_meta($item_id, '_vendor_id', true);
             if ($vendor_id) {
