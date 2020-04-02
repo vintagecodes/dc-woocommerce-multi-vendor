@@ -359,10 +359,10 @@ class WCMp_Vendor {
     public function get_products_ids( $clauses = array() ) {
         global $wpdb;
         $default_clauses = array(
-            'fields'    => 'wp_posts.ID',
-            'where'     => "AND wp_posts.post_status = 'publish' ",
-            'groupby'   => 'wp_posts.ID',
-            'orderby'   => 'wp_posts.post_date DESC',
+            'fields'    => $wpdb->prefix.'posts.ID',
+            'where'     => "AND ".$wpdb->prefix."posts.post_status = 'publish' ",
+            'groupby'   => $wpdb->prefix.'posts.ID',
+            'orderby'   => $wpdb->prefix.'posts.post_date DESC',
             'limits'    => ''
         );
         $clauses = apply_filters( 'wcmp_get_products_ids_clauses_request', wp_parse_args( $clauses, $default_clauses ) );
@@ -374,14 +374,14 @@ class WCMp_Vendor {
         $sql = "SELECT
                 $fields
             FROM
-                wp_posts
-            LEFT JOIN wp_term_relationships ON(
-                    wp_posts.ID = wp_term_relationships.object_id
+                {$wpdb->prefix}posts
+            LEFT JOIN {$wpdb->prefix}term_relationships ON(
+                    {$wpdb->prefix}posts.ID = {$wpdb->prefix}term_relationships.object_id
                 )
             WHERE
                 1 = 1 AND(
-                    wp_term_relationships.term_taxonomy_id IN( $this->term_id )
-                ) AND wp_posts.post_author IN( $this->id ) AND wp_posts.post_type = 'product' $where
+                    {$wpdb->prefix}term_relationships.term_taxonomy_id IN( $this->term_id )
+                ) AND {$wpdb->prefix}posts.post_author IN( $this->id ) AND {$wpdb->prefix}posts.post_type = 'product' $where
             GROUP BY
                 $groupby
             ORDER BY
