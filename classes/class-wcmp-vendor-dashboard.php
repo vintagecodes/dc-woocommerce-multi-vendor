@@ -1567,7 +1567,7 @@ Class WCMp_Admin_Dashboard {
         }
 
         public function wcmp_customer_review() {
-            global $WCMp;
+            global $WCMp, $wpdb;
             $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_customer_review.php');
         }
 
@@ -1578,7 +1578,7 @@ Class WCMp_Admin_Dashboard {
             $args = array('post_status' => array('publish', 'pending', 'draft', 'trash'));
             $product_stats = array();
             if($vendor) :
-                $where = "AND (wp_posts.post_status = 'publish' OR wp_posts.post_status = 'draft' OR wp_posts.post_status = 'pending' OR wp_posts.post_status = 'trash')";
+                $where = "AND ({$wpdb->prefix}posts.post_status = 'publish' OR {$wpdb->prefix}posts.post_status = 'draft' OR {$wpdb->prefix}posts.post_status = 'pending' OR {$wpdb->prefix}posts.post_status = 'trash')";
                 $products = $vendor->get_products_ids( array( 'where' => $where ) );
                 $product_stats['total_products'] = count($products);
                 foreach ( $products as $product) {
