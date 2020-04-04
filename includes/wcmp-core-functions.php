@@ -3028,17 +3028,17 @@ if (!function_exists('get_wcmp_spmv_products_map_data')) {
     function get_wcmp_spmv_products_map_data($map_id = '') {
         global $wpdb;
         $products_map_data = array();
-        $results = $wpdb->get_results("SELECT product_map_id FROM {$wpdb->prefix}wcmp_products_map");
+        if ($map_id) {
+            $results = $wpdb->get_results($wpdb->prepare("SELECT product_map_id , GROUP_CONCAT(product_id) as product_ids FROM {$wpdb->prefix}wcmp_products_map WHERE product_map_id=%d", $map_id));
+        }else{
+            $results = $wpdb->get_results("SELECT product_map_id , GROUP_CONCAT(product_id) as product_ids  FROM {$wpdb->prefix}wcmp_products_map");
+        }
         if ($results) {
-            $product_map_ids = array_unique(wp_list_pluck($results, 'product_map_id'));
-            foreach ($product_map_ids as $product_map_id) {
-                $product_ids = $wpdb->get_results($wpdb->prepare("SELECT product_id FROM {$wpdb->prefix}wcmp_products_map WHERE product_map_id=%d", $product_map_id));
-                $products_map_data[$product_map_id] = wp_list_pluck($product_ids, 'product_id');
+            foreach ($result as $row) {
+                $products_map_data[$row->product_map_id ] = explode(',',$row->product_ids);
             }
         }
-        if ($map_id) {
-            return isset($products_map_data[$map_id]) ? $products_map_data[$map_id] : array();
-        }
+       
         return $products_map_data;
     }
 
