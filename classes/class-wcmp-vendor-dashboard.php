@@ -2539,7 +2539,7 @@ Class WCMp_Admin_Dashboard {
             <p>
                 <?php
                 printf(
-                    __( '%s offers follows payments for you.', 'dc-woocommerce-multi-vendor' ),
+                    __( '%s offers the following payment methods for you.', 'dc-woocommerce-multi-vendor' ),
                     wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES )
                 );
                 ?>
