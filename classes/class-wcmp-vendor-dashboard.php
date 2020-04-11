@@ -1572,7 +1572,7 @@ Class WCMp_Admin_Dashboard {
         }
 
         public function wcmp_vendor_product_stats($args = array()) {
-            global $WCMp;
+            global $WCMp, $wpdb;
             $publish_products_count = $pending_products_count = $draft_products_count = $trashed_products_count = 0;
             $vendor = get_wcmp_vendor(get_current_user_id());
             $args = array('post_status' => array('publish', 'pending', 'draft', 'trash'));
