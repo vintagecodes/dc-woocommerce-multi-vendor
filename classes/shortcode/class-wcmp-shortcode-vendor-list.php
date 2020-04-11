@@ -164,7 +164,12 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
                 'radius' => $radius,
                 'request' => $_REQUEST,
             ));
-            $WCMp->template->get_template('shortcode/vendor_lists.php', $data);
+            if ( !apply_filters( 'wcmp_load_default_vendor_list', false ) ) {
+                $GLOBALS['vendor_list'] = $data;
+                $WCMp->template->get_template('shortcode/vendor-list.php');
+            } else {
+                $WCMp->template->get_template('shortcode/vendor_lists.php', $data);
+            }
         }
     }
 
