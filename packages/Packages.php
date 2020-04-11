@@ -61,16 +61,18 @@ class Packages {
 	 */
 	protected static function load_packages() {
 		$packages = apply_filters( 'wcmp_load_default_packages', self::$packages );
-		foreach ( $packages as $package_dir => $package_class ) {
-			if ( ! self::package_exists( $package_dir ) ) {
-				self::missing_package( $package_dir );
-				continue;
+		if( $packages ) :
+			foreach ( $packages as $package_dir => $package_class ) {
+				if ( ! self::package_exists( $package_dir ) ) {
+					self::missing_package( $package_dir );
+					continue;
+				}
+				if( apply_filters( 'wcmp_load_package_' . $package_dir, false, $package_class ) ) {
+					self::load_package( $package_dir );
+					call_user_func( array( $package_class, 'init' ) );
+				}
 			}
-			if( apply_filters( 'wcmp_load_package_' . $package_dir, false, $package_class ) ) {
-				self::load_package( $package_dir );
-				call_user_func( array( $package_class, 'init' ) );
-			}
-		}
+		endif;
 	}
 
 	/**
