@@ -257,7 +257,7 @@ class WCMp_Frontend {
                 'contents_cost' => array_sum(wp_list_pluck($split_package, 'line_total')),
                 'applied_coupons' => WC()->cart->get_applied_coupons(),
                 'user' => array(
-                    'ID' => get_current_vendor_id(),
+                    'ID' => $vendor_id,
                 ),
                 'destination' => array(
                     'country' => WC()->customer->get_shipping_country(),
