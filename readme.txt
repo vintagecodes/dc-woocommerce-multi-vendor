@@ -3,9 +3,9 @@ Contributors: Dualcube, greyparrots, purnendu, itzmekhokan
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.3.2
+Tested up to: 5.4
 Requires PHP: 5.6
-Stable tag: 3.4.10
+Stable tag: 3.4.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,14 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.4.11 - 2020-04-14 =
+* Fix - Subscription suborders issue. #67
+* Fix - Vendor per product shipping issues. #253
+* Fix - Shipping tax issue. #254
+* Fix - Templates files information header. #257
+* Fix - Default permalink settings conflict with vendor add product. #261
+* Updated - Language file.
+
 = 3.4.10 - 2020-03-11 =
 * Added - Generate coupon code supports in vendor dashboard.
 * Tweak - Query optimization for vendor products. #231
