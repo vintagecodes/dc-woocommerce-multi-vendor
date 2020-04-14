@@ -123,8 +123,12 @@ class WCMp_Shipping_Gateway {
                     <label for="" class="control-label col-sm-3 col-md-3"><?php _e( 'Tax Status', 'dc-woocommerce-multi-vendor' ); ?></label>
                     <div class="col-md-9 col-sm-9">
                         <select id="method_tax_status_fr" class="form-control" name="tax_status">
-                            <?php foreach( $is_method_taxable_array as $key => $value ) { ?>
-                                <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                            <?php foreach( $is_method_taxable_array as $key => $value ) { 
+                                $selected = '';
+                                if (isset($shipping_method['settings']['tax_status']) && $shipping_method['settings']['tax_status'] == $key) {
+                                   $selected = 'selected="selected"';
+                                }?>
+                                <option value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
                             <?php } ?>
                         </select>
                     </div>
