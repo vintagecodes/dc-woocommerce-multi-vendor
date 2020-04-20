@@ -53,7 +53,8 @@ class WCMp_Products_Edit_Product {
 
     private function product_capablity_check( $action = 'add', $product_id = '' ) {
         global $WCMp;
-        $current_vendor_id = get_current_user_id();
+        $current_vendor_id = apply_filters('wcmp_current_vendor_product_capability
+',get_current_user_id() ) ;
         if ( ! $current_vendor_id ) {
             $this->error_msg = __( 'You do not have permission to view this content. Please contact site administrator.', 'dc-woocommerce-multi-vendor' );
             return false;
