@@ -953,41 +953,63 @@ if (!function_exists('wcmp_get_vendor_review_info')) {
      * Get vendor review information
      * @global type $wpdb
      * @param type $vendor_term_id
+     * @param type $type values vendor-rating/product-rating
      * @return type
      */
-    function wcmp_get_vendor_review_info($vendor_term_id) {
+    function wcmp_get_vendor_review_info($vendor_term_id, $type = 'vendor-rating' ) {
         global $wpdb;
+        $default_rating = apply_filters( 'wcmp_vendor_review_rating_info_default_type', $type, $vendor_term_id );
         $rating_result_array = array(
             'total_rating' => 0,
-            'avg_rating' => 0
+            'avg_rating' => 0,
+            'rating_type' => $default_rating,
         );
-        $args_default = array(
-            'status' => 'approve',
-            'type' => 'wcmp_vendor_rating',
-            'meta_key' => 'vendor_rating_id',
-            'meta_value' => get_wcmp_vendor_by_term($vendor_term_id)->id,
-            'meta_query' => array(
-                'relation' => 'AND',
-                array(
-                    'key' => 'vendor_rating_id',
-                    'value' => get_wcmp_vendor_by_term($vendor_term_id)->id
-                ),
-                array(
-                    'key' => 'vendor_rating',
-                    'value' => '',
-                    'compare' => '!='
-                )
-            )
-        );
-        $args = apply_filters('wcmp_vendor_review_rating_args_to_fetch', $args_default);
-        $retting = 0;
-        $comments = get_comments($args);
-        if ($comments && count($comments) > 0) {
-            foreach ($comments as $comment) {
-                $retting += floatval(get_comment_meta($comment->comment_ID, 'vendor_rating', true));
+
+        if ( $default_rating === 'product-rating' ) {
+            $vendor = get_wcmp_vendor_by_term( $vendor_term_id );
+            $vendor_products = wp_list_pluck( $vendor->get_products_ids(), 'ID' );
+            $rating = $rating_pro_count = 0;
+            if( $vendor_products ) {
+                foreach( $vendor_products as $product_id ) {
+                    if( get_post_meta( $product_id, '_wc_average_rating', true ) ) {
+                        $rating += get_post_meta( $product_id, '_wc_average_rating', true );
+                        $rating_pro_count++;
+                    };
+                }
             }
-            $rating_result_array['total_rating'] = count($comments);
-            $rating_result_array['avg_rating'] = $retting / count($comments);
+            if( $rating_pro_count ) {
+                $rating_result_array['total_rating'] = $rating_pro_count;
+                $rating_result_array['avg_rating'] = $rating / $rating_pro_count;
+            }
+        } else {
+            $args_default = array(
+                'status' => 'approve',
+                'type' => 'wcmp_vendor_rating',
+                'meta_key' => 'vendor_rating_id',
+                'meta_value' => get_wcmp_vendor_by_term($vendor_term_id)->id,
+                'meta_query' => array(
+                    'relation' => 'AND',
+                    array(
+                        'key' => 'vendor_rating_id',
+                        'value' => get_wcmp_vendor_by_term($vendor_term_id)->id
+                    ),
+                    array(
+                        'key' => 'vendor_rating',
+                        'value' => '',
+                        'compare' => '!='
+                    )
+                )
+            );
+            $args = apply_filters('wcmp_vendor_review_rating_args_to_fetch', $args_default);
+            $rating = 0;
+            $comments = get_comments($args);
+            if ($comments && count($comments) > 0) {
+                foreach ($comments as $comment) {
+                    $rating += floatval(get_comment_meta($comment->comment_ID, 'vendor_rating', true));
+                }
+                $rating_result_array['total_rating'] = count($comments);
+                $rating_result_array['avg_rating'] = $rating / count($comments);
+            }
         }
 
         return $rating_result_array;

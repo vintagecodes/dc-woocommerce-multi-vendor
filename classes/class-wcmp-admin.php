@@ -539,8 +539,14 @@ class WCMp_Admin {
         if ($commission_id) {
             // Add order note
             $order->add_order_note( __( 'Regenerated order commission.', 'dc-woocommerce-multi-vendor') );
+            /**
+             * Action filter to recalculate commission with modified settings.
+             *
+             * @since 3.5.0
+             */
+            $recalculate = apply_filters( 'wcmp_regenerate_order_commissions_by_new_commission_rate', 'false', $order );
             // Calculate commission
-            WCMp_Commission::calculate_commission($commission_id, $order);
+            WCMp_Commission::calculate_commission($commission_id, $order, $recalculate);
             update_post_meta($commission_id, '_paid_status', 'unpaid');
 
             // add commission id with associated vendor order

@@ -155,33 +155,54 @@ class WCMp_Commission {
      * Calculate commission
      * @param int $commission_id
      * @param object $order
+     * @param bool $recalculate
      * @return void 
      */
-    public static function calculate_commission( $commission_id, $order ) {
+    public static function calculate_commission( $commission_id, $order, $recalculate = false ) {
         global $WCMp;
         if ($commission_id && $order) {
             $vendor_id = get_post_meta($order->get_id(), '_vendor_id', true);
-            $commission_rates = get_post_meta($order->get_id(), 'order_items_commission_rates', true);
-            // line item commission
-            $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = 0;
-            foreach ($order->get_items() as $item_id => $item) {
-                $product = $item->get_product();
-                $meta_data = $item->get_meta_data();
-                // get item commission
-                foreach ( $meta_data as $meta ) {
-                    if($meta->key == '_vendor_item_commission'){
-                        $commission_amount += floatval($meta->value);
-                    }
-                    if($meta->key == '_vendor_order_item_id'){
-                        $order_item_id = absint($meta->value);
-                        if(isset($commission_rates[$order_item_id])){
-                            $rate = $commission_rates[$order_item_id];
-                            $commission_rates[$item_id] = $rate;
-                            unset($commission_rates[$order_item_id]); // update with vendor order item id for further use
+             // line item commission
+             $commission_amount = $shipping_amount = $tax_amount = $shipping_tax_amount = 0;
+             $commission_rates = array();
+            // if recalculate is set
+            if( $recalculate ) {
+                foreach ($order->get_items() as $item_id => $item) {
+                    $parent_order_id = wp_get_post_parent_id( $order->get_id() );
+                    $parent_order = wc_get_order( $parent_order_id );
+                    $variation_id = isset($item['variation_id']) && !empty($item['variation_id']) ? $item['variation_id'] : 0;
+                    $item_commission = $WCMp->commission->get_item_commission($item['product_id'], $variation_id, $item, $order_id, $item_id);
+                    $commission_values = $WCMp->commission->get_commission_amount($item['product_id'], $has_vendor->term_id, $variation_id, $item_id, $parent_order);
+                    $commission_rate = array('mode' => $WCMp->vendor_caps->payment_cap['revenue_sharing_mode'], 'type' => $WCMp->vendor_caps->payment_cap['commission_type']);
+                    $commission_rate['commission_val'] = isset($commission_values['commission_val']) ? $commission_values['commission_val'] : 0;
+                    $commission_rate['commission_fixed'] = isset($commission_values['commission_fixed']) ? $commission_values['commission_fixed'] : 0;
+                    
+                    wc_update_order_item_meta( $item_id, '_vendor_item_commission', $item_commission );
+                    $commission_amount += floatval($item_commission);
+                    $commission_rates[$item_id] = $commission_rate;
+                }
+            } else {
+                $commission_rates = get_post_meta($order->get_id(), 'order_items_commission_rates', true);
+                foreach ($order->get_items() as $item_id => $item) {
+                    $product = $item->get_product();
+                    $meta_data = $item->get_meta_data();
+                    // get item commission
+                    foreach ( $meta_data as $meta ) {
+                        if($meta->key == '_vendor_item_commission'){
+                            $commission_amount += floatval($meta->value);
+                        }
+                        if($meta->key == '_vendor_order_item_id'){
+                            $order_item_id = absint($meta->value);
+                            if(isset($commission_rates[$order_item_id])){
+                                $rate = $commission_rates[$order_item_id];
+                                $commission_rates[$item_id] = $rate;
+                                unset($commission_rates[$order_item_id]); // update with vendor order item id for further use
+                            }
                         }
                     }
                 }
             }
+
             /**
              * Action hook to adjust items commission rates before save.
              *

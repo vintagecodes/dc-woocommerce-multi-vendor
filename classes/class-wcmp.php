@@ -230,7 +230,9 @@ final class WCMp {
         /**
          * Core functionalities.
          */
-        include_once ($this->plugin_path . "/includes/wcmp-order-functions.php" );
+        include_once ( $this->plugin_path . "/includes/wcmp-order-functions.php" );
+        // Query classes
+        include_once ( $this->plugin_path . '/classes/query/class-wcmp-vendor-query.php' );
     }
 
     /**
