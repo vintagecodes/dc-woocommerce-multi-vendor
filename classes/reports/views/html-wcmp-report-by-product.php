@@ -52,6 +52,7 @@ global $WCMp;
 						<?php echo $option; ?>
 					</select> 
 					<input type="button" style="vertical-align: top;" class="product_report_search submit button" value="<?php _e( 'Show', 'dc-woocommerce-multi-vendor' ); ?>" />
+					<?php do_action( 'wcmp_frontend_report_product_filter', $start_date, $end_date ); ?>
 				</p>
 			</form>
 		</div>
