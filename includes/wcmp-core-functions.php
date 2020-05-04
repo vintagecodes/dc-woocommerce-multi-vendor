@@ -1582,6 +1582,11 @@ if (!function_exists('do_wcmp_data_migrate')) {
                     wp_schedule_event( time(), 'hourly', 'wcmp_orders_migration' );
                 }
             }
+            if (version_compare($previous_plugin_version, '3.5.0', '<=')) {
+                if (!$wpdb->get_var("SHOW COLUMNS FROM `{$wpdb->prefix}wcmp_cust_questions` LIKE 'status';")) {
+                    $wpdb->query("ALTER TABLE {$wpdb->prefix}wcmp_cust_questions ADD `status` text NOT NULL;");
+                }
+            }
             /* Migrate commission data into table */
             do_wcmp_commission_data_migrate();
         }

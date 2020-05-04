@@ -23,8 +23,8 @@
     var keyup_timeout;
     $( '#cust_question' ).on( 'keyup' , function () {
         var this_ele_val = $(this).val();
-   	clearTimeout( keyup_timeout );
-   	keyup_timeout = setTimeout( function() {
+    clearTimeout( keyup_timeout );
+    keyup_timeout = setTimeout( function() {
             $( '#qna-result-msg' ).html('');
             block( $( '#cust_qna_form' ) );
             if( this_ele_val.length > 3 ){
@@ -115,6 +115,26 @@
 //                setTimeout($('#qna-reply-modal-'+key).modal('hide'),3000);
                 window.location.reload();
             }
+        });
+    });
+
+    $('body').on('click', '.wcmp_vendor_question .do_verify', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        var question_type = $(this).attr('data-verification');
+        var question_id = $(this).attr('data-question_id');
+        var data_action = $(this).attr('data-action');
+        var product     = $(this).attr('data-product');
+         console.log(question_id);
+        var data = {
+            action   : 'wcmp_question_verification_approval',
+            question_type : question_type,
+            question_id : question_id,
+            data_action : data_action,
+            product     : product
+        }   
+        $.post(wcmp_customer_qna_js_script_data.ajax_url, data, function(response) {
+            window.location.reload();
         });
     });
     

@@ -325,6 +325,50 @@ class WCMp_Settings_To_Do_List {
             </table>
             <?php
         }
+
+         $args = array(
+            'posts_per_page' => -1,
+            'author__in' => $vendor_ids,
+            'post_type' => 'product',
+            'post_status' => 'publish',
+        );
+        $get_vendor_products = new WP_Query($args);
+        $get_vendor_products = $get_vendor_products->get_posts();
+        if (!empty($get_vendor_products) && apply_filters('admin_can_approve_qna_answer', true)) {
+            foreach ($get_vendor_products as $get_vendor_product) {
+                $get_pending_questions = $WCMp->product_qna->get_Pending_Questions($get_vendor_product->ID);
+                if (!empty($get_pending_questions)) {
+                    ?>
+                    <h3><?php echo apply_filters('to_do_pending_question_text', __('Pending Question Approval', 'dc-woocommerce-multi-vendor')); ?></h3>
+                    <table class="form-table" id="to_do_list">
+                        <tbody>
+                            <tr>
+                                <th><?php _e('Question by', 'dc-woocommerce-multi-vendor'); ?></th>
+                                <th><?php _e('Product Name', 'dc-woocommerce-multi-vendor'); ?></th>
+                                <th><?php _e('Question details', 'dc-woocommerce-multi-vendor'); ?></th>   
+                                <th><?php _e('Approve', 'dc-woocommerce-multi-vendor'); ?></th> 
+                                <th><?php _e('Reject', 'dc-woocommerce-multi-vendor'); ?></th> 
+                            </tr>
+                            <?php
+                            foreach ($get_pending_questions as $pending_question) {
+                                $question_by = get_userdata($pending_question->ques_by);
+                                ?>
+                                <tr>
+                                    <td class="wcmp_verification column-username" style="width:30%">    <img alt="" src="<?php echo $WCMp->plugin_url . 'assets/images/wp-avatar-frau.jpg'; ?>" class="avatar avatar-32 photo" height="32" width="32"><?php echo $question_by->data->display_name; ?>
+                                    </td>
+                                    <td class="edit"><?php echo get_the_title($pending_question->product_ID); ?>
+                                    </td>
+                                    <td><?php echo $pending_question->ques_details; ?></td>
+                                     <td><input class="activate_vendor question_verify_admin" id="question_response" type="button" data-verification="activate_vendor" data-action="verified" data-user_id="<?php echo $pending_question->ques_ID; ?>" data-product="<?php echo $pending_question->product_ID; ?>" value="accept"></td>
+                                     <td><input class="reject_vendor question_verify_admin" id="question_response" type="button" data-verification="reject_vendor" data-action="rejected" data-user_id="<?php echo $pending_question->ques_ID; ?>" data-product="<?php echo $pending_question->product_ID; ?>" value="Reject"></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                    <?php
+                }
+            }
+        }
         do_action('after_wcmp_to_do_list');
     }
 

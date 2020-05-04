@@ -1,4 +1,22 @@
 jQuery(document).ready(function ($) {
+    $('.question_verify_admin').on('click', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        var question_type = $(this).attr('data-verification');
+        var question_id = $(this).attr('data-user_id');
+        var data_action = $(this).attr('data-action');
+        var product     = $(this).attr('data-product');
+        var data = {
+            action   : 'wcmp_question_verification_approval',
+            question_type : question_type,
+            question_id : question_id,
+            data_action : data_action,
+            product      : product
+        }   
+        $.post(ajaxurl, data, function(response) {
+            location.reload();
+        });
+    });
     $('.img_tip').each(function () {
         $(this).qtip({
             content: $(this).attr('data-desc'),
@@ -328,83 +346,83 @@ jQuery(document).ready(function ($) {
         getHasLoc = location.hash.replace('#/', '');        
         $("#vendor_preview_tabs a[id='" + getHasLoc + "']").click();
     }
-	
-	// Disable buttons for application archive tab
-	$('#vendor_preview_tabs').click('#vendor-application', function (event, ui) {
-			$vendor_type = $("#vendor-application").data( 'vendor-type' );
-			if($vendor_type) {
-				var selectedTabIndex= $("#vendor_preview_tabs").tabs('option', 'active');
-				if(selectedTabIndex == 4) $("#wc-backbone-modal-dialog").hide();
-				else $("#wc-backbone-modal-dialog").show();
-			}
-	});
-	
-	$('#vendor_payment_mode').on('change', function () {
-		$('.payment-gateway').hide();
-		$('.payment-gateway-' + $(this).val()).show();
-	}).change();
-	
-	$('.vendor-preview').click(function() {
-		var $previewButton    = $( this ),
-			$vendor_id         = $previewButton.data( 'vendor-id' );
-			
-		if ( $previewButton.data( 'vendor-data' ) ) {
-			$( this ).WCBackboneModal({
-				template: 'wcmp-modal-view-vendor',
-				variable : $previewButton.data( 'vendor-data' )
-			});
-		} else {
-			$previewButton.addClass( 'disabled' );
+    
+    // Disable buttons for application archive tab
+    $('#vendor_preview_tabs').click('#vendor-application', function (event, ui) {
+            $vendor_type = $("#vendor-application").data( 'vendor-type' );
+            if($vendor_type) {
+                var selectedTabIndex= $("#vendor_preview_tabs").tabs('option', 'active');
+                if(selectedTabIndex == 4) $("#wc-backbone-modal-dialog").hide();
+                else $("#wc-backbone-modal-dialog").show();
+            }
+    });
+    
+    $('#vendor_payment_mode').on('change', function () {
+        $('.payment-gateway').hide();
+        $('.payment-gateway-' + $(this).val()).show();
+    }).change();
+    
+    $('.vendor-preview').click(function() {
+        var $previewButton    = $( this ),
+            $vendor_id         = $previewButton.data( 'vendor-id' );
+            
+        if ( $previewButton.data( 'vendor-data' ) ) {
+            $( this ).WCBackboneModal({
+                template: 'wcmp-modal-view-vendor',
+                variable : $previewButton.data( 'vendor-data' )
+            });
+        } else {
+            $previewButton.addClass( 'disabled' );
 
-			$.ajax({
-				url:     wcmp_admin_js_script_data.ajax_url,
-				data:    {
-					vendor_id: $vendor_id,
-					action  : 'wcmp_get_vendor_details',
-					nonce: wcmp_admin_js_script_data.vendors_nonce
-				},
-				type:    'GET',
-				success: function( response ) {
-					$( '.vendor-preview' ).removeClass( 'disabled' );
-					if ( response.success ) {
-						$previewButton.data( 'vendor-data', response.data );
+            $.ajax({
+                url:     wcmp_admin_js_script_data.ajax_url,
+                data:    {
+                    vendor_id: $vendor_id,
+                    action  : 'wcmp_get_vendor_details',
+                    nonce: wcmp_admin_js_script_data.vendors_nonce
+                },
+                type:    'GET',
+                success: function( response ) {
+                    $( '.vendor-preview' ).removeClass( 'disabled' );
+                    if ( response.success ) {
+                        $previewButton.data( 'vendor-data', response.data );
 
-						$( this ).WCBackboneModal({
-							template: 'wcmp-modal-view-vendor',
-							variable : response.data
-						});
-					}
-				}
-			});
-		}
-		return false;
-	});
-	
-	$( document.body ).on('click', '#wc-backbone-modal-dialog .wcmp-action-button', function(e) {
+                        $( this ).WCBackboneModal({
+                            template: 'wcmp-modal-view-vendor',
+                            variable : response.data
+                        });
+                    }
+                }
+            });
+        }
+        return false;
+    });
+    
+    $( document.body ).on('click', '#wc-backbone-modal-dialog .wcmp-action-button', function(e) {
         e.preventDefault();
         $('.wcmp-loader').html('<span class="dashicons dashicons-image-rotate"></span>');
-		var $actionButton    = $( this ),
-			$vendor_id       = $actionButton.data( 'vendor-id' ),
-			$vendor_action   = $actionButton.data( 'ajax-action' );
-			$pending_vendor_note = $actionButton.closest( '.wcmp-vendor-modal-main' ).find( '.pending-vendor-note' ).val();
-			$note_author_id = $actionButton.closest( '.wcmp-vendor-modal-main' ).find( '.pending-vendor-note' ).data( 'note-author-id' );
-			
-		if(typeof($vendor_id) != "undefined" && $vendor_id !== null && $vendor_id > 0) {
-			$.ajax({
-				url:  wcmp_admin_js_script_data.ajax_url,
-				data: {
-					user_id: $vendor_id,
-					action : $vendor_action,
-					redirect: true,
-					custom_note: $pending_vendor_note,
-					note_by: $note_author_id
-				},
-				type: 'POST',
-				success: function( response ) {
+        var $actionButton    = $( this ),
+            $vendor_id       = $actionButton.data( 'vendor-id' ),
+            $vendor_action   = $actionButton.data( 'ajax-action' );
+            $pending_vendor_note = $actionButton.closest( '.wcmp-vendor-modal-main' ).find( '.pending-vendor-note' ).val();
+            $note_author_id = $actionButton.closest( '.wcmp-vendor-modal-main' ).find( '.pending-vendor-note' ).data( 'note-author-id' );
+            
+        if(typeof($vendor_id) != "undefined" && $vendor_id !== null && $vendor_id > 0) {
+            $.ajax({
+                url:  wcmp_admin_js_script_data.ajax_url,
+                data: {
+                    user_id: $vendor_id,
+                    action : $vendor_action,
+                    redirect: true,
+                    custom_note: $pending_vendor_note,
+                    note_by: $note_author_id
+                },
+                type: 'POST',
+                success: function( response ) {
                     $('.wcmp-loader').html('');
-					if(response.redirect) window.location = response.redirect_url;
-				}
-			});
-		}
-	});
+                    if(response.redirect) window.location = response.redirect_url;
+                }
+            });
+        }
+    });
 });
