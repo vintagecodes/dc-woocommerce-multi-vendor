@@ -73,6 +73,8 @@ final class WCMp {
         $this->init_cron_job();
         // Load Woo helper
         $this->load_woo_helper();
+        // Init package
+        $this->init_packages();
 
         // Intialize WCMp
         add_action('init', array(&$this, 'init'));
@@ -194,8 +196,6 @@ final class WCMp {
         $this->init_wcmp_rest_api();
         // Init Ledger
         $this->init_ledger();
-        // Init Ledger
-        $this->init_packages();
         
         if (!wp_next_scheduled('migrate_spmv_multivendor_table') && !get_option('spmv_multivendor_table_migrated', false)) {
             wp_schedule_event(time(), 'every_5minute', 'migrate_spmv_multivendor_table');
