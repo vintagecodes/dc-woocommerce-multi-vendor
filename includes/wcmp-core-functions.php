@@ -1806,6 +1806,8 @@ if (!function_exists('wcmp_count_commission')) {
 if (!function_exists('wcmp_count_to_do_list')) {
 
     function wcmp_count_to_do_list() {
+        global $WCMp;
+
         $to_do_list_count = 0;
         $vendor_ids = array();
         $vendors = get_wcmp_vendors();
@@ -1815,7 +1817,14 @@ if (!function_exists('wcmp_count_to_do_list')) {
             }
         }
 
-        $to_do_list_count += count( get_users('role=dc_pending_vendor') );
+        $get_pending_vendors = get_users('role=dc_pending_vendor');
+        if (!empty($get_pending_vendors)) {
+            foreach ($get_pending_vendors as $pending_vendor) {
+                if( !get_user_meta($pending_vendor->ID, '_dismiss_to_do_list', true) )
+                    $to_do_list_count++;
+            }
+        }
+
 
         $coupon_args = array(
             'posts_per_page' => -1,
@@ -1824,8 +1833,13 @@ if (!function_exists('wcmp_count_to_do_list')) {
             'post_status' => 'pending',
         );
         $get_pending_coupons = new WP_Query($coupon_args);
-        $to_do_list_count += count( $get_pending_coupons->get_posts() );
-
+        $get_pending_coupons = $get_pending_coupons->get_posts();
+        if (!empty($get_pending_coupons)) {
+            foreach ($get_pending_coupons as $get_pending_coupon) {
+                if( !get_post_meta($get_pending_coupon->ID, '_dismiss_to_do_list', true) )
+                    $to_do_list_count++;
+            }
+        }
         $product_args = array(
             'posts_per_page' => -1,
             'author__in' => $vendor_ids,
@@ -1833,7 +1847,13 @@ if (!function_exists('wcmp_count_to_do_list')) {
             'post_status' => 'pending',
         );
         $get_pending_products = new WP_Query($product_args);
-        $to_do_list_count += count( $get_pending_products->get_posts() );
+        $get_pending_products = $get_pending_products->get_posts();
+        if (!empty($get_pending_products)) {
+            foreach ($get_pending_products as $get_pending_product) {
+                if( !get_post_meta($get_pending_product->ID, '_dismiss_to_do_list', true) )
+                    $to_do_list_count++;
+            }
+        }
 
         $transactions_args = array(
             'post_type' => 'wcmp_transaction',
@@ -1842,7 +1862,13 @@ if (!function_exists('wcmp_count_to_do_list')) {
             'meta_value' => 'direct_bank',
             'posts_per_page' => -1
         );
-        $to_do_list_count += count( get_posts($transactions_args) );
+        $transactions = get_posts($transactions_args);
+        if (!empty($transactions)) {
+            foreach ($transactions as $transaction) {
+                if( !get_post_meta($transaction->ID, '_dismiss_to_do_list', true) )
+                    $to_do_list_count++;
+            }
+        }
 
         $args = array(
             'posts_per_page' => -1,
@@ -1854,7 +1880,13 @@ if (!function_exists('wcmp_count_to_do_list')) {
         $get_vendor_products = $get_vendor_products->get_posts();
         if (!empty($get_vendor_products) && apply_filters('admin_can_approve_qna_answer', true)) {
             foreach ($get_vendor_products as $get_vendor_product) {
-                $to_do_list_count += count( $WCMp->product_qna->get_Pending_Questions($get_vendor_product->ID) );
+                $get_pending_questions = $WCMp->product_qna->get_Pending_Questions($get_vendor_product->ID);
+                if (!empty($get_pending_questions)) {
+                    foreach ($get_pending_questions as $pending_question) {
+                        if( !get_post_meta($pending_question->ques_ID, '_dismiss_to_do_list', true) )
+                            $to_do_list_count++;
+                    }
+                }
             }
         }
 
