@@ -3722,12 +3722,9 @@ class WCMp_Ajax {
      */
     public function wcmp_do_refund() {
         ob_start();
+        global $WCMp;
 
         check_ajax_referer('wcmp-order-item', 'security');
-
-//		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-//			wp_die( -1 );
-//		}
         
         $order_id = absint($_POST['order_id']);
         $refund_amount = wc_format_decimal(sanitize_text_field(wp_unslash($_POST['refund_amount'])), wc_get_price_decimals());
@@ -3743,6 +3740,11 @@ class WCMp_Ajax {
 
         try {
             $order = wc_get_order($order_id);
+
+            $parent_order_id = wp_get_post_parent_id($order_id);
+            $parent_order = wc_get_order( $parent_order_id );
+            $parent_items_ids = array_keys($parent_order->get_items( array( 'line_item', 'fee', 'shipping' ) ));
+
             $order_items = $order->get_items();
             $max_refund = wc_format_decimal($order->get_total() - $order->get_total_refunded(), wc_get_price_decimals());
 
@@ -3756,6 +3758,8 @@ class WCMp_Ajax {
 
             // Prepare line items which we are refunding.
             $line_items = array();
+            $parent_line_items = array();
+
             $item_ids = array_unique(array_merge(array_keys($line_item_qtys, $line_item_totals)));
 
             foreach ($item_ids as $item_id) {
@@ -3764,15 +3768,38 @@ class WCMp_Ajax {
                     'refund_total' => 0,
                     'refund_tax' => array(),
                 );
+                $parent_item_id = $WCMp->order->get_vendor_parent_order_item_id($item_id);
+                if( $parent_item_id && in_array($parent_item_id, $parent_items_ids) ){
+                    $parent_line_items[$parent_item_id] = array(
+                        'qty' => 0,
+                        'refund_total' => 0,
+                        'refund_tax' => array(),
+                    );
+                }
             }
             foreach ($line_item_qtys as $item_id => $qty) {
                 $line_items[$item_id]['qty'] = max($qty, 0);
+                
+                $parent_item_id = $WCMp->order->get_vendor_parent_order_item_id($item_id);
+                if( $parent_item_id && in_array($parent_item_id, $parent_items_ids) ){
+                    $parent_line_items[$parent_item_id]['qty'] = max($qty, 0);
+                }
             }
             foreach ($line_item_totals as $item_id => $total) {
                 $line_items[$item_id]['refund_total'] = wc_format_decimal($total);
-            }
+                
+                $parent_item_id = $WCMp->order->get_vendor_parent_order_item_id($item_id);
+                if( $parent_item_id && in_array($parent_item_id, $parent_items_ids) ){
+                    $parent_line_items[$parent_item_id]['refund_total'] = wc_format_decimal($total);
+                }
+            }   
             foreach ($line_item_tax_totals as $item_id => $tax_totals) {
                 $line_items[$item_id]['refund_tax'] = array_filter(array_map('wc_format_decimal', $tax_totals));
+                
+                $parent_item_id = $WCMp->order->get_vendor_parent_order_item_id($item_id);
+                if( $parent_item_id && in_array($parent_item_id, $parent_items_ids) ){
+                    $parent_line_items[$parent_item_id]['refund_tax'] = array_filter(array_map('wc_format_decimal', $tax_totals));
+                }
             }
 
             // Create the refund object.
@@ -3787,8 +3814,24 @@ class WCMp_Ajax {
                     )
             );
             
+            if( $parent_line_items ){
+                $parent_refund = wc_create_refund(
+                        array(
+                            'amount' => $refund_amount,
+                            'reason' => $refund_reason,
+                            'order_id' => $parent_order_id,
+                            'line_items' => $parent_line_items,
+                            'refund_payment' => $api_refund,
+                            'restock_items' => $restock_refunded_items,
+                        )
+                );
+            }
+
             if (is_wp_error($refund)) {
                 throw new Exception($refund->get_error_message());
+            }
+            if (is_wp_error($parent_refund)) {
+                throw new Exception($parent_refund->get_error_message());
             }
             
             do_action( 'wcmp_order_refunded', $order_id, $refund->get_id() );
