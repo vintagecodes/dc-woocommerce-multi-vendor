@@ -378,9 +378,12 @@ class WCMp_Vendor {
             LEFT JOIN {$wpdb->prefix}term_relationships ON(
                     {$wpdb->prefix}posts.ID = {$wpdb->prefix}term_relationships.object_id
                 )
+            LEFT JOIN {$wpdb->prefix}term_taxonomy ON(
+                {$wpdb->prefix}term_relationships.term_taxonomy_id = {$wpdb->prefix}term_taxonomy.term_taxonomy_id
+            )
             WHERE
                 1 = 1 AND(
-                    {$wpdb->prefix}term_relationships.term_taxonomy_id IN( $this->term_id )
+                    {$wpdb->prefix}term_taxonomy.term_id IN( $this->term_id )
                 ) AND {$wpdb->prefix}posts.post_author IN( $this->id ) AND {$wpdb->prefix}posts.post_type = 'product' $where
             GROUP BY
                 $groupby
