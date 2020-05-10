@@ -47,6 +47,7 @@ $template_class = apply_filters('can_vendor_edit_shop_template', false) && get_u
             <?php if ($vendor_google_plus_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_google_plus_profile); ?>"><i class="wcmp-font ico-google-plus-icon"></i></a><?php } ?>
             <?php if ($vendor_youtube) { ?> <a target="_blank" href="<?php echo esc_url($vendor_youtube); ?>"><i class="wcmp-font ico-youtube-icon"></i></a><?php } ?>
             <?php if ($vendor_instagram) { ?> <a target="_blank" href="<?php echo esc_url($vendor_instagram); ?>"><i class="wcmp-font ico-instagram-icon"></i></a><?php } ?>
+            <?php do_action( 'wcmp_vendor_store_header_social_link', $vendor_id ); ?>
         </div>
         <?php endif; ?>
 

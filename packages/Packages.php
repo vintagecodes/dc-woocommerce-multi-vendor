@@ -20,6 +20,7 @@ class Packages {
 	 * @var array Key is the package directory, value is the main package class which handles init.
 	 */
 	protected static $packages = array(
+		'wcmp-buddypress/wcmp-buddypress.php'   => 'WCMp_BuddyPress',
 		//'wcmp-blocks/wcmp-blocks.php'   => 'WCMp_Blocks',
 	);
 

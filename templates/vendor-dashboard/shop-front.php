@@ -412,7 +412,7 @@ $_wp_editor_settings = apply_filters('wcmp_vendor_storefront_wp_editor_settings'
                             <input class="form-control" type="url"   name="vendor_instagram" value="<?php echo isset($vendor_instagram['value']) ? $vendor_instagram['value'] : ''; ?>">
                         </div>  
                     </div>
-
+                    <?php do_action( 'wcmp_vendor_add_extra_social_link', $vendor ); ?>
                 </div>
             </div>
         </div>    
