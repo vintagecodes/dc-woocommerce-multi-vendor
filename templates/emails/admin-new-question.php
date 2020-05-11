@@ -19,11 +19,11 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 <p style="text-align:<?php echo $text_align; ?>;" >
 	<?php printf( __( "Greetings Admin,",  'dc-woocommerce-multi-vendor' ) ); ?><br><br>
 	<?php printf( __( "A new query has added by your buyer - %s",  'dc-woocommerce-multi-vendor' ), $customer_name ); ?><br>
-	<?php printf( __( "Query for : ",  'dc-woocommerce-multi-vendor' ), $vendor->page_title ); ?><br>
-	<?php printf( __( "Query : ",  'dc-woocommerce-multi-vendor' ), $question ); ?><br>
+	<?php printf( __( "Query for : %s",  'dc-woocommerce-multi-vendor' ), $vendor->page_title ); ?><br>
+	<?php printf( __( "Query : %s",  'dc-woocommerce-multi-vendor' ), $question ); ?><br>
     <?php 
     	$question_link = apply_filters( 'admin_question_redirect_link', admin_url( 'admin.php?page=wcmp-to-do' ) ); 
-        printf( __( "You can approve or reject query from here : ",  'dc-woocommerce-multi-vendor' ), $question_link ); ?><br><br>
+        printf( __( "You can approve or reject query from here : %s",  'dc-woocommerce-multi-vendor' ), $question_link ); ?><br><br>
 
         <?php printf( __( 'Note: Quick replies help to maintain a friendly customer-buyer relationship', 'dc-woocommerce-multi-vendor' )); ?>
 </p>

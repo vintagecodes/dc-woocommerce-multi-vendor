@@ -20,12 +20,12 @@ echo sprintf(  __( "Hi %s,",  'dc-woocommerce-multi-vendor' ), $vendor->page_tit
 echo '\n\n';
 echo sprintf(  __( "A new query has been added by your potential buyer - %s",  'dc-woocommerce-multi-vendor' ), $customer_name ); 
 echo '\n';
-echo sprintf(  __( "Product name : ",  'dc-woocommerce-multi-vendor' ), $product_name );
+echo sprintf(  __( "Product name : %s",  'dc-woocommerce-multi-vendor' ), $product_name );
 echo '\n';
-echo sprintf(  __( "Query : ",  'dc-woocommerce-multi-vendor' ), $question );
+echo sprintf(  __( "Query : %s",  'dc-woocommerce-multi-vendor' ), $question );
 echo '\n';
 $question_link = apply_filters( 'wcmp_vendor_plain_question_redirect_link', esc_url( wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_products_qnas_endpoint', 'vendor', 'general', 'products-qna'))) ); 
-echo sprintf(  __( "You can approve or reject query from here : ",  'dc-woocommerce-multi-vendor' ), $question_link );
+echo sprintf(  __( "You can approve or reject query from here : %s",  'dc-woocommerce-multi-vendor' ), $question_link );
 echo '\n\n';
 echo sprintf( __( 'Note: Quick replies help to maintain a friendly customer-buyer relationship', 'dc-woocommerce-multi-vendor'));
 
