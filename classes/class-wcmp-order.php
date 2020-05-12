@@ -1138,7 +1138,7 @@ class WCMp_Order {
     public function woocommerce_customer_available_downloads( $downloads ) {
        $parent_downloads = array();
        foreach( $downloads as $download ) {
-           if( get_wcmp_suborders( $download['order_id'] ) )
+           if( !wp_get_post_parent_id( $download['order_id'] ) )
                $parent_downloads[] = $download;
        }
        return $parent_downloads;
