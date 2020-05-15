@@ -420,7 +420,7 @@ class WCMp_BuddyPress {
 
     public function wcmp_vendor_store_header_bp_link( $vendor_id ){
         $vendor_buddypress = get_user_meta($vendor_id, '_vendor_buddypress', true);
-        if ($vendor_buddypress) { ?> <a target="_blank" href="<?php echo esc_url($vendor_buddypress); ?>"><i class="dashicons dashicons-buddicons-buddypress-logo" style="font-size: 25px; display: inline;"></i></a><?php } 
+        if ($vendor_buddypress) { ?> <a target="_blank" href="<?php echo esc_url($vendor_buddypress); ?>"><i class="wcmp-font ico-buddypress_icon"></i></a><?php } 
     }
 
 }
