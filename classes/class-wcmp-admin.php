@@ -29,7 +29,7 @@ class WCMp_Admin {
         add_filter('woocommerce_hidden_order_itemmeta', array(&$this, 'add_hidden_order_items'));
 
         add_action('admin_menu', array(&$this, 'wcmp_admin_menu'));
-        add_action('admin_head', array($this, 'menu_commission_count'));
+        add_action('admin_head', array($this, 'wcmp_submenu_count'));
         add_action('wp_dashboard_setup', array(&$this, 'wcmp_remove_wp_dashboard_widget'));
         add_filter('woocommerce_order_actions', array(&$this, 'woocommerce_order_actions'));
         add_action('woocommerce_order_action_regenerate_order_commissions', array(&$this, 'regenerate_order_commissions'));
@@ -296,13 +296,21 @@ class WCMp_Admin {
         }
     }
 
-    public function menu_commission_count() {
+    public function wcmp_submenu_count() {
         global $submenu;
         if (isset($submenu['wcmp'])) {
             if (apply_filters('wcmp_include_unpaid_commission_count_in_menu', true) && current_user_can('manage_woocommerce') && ( $order_count = wcmp_count_commission()->unpaid )) {
                 foreach ($submenu['wcmp'] as $key => $menu_item) {
                     if (0 === strpos($menu_item[0], _x('Commissions', 'Admin menu name', 'wcmp'))) {
                         $submenu['wcmp'][$key][0] .= ' <span class="awaiting-mod update-plugins count-' . $order_count . '"><span class="processing-count">' . number_format_i18n($order_count) . '</span></span>';
+                        break;
+                    }
+                }
+            }
+            if (apply_filters('wcmp_include_to_do_list_count_in_menu', true) && current_user_can('manage_woocommerce') && ( $to_do_list_count = wcmp_count_to_do_list() )) {
+                foreach ($submenu['wcmp'] as $key => $menu_item) {
+                    if (0 === strpos($menu_item[0], _x('To-do List', 'Admin menu name', 'wcmp'))) {
+                        $submenu['wcmp'][$key][0] .= ' <span class="awaiting-mod update-plugins count-' . $to_do_list_count . '"><span class="processing-count">' . number_format_i18n($to_do_list_count) . '</span></span>';
                         break;
                     }
                 }
