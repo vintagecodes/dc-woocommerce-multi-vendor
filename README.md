@@ -1,4 +1,4 @@
-# [WC Marketplace](wc-marketplace.com) [![WP compatibility](https://plugintests.com/plugins/dc-woocommerce-multi-vendor/wp-badge.svg)](https://plugintests.com/plugins/dc-woocommerce-multi-vendor/latest) [![PHP compatibility](https://plugintests.com/plugins/dc-woocommerce-multi-vendor/php-badge.svg)](https://plugintests.com/plugins/dc-woocommerce-multi-vendor/latest)
+# [WC Marketplace](https://wc-marketplace.com) [![WP compatibility](https://plugintests.com/plugins/dc-woocommerce-multi-vendor/wp-badge.svg)](https://plugintests.com/plugins/dc-woocommerce-multi-vendor/latest) [![PHP compatibility](https://plugintests.com/plugins/dc-woocommerce-multi-vendor/php-badge.svg)](https://plugintests.com/plugins/dc-woocommerce-multi-vendor/latest)
 
 WC Marketplace is the fastest growing multi-store marketplace plugin for WooCommerce.
 
