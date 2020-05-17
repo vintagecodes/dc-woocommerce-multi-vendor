@@ -1807,88 +1807,44 @@ if (!function_exists('wcmp_count_to_do_list')) {
 
     function wcmp_count_to_do_list() {
         global $WCMp;
-
         $to_do_list_count = 0;
-        $vendor_ids = array();
-        $vendors = get_wcmp_vendors();
-        if (!empty($vendors) && is_array($vendors)) {
-            foreach ($vendors as $vendor) {
-                $vendor_ids[] = $vendor->id;
-            }
-        }
 
+        // pending vendors
         $get_pending_vendors = get_users('role=dc_pending_vendor');
-        if (!empty($get_pending_vendors)) {
-            foreach ($get_pending_vendors as $pending_vendor) {
-                if( !get_user_meta($pending_vendor->ID, '_dismiss_to_do_list', true) )
-                    $to_do_list_count++;
-            }
-        }
+        $to_do_list_count += count( $get_pending_vendors );
 
+        $vendor_ids = get_wcmp_vendors(array(), 'ids');
 
-        $coupon_args = array(
+        // pending coupons
+        $args = array(
             'posts_per_page' => -1,
             'author__in' => $vendor_ids,
             'post_type' => 'shop_coupon',
             'post_status' => 'pending',
         );
-        $get_pending_coupons = new WP_Query($coupon_args);
-        $get_pending_coupons = $get_pending_coupons->get_posts();
-        if (!empty($get_pending_coupons)) {
-            foreach ($get_pending_coupons as $get_pending_coupon) {
-                if( !get_post_meta($get_pending_coupon->ID, '_dismiss_to_do_list', true) )
-                    $to_do_list_count++;
-            }
-        }
-        $product_args = array(
+        $get_pending_coupons = new WP_Query($args);
+        $to_do_list_count += count($get_pending_coupons->get_posts());
+
+        // pending products
+        $args = array(
             'posts_per_page' => -1,
             'author__in' => $vendor_ids,
             'post_type' => 'product',
             'post_status' => 'pending',
         );
-        $get_pending_products = new WP_Query($product_args);
-        $get_pending_products = $get_pending_products->get_posts();
-        if (!empty($get_pending_products)) {
-            foreach ($get_pending_products as $get_pending_product) {
-                if( !get_post_meta($get_pending_product->ID, '_dismiss_to_do_list', true) )
-                    $to_do_list_count++;
-            }
-        }
+        $get_pending_products = new WP_Query($args);
+        $to_do_list_count += count($get_pending_products->get_posts());
 
-        $transactions_args = array(
+        // pending bank transfer
+        $args = array(
             'post_type' => 'wcmp_transaction',
             'post_status' => 'wcmp_processing',
             'meta_key' => 'transaction_mode',
             'meta_value' => 'direct_bank',
             'posts_per_page' => -1
         );
-        $transactions = get_posts($transactions_args);
-        if (!empty($transactions)) {
-            foreach ($transactions as $transaction) {
-                if( !get_post_meta($transaction->ID, '_dismiss_to_do_list', true) )
-                    $to_do_list_count++;
-            }
-        }
-
-        $args = array(
-            'posts_per_page' => -1,
-            'author__in' => $vendor_ids,
-            'post_type' => 'product',
-            'post_status' => 'publish',
-        );
-        $get_vendor_products = new WP_Query($args);
-        $get_vendor_products = $get_vendor_products->get_posts();
-        if (!empty($get_vendor_products) && apply_filters('admin_can_approve_qna_answer', true)) {
-            foreach ($get_vendor_products as $get_vendor_product) {
-                $get_pending_questions = $WCMp->product_qna->get_Pending_Questions($get_vendor_product->ID);
-                if (!empty($get_pending_questions)) {
-                    foreach ($get_pending_questions as $pending_question) {
-                        if( !get_post_meta($pending_question->ques_ID, '_dismiss_to_do_list', true) )
-                            $to_do_list_count++;
-                    }
-                }
-            }
-        }
+        $transactions = get_posts($args);
+        $to_do_list_count += count($transactions);
 
         return $to_do_list_count; 
     }

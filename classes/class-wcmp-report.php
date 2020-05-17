@@ -11,7 +11,7 @@ class WCMp_Report {
 
     public function __construct() {
 
-        add_action('woocommerce_admin_reports', array($this, 'wcmp_report_tabs'));
+        //add_action('woocommerce_admin_reports', array($this, 'wcmp_report_tabs'));
         if (is_user_wcmp_vendor(get_current_vendor_id())) {
             add_filter('woocommerce_reports_charts', array($this, 'filter_tabs'), 99);
             add_filter('wcmp_filter_orders_report_overview', array($this, 'filter_orders_report_overview'), 99);
@@ -374,38 +374,38 @@ class WCMp_Report {
     /**
      * WCMp reports tab options
      */
-    function wcmp_report_tabs($reports) {
-        global $WCMp;
-        $reports['wcmp_vendors'] = apply_filters( 'wcmp_backend_sales_report_tabs', array(
-            'title' => __('WCMp', 'dc-woocommerce-multi-vendor'),
-            'reports' => array(
-                "overview" => array(
-                    'title' => __('Overview', 'dc-woocommerce-multi-vendor'),
-                    'description' => '',
-                    'hide_title' => true,
-                    'callback' => array(__CLASS__, 'wcmp_get_report')
-                ),
-                "vendor" => array(
-                    'title' => __('Vendor', 'dc-woocommerce-multi-vendor'),
-                    'description' => '',
-                    'hide_title' => true,
-                    'callback' => array(__CLASS__, 'wcmp_get_report')
-                ),
-                "product" => array(
-                    'title' => __('Product', 'dc-woocommerce-multi-vendor'),
-                    'description' => '',
-                    'hide_title' => true,
-                    'callback' => array(__CLASS__, 'wcmp_get_report')
-                )
-            )
-        ) );
-        if( !is_user_wcmp_vendor(get_current_user_id() ) ) {
-            if( isset( $reports['wcmp_vendors']['reports']['overview'] ) ){
-                unset( $reports['wcmp_vendors']['reports']['overview'] );
-            }
-        }
-        return $reports;
-    }
+    // function wcmp_report_tabs($reports) {
+    //     global $WCMp;
+    //     $reports['wcmp_vendors'] = apply_filters( 'wcmp_backend_sales_report_tabs', array(
+    //         'title' => __('WCMp', 'dc-woocommerce-multi-vendor'),
+    //         'reports' => array(
+    //             "overview" => array(
+    //                 'title' => __('Overview', 'dc-woocommerce-multi-vendor'),
+    //                 'description' => '',
+    //                 'hide_title' => true,
+    //                 'callback' => array(__CLASS__, 'wcmp_get_report')
+    //             ),
+    //             "vendor" => array(
+    //                 'title' => __('Vendor', 'dc-woocommerce-multi-vendor'),
+    //                 'description' => '',
+    //                 'hide_title' => true,
+    //                 'callback' => array(__CLASS__, 'wcmp_get_report')
+    //             ),
+    //             "product" => array(
+    //                 'title' => __('Product', 'dc-woocommerce-multi-vendor'),
+    //                 'description' => '',
+    //                 'hide_title' => true,
+    //                 'callback' => array(__CLASS__, 'wcmp_get_report')
+    //             )
+    //         )
+    //     ) );
+    //     if( !is_user_wcmp_vendor(get_current_user_id() ) ) {
+    //         if( isset( $reports['wcmp_vendors']['reports']['overview'] ) ){
+    //             unset( $reports['wcmp_vendors']['reports']['overview'] );
+    //         }
+    //     }
+    //     return $reports;
+    // }
 
     /**
      * Get a report from our reports subfolder

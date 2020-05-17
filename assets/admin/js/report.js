@@ -18,6 +18,10 @@ jQuery(document).ready(function($) {
             $(".product_sort_chart").html(b)
         })
     }
+
+    $('#from_vendor, #to_vendor, #from_product, #to_product, #from_banking_overview, #to_banking_overview').datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
     $(".vendor_report_sort").change(function() {
         $(".high_to_low").is(":checked") ? ($(".low_to_high").prop("checked", !1), selected_sorting = $(".vendor_report_sort").val(), sorting_order = selected_sorting + "_desc", vendor_report_sort(sorting_order)) : ($(".low_to_high").prop("checked", !0), selected_sorting = $(".vendor_report_sort").val(), sorting_order = selected_sorting + "_asc", vendor_report_sort(sorting_order))
     }), $(".low_to_high_btn_vendor").click(function() {
@@ -60,6 +64,15 @@ jQuery(document).ready(function($) {
             end_date: wcmp_report_vendor.end_date
         }, $.post(ajaxurl, selected_vendor_data, function(b) {
             $(".sort_chart").html(b), $(".report_sort").hide()
+        })
+    }), $(".banking_overview_report_search").click(function() {
+        vendor_id = $(this).parent().parent().find("select.banking_overview_vendor").val(), selected_vendor_data = {
+            action: "banking_overview_search",
+            vendor_id: vendor_id,
+            start_date: wcmp_report_banking.start_date,
+            end_date: wcmp_report_banking.end_date
+        }, $.post(ajaxurl, selected_vendor_data, function(b) {
+            $(".sort_banking_table").html(b), $(".report_sort").hide()
         })
     }), $(".product_report_sort").change(function() {
         $(".high_to_low").is(":checked") ? ($(".low_to_high").prop("checked", !1), selected_sorting = $(".product_report_sort").val(), sorting_order = selected_sorting + "_desc", product_report_sort(sorting_order)) : ($(".low_to_high").prop("checked", !0), selected_sorting = $(".product_report_sort").val(), sorting_order = selected_sorting + "_asc", product_report_sort(sorting_order))

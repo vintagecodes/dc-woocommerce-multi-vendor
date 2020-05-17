@@ -299,19 +299,15 @@ class WCMp_Admin {
     public function wcmp_submenu_count() {
         global $submenu;
         if (isset($submenu['wcmp'])) {
-            if (apply_filters('wcmp_include_unpaid_commission_count_in_menu', true) && current_user_can('manage_woocommerce') && ( $order_count = wcmp_count_commission()->unpaid )) {
+            if (apply_filters('wcmp_submenu_show_necesarry_count', true) && current_user_can('manage_woocommerce') ) {
                 foreach ($submenu['wcmp'] as $key => $menu_item) {
                     if (0 === strpos($menu_item[0], _x('Commissions', 'Admin menu name', 'wcmp'))) {
+                        $order_count = isset( wcmp_count_commission()->unpaid ) ? wcmp_count_commission()->unpaid : 0;
                         $submenu['wcmp'][$key][0] .= ' <span class="awaiting-mod update-plugins count-' . $order_count . '"><span class="processing-count">' . number_format_i18n($order_count) . '</span></span>';
-                        break;
                     }
-                }
-            }
-            if (apply_filters('wcmp_include_to_do_list_count_in_menu', true) && current_user_can('manage_woocommerce') && ( $to_do_list_count = wcmp_count_to_do_list() )) {
-                foreach ($submenu['wcmp'] as $key => $menu_item) {
                     if (0 === strpos($menu_item[0], _x('To-do List', 'Admin menu name', 'wcmp'))) {
+                        $to_do_list_count = wcmp_count_to_do_list();
                         $submenu['wcmp'][$key][0] .= ' <span class="awaiting-mod update-plugins count-' . $to_do_list_count . '"><span class="processing-count">' . number_format_i18n($to_do_list_count) . '</span></span>';
-                        break;
                     }
                 }
             }
@@ -329,9 +325,10 @@ class WCMp_Admin {
         $wcmp_admin_screens = apply_filters('wcmp_enable_admin_script_screen_ids', array(
             'wcmp_page_wcmp-setting-admin',
             'wcmp_page_wcmp-to-do',
+            'wcmp_vendor_notice',
             'edit-wcmp_vendorrequest',
             'dc_commission',
-            'woocommerce_page_wc-reports',
+            'wcmp_page_reports',
             'toplevel_page_wc-reports',
             'product',
             'edit-product',
@@ -342,7 +339,7 @@ class WCMp_Admin {
             'wcmp_page_wcmp-extensions',
             'wcmp_page_vendors',
             'toplevel_page_dc-vendor-shipping',
-	));
+	    ));
         
         // Register scripts.
         wp_register_style('wcmp_admin_css', $WCMp->plugin_url . 'assets/admin/css/admin' . $suffix . '.css', array(), $WCMp->version);
@@ -357,7 +354,7 @@ class WCMp_Admin {
         wp_register_script('wcmp_admin_product_auto_search_js', $WCMp->plugin_url . 'assets/admin/js/admin-product-auto-search' . $suffix . '.js', array('jquery'), $WCMp->version, true);
         wp_register_script('wcmp_report_js', $WCMp->plugin_url . 'assets/admin/js/report' . $suffix . '.js', array('jquery'), $WCMp->version, true);
         wp_register_script('wcmp_vendor_js', $WCMp->plugin_url . 'assets/admin/js/vendor' . $suffix . '.js', array('jquery', 'woocommerce_admin'), $WCMp->version, true);
-        wp_register_script('wcmp_vendor_shipping',$WCMp->plugin_url . 'assets/admin/js/vendor-shipping' . $suffix . '.js', array( 'jquery', 'wp-util', 'underscore', 'backbone', 'jquery-ui-sortable', 'wc-backbone-modal' ), $WCMp->version );
+        wp_register_script('wcmp_vendor_shipping', $WCMp->plugin_url . 'assets/admin/js/vendor-shipping' . $suffix . '.js', array( 'jquery', 'wp-util', 'underscore', 'backbone', 'jquery-ui-sortable', 'wc-backbone-modal' ), $WCMp->version );
 
         $WCMp->localize_script('wcmp_admin_js', array(
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -368,6 +365,11 @@ class WCMp_Admin {
             )
         ));
         if (in_array($screen->id, $wcmp_admin_screens)) :
+            $WCMp->library->load_qtip_lib();
+            $WCMp->library->load_upload_lib();
+            $WCMp->library->load_colorpicker_lib();
+            $WCMp->library->load_datepicker_lib();
+            $WCMp->library->load_select2_lib();
             wp_enqueue_style( 'wcmp_admin_css' );
             wp_enqueue_script( 'wcmp_admin_js' );
         endif;
@@ -417,7 +419,7 @@ class WCMp_Admin {
             
         endif;
 
-        if (in_array($screen->id, array('dc_commission', 'woocommerce_page_wc-reports', 'toplevel_page_wc-reports', 'product', 'edit-product'))) :
+        if (in_array($screen->id, array('dc_commission', 'wcmp_page_reports', 'toplevel_page_wc-reports', 'product', 'edit-product'))) :
             $WCMp->library->load_qtip_lib();
             if (!wp_style_is('woocommerce_chosen_styles', 'queue')) {
                 wp_enqueue_style('woocommerce_chosen_styles', $WCMp->plugin_url . '/assets/admin/css/chosen' . $suffix . '.css');
@@ -448,15 +450,18 @@ class WCMp_Admin {
             wp_enqueue_script('dc_users_js');
         endif;
 
-        if (in_array($screen->id, array('woocommerce_page_wc-reports', 'toplevel_page_wc-reports'))) :
+        if (in_array($screen->id, array('wcmp_page_reports', 'toplevel_page_wc-reports'))) :
             wp_enqueue_script('WCMp_chosen');
             wp_enqueue_script('WCMp_ajax-chosen');
             wp_enqueue_script('wcmp-admin-product-js');
             wp_localize_script('wcmp-admin-product-js', 'dc_vendor_object', array('security' => wp_create_nonce("search-products")));
         endif;
 
-        if (in_array($screen->id, array('woocommerce_page_wc-reports', 'toplevel_page_wc-reports'))) :
+        if (in_array($screen->id, array('wcmp_page_reports', 'toplevel_page_wc-reports'))) :
+            wp_enqueue_style('woocommerce_admin_styles');
             wp_enqueue_script('wcmp_report_js');
+            $WCMp->library->load_bootstrap_style_lib();
+            $WCMp->library->load_datepicker_lib();
         endif;
 
         if (is_user_wcmp_vendor(get_current_vendor_id())) {

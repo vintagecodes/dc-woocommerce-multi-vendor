@@ -57,13 +57,8 @@ class WCMp_Settings_To_Do_List {
             </table>
             <?php
         }
-        $vendor_ids = array();
-        $vendors = get_wcmp_vendors();
-        if (!empty($vendors) && is_array($vendors)) {
-            foreach ($vendors as $vendor) {
-                $vendor_ids[] = $vendor->id;
-            }
-        }
+
+        $vendor_ids = get_wcmp_vendors(array(), 'ids');
         //coupon
         $args = array(
             'posts_per_page' => -1,

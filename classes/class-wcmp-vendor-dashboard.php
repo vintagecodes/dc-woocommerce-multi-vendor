@@ -2621,4 +2621,22 @@ Class WCMp_Admin_Dashboard {
         <?php
     }
 
+    public function save_handler_vendor_orders( $postdata ) {
+        global $wp;
+        if( $postdata ) {
+            $vendor_order_id = $wp->query_vars[get_wcmp_vendor_settings( 'wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders' )];
+            if( isset( $postdata['update_cust_refund_status'] ) && $vendor_order_id ) {
+                if( isset( $postdata['refund_order_customer'] ) && $postdata['refund_order_customer'] ) {
+                    update_post_meta( $vendor_order_id, '_customer_refund_order', $postdata['refund_order_customer'] );
+                    // trigger customer email
+                    if( in_array( $postdata['refund_order_customer'], array( 'refund_reject', 'refund_accept' ) ) ) {
+                        $mail = WC()->mailer()->emails['WC_Email_Customer_Refund_Request'];
+                        $billing_email = get_post_meta( $vendor_order_id, '_billing_email', true );
+                        $mail->trigger( $billing_email, $vendor_order_id, array(), 'customer' );
+                    }
+                }
+            }
+        }
+    }
+
 }

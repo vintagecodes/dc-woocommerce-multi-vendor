@@ -796,6 +796,9 @@ class WCMp_Vendor_Hooks {
                 case 'profile':
                     $WCMp->vendor_dashboard->save_vendor_profile( $vendor->id, $_POST );
                     break;
+                case 'vendor-orders':
+                    $WCMp->vendor_dashboard->save_handler_vendor_orders( $_POST );
+                    break;
                 default :
                     break;
             }

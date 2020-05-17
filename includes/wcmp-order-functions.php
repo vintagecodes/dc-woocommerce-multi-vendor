@@ -215,3 +215,48 @@ function wcmp_get_order_commission_id( $order_id ) {
     $commission_id = get_post_meta( $order_id, '_commission_id', true );
     return ( $commission_id ) ? $commission_id : false;
 }
+
+/**
+ * Get customer order refund related message
+ *
+ * @param int $order Object.
+ * @param array $settings Settings.
+ * @return $msg Message
+ */
+function wcmp_get_customer_refund_order_msg( $order, $settings = array() ) {
+    if( !$order ) return false;
+    $default_msg = apply_filters( 'wcmp_customer_my_account_refund_order_messages', array(
+        'order_status_not_allowed' => __( 'Your Refund is not allowed for this order status', 'dc-woocommerce-multi-vendor' ),
+        'order_refund_period_overed' => __( 'Your Refund Period is over. Please contact with your seller for further information' , 'dc-woocommerce-multi-vendor' ),
+        'order_refund_rejected' => __( 'Sorry!! Your Request Is Reject', 'dc-woocommerce-multi-vendor' ),
+        'order_refund_request_pending' => __( 'Your Request Is pending', 'dc-woocommerce-multi-vendor' ),
+        'order_refund_request_accepted' => __( 'Congratulation: *** Your Request is Accepted *** ', 'dc-woocommerce-multi-vendor' ),
+    ), $order, $settings );
+    $cust_refund_status = get_post_meta( $order->get_id(), '_customer_refund_order', true ) ? get_post_meta( $order->get_id(), '_customer_refund_order', true ) : '';
+    $refund_days_limit = isset( $settings['refund_days'] ) ? absint( $settings['refund_days'] ) : apply_filters( 'wcmp_customer_refund_order_default_days_limit', 10, $order );
+    $order_date = $order->get_date_created()->format('Y-m-d');
+    $order_place_days = time() - strtotime( $order_date );
+    $message = array();
+
+    if( abs( round( $order_place_days / 86400 ) ) > $refund_days_limit ) {
+        $message['type'] = 'info';
+        $message['msg'] = isset( $default_msg['order_refund_period_overed'] ) ? $default_msg['order_refund_period_overed'] : __( 'Your Refund Period is over. Please contact with your seller for further information', 'dc-woocommerce-multi-vendor' );
+    }
+
+    if( !in_array( $order->get_status() , $settings ) ) {
+        $message['type'] = 'info';
+        $message['msg'] = isset( $default_msg['order_status_not_allowed'] ) ? $default_msg['order_status_not_allowed'] : __( 'Your Refund is not allowed for this order status', 'dc-woocommerce-multi-vendor' );
+    }
+    if( $cust_refund_status == 'refund_reject' ) {
+        $message['type'] = 'error';
+        $message['msg'] = isset( $default_msg['order_refund_rejected'] ) ? $default_msg['order_refund_rejected'] : __( 'Sorry!! Your Request Is Reject', 'dc-woocommerce-multi-vendor' );
+    }elseif( $cust_refund_status == 'refund_request' ) {
+        $message['type'] = 'warning';
+        $message['msg'] = isset( $default_msg['order_refund_request_pending'] ) ? $default_msg['order_refund_request_pending'] : __( 'Your Request Is pending', 'dc-woocommerce-multi-vendor' );
+    }elseif( $cust_refund_status == 'refund_request' ) {
+        $message['type'] = 'success';
+        $message['msg'] = isset( $default_msg['order_refund_request_accepted'] ) ? $default_msg['order_refund_request_accepted'] : __( 'Congratulation: *** Your Request is Accepted *** ', 'dc-woocommerce-multi-vendor' );
+    }
+
+    return $message;
+}

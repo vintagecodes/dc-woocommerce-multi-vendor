@@ -9,60 +9,114 @@
  
 class WCMp_Notices {
 	private $post_type;
-  public $dir;
-  public $file;
+  	public $dir;
+  	public $file;
   
-  public function __construct() {
-    $this->post_type = 'wcmp_vendor_notice';
-    $this->register_post_type();
-		add_action( 'add_meta_boxes', array($this,'vendor_notices_add_meta_box_addtional_field') );
-		add_action( 'save_post', array( $this, 'vendor_notices_save_addtional_field' ), 10, 3 );		
-  }
+  	public function __construct() {
+    	$this->post_type = 'wcmp_vendor_notice';
+    	$this->register_post_type();
+		add_action( 'add_meta_boxes', array($this,'vendor_notices_add_meta_boxes') );
+		add_action( 'save_post', array( $this, 'vendor_notices_save_meta_boxes' ), 10, 3 );
+		add_action( 'transition_post_status', array( $this, 'vendor_notices_send_email' ), 10, 3 );
+  	}
+
+  	public function vendor_notices_add_meta_boxes() {
+		add_meta_box(
+			'wcmp_vendor_notice_addtional_field',
+			__( 'Addtional Fields', 'dc-woocommerce-multi-vendor' ),
+			array($this,'wcmp_vendor_notice_addtional_field_callback'),
+			$this->post_type,
+			'normal',
+			'high'
+		);
+
+		add_meta_box(
+			'wcmp_vendor_notice_select_vendor',
+			__( 'Vendors', 'dc-woocommerce-multi-vendor' ),
+			array($this,'wcmp_vendor_notice_select_vendor_callback'),
+			$this->post_type,
+			'side',
+			'low'
+		);
+  	}
   
-  
-  public function vendor_notices_add_meta_box_addtional_field() {
-  	global $WCMp;
-		$screens = array( 'wcmp_vendor_notice' );
-		foreach ( $screens as $screen ) {
-			add_meta_box(
-				'wcmp_vendor_notice_addtional_field',
-				__( 'Addtional Fields', 'dc-woocommerce-multi-vendor' ),
-				array($this,'wcmp_vendor_notice_addtional_field_callback'),
-				$screen,
-				'normal',
-				'high'
-			);
-		}  	
-  }
-  
-  public function wcmp_vendor_notice_addtional_field_callback() {
-  	global $WCMp, $post;
-  	$url = get_post_meta($post->ID,'_wcmp_vendor_notices_url', true);
-  	?>
-  	<div id="_wcmp_vendor_notices_url_div" class="_wcmp_vendor_notices_url_div" >
-  		<label>Enter Url</label>
-  		<input type="text" name="_wcmp_vendor_notices_url" value="<?php echo $url; ?>" class="widefat" style="margin:10px; border:1px solid #888; width:90%;" >			
-		</div>			
+  	public function wcmp_vendor_notice_addtional_field_callback() {
+  		global $post;
+		$url = get_post_meta( $post->ID,'_wcmp_vendor_notices_url', true );
+  		?>
+  		<div id="_wcmp_vendor_notices_url_div" class="_wcmp_vendor_notices_url_div" >
+  			<label><?php _e( 'Enter Url', 'dc-woocommerce-multi-vendor' ); ?></label>
+  			<input type="text" name="_wcmp_vendor_notices_url" value="<?php echo $url; ?>" class="widefat" style="margin:10px; border:1px solid #888; width:90%;" >			
+		</div>
 		<?php
-  }
+	}
+	
+	public function wcmp_vendor_notice_select_vendor_callback() {
+		global $post;
+		$selected_vendors = (array)get_post_meta( $post->ID, '_wcmp_vendor_notices_vendors', true );
+		wp_add_inline_script( 'wcmp_admin_js', '( function( $ ) {
+			$("#show_announcement_vendors").select2({
+				placeholder: "'.__('Select vendor...', 'dc-woocommerce-multi-vendor').'"
+			});
+			$("#anv_select_all").click(function(){
+				$("#show_announcement_vendors > option").prop("selected","selected");
+				$("#show_announcement_vendors").trigger("change");
+			});
+			$("#anv_reset").click(function(){
+				$("#show_announcement_vendors").val(null).trigger("change");
+			});
+		} )( jQuery );' );
+		?>
+		<div class="announcement-vendors-wrap">
+			<select id="show_announcement_vendors" name="show_announcement_vendors[]" class="" multiple="multiple" style="width:100%;">
+			<?php
+				$vendors = get_wcmp_vendors();
+				if ($vendors){
+					foreach ($vendors as $vendor) {
+						$selected = in_array($vendor->id, $selected_vendors) ? 'selected' : '';
+						echo '<option value="' . esc_attr($vendor->id) . '" '.$selected.'>' . esc_html($vendor->page_title) . '</option>';
+					}
+			} ?>
+			</select>
+			<p>
+				<button type="button" class="button button-default" id="anv_select_all"><?php _e( 'Select All', 'dc-woocommerce-multi-vendor' ); ?></button>
+				<button type="button" class="button button-default" id="anv_reset"><?php _e( 'Reset', 'dc-woocommerce-multi-vendor' ); ?></button>
+			</p>
+		</div>
+	  <?php
+	}
+
+  	public function vendor_notices_save_meta_boxes($post_id, $post, $update) {
+  		global $WCMp;
+  		if (  $this->post_type != $post->post_type ) {
+        	return;
+    	}
+    	if(isset($_POST['_wcmp_vendor_notices_url'])) {
+    		update_post_meta($post_id, '_wcmp_vendor_notices_url', $_POST['_wcmp_vendor_notices_url']);
+		}
+		if(isset($_POST['show_announcement_vendors'])) {
+			update_post_meta($post_id, '_wcmp_vendor_notices_vendors', $_POST['show_announcement_vendors']);
+		} 
+	}
+
+	public function vendor_notices_send_email( $new_status, $old_status, $post ) { 
+		if ( $new_status == 'publish' && $old_status != 'publish' ) {
+			$email_vendor = WC()->mailer()->emails['WC_Email_Vendor_New_Announcement'];
+			$vendors = ( get_post_meta( $post->ID, '_wcmp_vendor_notices_vendors', true ) ) ? (array)get_post_meta( $post->ID, '_wcmp_vendor_notices_vendors', true ) : get_wcmp_vendors( array(), 'ids' );
+			$single = ( count($vendors) == 1 ) ? __( 'Your', 'dc-woocommerce-multi-vendor' ) : __( 'All vendors and their', 'dc-woocommerce-multi-vendor' );
+			foreach ($vendors as $vendor_id) {
+				$email_vendor->trigger( $post, $vendor_id, $single );
+			}
+		}
+	}
   
-  public function vendor_notices_save_addtional_field($post_id, $post, $update) {
-  	global $WCMp;
-  	if (  $this->post_type != $post->post_type ) {
-        return;
-    }
-    if(isset($_POST['_wcmp_vendor_notices_url'])) {
-    	update_post_meta($post_id, '_wcmp_vendor_notices_url', $_POST['_wcmp_vendor_notices_url']);    	
-    } 	
-  }
-  
-  /**
+  	/**
 	 * Register vendor_notices post type
 	 *
 	 * @access public
 	 * @return void
 	*/
-  function register_post_type() {
+  	function register_post_type() {
 		global $WCMp;
 		if ( post_type_exists($this->post_type) ) return;
 		$labels = array(
@@ -101,6 +155,5 @@ class WCMp_Notices {
 		);		
 		register_post_type( $this->post_type, $args );
 	}  
-	
 	
 }
