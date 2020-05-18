@@ -93,6 +93,18 @@ class WCMp_Product_QNA {
         return $wpdb->get_row( $wpdb->prepare( $get_ques_sql, $ques_ID ) );
     }
 
+    public function get_Pending_Questions( $product_ID ) {
+        $questions = $this->get_Questions( $product_ID );
+        $pending_questions = [];
+        foreach( $questions as $question ) {
+            if( $question->status == 'pending' ) {
+                $pending_questions[] = $question;
+            } 
+        }
+        $pending_questions = !empty($pending_questions)?$pending_questions:'';
+        return $pending_questions;
+    }
+
     /**
      * Get a list of questions for a product.
      *

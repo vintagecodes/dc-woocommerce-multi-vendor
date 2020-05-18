@@ -98,6 +98,8 @@ class WCMp_Ajax {
         add_action('wp_ajax_wcmp_vendor_dashboard_customer_questions_data', array(&$this, 'wcmp_vendor_dashboard_customer_questions_data'));
         // vendor products Q&As list
         add_action('wp_ajax_wcmp_vendor_products_qna_list', array(&$this, 'wcmp_vendor_products_qna_list'));
+        // vendor products Q&As approval
+        add_action('wp_ajax_wcmp_question_verification_approval', array($this, 'wcmp_question_verification_approval'));
         // vendor pending shipping widget
         add_action('wp_ajax_wcmp_widget_vendor_pending_shipping', array(&$this, 'wcmp_widget_vendor_pending_shipping'));
         // vendor product sales report widget
@@ -2347,7 +2349,8 @@ class WCMp_Ajax {
                     'ques_details' => sanitize_text_field($cust_question),
                     'ques_by' => $cust_id,
                     'ques_created' => date('Y-m-d H:i:s', current_time('timestamp')),
-                    'ques_vote' => ''
+                    'ques_vote' => '',
+                    'status' => 'pending'
                 ));
                 if ($result) {
                     //delete transient
@@ -2356,6 +2359,10 @@ class WCMp_Ajax {
                     }
                     $no_data = 0;
                     $msg = __("Your question submitted successfully!", 'dc-woocommerce-multi-vendor');
+                    $email_vendor = WC()->mailer()->emails['WC_Email_Vendor_New_Question'];
+                    $email_vendor->trigger( $vendor, $product_id, $cust_question, $cust_id );
+                    $email_admin = WC()->mailer()->emails['WC_Email_Admin_New_Question'];
+                    $email_admin->trigger( $vendor, $product_id, $cust_question, $cust_id );
                     wc_add_notice($msg, 'success');
                     do_action('wcmp_product_qna_after_question_submitted', $product_id, $cust_id, $cust_question);
                 }
@@ -2443,6 +2450,9 @@ class WCMp_Ajax {
             $ques_ID = isset($_POST['key']) ? $_POST['key'] : '';
             $reply = isset($_POST['reply']) ? sanitize_textarea_field($_POST['reply']) : '';
             $vendor = get_wcmp_vendor(get_current_user_id());
+            $question_info = $WCMp->product_qna->get_Question($ques_ID);
+            $product_id = $question_info->product_ID;
+            $customer = get_userdata($question_info->ques_by);
             if ($vendor && $reply && $ques_ID) {
                 $_is_answer_given = $WCMp->product_qna->get_Answers($ques_ID);
                 if (isset($_is_answer_given[0]) && count($_is_answer_given[0]) > 0) {
@@ -2467,6 +2477,8 @@ class WCMp_Ajax {
                     } else {
                         $msg = '';
                     }
+                    $email_customer = WC()->mailer()->emails['WC_Email_Customer_Answer'];
+                    $email_customer->trigger( $customer, $reply, $product_id );
                     do_action('wcmp_product_qna_after_answer_submitted', $ques_ID, $vendor, $reply);
                     $qna_data = '';
                     $no_data = 0;
@@ -2620,20 +2632,25 @@ class WCMp_Ajax {
                     $product = wc_get_product($data->product_ID);
                     if ($product) {
                         $row = '';
-                        $row = '<article id="reply-item-' . $data->ques_ID . '" class="reply-item">
+                        $row .= '<article id="reply-item-' . $data->ques_ID . '" class="reply-item">
                         <div class="media">
                             <!-- <div class="media-left">' . $product->get_image() . '</div> -->
                             <div class="media-body">
                                 <h4 class="media-heading qna-question">' . wp_trim_words($data->ques_details, 160, '...') . '</h4>
                                 <time class="qna-date">
                                     <span>' . wcmp_date($data->ques_created) . '</span>
-                                </time>
-                                <a data-toggle="modal" data-target="#qna-reply-modal-' . $data->ques_ID . '" >' . __('Reply', 'dc-woocommerce-multi-vendor') . '</a>
-                                <!-- Modal -->
-                                <div class="modal fade" id="qna-reply-modal-' . $data->ques_ID . '" role="dialog">
+                                </time>';
+                        if($data->status == 'pending') {
+                            $row .= '<div class="wcmp_vendor_question"><a class="accept_verification do_verify" id="question_response" data-verification="question_verification" data-action="verified" data-question_id="'.$data->ques_ID.'" data-product="'.$data->product_ID.'"><i class="wcmp-font ico-approve-icon action-icon"></i></a>
+                             <a class="reject_verification do_verify" id="question_response" data-verification="question_verification" data-action="rejected" data-question_id="'.$data->ques_ID.'" data-product="'.$data->product_ID.'"><i class="wcmp-font ico-delete-icon action-icon"></i></a></div>';
+                         } else {
+                            $row .='<a data-toggle="modal" data-target="#qna-reply-modal-' . $data->ques_ID . '" >' . __('Reply', 'dc-woocommerce-multi-vendor') . '</a>';
+                        }
+                                /* Modal*/
+                        $row .='<div class="modal fade" id="qna-reply-modal-' . $data->ques_ID . '" role="dialog">
                                     <div class="modal-dialog">
                                         <!-- Modal content-->
-                                        <div class="modal-content">
+                                        <div cla ss="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                 <h4 class="modal-title">' . __('Product - ', 'dc-woocommerce-multi-vendor') . ' ' . $product->get_formatted_name() . '</h4>
@@ -2728,8 +2745,10 @@ class WCMp_Ajax {
                                     <div class="modal-footer">
                                         <button type="button" data-key="' . $question->ques_ID . '" class="btn btn-default wcmp-add-qna-reply">' . __('Add', 'dc-woocommerce-multi-vendor') . '</button>
                                     </div>';
+                        $reply = '<a data-toggle="modal" data-target="#question-details-modal-' . $question->ques_ID . '" data-ques="' . $question->ques_ID . '" class="question-details"><i class="wcmp-font ico-reply-icon action-icon"></i></a>';
                     } else {
                         $status = '<span class="answered label label-success">' . __('Answered', 'dc-woocommerce-multi-vendor') . '</span>';
+                        $reply = '<a data-toggle="modal" data-target="#question-details-modal-' . $question->ques_ID . '" data-ques="' . $question->ques_ID . '" class="question-details"><i class="wcmp-font ico-edit-pencil-icon action-icon"></i></a>';
                         $ans_vote = maybe_unserialize($have_answer[0]->ans_vote);
                         if (is_array($ans_vote)) {
                             $vote = array_sum($ans_vote);
@@ -2752,8 +2771,17 @@ class WCMp_Ajax {
                                     </div>';
                         }
                     }
+                    if($question->status == 'pending') {
+                        $qnas  = wp_trim_words(stripslashes($question->ques_details), 160, '...');
+                        $action_button = '<div class="wcmp_vendor_question"><a class="accept_verification do_verify" id="question_response" data-verification="question_verification" data-action="verified" data-question_id="'.$question->ques_ID.'" data-product="'.$pending_question->product_ID.'"><i class="wcmp-font ico-approve-icon action-icon"></i></a>
+                                 <a class="reject_verification do_verify" id="question_response" data-verification="question_verification" data-action="rejected" data-question_id="'.$question->ques_ID.'" data-product="'.$pending_question->product_ID.'"><i class="wcmp-font ico-delete-icon action-icon"></i></a></div>';
+                
+                    } else {
+                        $qnas  = '<a data-toggle="modal" data-target="#question-details-modal-' . $question->ques_ID . '" data-ques="' . $question->ques_ID . '" class="question-details">' . wp_trim_words(stripslashes($question->ques_details), 160, '...') . '</a>';
+                        $action_button  = '<a data-toggle="modal" data-target="#question-details-modal-' . $question->ques_ID . '" data-ques="' . $question->ques_ID . '" class="question-details">' . $reply . '</a>';
+                    }
                     $data[] = array(
-                        'qnas' => '<a data-toggle="modal" data-target="#question-details-modal-' . $question->ques_ID . '" data-ques="' . $question->ques_ID . '" class="question-details">' . wp_trim_words(stripslashes($question->ques_details), 160, '...') . '</a>'
+                        'qnas' => $qnas
                         . '<!-- Modal -->
                                 <div class="modal fade" id="question-details-modal-' . $question->ques_ID . '" role="dialog">
                                     <div class="modal-dialog">
@@ -2770,7 +2798,8 @@ class WCMp_Ajax {
                         'product' => $product->get_title(),
                         'date' => wcmp_date($question->ques_created),
                         'vote' => $vote,
-                        'status' => $status
+                        'status' => $status,
+                        'action' => $action_button
                     );
                 }
             }
@@ -2782,6 +2811,29 @@ class WCMp_Ajax {
             "data" => $data   // total data array
         );
         wp_send_json($json_data);
+    }
+
+    public function wcmp_question_verification_approval() {
+        global $WCMp;
+        $data = array();
+        if(!empty($_POST['question_id'])){
+            $question_id = (int)$_POST['question_id'];
+            if(!empty($_POST['question_type']) && !empty($_POST['data_action'])){
+                $q_type = $_POST['question_type'];
+                $action = $_POST['data_action'];
+                $vendor = get_wcmp_product_vendors($_POST['product']);
+                if($action == 'rejected'){
+                    $WCMp->product_qna->deleteQuestion( $question_id );
+                    delete_transient('wcmp_customer_qna_for_vendor_' . $vendor->id);
+                }else{
+                    $data['status'] = $action;
+                    $WCMp->product_qna->updateQuestion( $question_id, $data );
+                    $questions = $WCMp->product_qna->get_Vendor_Questions($vendor);
+                    set_transient('wcmp_customer_qna_for_vendor_' . $vendor->id, $questions);
+                }
+            }
+        }
+        die;
     }
 
     function wcmp_get_vendor_details() {

@@ -39,6 +39,7 @@ do_action('before_wcmp_vendor_dashboard_products_qna_table');
                     <th><?php _e('Date', 'dc-woocommerce-multi-vendor'); ?></th>
                     <th><?php _e('Vote', 'dc-woocommerce-multi-vendor'); ?></th>
                     <th><?php _e('Status', 'dc-woocommerce-multi-vendor'); ?></th>
+                    <th><?php _e('Action', 'dc-woocommerce-multi-vendor'); ?></th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -110,7 +111,8 @@ do_action('before_wcmp_vendor_dashboard_products_qna_table');
                 {data: 'product', orderable:false},
                 {data: 'date', orderable:false},
                 {data: 'vote', orderable:true},
-                {data: 'status', orderable:false}
+                {data: 'status', orderable:false},
+                {data: 'action', orderable:false}
             ],
             "createdRow": function (row, data, index) {
                 //$(row).addClass('vendor-product');
