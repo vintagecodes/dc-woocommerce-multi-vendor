@@ -253,7 +253,7 @@ function wcmp_get_customer_refund_order_msg( $order, $settings = array() ) {
     }elseif( $cust_refund_status == 'refund_request' ) {
         $message['type'] = 'warning';
         $message['msg'] = isset( $default_msg['order_refund_request_pending'] ) ? $default_msg['order_refund_request_pending'] : __( 'Your Request Is pending', 'dc-woocommerce-multi-vendor' );
-    }elseif( $cust_refund_status == 'refund_request' ) {
+    }elseif( $cust_refund_status == 'refund_accept' ) {
         $message['type'] = 'success';
         $message['msg'] = isset( $default_msg['order_refund_request_accepted'] ) ? $default_msg['order_refund_request_accepted'] : __( 'Congratulation: *** Your Request is Accepted *** ', 'dc-woocommerce-multi-vendor' );
     }
