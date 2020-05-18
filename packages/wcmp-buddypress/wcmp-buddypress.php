@@ -89,7 +89,8 @@ class WCMp_BuddyPress {
         add_filter( 'wcmp_vendor_fields', array( $this, 'wcmp_save_storefont_data' ), 99, 2 );
         add_action( 'wcmp_vendor_add_extra_social_link', array( $this, 'wcmp_add_storefont_buddypress_link' ) );
         add_action( 'wcmp_vendor_store_header_social_link', array( $this, 'wcmp_vendor_store_header_bp_link' ) );
-
+        // Buddypress social link at admin end
+        add_filter("settings_vendors_social_tab_options", array( $this, "wcmp_buddypress_tab_admin" ), 10 , 2);
 	}
         
 	/***************** Create a endpoint "Shop page" in buddypress if display member is vendor  *********************/
@@ -421,6 +422,11 @@ class WCMp_BuddyPress {
     public function wcmp_vendor_store_header_bp_link( $vendor_id ){
         $vendor_buddypress = get_user_meta($vendor_id, '_vendor_buddypress', true);
         if ($vendor_buddypress) { ?> <a target="_blank" href="<?php echo esc_url($vendor_buddypress); ?>"><i class="wcmp-font ico-buddypress_icon"></i></a><?php } 
+    }
+    
+    public function wcmp_buddypress_tab_admin( $social_tab_options, $vendor_obj ){
+        $social_tab_options['vendor_buddypress'] = array('label' => __('BuddyPress', 'dc-woocommerce-multi-vendor'), 'type' => 'url', 'id' => 'vendor_buddypress', 'label_for' => 'vendor_buddypress', 'name' => 'vendor_buddypress', 'value' => $vendor_obj->buddypress);
+        return $social_tab_options;
     }
 
 }
