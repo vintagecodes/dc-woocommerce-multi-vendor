@@ -21,6 +21,7 @@ if (!class_exists('WC_Email_Customer_Refund_Request')) :
         public $refund_details;
         public $user_type;
         public $status;
+        protected $post_type = 'shop_order';
         /**
          * Constructor
          *

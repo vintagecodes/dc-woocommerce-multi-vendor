@@ -1367,6 +1367,11 @@ class WCMp_Order {
 		if ( ! wp_verify_nonce( $nonce_value, 'customer_request_refund' ) ) {
 			return;
         }
+        // If no refund reason is selected
+        if ( !isset( $_REQUEST['refund_reason_option'] ) ) {
+            wc_add_notice( __( 'Kindly choose a refund reason', 'dc-woocommerce-multi-vendor' ) , 'error' );
+            return;
+        }
         if( !isset( $wp->query_vars['view-order'] ) ) return;
         $order_id = $wp->query_vars['view-order'];
         $order = wc_get_order( $order_id );
