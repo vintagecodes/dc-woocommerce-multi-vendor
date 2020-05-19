@@ -23,7 +23,7 @@ if( $user_type != 'customer' ) {
     printf( __( "Additional Information: %s",  'dc-woocommerce-multi-vendor' ), $refund_details['addi_info']) . "\n";
     printf( __( "Refund Status: %s",  'dc-woocommerce-multi-vendor' ), $refund_details['status']) . "\n";
 }else{
-    printf( __( "Your refund request for order %s is %s",  'dc-woocommerce-multi-vendor' ), $order->get_id()), $refund_details['status'] ) . "\n";
+    printf( __( "Your refund request for order %s is %s",  'dc-woocommerce-multi-vendor' ), $order->get_id(), $refund_details['status'] ) . "\n";
 }
 
 echo apply_filters( 'wcmp_email_footer_text', get_option( 'wcmp_email_footer_text' ) ); 

@@ -1,11 +1,11 @@
 === WC Marketplace ===
-Contributors: Dualcube, greyparrots, purnendu, itzmekhokan
+Contributors: Dualcube, greyparrots, purnendu, itzmekhokan, sumit-singh-hash, cool-raju
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.4
+Tested up to: 5.4.1
 Requires PHP: 5.6
-Stable tag: 3.4.11
+Stable tag: 3.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,20 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.5.0 - 2020-05-19 =
+* Added - BuddyPress compatibilities.
+* Added - Announcement email to vendor.
+* Added - Product Q&As emails for vendor and customer.
+* Added - Product approval management.
+* Added - Customer refund request process for vendor orders.
+* Added - Vendor Review API endpoint. #235
+* Added - Backend WCMp core reports enhancement.
+* Tweak - Vendor endpoint with image and banner fields. #234
+* Tweak - Vendor reviews based on product reviews. #276
+* Fix - Regenerate commission issue. #285
+* Fix - Suborder refund sync with parent order
+* Updated - Language file.
+
 = 3.4.11 - 2020-04-14 =
 * Fix - Subscription suborders issue. #67
 * Fix - Vendor per product shipping issues. #253
@@ -823,5 +837,5 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Upgrade Notice ==
 
-= 3.4.1 =
-WC Marketplace 3.4+ is a significantly major update and hence please make a full site backup or follow some standard steps(staging to live) before upgrading your marketplace to avoid any undesirable situations.
+= 3.5.0 =
+3.5+ is a major update. Make a full site backup and [review latest release](https://wc-marketplace.com/latest-release/) before upgrading your marketplace to avoid any undesirable situations.

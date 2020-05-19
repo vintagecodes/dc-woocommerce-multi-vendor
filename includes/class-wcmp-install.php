@@ -252,6 +252,7 @@ class WCMp_Install {
 		`ques_by` BIGINT UNSIGNED NOT NULL DEFAULT '0',
 		`ques_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `ques_vote` longtext NULL,
+                `status` text NOT NULL,
 		PRIMARY KEY (`ques_ID`)
 		) $collate;";
         

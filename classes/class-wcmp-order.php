@@ -1271,6 +1271,11 @@ class WCMp_Order {
             $args['parent'] = ( isset( $args['parent'] ) && $args['parent'] ) ? $args['parent'][] = 0 : array( 0 );
         if( apply_filters( 'wcmp_fetch_all_suborders_from_rest_api_call', false, $args, $request ) )
             $args['parent_exclude'] = ( isset( $args['parent_exclude'] ) && $args['parent_exclude'] ) ? $args['parent_exclude'][] = 0 : array( 0 );
+        
+        if( apply_filters( 'wcmp_remove_suborders_from_rest_api_call', true, $args, $request ) ) {
+            $suborders = wcmp_get_orders( array(), 'ids', true );
+            $args['post__not_in'] = array( $suborders );
+        }
         return apply_filters( 'wcmp_exclude_suborders_from_rest_api_call_query_args', $args, $request );
     }
 

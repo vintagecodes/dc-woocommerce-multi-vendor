@@ -17,9 +17,10 @@ defined( 'ABSPATH' ) || exit;
  * @since 3.4.0
  * @param $args query_args
  * @param $return_type return types
+ * @param $subonly suborder only
  * @return array
  */
-function wcmp_get_orders($args = array(), $return_type = 'ids') {
+function wcmp_get_orders($args = array(), $return_type = 'ids', $subonly = false) {
     
     $default = array(
 	'posts_per_page'   => -1,
@@ -29,6 +30,10 @@ function wcmp_get_orders($args = array(), $return_type = 'ids') {
 	'post_status'      => 'any',
 	'fields'           => 'ids',
     );
+    if( $subonly ) {
+        $default['meta_key'] = '_created_via';
+        $default['meta_value'] = 'wcmp_vendor_order';
+    }
     $args = wp_parse_args($args, $default);
     $query = new WP_Query( apply_filters( 'wcmp_get_orders_query_args', $args ) );
     if(strtolower($return_type) == 'object'){
