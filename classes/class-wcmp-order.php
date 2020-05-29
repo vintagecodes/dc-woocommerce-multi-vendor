@@ -47,7 +47,7 @@ class WCMp_Order {
             add_action('woocommerce_saved_order_items', array(&$this, 'wcmp_create_orders_from_backend'), 10, 2 );
             add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_create_orders'), 10, 3);
             add_action('woocommerce_after_checkout_validation', array($this, 'wcmp_check_order_awaiting_payment'));
-            add_action('woocommerce_new_order', array($this, 'wcmp_create_orders_via_rest'), 10, 2);
+            add_action( 'woocommerce_rest_insert_shop_order_object',array($this,'wcmp_create_orders_via_rest_callback'), 10, 3 );
             // Order Refund
             add_action('woocommerce_order_refunded', array($this, 'wcmp_order_refunded'), 10, 2);
             add_action('woocommerce_refund_deleted', array($this, 'wcmp_refund_deleted'), 10, 2);
@@ -302,9 +302,21 @@ class WCMp_Order {
         $this->wcmp_create_orders($order_id, array(), $order, true);
     }
     
-    public function wcmp_create_orders_via_rest( $order_id, $order ) {
-        if( $order && get_post_meta( $order_id, '_created_via', true ) !== 'rest-api' ) return;
-        $this->wcmp_create_orders($order_id, array(), $order, true);
+    public function wcmp_create_orders_via_rest_callback( $order, $request, $creating ) {
+        global $WCMp;
+        $items = $order->get_items();
+        foreach ($items as $key => $value) {
+            if ( $order && wp_get_post_parent_id( $order->get_id() ) == 0 || wcs_is_subscription( $order ) ) {
+                $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
+                $vendor = get_wcmp_product_vendors($value['product_id']);
+                if ($vendor) {
+                    wc_add_order_item_meta($key, '_vendor_id', $vendor->id);
+                    wc_add_order_item_meta($key, $general_cap, $vendor->page_title);
+                }
+            }
+        }
+        if( $order && get_post_meta( $order->get_id(), '_created_via', true ) !== 'rest-api' ) return;
+        $this->wcmp_create_orders($order->get_id(), array(), $order, true);
     }
 
     /**
