@@ -838,75 +838,58 @@ class WCMp_Product {
         $post = get_post($post_id);
         
         if ($post->post_type == 'product') { 
-            $_product = wc_get_product($post_id);
-            if ($_product->is_type('variable')) {
-                $children = $_product->get_children();
-                if(!empty($children)) {
-                    array_push($children, $post_id);
-                    $products = $children;
-                } else {
-                    $products = array($post_id);
-                }
-            } else {
-                $products = array($post_id);
+            if (isset($_POST['commision'])) {
+                update_post_meta($post_id, '_commission_per_product', $_POST['commision']);
+            }
+
+            if (isset($_POST['commission_percentage'])) {
+                update_post_meta($post_id, '_commission_percentage_per_product', $_POST['commission_percentage']);
+            }
+
+            if (isset($_POST['fixed_with_percentage_qty'])) {
+                update_post_meta($post_id, '_commission_fixed_with_percentage_qty', $_POST['fixed_with_percentage_qty']);
+            }
+
+            if (isset($_POST['fixed_with_percentage'])) {
+                update_post_meta($post_id, '_commission_fixed_with_percentage', $_POST['fixed_with_percentage']);
             }
             
-            if( !empty($products) ) {
-                foreach( $products as $product ) {
-                    if (isset($_POST['commision'])) {
-                        update_post_meta($product, '_commission_per_product', $_POST['commision']);
-                    }
+            if (isset($_POST['choose_vendor']) && !empty($_POST['choose_vendor'])) {
 
-                    if (isset($_POST['commission_percentage'])) {
-                        update_post_meta($product, '_commission_percentage_per_product', $_POST['commission_percentage']);
-                    }
-
-                    if (isset($_POST['fixed_with_percentage_qty'])) {
-                        update_post_meta($product, '_commission_fixed_with_percentage_qty', $_POST['fixed_with_percentage_qty']);
-                    }
-
-                    if (isset($_POST['fixed_with_percentage'])) {
-                        update_post_meta($product, '_commission_fixed_with_percentage', $_POST['fixed_with_percentage']);
-                    }
+                $term = get_term($_POST['choose_vendor'], $WCMp->taxonomy->taxonomy_name);
+                if ($term) {
+                    wp_delete_object_term_relationships($post_id, $WCMp->taxonomy->taxonomy_name);
+                    //wp_set_post_terms($post_id, $term->slug, $WCMp->taxonomy->taxonomy_name, true);
+                    wp_set_object_terms($post_id, (int) $term->term_id, $WCMp->taxonomy->taxonomy_name, true);
                     
-                    if (isset($_POST['choose_vendor']) && !empty($_POST['choose_vendor'])) {
+                }
 
-                        $term = get_term($_POST['choose_vendor'], $WCMp->taxonomy->taxonomy_name);
-                        if ($term) {
-                            wp_delete_object_term_relationships($product, $WCMp->taxonomy->taxonomy_name);
-                            //wp_set_post_terms($post_id, $term->slug, $WCMp->taxonomy->taxonomy_name, true);
-                            wp_set_object_terms($product, (int) $term->term_id, $WCMp->taxonomy->taxonomy_name, true);
-                            
-                        }
-
-                        $vendor = get_wcmp_vendor_by_term($_POST['choose_vendor']);
-                        if (!wp_is_post_revision($product)) {
-                            // unhook this function so it doesn't loop infinitely
-                            remove_action('save_post', array($this, 'process_vendor_data'));
-                            // update the post, which calls save_post again
-                            wp_update_post(array('ID' => $product, 'post_author' => $vendor->id));
-                            // re-hook this function
-                            add_action('save_post', array($this, 'process_vendor_data'));
-                        }
-                    }elseif(!isset($_POST['woocommerce-process-checkout-nonce'])){
-                        // vendor assign with product
-                        if(is_user_wcmp_vendor(get_current_user_id())){
-                            $vendor = get_wcmp_vendor(get_current_user_id());
-                            wp_delete_object_term_relationships($product, $WCMp->taxonomy->taxonomy_name);
-                            $term = get_term($vendor->term_id, $WCMp->taxonomy->taxonomy_name);
-                            //wp_set_post_terms($post_id, $term->name, $WCMp->taxonomy->taxonomy_name, false);
-                            if($term)
-                                wp_set_object_terms($product, (int) $term->term_id, $WCMp->taxonomy->taxonomy_name, true);
-                            $vendor = get_wcmp_vendor_by_term($vendor->term_id);
-                            if (!wp_is_post_revision($product) && $vendor) {
-                                // unhook this function so it doesn't loop infinitely
-                                remove_action('save_post', array($this, 'process_vendor_data'));
-                                // update the post, which calls save_post again
-                                wp_update_post(array('ID' => $product, 'post_author' => $vendor->id));
-                                // re-hook this function
-                                add_action('save_post', array($this, 'process_vendor_data'));
-                            }
-                        }
+                $vendor = get_wcmp_vendor_by_term($_POST['choose_vendor']);
+                if (!wp_is_post_revision($post_id)) {
+                    // unhook this function so it doesn't loop infinitely
+                    remove_action('save_post', array($this, 'process_vendor_data'));
+                    // update the post, which calls save_post again
+                    wp_update_post(array('ID' => $post_id, 'post_author' => $vendor->id));
+                    // re-hook this function
+                    add_action('save_post', array($this, 'process_vendor_data'));
+                }
+            }elseif(!isset($_POST['woocommerce-process-checkout-nonce'])){
+                // vendor assign with product
+                if(is_user_wcmp_vendor(get_current_user_id())){
+                    $vendor = get_wcmp_vendor(get_current_user_id());
+                    wp_delete_object_term_relationships($post_id, $WCMp->taxonomy->taxonomy_name);
+                    $term = get_term($vendor->term_id, $WCMp->taxonomy->taxonomy_name);
+                    //wp_set_post_terms($post_id, $term->name, $WCMp->taxonomy->taxonomy_name, false);
+                    if($term)
+                        wp_set_object_terms($post_id, (int) $term->term_id, $WCMp->taxonomy->taxonomy_name, true);
+                    $vendor = get_wcmp_vendor_by_term($vendor->term_id);
+                    if (!wp_is_post_revision($post_id) && $vendor) {
+                        // unhook this function so it doesn't loop infinitely
+                        remove_action('save_post', array($this, 'process_vendor_data'));
+                        // update the post, which calls save_post again
+                        wp_update_post(array('ID' => $post_id, 'post_author' => $vendor->id));
+                        // re-hook this function
+                        add_action('save_post', array($this, 'process_vendor_data'));
                     }
                 }
             }
