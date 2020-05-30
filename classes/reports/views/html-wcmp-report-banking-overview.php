@@ -9,9 +9,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $WCMp;
 
+$vendor = isset($vendor) ? $vendor : '';
+
 ?>
 
 <div id="poststuff" class="woocommerce-reports-wide">
+	<?php if(!$vendor) { ?>
 	<div class="postbox">
 		<h3 class="stats_range">
 			<ul>
@@ -56,9 +59,82 @@ global $WCMp;
 			</form>
 		</div>
 	</div>
-	<div class="postbox box_data">
-		<div class="sort_banking_table">
-			<?php echo $table; ?>
-		</div>
+	<?php } ?>
+	<div class="sort_banking_table">
+		<?php
+		$table_headers = apply_filters('wcmp_admin_report_banking_header', array(
+		    'status'      => __( 'Status', 'dc-woocommerce-multi-vendor' ),
+		    'date'      => __( 'Date', 'dc-woocommerce-multi-vendor' ),
+		    'type'      => __( 'Type', 'dc-woocommerce-multi-vendor' ),
+		    'reference_id'      => __( 'Reference ID', 'dc-woocommerce-multi-vendor' ),
+		    'Credit'      => __( 'Credit', 'dc-woocommerce-multi-vendor' ),
+		    'Debit'      => __( 'Debit', 'dc-woocommerce-multi-vendor' ),
+		    'balance'      => __( 'Balance', 'dc-woocommerce-multi-vendor' ),
+		));
+		$headers = array_keys($table_headers);
+		if(isset($vendor_all_ledgers)) {
+			?>
+			<table class='widefat'>
+				<thead>
+					<tr>
+						<?php
+							foreach($table_headers as $key => $header)
+								echo "<th class='total_row' id=".$key.">".$header."</th>";
+
+						?>
+					</tr>
+				</thead>
+				<tbody>
+				<?php
+				if ( !empty( $vendor_all_ledgers ) ) {
+	                foreach ($vendor_all_ledgers as $ledger ) {
+	                    // total credited balance
+	                    $total_credit += floatval( $ledger->credit );
+	                    // total debited balance
+	                    $total_debit += floatval( $ledger->debit );
+	                    $order = wc_get_order( $ledger->order_id );
+	                    $currency = ( $order ) ? $order->get_currency() : '';
+	                    $ref_types = get_wcmp_ledger_types();
+	                    $ref_type = isset($ref_types[$ledger->ref_type]) ? $ref_types[$ledger->ref_type] : ucfirst( $ledger->ref_type );
+	                    $type = '<mark class="type ' . $ledger->ref_type . '"><span>' . $ref_type . '</span></mark>';
+	                    $status = $ledger->ref_status;
+	                    if($ref_type == 'Commission') {
+	                        $link = admin_url('post.php?post=' . $ledger->order_id . '&action=edit');
+	                        $ref_link = '<a href="'.$link.'">#'.$ledger->order_id.'</a>';
+	                    } elseif($ref_type == 'Refund' && $ref_type == 'Withdrawal') {
+	                        $com_id = get_post_meta( $ledger->order_id, '_commission_id', true );
+	                        $link = admin_url('post.php?post=' . $com_id . '&action=edit');
+	                        $ref_link = '<a href="'.$link.'">#'.$com_id.'</a>';
+	                    }
+	                    $credit = ( $ledger->credit ) ? wc_price($ledger->credit, array('currency' => $currency)) : '';
+	                    $debit = ( $ledger->debit ) ? wc_price($ledger->debit, array('currency' => $currency)) : '';
+	                    $banking_datas = apply_filters( 'wcmp_admin_report_banking_details', array( 
+	                        'status' => ucfirst( $status ), 
+	                        'date' => wcmp_date($ledger->created), 
+	                        'type' => $ref_type, 
+	                        'reference_id' => $ref_link, 
+	                        'Credit' => $credit, 
+	                        'Debit' => $debit, 
+	                        'balance' => wc_price($ledger->balance, array('currency' => $currency))
+	                    ), $ledger );
+	                    ?>
+						<tr>
+							<?php
+							foreach($banking_datas as $key => $data) {
+								if( in_array($key, $headers) )
+									echo "<td class='total_row'>".$data."</td>";
+							}
+							?>
+						</tr>
+						<?php
+	                }
+	            } else {
+	            	echo '<tr><td colspan="3">' . __('No records found.', 'dc-woocommerce-multi-vendor') . '</td></tr>';
+	            }
+	            
+				?>
+			</tbody>
+			</table>
+		<?php } ?>
 	</div>
 </div>

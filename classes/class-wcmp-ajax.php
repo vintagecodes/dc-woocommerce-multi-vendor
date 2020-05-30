@@ -1247,69 +1247,13 @@ class WCMp_Ajax {
         $start_date = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
         $end_date = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
 
-        $table = '';
-            $table .= "<table class='widefat'>
-                <thead>
-                    <tr>
-                        <th>" .esc_html( 'Status', 'dc-woocommerce-multi-vendor' ). "</th>
-                        <th class='total_row'>" .esc_html( 'Date', 'dc-woocommerce-multi-vendor' ). "</th>
-                        <th class='total_row'>" .esc_html( 'Type', 'dc-woocommerce-multi-vendor' ). "</th>
-                        <th class='total_row'>" .esc_html( ' Reference ID', 'dc-woocommerce-multi-vendor' ). "</th>
-                        <th class='total_row'>" .esc_html( ' Credit', 'dc-woocommerce-multi-vendor' ). "</th>
-                        <th class='total_row'>" .esc_html( 'Debit', 'dc-woocommerce-multi-vendor' ). "</th>
-                        <th class='total_row'>" .esc_html( 'Balance', 'dc-woocommerce-multi-vendor' ). "</th>
-                    </tr>
-                </thead>
-                <tbody>";
-
-
         if ( $vendor ) {
-
             $requestData = array('from_date'=> date("Y-m-d", $start_date) , 'to_date' => date("Y-m-d", $end_date) );
 
             $data_store = $WCMp->ledger->load_ledger_data_store();
-            $vendor_all_ledgers = $data_store->get_ledger( array( 'vendor_id' => $vendor->id ), '', $requestData );
-            $initial_balance = $ending_balance = $total_credit = $total_debit = 0;
-            //$vendor_ledgers = array_slice( $vendor_all_ledgers, $requestData['start'], $requestData['length'] );
-            $data = array();
-            if ( $vendor_all_ledgers ) {
-                foreach ($vendor_all_ledgers as $ledger ) {
-                    // total credited balance
-                    $total_credit += floatval( $ledger->credit );
-                    // total debited balance
-                    $total_debit += floatval( $ledger->debit );
-                    $order = wc_get_order( $ledger->order_id );
-                    $currency = ( $order ) ? $order->get_currency() : '';
-                    $ref_types = get_wcmp_ledger_types();
-                    $ref_type = isset($ref_types[$ledger->ref_type]) ? $ref_types[$ledger->ref_type] : ucfirst( $ledger->ref_type );
-                    $type = '<mark class="type ' . $ledger->ref_type . '"><span>' . $ref_type . '</span></mark>';
-                    $status = $ledger->ref_status;
-                    if($ref_type == 'Commission') {
-                        $link = admin_url('post.php?post=' . $ledger->order_id . '&action=edit');
-                        $ref_link = '<a href="'.$link.'">#'.$ledger->order_id.'</a>';
-                    } elseif($ref_type == 'Refund' && $ref_type == 'Withdrawal') {
-                        $com_id = get_post_meta( $ledger->order_id, '_commission_id', true );
-                        $link = admin_url('post.php?post=' . $com_id . '&action=edit');
-                        $ref_link = '<a href="'.$link.'">#'.$com_id.'</a>';
-                    }
-                    $credit = ( $ledger->credit ) ? wc_price($ledger->credit, array('currency' => $currency)) : '';
-                    $debit = ( $ledger->debit ) ? wc_price($ledger->debit, array('currency' => $currency)) : '';
-                    $table .= "<tr>
-                                <td>" . ucfirst( $status ). "</td>
-                                <td class='total_row'>" .wcmp_date($ledger->created). "</td>
-                                <td class='total_row'>" .$ref_type. "</td>
-                                <td class='total_row'>" .$ref_link. "</td>
-                                <td class='total_row'>" .$credit. "</td>
-                                <td class='total_row'>" .$debit. "</td>
-                                <td class='total_row'>" .wc_price($ledger->balance, array('currency' => $currency)). "</td>
-                            </tr>";
-                } 
-            } else {
-                $table .= '<tr><td colspan="3">' . __('No records found.', 'dc-woocommerce-multi-vendor') . '</td></tr>';
-            }
-        }
-        $table .= "</tbody></table>";
-        echo $table;
+            $vendor_all_ledgers = apply_filters('wcmp_admin_report_banking_data', $data_store->get_ledger( array( 'vendor_id' => $vendor->id ), '', $requestData )); 
+            include( $WCMp->plugin_path . '/classes/reports/views/html-wcmp-report-banking-overview.php');      
+        } 
         die;
     }
 
