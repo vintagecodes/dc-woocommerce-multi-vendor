@@ -34,6 +34,7 @@ class WCMp_Order {
             add_filter('woocommerce_my_account_my_orders_query', array($this, 'woocommerce_my_account_my_orders_query'), 99);
             add_filter('woocommerce_my_account_my_orders_columns', array($this, 'woocommerce_my_account_my_orders_columns'), 99);
             add_action('woocommerce_my_account_my_orders_column_wcmp_suborder', array($this, 'woocommerce_my_account_my_orders_column_wcmp_suborder'), 99);
+            add_filter( 'woocommerce_customer_available_downloads', array($this, 'woocommerce_customer_available_downloads'), 99);
             add_action('wcmp_frontend_enqueue_scripts', array($this, 'wcmp_frontend_enqueue_scripts'));
             if( !is_user_wcmp_vendor( get_current_user_id() ) ) {
                 add_filter('manage_shop_order_posts_columns', array($this, 'wcmp_shop_order_columns'), 99);
@@ -1150,6 +1151,15 @@ class WCMp_Order {
             echo '<span class="na">&ndash;</span>';
         }
     }
+
+    public function woocommerce_customer_available_downloads( $downloads ) {
+       $parent_downloads = array();
+       foreach( $downloads as $download ) {
+           if( !wp_get_post_parent_id( $download['order_id'] ) )
+               $parent_downloads[] = $download;
+       }
+       return $parent_downloads;
+   }
     
     public function wcmp_frontend_enqueue_scripts(){
         if(is_account_page()){
