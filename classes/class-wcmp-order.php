@@ -1397,7 +1397,7 @@ class WCMp_Order {
         $refund_request_addi_info = isset( $_REQUEST['refund_request_addi_info'] ) ? $_REQUEST['refund_request_addi_info'] : '';
         $refund_settings = get_option( 'wcmp_payment_refund_payment_settings_name', true );
         $refund_reason_options = ( isset( $refund_settings['refund_order_msg'] ) && $refund_settings['refund_order_msg'] ) ? explode( "||", $refund_settings['refund_order_msg'] ) : array();
-        $refund_reason = ( $reason_option == 'others' ) ? $refund_reason_other : isset( $refund_reason_options[$reason_option] ) ? $refund_reason_options[$reason_option] : ''; 
+        $refund_reason = (( $reason_option == 'others' ) ? $refund_reason_other : isset( $refund_reason_options[$reason_option] )) ? $refund_reason_options[$reason_option] : ''; 
         $refund_details = array(
             'refund_reason' => $refund_reason,
             'addi_info' => $refund_request_addi_info,
