@@ -60,8 +60,7 @@ class WCMp_BuddyPress {
 
         add_filter( 'bp_core_fetch_avatar_no_grav', array( $this, 'fetch_avatar_no_grav' ) );
 
-        add_filter( 'bp_core_avatar_default', array( $this, 'set_avatar_default'  ) );
-
+        add_filter( 'bp_core_avatar_default', array( $this, 'set_avatar_default'  ) , 10 , 2 );
 		/*************************  Default Avatar cover image  ***********************************/
         add_filter( 'bp_before_xprofile_cover_image_settings_parse_args', array( $this, 'bpcp_profile_cover_default_from_vendor'), 10, 1 );
 
@@ -125,19 +124,19 @@ class WCMp_BuddyPress {
 
     public function fetch_avatar_no_grav( $false ){
     	$prfile_sync = get_user_meta( bp_displayed_user_id(),'wcmp_sync_profile_buddy', true );
-    	if (!is_user_wcmp_vendor(bp_displayed_user_id())  ) return;
-    	if( !$prfile_sync ) return;
+    	if (!is_user_wcmp_vendor(bp_displayed_user_id())  ) return $false;
+    	if( !$prfile_sync ) return $false;
     	return true;
     } 
 
-    public function set_avatar_default(){
-    	global $WCMp;
+    public function set_avatar_default( $avatar, $params ){    	
+        global $WCMp;
 
     	$prfile_sync = get_user_meta( bp_displayed_user_id(),'wcmp_sync_profile_buddy', true );
 
-    	if (!is_user_wcmp_vendor(bp_displayed_user_id()) ) return;
+    	if (!is_user_wcmp_vendor(bp_displayed_user_id()) ) return $avatar;
 
-    	if( !$prfile_sync ) return;
+    	if( !$prfile_sync ) return $avatar;
 
     	$vendor = get_wcmp_vendor(bp_displayed_user_id());
     	$default = $vendor->get_image('image');
@@ -155,7 +154,7 @@ class WCMp_BuddyPress {
 
     	if (!is_user_wcmp_vendor(bp_displayed_user_id()) ) return $settings;
 
-    	if( !$cover_sync ) return;
+    	if( !$cover_sync ) return $settings;
 
     	$vendor = get_wcmp_vendor(bp_displayed_user_id());
 		// set vendor banner to members url
