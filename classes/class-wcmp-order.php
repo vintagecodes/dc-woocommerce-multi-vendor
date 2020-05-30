@@ -72,6 +72,7 @@ class WCMp_Order {
             add_filter( 'woocommerce_order_item_get_formatted_meta_data', array($this, 'woocommerce_hidden_order_item_get_formatted_meta_data'), 99 );
             add_action( 'woocommerce_order_status_changed', array($this, 'wcmp_vendor_order_status_changed_actions'), 99, 3 );
             add_action( 'woocommerce_rest_shop_order_object_query', array($this, 'wcmp_exclude_suborders_from_rest_api_call'), 99, 2 );
+            add_filter( "woocommerce_rest_shop_order_object_query", array($this, 'wcmp_suborder_hide' ), 99 , 2 );
         }
     }
 
@@ -1466,4 +1467,17 @@ class WCMp_Order {
             }
         }
     }
+
+    public function wcmp_suborder_hide( $args, $request ){
+        $woocommerce_orders = wcmp_get_orders();
+        $suborders = array();
+        foreach ($woocommerce_orders as $key => $value) {
+            if( wp_get_post_parent_id( $value ) ) {
+                $suborders[] = $value;
+            }
+        }
+        $args['post__not_in'] = array( $suborders );
+        return $args;
+    }
+
 }
