@@ -100,7 +100,7 @@ class WCMp_Notices {
 	}
 
 	public function vendor_notices_send_email( $new_status, $old_status, $post ) { 
-		if ( $new_status == 'publish' && $old_status != 'publish' ) {
+		if ( $new_status == 'publish' && $old_status != 'publish' && $post->post_type == 'wcmp_vendor_notice' ) {
 			$email_vendor = WC()->mailer()->emails['WC_Email_Vendor_New_Announcement'];
 			$vendors = ( get_post_meta( $post->ID, '_wcmp_vendor_notices_vendors', true ) ) ? (array)get_post_meta( $post->ID, '_wcmp_vendor_notices_vendors', true ) : get_wcmp_vendors( array(), 'ids' );
 			$single = ( count($vendors) == 1 ) ? __( 'Your', 'dc-woocommerce-multi-vendor' ) : __( 'All vendors and their', 'dc-woocommerce-multi-vendor' );
