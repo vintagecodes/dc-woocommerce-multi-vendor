@@ -3852,7 +3852,8 @@ if ( ! function_exists( 'generate_hierarchical_taxonomy_html' ) ) {
 
     function generate_hierarchical_taxonomy_html( $taxonomy, $terms, $post_terms, $add_cap, $level = 0, $max_depth = 2 ) {
         $max_depth = apply_filters( 'wcmp_generate_hierarchical_taxonomy_html_max_depth', 5, $taxonomy, $terms, $post_terms, $level );
-        $tax_html = '<ul class="taxonomy-widget ' . $taxonomy . ' level-' . $level . '">';
+        $tax_html_class = ($level == 0) ? 'taxonomy-widget ' . $taxonomy . ' level-' . $level : '';
+        $tax_html = '<ul class="'.$tax_html_class.'">';
         foreach ( $terms as $term_id => $term_name ) {
             $child_html = '';
             if ( $max_depth > $level ) {
