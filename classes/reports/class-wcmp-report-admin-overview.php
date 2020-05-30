@@ -46,7 +46,7 @@ class WCMp_Report_Admin_overview extends WC_Admin_Report {
         $args = apply_filters('wcmp_report_admin_overview_query_args', array(
                 'post_type' => 'shop_order',
                 'posts_per_page' => -1,
-                'author' => get_current_user_id(),
+                'post_parent' => 0,
                 'post_status' => array('wc-processing', 'wc-completed'),
                 'date_query' => array(
                     'inclusive' => true,
