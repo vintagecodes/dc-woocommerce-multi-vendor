@@ -321,37 +321,39 @@ class WCMp_Report {
      * @param object $orders
      */
     public function filter_orders_report_overview($orders) {
-        foreach ($orders as $order_key => $order) {
-            $vendor_item = false;
-            $order_obj = new WC_Order($order->ID);
-            $items = $order_obj->get_items('line_item');
-            foreach ($items as $item_id => $item) {
-                $product_id = wc_get_order_item_meta($item_id, '_product_id', true);
-                $vendor_id = wc_get_order_item_meta($item_id, '_vendor_id', true);
-                $current_user = get_current_vendor_id();
-                if ($vendor_id) {
-                    if ($vendor_id == $current_user) {
-                        $existsids[] = $product_id;
-                        $vendor_item = true;
-                    }
-                } else {
-                    //for vendor logged in only
-                    if (is_user_wcmp_vendor($current_user)) {
-                        $vendor = get_wcmp_vendor($current_user);
-                        $vendor_products = $vendor->get_products_ids();
-                        $existsids = array();
-                        foreach ($vendor_products as $vendor_product) {
-                            $existsids[] = ( $vendor_product->ID );
-                        }
-                        if (in_array($product_id, $existsids)) {
-                            $vendor_item = true;
-                        }
-                    }
-                }
-            }
-            if (!$vendor_item)
-                unset($orders[$order_key]);
-        }
+    	if($orders) {
+	        foreach ($orders as $order_key => $order) {
+	            $vendor_item = false;
+	            $order_obj = new WC_Order($order->ID);
+	            $items = $order_obj->get_items('line_item');
+	            foreach ($items as $item_id => $item) {
+	                $product_id = wc_get_order_item_meta($item_id, '_product_id', true);
+	                $vendor_id = wc_get_order_item_meta($item_id, '_vendor_id', true);
+	                $current_user = get_current_vendor_id();
+	                if ($vendor_id) {
+	                    if ($vendor_id == $current_user) {
+	                        $existsids[] = $product_id;
+	                        $vendor_item = true;
+	                    }
+	                } else {
+	                    //for vendor logged in only
+	                    if (is_user_wcmp_vendor($current_user)) {
+	                        $vendor = get_wcmp_vendor($current_user);
+	                        $vendor_products = $vendor->get_products_ids();
+	                        $existsids = array();
+	                        foreach ($vendor_products as $vendor_product) {
+	                            $existsids[] = ( $vendor_product->ID );
+	                        }
+	                        if (in_array($product_id, $existsids)) {
+	                            $vendor_item = true;
+	                        }
+	                    }
+	                }
+	            }
+	            if (!$vendor_item)
+	                unset($orders[$order_key]);
+	        }
+	    }
         return $orders;
     }
 
@@ -363,50 +365,12 @@ class WCMp_Report {
      * @return array
      */
     public function filter_tabs($tabs) {
-        global $woocommerce;
-        unset($tabs['wcmp_vendors']['reports']['vendor']);
-        $return = array(
-            'wcmp_vendors' => $tabs['wcmp_vendors'],
-        );
-        return $return;
+       global $woocommerce;
+       unset($tabs['wcmp_vendors']['reports']['vendor']);
+       return $tabs;
     }
 
-    /**
-     * WCMp reports tab options
-     */
-    // function wcmp_report_tabs($reports) {
-    //     global $WCMp;
-    //     $reports['wcmp_vendors'] = apply_filters( 'wcmp_backend_sales_report_tabs', array(
-    //         'title' => __('WCMp', 'dc-woocommerce-multi-vendor'),
-    //         'reports' => array(
-    //             "overview" => array(
-    //                 'title' => __('Overview', 'dc-woocommerce-multi-vendor'),
-    //                 'description' => '',
-    //                 'hide_title' => true,
-    //                 'callback' => array(__CLASS__, 'wcmp_get_report')
-    //             ),
-    //             "vendor" => array(
-    //                 'title' => __('Vendor', 'dc-woocommerce-multi-vendor'),
-    //                 'description' => '',
-    //                 'hide_title' => true,
-    //                 'callback' => array(__CLASS__, 'wcmp_get_report')
-    //             ),
-    //             "product" => array(
-    //                 'title' => __('Product', 'dc-woocommerce-multi-vendor'),
-    //                 'description' => '',
-    //                 'hide_title' => true,
-    //                 'callback' => array(__CLASS__, 'wcmp_get_report')
-    //             )
-    //         )
-    //     ) );
-    //     if( !is_user_wcmp_vendor(get_current_user_id() ) ) {
-    //         if( isset( $reports['wcmp_vendors']['reports']['overview'] ) ){
-    //             unset( $reports['wcmp_vendors']['reports']['overview'] );
-    //         }
-    //     }
-    //     return $reports;
-    // }
-
+    
     /**
      * Get a report from our reports subfolder
      */
