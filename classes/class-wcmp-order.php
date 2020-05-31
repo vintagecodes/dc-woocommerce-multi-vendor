@@ -1479,5 +1479,4 @@ class WCMp_Order {
         $args['post__not_in'] = array( $suborders );
         return $args;
     }
-
 }
