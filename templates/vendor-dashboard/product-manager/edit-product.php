@@ -226,8 +226,59 @@ global $WCMp;
 
         <div class="row">
             <div class="col-md-8">
-            <?php do_action( 'wcmp_after_product_excerpt_metabox_panel', $post->ID ); ?>
-            <?php do_action( 'wcmp_afm_after_product_excerpt_metabox_panel', $post->ID ); ?>
+                <?php do_action( 'wcmp_after_product_excerpt_metabox_panel', $post->ID ); ?>
+                <?php do_action( 'wcmp_afm_after_product_excerpt_metabox_panel', $post->ID ); ?>
+                
+                <?php 
+                do_action( 'wcmp_before_product_note_metabox_panel', $post->ID );
+                $vendor = get_wcmp_vendor(get_current_user_id() ); 
+                $notes = WCMp_Product::get_product_note($post->ID);
+                ?>
+                <?php if($post->post_status == 'pending') { ?>
+                <div class="panel panel-default pannel-outer-heading order-action">
+                    <div class="panel-heading">
+                        <?php esc_html_e( 'Rejection Note', 'dc-woocommerce-multi-vendor' ); ?>
+                    </div>
+                    <div class="panel-body panel-content-padding form-group-wrapper"> 
+                        <ul class="order_notes list-group mb-0">
+                            <li class="list-group-item list-group-item-action flex-column align-items-start add_note">
+                                <?php if (apply_filters('is_vendor_can_add_product_notes', true, $vendor->id)) : ?>
+                                <!--  <form method="post" name="add_product_comment"> -->
+                                <?php wp_nonce_field('dc-vendor-add-product-comment', 'vendor_add_product_nonce'); ?> 
+                                    <h3><?php _e( 'Add note', 'dc-woocommerce-multi-vendor' ); ?> <span class="img_tip" data-desc="<?php echo __( 'Add a note for your reference, or add a customer note (the user will be notified).', 'dc-woocommerce-multi-vendor' ); ?>"></span></h3>
+                                    <div class="form-group">
+                                        <textarea placeholder="<?php _e('Enter text ...', 'dc-woocommerce-multi-vendor'); ?>" class="form-control" name="product_comment_text"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="btn btn-default wcmp-add-order-note" type="submit" name="wcmp_submit_product_comment" value="<?php _e('Submit', 'dc-woocommerce-multi-vendor'); ?>">
+                                    </div>
+                                    <input type="hidden" name="product_id" value="<?php echo $post->ID; ?>">
+                                    <input type="hidden" name="current_user_id" value="<?php echo $vendor->id; ?>">
+                                <!--  </form>  --> 
+                                <?php endif; ?>  
+                            </li>
+                            <li class="list-group-item list-group-item-action flex-column align-items-start"><div class="form-group"><h3><?php esc_html_e( 'Communication Log', 'dc-woocommerce-multi-vendor' ); ?></h3></div></li>
+                            <?php
+                            if ($notes) {
+                                foreach ($notes as $note) {
+                                    $author = get_comment_meta( $note->comment_ID, '_author_id', true );
+                                    $Seller = is_user_wcmp_vendor($author) ? "(Seller)" : '';
+                                    ?>
+                                    <li class="list-group-item list-group-item-action flex-column align-items-start order-notes">
+                                        <p class="order-note"><span><?php echo wptexturize( wp_kses_post( $note->comment_content ) ); ?></span></p>
+                                        <p><?php echo esc_html_e($note->comment_author); ?><?php echo $Seller; ?> - <?php echo esc_html_e( date_i18n(wc_date_format() . ' ' . wc_time_format(), strtotime($note->comment_date) ) ); ?></p>
+                                    </li>
+                                    <?php
+                                }
+                            }else{
+                                echo '<li class="list-group-item list-group-item-action flex-column align-items-start order-notes">' . __( 'There are no notes yet.', 'dc-woocommerce-multi-vendor' ) . '</li>';
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+                <?php do_action( 'wcmp_after_product_note_metabox_panel', $post->ID ); ?>
+                <?php } ?>
             </div>
             <div class="col-md-4">
                 <?php if( ( get_wcmp_vendor_settings('is_disable_marketplace_plisting', 'general') == 'Enable' ) ) :

@@ -21,12 +21,15 @@ jQuery(document).ready(function($) {
 		 });
 	});
 	
-	$('.vendor_dismiss_button').click(function (e) {
+	$('.vendor_dismiss_submit').click(function (e) {
 		e.preventDefault();
+		var id = $(this).attr('data-id');
+		var reason = $('#dismiss-reason-'+id).val();
 		var data = {
 				action : 'dismiss_vendor_to_do_list',
-				id : $(this).attr('data-id'),
+				id : id,
 				type: $(this).attr('data-type'),
+				reason : reason,
 		 }	
 		 $.post(ajaxurl, data, function(responsee) {
 		 		 window.location= window.location ;

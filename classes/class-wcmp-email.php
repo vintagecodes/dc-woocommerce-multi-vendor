@@ -46,6 +46,7 @@ class WCMp_Email {
 		include( 'emails/class-wcmp-email-send-report-abuse.php' );
 		include( 'emails/class-wcmp-email-vendor-new-announcement.php' );
 		include( 'emails/class-wcmp-email-customer-order-refund-request.php' );
+		include( 'emails/class-wcmp-email-vendor-product-rejected.php' );
         
         $wcmp_email = array();
         $wcmp_email['WC_Email_Vendor_New_Account'] = new WC_Email_Vendor_New_Account();
@@ -67,6 +68,7 @@ class WCMp_Email {
 		$wcmp_email['WC_Email_Send_Report_Abuse'] = new WC_Email_Send_Report_Abuse();
 		$wcmp_email['WC_Email_Vendor_New_Announcement'] = new WC_Email_Vendor_New_Announcement();
 		$wcmp_email['WC_Email_Customer_Refund_Request'] = new WC_Email_Customer_Refund_Request();
+		$wcmp_email['WC_Email_Vendor_Product_Rejected'] = new WC_Email_Vendor_Product_Rejected();
 
         return array_merge( $emails, apply_filters( 'wcmp_email_classes', $wcmp_email ) );
     }

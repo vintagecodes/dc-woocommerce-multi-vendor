@@ -393,6 +393,8 @@ class WCMp_Admin {
         endif;
         if (in_array($screen->id, array('wcmp_page_wcmp-to-do', 'edit-wcmp_vendorrequest'))) {
             wp_enqueue_script( 'dc_to_do_list_js' );
+            $WCMp->library->load_bootstrap_script_lib();
+            $WCMp->library->load_bootstrap_style_lib();
         }
         if (in_array($screen->id, array('wcmp_page_vendors'))) :
         	$WCMp->library->load_upload_lib();

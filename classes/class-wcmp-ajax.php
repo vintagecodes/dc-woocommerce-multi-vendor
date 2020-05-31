@@ -1394,12 +1394,20 @@ class WCMp_Ajax {
 
         $id = $_POST['id'];
         $type = $_POST['type'];
+        $post = get_post($id);
         if ($type == 'user') {
             update_user_meta($id, '_dismiss_to_do_list', 'true');
         } else if ($type == 'shop_coupon') {
             update_post_meta($id, '_dismiss_to_do_list', 'true');
         } else if ($type == 'product') {
+            $reason = esc_textarea($_POST['reason']);
+            $vendor = get_wcmp_vendor($post->post_author);
+            $email_vendor = WC()->mailer()->emails['WC_Email_Vendor_Product_Rejected'];
+            $email_vendor->trigger($id, $post, $vendor, $reason);
             update_post_meta($id, '_dismiss_to_do_list', 'true');
+            $comment_id = WCMp_Product::add_product_note($id, $reason, get_current_user_id());
+            update_post_meta($id, '_comment_dismiss', $comment_id);
+            add_comment_meta($comment_id, '_author_id', get_current_user_id());
         } else if ($type == 'dc_commission') {
             update_post_meta($id, '_dismiss_to_do_list', 'true');
             wp_update_post(array('ID' => $id, 'post_status' => 'wcmp_canceled'));
@@ -1955,12 +1963,32 @@ class WCMp_Ajax {
                         }
                     }
 
+                    $dismiss_comment_id = get_post_meta($product->get_id(), '_comment_dismiss', true);
+                    $dismiss_comment = get_comment($dismiss_comment_id);
+
+                    $dismiss_reason_modal = '<div class="modal fade" id="wcmp-product-dismiss-reason-modal-'.$product->get_id().'" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">'.__('Rejection Note', 'dc-woocommerce-multi-vendor').'</h4>
+                                </div>
+                                <div class="wcmp-product-dismiss-modal modal-body order-notes">     
+                                    <p class="order-note"><span>'.wptexturize( wp_kses_post( $dismiss_comment->comment_content ) ).'</span></p>
+                                    <p>'.__($dismiss_comment->comment_author).' - '.__( date_i18n(wc_date_format() . ' ' . wc_time_format(), strtotime($dismiss_comment->comment_date) ) ).'</p>
+                                </div>
+                            </div>
+                        </div>
+                     </div>';
+
                     $actions_col = array(
                         'view' => '<a href="' . esc_url($product->get_permalink()) . '" target="_blank" title="' . $view_title . '"><i class="wcmp-font ico-eye-icon"></i></a>',
                         'edit' => '<a href="' . esc_url($edit_product_link) . '" title="' . __('Edit', 'dc-woocommerce-multi-vendor') . '"><i class="wcmp-font ico-edit-pencil-icon"></i></a>',
                         'restore' => '<a href="' . esc_url(wp_nonce_url(add_query_arg(array('product_id' => $product->get_id()), wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_products_endpoint', 'vendor', 'general', 'products'))), 'wcmp_untrash_product')) . '" title="' . __('Restore from the Trash', 'dc-woocommerce-multi-vendor') . '"><i class="wcmp-font ico-reply-icon"></i></a>',
                         'trash' => '<a class="productDelete" href="' . esc_url(wp_nonce_url(add_query_arg(array('product_id' => $product->get_id()), wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_products_endpoint', 'vendor', 'general', 'products'))), 'wcmp_trash_product')) . '" title="' . __('Move to the Trash', 'dc-woocommerce-multi-vendor') . '"><i class="wcmp-font ico-delete-icon"></i></a>',
                         'delete' => '<a class="productDelete" href="' . esc_url(wp_nonce_url(add_query_arg(array('product_id' => $product->get_id()), wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_products_endpoint', 'vendor', 'general', 'products'))), 'wcmp_delete_product')) . '" onclick="' . $onclick . '" title="' . __('Delete Permanently', 'dc-woocommerce-multi-vendor') . '"><i class="wcmp-font ico-delete-icon"></i></a>',
+                        'dismiss' => $dismiss_reason_modal.'<a data-toggle="modal" data-target="#wcmp-product-dismiss-reason-modal-'.$product->get_id().'" title="' . __('Click to view reason for dismiss', 'dc-woocommerce-multi-vendor') . '"><i class="wcmp-font ico-reject-icon"></i></a>',
                     );
                     if ($product->get_status() == 'trash') {
                         $edit_product_link = '';
@@ -1971,6 +1999,9 @@ class WCMp_Ajax {
                         unset($actions_col['restore']);
                         unset($actions_col['delete']);
                     }
+
+                    if(!get_post_meta($product->get_id(), '_dismiss_to_do_list', true))
+                        unset($actions_col['dismiss']);
 
                     if (!current_vendor_can('edit_published_products') && get_wcmp_vendor_settings('is_edit_delete_published_product', 'capabilities', 'product') != 'Enable' && !in_array($product->get_status(), apply_filters('wcmp_enable_edit_product_options_for_statuses', array('draft', 'pending')))) { 
                         unset($actions_col['edit']);
