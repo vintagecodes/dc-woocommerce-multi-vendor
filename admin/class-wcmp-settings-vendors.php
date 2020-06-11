@@ -395,6 +395,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 						}
 					}
 				}
+				do_action('wcmp_vendor_details_update', $_POST, $vendor);
 				if ( is_wp_error( $errors ) && ! empty( $errors->errors ) ) {
 					$error_string = $errors->get_error_message();
 					echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
