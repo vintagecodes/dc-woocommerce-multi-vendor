@@ -108,7 +108,7 @@ $template_class = apply_filters('can_vendor_edit_shop_template', false) && get_u
     <div class="vendor_description">
         <div class="vendor_img_add">
             <div class="img_div"><img src=<?php echo $profile; ?> alt="<?php echo $vendor->page_title ?>"/></div>
-            <div class="vendor_address">
+            <div class="">
                 <p class="wcmp_vendor_name"><?php echo $vendor->page_title ?></p>
                 <?php do_action('before_wcmp_vendor_information',$vendor_id);?>
                 <div class="wcmp_vendor_rating">
