@@ -91,6 +91,7 @@ global $WCMp;
                                                 <h3><?php echo wc_price($transactions); ?></h3>
                                             </div>
                                         </div>
+                                        <?php do_action('wcmp_report_admin_overview',$this); ?>
                                     </div>
                                     <div class="clear"></div>
                                 </div>
