@@ -1479,4 +1479,14 @@ class WCMp_Order {
         $args['post__not_in'] = array( $suborders );
         return $args;
     }
+
+    public function get_vendor_parent_order_item_id( $item_id ) {
+        global $wpdb;
+        $vendor_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", '_vendor_order_item_id', absint( $item_id ) ) );
+        // check for shipping
+        if( !$vendor_item_id ){
+            $vendor_item_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->order_itemmeta} WHERE meta_key=%s AND order_item_id=%d", '_vendor_order_shipping_item_id', absint( $item_id ) ) );
+        }
+        return $vendor_item_id;
+    }
 }
