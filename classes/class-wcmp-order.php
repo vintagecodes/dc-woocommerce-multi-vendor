@@ -84,7 +84,7 @@ class WCMp_Order {
      */
 
     public function add_meta_date_in_order_line_item($item, $item_key, $values, $order) {
-        if ( $order && wp_get_post_parent_id( $order->get_id() ) == 0 || wcs_is_subscription( $order ) ) {
+        if ( $order && wp_get_post_parent_id( $order->get_id() ) == 0 || (function_exists('wcs_is_subscription') && wcs_is_subscription( $order )) ) {
             $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
             $vendor = get_wcmp_product_vendors($item['product_id']);
             if ($vendor) {
@@ -308,7 +308,7 @@ class WCMp_Order {
         global $WCMp;
         $items = $order->get_items();
         foreach ($items as $key => $value) {
-            if ( $order && wp_get_post_parent_id( $order->get_id() ) == 0 || wcs_is_subscription( $order ) ) {
+            if ( $order && wp_get_post_parent_id( $order->get_id() ) == 0 || (function_exists('wcs_is_subscription') && wcs_is_subscription( $order )) ) {
                 $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
                 $vendor = get_wcmp_product_vendors($value['product_id']);
                 if ($vendor) {
