@@ -27,7 +27,7 @@ function wcmp_get_orders($args = array(), $return_type = 'ids', $subonly = false
 	'orderby'          => 'date',
 	'order'            => 'DESC',
 	'post_type'        => 'shop_order',
-	'post_status'      => 'any',
+	'post_status'      => array('wc-processing', 'wc-completed'),
 	'fields'           => 'ids',
     );
     if( $subonly ) {

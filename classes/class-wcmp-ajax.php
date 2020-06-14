@@ -1106,7 +1106,7 @@ class WCMp_Ajax {
             'post_type' => 'shop_order',
             'posts_per_page' => -1,
             'author' => $vendor_id,
-            'post_status' => array('wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed'),
+            'post_status' => array('wc-processing', 'wc-completed'),
             'meta_query' => array(
                 array(
                     'key' => '_commissions_processed',
