@@ -3,9 +3,9 @@ Contributors: Dualcube, greyparrots, purnendu, itzmekhokan, rajsekharchatterjee1
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.4.1
+Tested up to: 5.4.2
 Requires PHP: 5.6
-Stable tag: 3.5.1
+Stable tag: 3.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,16 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+= 3.5.2 -  =
+* Added - Additional hook in WCMp report #357
+* Added - Hook to save global verifiy setting #352
+* Fix - Manual Refund from vendor not working #351
+* Fix - Vendorlist page minify issue.
+* Fix - Vendor store description image issue for template 2 and 3.
+* Fix - Key Performance exclude data #354
+* Fix - variable and function checking error #350
+* Updated - Language file.
+
 = 3.5.1 - 2020-05-31 =
 * Added - Product management flow #294.
 * Tweak - Backend WCMp report functionalities.
