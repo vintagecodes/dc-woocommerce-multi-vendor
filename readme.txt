@@ -189,7 +189,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
-= 3.5.2 -  =
+= 3.5.2 - 2020-06-16 =
 * Added - Additional hook in WCMp report #357
 * Added - Hook to save global verifiy setting #352
 * Fix - Manual Refund from vendor not working #351
