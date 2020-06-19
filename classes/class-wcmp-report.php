@@ -411,7 +411,7 @@ class WCMp_Report {
 
             $line_total = $sales = $comm_amount = $vendor_earnings = $earnings = 0;
 
-            $args = array(
+            $args = apply_filters( 'vendor_sales_stat_overview_args', array(
                 'post_type' => 'shop_order',
                 'posts_per_page' => -1,
                 'post_status' => array('wc-processing', 'wc-completed'),
@@ -434,7 +434,7 @@ class WCMp_Report {
                         'day' => $day,
                     ),
                 )
-            );
+            ), $vendor);
 
             $qry = new WP_Query($args);
 

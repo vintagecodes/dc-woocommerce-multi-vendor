@@ -40,11 +40,12 @@ class WCMp_Coupons_Add_Coupon {
 
     private function coupon_capablity_check( $action = 'add', $coupon_id = '' ) {
         $current_vendor_id = get_current_user_id();
+        $current_user_ids = apply_filters( 'wcmp_current_coupon_edit' , array( get_current_user_id() ) ,$coupon_id );
         if ( ! $current_vendor_id ) {
             $this->error_msg = __( 'You do not have permission to view this content. Please contact site administrator.', 'dc-woocommerce-multi-vendor' );
             return false;
         }
-        if ( $coupon_id && $current_vendor_id !== absint( get_post_field( 'post_author', $coupon_id ) ) ) {
+        if ( $coupon_id && !in_array( absint( get_post_field( 'post_author', $coupon_id ) ), $current_user_ids ) ) {
             $this->error_msg = __( 'You do not have permission to view this content. Please contact site administrator.', 'dc-woocommerce-multi-vendor' );
             return false;
         }
