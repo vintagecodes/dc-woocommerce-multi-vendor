@@ -212,6 +212,7 @@ class WCMp_Ajax {
         
         $args = array(
             'author' => $vendor->id,
+            'post_status' => 'any',
             'date_query' => array(
                 array(
                     'after'     => $start_date,
