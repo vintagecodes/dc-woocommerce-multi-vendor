@@ -31,13 +31,26 @@ global $WCMp;
                 'refund_reject' => __( 'Refund Rejected','dc-woocommerce-multi-vendor' ) 
             );
             ?>
-            <select id="refund_order_customer" name="refund_order_customer">
+            <select id="refund_order_customer" name="refund_order_customer" onchange='refund_admin_reason(this.value);'>
                 <?php foreach ( $refund_statuses as $key => $value ) { ?>
                 <option value="<?php echo $key; ?>" <?php selected( $refund_status, $key ); ?> ><?php echo $value; ?></option>
                 <?php } ?>
             </select>
+            <div class="reason_select_by_admin" id="reason_select_by_admin" style='display:none;'>
+                <textarea class="woocommerce-Input input-text" name="refund_admin_reason_text" id="refund_admin_reason_text" placeholder="Please Enter some massage"></textarea>
+            </div>
             <button class="button grant_access btn btn-default" name="update_cust_refund_status"><?php echo __('Update status', 'dc-woocommerce-multi-vendor'); ?></button>
         </div>
         </form>
     </div>
 </div>
+<!-- Script -->
+<script>
+    function refund_admin_reason(val){
+        var element = document.getElementById('reason_select_by_admin');
+        if( val == 'refund_accept' || val == 'refund_reject' )
+            element.style.display='block';
+        else  
+            element.style.display='none';
+    }
+</script>

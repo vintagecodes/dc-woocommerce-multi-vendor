@@ -73,6 +73,7 @@ if (!class_exists('WC_Email_Customer_Refund_Request')) :
                 $details = array(
                     'refund_reason' => isset( $refund_details['refund_reason'] ) ? $refund_details['refund_reason'] : '',
                     'addi_info' => isset( $refund_details['addi_info'] ) ? $refund_details['addi_info'] : '',
+                    'admin_reason' => isset( $refund_details['admin_reason'] ) ? $refund_details['admin_reason'] : '',
                     'status' => $this->status,
                 );
 
