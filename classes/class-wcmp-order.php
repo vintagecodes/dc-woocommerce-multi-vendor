@@ -299,6 +299,18 @@ class WCMp_Order {
     public function wcmp_create_orders_from_backend( $order_id, $items ){
         $order = wc_get_order($order_id);
         if(!$order) return;
+
+        $items = $order->get_items();
+        foreach ($items as $key => $value) {
+            if ( $order && wp_get_post_parent_id( $order->get_id() ) == 0 || (function_exists('wcs_is_subscription') && wcs_is_subscription( $order )) ) {
+                $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
+                $vendor = get_wcmp_product_vendors($value['product_id']);
+                if ($vendor) {
+                    wc_add_order_item_meta($key, '_vendor_id', $vendor->id);
+                    wc_add_order_item_meta($key, $general_cap, $vendor->page_title);
+                }
+            }
+        }
         $has_sub_order = get_post_meta($order_id, 'has_wcmp_sub_order', true) ? true : false;
         if($has_sub_order) return;
         $this->wcmp_create_orders($order_id, array(), $order, true);
