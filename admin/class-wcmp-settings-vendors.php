@@ -69,9 +69,11 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
     function column_username( $item ) {
     	$name_link = sprintf('?page=%s&action=%s&ID=%s', $_GET['page'], 'edit', $item['ID']);
     	$action = 'bulk-' . $this->_args['plural'];
+    	$delete_url = self_admin_url('users.php?action=delete&user='.$item['ID']);
+    	$delete_url = str_replace( '&amp;', '&', wp_nonce_url( $delete_url, 'bulk-users' ) );
     	$actions = array(
 			'edit'=> sprintf('<a href="' . $name_link . '">' . __( 'Edit', 'dc-woocommerce-multi-vendor' ) . '</a>'),
-			'delete'=> sprintf('<a href="?page=%s&action=%s&ID=%s&_wpnonce=%s">' . __( 'Delete', 'dc-woocommerce-multi-vendor' ) . '</a>', $_GET['page'], 'delete', $item['ID'], wp_create_nonce($action) ),
+			'delete'=> '<a href="'.$delete_url.'">' . __( 'Delete', 'dc-woocommerce-multi-vendor' ) . '</a>',
 			'shop' => sprintf('<a href="' . $item['permalink'] . '">' . __( 'Shop', 'dc-woocommerce-multi-vendor' ) . '</a>'),
         );
         
@@ -228,24 +230,10 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 	
 	public function process_bulk_action() {
 		if ( 'delete' === $this->current_action() ) {
-			$nonce = esc_attr( $_REQUEST['_wpnonce'] );
-			$action = 'bulk-' . $this->_args['plural'];
-			if ( ! wp_verify_nonce( $nonce, $action ) ) {
-				wp_die( __('You are not permitted to do this', 'dc-woocommerce-multi-vendor') );
-			}  else {
-				if(isset($_GET['ID'])) {
-					if(is_array($_GET['ID'])) {
-						foreach($_GET['ID'] as $id) {
-							wp_delete_user( absint( $id ) );
-						}
-					} else if(absint($_GET['ID']) > 0){
-						wp_delete_user( absint($_GET['ID']) );
-					}
-				}
-				
-				wp_redirect( $_SERVER['HTTP_REFERER'] );
-				exit;
-			}
+		 	$delete_url = self_admin_url('users.php?action=delete&users[]=' . implode( '&users[]=', $_GET['ID'] ));
+    		$delete_url = str_replace( '&amp;', '&', wp_nonce_url( $delete_url, 'bulk-users' ) );
+			wp_safe_redirect ($delete_url);
+			exit();
 		}
 		do_action('wcmp_vendor_process_bulk_action', $this->current_action(), $_REQUEST);
 	}
