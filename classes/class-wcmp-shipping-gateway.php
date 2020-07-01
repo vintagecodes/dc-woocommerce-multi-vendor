@@ -140,7 +140,7 @@ class WCMp_Shipping_Gateway {
                 <div class="wcmp_shipping_classes">
                     <hr>
                     <h2><?php _e('Shipping Class Cost', 'dc-woocommerce-multi-vendor'); ?></h2> 
-                    <div class="description mb-15"><?php _e('These costs can be optionally entered based on the shipping class set per product( This cost will be added with the shipping cost above).', 'dc-woocommerce-multi-vendor'); ?></div>
+                    <div class="description mb-15"><?php _e('These costs can be optionally entered based on the shipping class set per product (This cost will be added with the shipping cost above).', 'dc-woocommerce-multi-vendor'); ?></div>
                     <?php
 
                     // $shipping_classes =  WC()->shipping->get_shipping_classes();

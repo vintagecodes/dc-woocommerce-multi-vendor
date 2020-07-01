@@ -3462,7 +3462,7 @@ class WCMp_Ajax {
                             if (!apply_filters( 'wcmp_hide_vendor_shipping_classes', false )) { 
                             $settings_html .= '<div class="wcmp_shipping_classes"><hr>'
                                     . '<h2>'.__('Shipping Class Cost', 'dc-woocommerce-multi-vendor').'</h2>'
-                                    . '<div class="description mb-15">'.__('These costs can be optionally entered based on the shipping class set per product( This cost will be added with the shipping cost above).', 'dc-woocommerce-multi-vendor').'</div>';
+                                    . '<div class="description mb-15">'.__('These costs can be optionally entered based on the shipping class set per product (This cost will be added with the shipping cost above).', 'dc-woocommerce-multi-vendor').'</div>';
       
                             $shipping_classes = get_vendor_shipping_classes();
 
