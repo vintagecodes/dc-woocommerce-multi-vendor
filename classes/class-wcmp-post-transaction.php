@@ -218,10 +218,12 @@ class WCMp_Transaction {
         if (is_array($commissions)) {
             foreach ($commissions as $commission_id) {
                 $wcmp_order = get_wcmp_order_by_commission( $commission_id );
-                $order = $wcmp_order->get_order();
-                $line_items = $order->get_items( 'line_item' );
-                foreach ( $line_items as $item_id => $item ) {
-                    $title[] = esc_html( $item->get_name() );
+                if( $wcmp_order ){
+                    $order = $wcmp_order->get_order();
+                    $line_items = $order->get_items( 'line_item' );
+                    foreach ( $line_items as $item_id => $item ) {
+                        $title[] = esc_html( $item->get_name() );
+                    }
                 }
             }
         }
