@@ -39,6 +39,7 @@ if (!class_exists('WC_Email_Customer_Refund_Request')) :
             $this->placeholders = array(
                 '{order_date}'   => '',
                 '{order_number}' => '',
+                '{refund_status}'=> '',
             );
 
             $this->template_base = $WCMp->plugin_path . 'templates/';
@@ -79,6 +80,7 @@ if (!class_exists('WC_Email_Customer_Refund_Request')) :
 
                 $this->refund_details = $details;
                 $this->placeholders['{order_number}'] = $order_id;
+                $this->placeholders['{refund_status}'] = $this->status;
             }
 
             if (!$this->is_enabled() || !$this->get_recipient())
@@ -94,7 +96,7 @@ if (!class_exists('WC_Email_Customer_Refund_Request')) :
          * @return string
          */
         public function get_default_subject() {
-            return apply_filters('wcmp_customer_refund_request_email_subject', __('New Refund Request - Order -#{order_number}', 'dc-woocommerce-multi-vendor'), $this->object);
+            return apply_filters('wcmp_customer_refund_request_email_subject', __('New Refund {refund_status} for - Order -#{order_number}', 'dc-woocommerce-multi-vendor'), $this->object);
         }
 
         /**
@@ -104,7 +106,7 @@ if (!class_exists('WC_Email_Customer_Refund_Request')) :
          * @return string
          */
         public function get_default_heading() {
-            return apply_filters('wcmp_customer_refund_request_email_heading', __(' Refund Requested! ', 'dc-woocommerce-multi-vendor'), $this->object);
+            return apply_filters('wcmp_customer_refund_request_email_heading', __(' Refund {refund_status}! ', 'dc-woocommerce-multi-vendor'), $this->object);
         }
 
         /**

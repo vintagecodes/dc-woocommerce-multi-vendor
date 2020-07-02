@@ -84,7 +84,9 @@ $subtotal = 0;
             ?>
             <!-- Customer refund request -->
             <?php
-            $WCMp->template->get_template( 'vendor-dashboard/vendor-orders/views/html-order-refund-customer.php', array( 'order' => $order, 'vendor_order' => $vendor_order, 'vendor' => $vendor ) );
+            if( apply_filters( 'wcmp_vendor_refund_capability' ,true ) ){
+                $WCMp->template->get_template( 'vendor-dashboard/vendor-orders/views/html-order-refund-customer.php', array( 'order' => $order, 'vendor_order' => $vendor_order, 'vendor' => $vendor ) );
+            }
             ?>
         </div>
         
