@@ -1464,7 +1464,8 @@ class WCMp_Product {
         $wpnonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : '';
         $product_id = isset($_REQUEST['product_id']) ? (int) $_REQUEST['product_id'] : 0;
         $vendor = get_wcmp_product_vendors($product_id);
-        if ($wpnonce && wp_verify_nonce($wpnonce, 'wcmp_delete_product') && $product_id && get_current_user_id() == $vendor->id) {
+        $current_user_ids = apply_filters( 'wcmp_product_current_id' , array( get_current_user_id() ) , $vendor );
+        if ($wpnonce && wp_verify_nonce($wpnonce, 'wcmp_delete_product') && $product_id && in_array($vendor->id, $current_user_ids )) {
             if (current_user_can('delete_published_products')) {
                 wp_delete_post($product_id);
                 wc_add_notice(__('Product Deleted!', 'dc-woocommerce-multi-vendor'), 'success');
@@ -1472,13 +1473,13 @@ class WCMp_Product {
                 exit;
             }
         }
-        if($wpnonce && wp_verify_nonce($wpnonce, 'wcmp_untrash_product') && $product_id && get_current_user_id() == $vendor->id){
+        if($wpnonce && wp_verify_nonce($wpnonce, 'wcmp_untrash_product') && $product_id && in_array($vendor->id, $current_user_ids )){
             wp_untrash_post($product_id);
             wc_add_notice(__('Product restored from the Trash', 'dc-woocommerce-multi-vendor'), 'success');
             wp_redirect($delete_product_redirect_url);
             exit;
         }
-        if($wpnonce && wp_verify_nonce($wpnonce, 'wcmp_trash_product') && $product_id && get_current_user_id() == $vendor->id){
+        if($wpnonce && wp_verify_nonce($wpnonce, 'wcmp_trash_product') && $product_id && in_array($vendor->id, $current_user_ids )){
             wp_trash_post($product_id);
             wc_add_notice(__('Product moved to the Trash', 'dc-woocommerce-multi-vendor'), 'success');
             wp_redirect($delete_product_redirect_url);
