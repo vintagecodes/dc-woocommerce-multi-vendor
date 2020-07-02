@@ -2657,9 +2657,13 @@ Class WCMp_Admin_Dashboard {
                     update_post_meta( $vendor_order_id, '_customer_refund_order', $postdata['refund_order_customer'] );
                     // trigger customer email
                     if( in_array( $postdata['refund_order_customer'], array( 'refund_reject', 'refund_accept' ) ) ) {
+
+                        $refund_details = array(
+                            'admin_reason' => isset( $postdata['refund_admin_reason_text'] ) ? $postdata['refund_admin_reason_text'] : '',
+                            );
                         $mail = WC()->mailer()->emails['WC_Email_Customer_Refund_Request'];
                         $billing_email = get_post_meta( $vendor_order_id, '_billing_email', true );
-                        $mail->trigger( $billing_email, $vendor_order_id, array(), 'customer' );
+                        $mail->trigger( $billing_email, $vendor_order_id, $refund_details, 'customer' );
                     }
                 }
             }

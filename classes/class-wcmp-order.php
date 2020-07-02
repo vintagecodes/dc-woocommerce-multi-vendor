@@ -1427,10 +1427,17 @@ class WCMp_Order {
         );
         // update customer refunt request 
         update_post_meta( $order_id, '_customer_refund_order', 'refund_request' );
-        $comment_id = $order->add_order_note( __('Customer requested a refund.', 'dc-woocommerce-multi-vendor') );
+        $comment_id = $order->add_order_note( __('Customer requested a refund '.$order_id.' .', 'dc-woocommerce-multi-vendor') );
         // user info
         $user_info = get_userdata(get_current_user_id());
         wp_update_comment(array('comment_ID' => $comment_id, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
+
+        // parent order
+        $parent_order_id = wp_get_post_parent_id($order->get_id());
+        $parent_order = wc_get_order( $parent_order_id );
+        $comment_id_parent = $parent_order->add_order_note( __('Customer requested a refund for '.$order_id.'.', 'dc-woocommerce-multi-vendor') );
+        wp_update_comment(array('comment_ID' => $comment_id_parent, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
+
         $mail = WC()->mailer()->emails['WC_Email_Customer_Refund_Request'];
         // order vendor
         $vendor_id = get_post_meta( $order_id, '_vendor_id', true );
@@ -1456,12 +1463,25 @@ class WCMp_Order {
             'refund_reject' => __('Refund Rejected','dc-woocommerce-multi-vendor') 
         );
         ?>
-        <select id="refund_order_customer" name="refund_order_customer">
+        <select id="refund_order_customer" name="refund_order_customer" onchange='refund_admin_reason(this.value);'>
             <?php foreach ( $refund_statuses as $key => $value ) { ?>
             <option value="<?php echo $key; ?>" <?php selected( $refund_status, $key ); ?> ><?php echo $value; ?></option>
             <?php } ?>
         </select>
+        <div class="reason_select_by_admin" id="reason_select_by_admin" style='display:none;'>
+            <label for="additional_massage"><?php _e( 'Please Provide Some Reason', 'dc-woocommerce-multi-vendor' ); ?></label>
+            <textarea class="woocommerce-Input input-text" name="refund_admin_reason_text" id="refund_admin_reason_text"></textarea>
+        </div>
         <button type="submit" class="button cust-refund-status button-default" name="cust_refund_status" value="<?php echo __('Update status', 'dc-woocommerce-multi-vendor'); ?>"><?php echo __('Update status', 'dc-woocommerce-multi-vendor'); ?></button>
+        <script>
+            function refund_admin_reason(val){
+                var element = document.getElementById('reason_select_by_admin');
+                if( val == 'refund_accept' || val == 'refund_reject' )
+                    element.style.display='block';
+                else  
+                    element.style.display='none';
+            }
+        </script>
         <?php
     }
 
@@ -1474,8 +1494,12 @@ class WCMp_Order {
             update_post_meta( $post_id, '_customer_refund_order', $_POST['refund_order_customer'] );
             // trigger customer email
             if( in_array( $_POST['refund_order_customer'], array( 'refund_reject', 'refund_accept' ) ) ) {
+
+                $refund_details = array(
+                    'admin_reason' => isset( $_POST['refund_admin_reason_text'] ) ? $_POST['refund_admin_reason_text'] : '',
+                    );
                 $mail = WC()->mailer()->emails['WC_Email_Customer_Refund_Request'];
-                $mail->trigger( $_POST['_billing_email'], $post_id, array(), 'customer' );
+                $mail->trigger( $_POST['_billing_email'], $post_id, $refund_details, 'customer' );
             }
         }
     }

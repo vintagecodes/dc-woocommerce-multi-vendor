@@ -31,6 +31,8 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
     <?php }else{ ?>
     <p><?php printf(__( 'Your refund request for order <a href="%s">#%s</a> is %s', 'dc-woocommerce-multi-vendor' ), esc_url( $order->get_view_order_url() ), $order->get_id(), $refund_details['status'] ); 
 			?></p>
+    <p><?php printf(__( 'Reason given by seller is %s', 'dc-woocommerce-multi-vendor' ), $refund_details['admin_reason'] ); 
+        ?></p>
     <?php } ?>
 </div>
 
