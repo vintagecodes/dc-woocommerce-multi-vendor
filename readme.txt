@@ -196,7 +196,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 * Enhancement - Refund module enhancement #366
 * Fix - Multi layer capability issue resolved
 * Fix - Sub order missing for admin created order from backend #377
-* Fix - product note display under product reviews section #374
+* Fix - Product note display under product reviews section #374
 * Fix - All order status displays for orders table on dashboard
 * Fix - Error at the time of withdrawal #310
 * Fix - Error at admin report
