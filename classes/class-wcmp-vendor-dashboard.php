@@ -2661,6 +2661,26 @@ Class WCMp_Admin_Dashboard {
                         $refund_details = array(
                             'admin_reason' => isset( $postdata['refund_admin_reason_text'] ) ? $postdata['refund_admin_reason_text'] : '',
                             );
+
+                        $order_status = '';
+                        if( $_POST['refund_order_customer'] == 'refund_accept' ) {
+                            $order_status = __( 'accepted', 'dc-woocommerce-multi-vendor' );
+                        }elseif( $_POST['refund_order_customer'] == 'refund_reject') {
+                            $order_status = __( 'rejected', 'dc-woocommerce-multi-vendor' );
+                        }
+                        // Comment note for suborder
+                        $order = wc_get_order( $vendor_order_id );
+                        $comment_id = $order->add_order_note( __('Vendor '.$order_status.' refund request for order #'.$vendor_order_id.' .', 'dc-woocommerce-multi-vendor') );
+                        // user info
+                        $user_info = get_userdata(get_current_user_id());
+                        wp_update_comment(array('comment_ID' => $comment_id, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
+
+                        // Comment note for parent order
+                        $parent_order_id = wp_get_post_parent_id($vendor_order_id);
+                        $parent_order = wc_get_order( $parent_order_id );
+                        $comment_id_parent = $parent_order->add_order_note( __('Vendor '.$order_status.' refund request for order #'.$vendor_order_id.'.', 'dc-woocommerce-multi-vendor') );
+                        wp_update_comment(array('comment_ID' => $comment_id_parent, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
+
                         $mail = WC()->mailer()->emails['WC_Email_Customer_Refund_Request'];
                         $billing_email = get_post_meta( $vendor_order_id, '_billing_email', true );
                         $mail->trigger( $billing_email, $vendor_order_id, $refund_details, 'customer' );
