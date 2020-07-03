@@ -192,10 +192,10 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 = 3.5.2 - 2020-07-03 =
 * Added - Suspended Vendor Notification #357
-* Added - Refund module enhancement #366
 * Added - Confirm deletion option for vendors #376
-* Added - change functionality for vendor staff addon
-* Fix - when create order from backend then vendor id, sold by not added #377
+* Enhancement - Refund module enhancement #366
+* Fix - Multi layer capability issue resolved
+* Fix - Sub order missing for admin created order from backend #377
 * Fix - product note display under product reviews section #374
 * Fix - All order status displays for orders table on dashboard
 * Fix - Error at the time of withdrawal #310
