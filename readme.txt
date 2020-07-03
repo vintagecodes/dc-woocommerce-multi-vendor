@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.4.2
 Requires PHP: 5.6
-Stable tag: 3.5.2
+Stable tag: 3.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,19 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.5.2 - 2020-07-03 =
+* Added - Suspended Vendor Notification #357
+* Added - Confirm deletion option for vendors #376
+* Enhancement - Refund module enhancement #366
+* Fix - Multi layer capability issue resolved
+* Fix - Sub order missing for admin created order from backend #377
+* Fix - Product note display under product reviews section #374
+* Fix - All order status displays for orders table on dashboard
+* Fix - Error at the time of withdrawal #310
+* Fix - Error at admin report
+* Updated - Language file.
+
 = 3.5.2 - 2020-06-16 =
 * Added - Additional hook in WCMp report #357
 * Added - Hook to save global verifiy setting #352
