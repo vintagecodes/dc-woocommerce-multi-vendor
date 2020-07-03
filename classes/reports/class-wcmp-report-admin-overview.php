@@ -74,8 +74,10 @@ class WCMp_Report_Admin_overview extends WC_Admin_Report {
                 if(!empty($wcmp_suborders)) {
                     foreach ($wcmp_suborders as $suborder) {
                         $vendor_order = wcmp_get_order($suborder->get_id());
-                        $gross_sales += $suborder->get_total( 'edit' );
-                        $vendor_earning += $vendor_order->get_commission_total('edit');
+                        if( $vendor_order ){
+                            $gross_sales += $suborder->get_total( 'edit' );
+                            $vendor_earning += $vendor_order->get_commission_total('edit');
+                        }
                     }
                 }
             }
