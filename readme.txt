@@ -190,7 +190,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Changelog ==
 
-= 3.5.2 - 2020-07-03 =
+= 3.5.3 - 2020-07-03 =
 * Added - Suspended Vendor Notification #357
 * Added - Confirm deletion option for vendors #376
 * Enhancement - Refund module enhancement #366
