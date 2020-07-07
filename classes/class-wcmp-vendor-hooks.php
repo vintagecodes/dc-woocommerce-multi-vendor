@@ -401,6 +401,7 @@ class WCMp_Vendor_Hooks {
      */
     public function wcmp_vendor_dashboard_vendor_shipping_endpoint() {
         global $WCMp;
+        $WCMp->library->load_select2_lib();
         $wcmp_payment_settings_name = get_option( 'wcmp_payment_settings_name' );
         $_vendor_give_shipping = get_user_meta( get_current_vendor_id(), '_vendor_give_shipping', true );
         if ( isset( $wcmp_payment_settings_name['give_shipping'] ) && empty( $_vendor_give_shipping ) ) {

@@ -266,6 +266,7 @@
         limitZoneLocation: function (event) {
             if ($('#limit_zone_location').is(':checked')) {
                 $('.hide_if_zone_not_limited').show();
+                $('#select_zone_states').select2();
             } else {
                 $('.hide_if_zone_not_limited').hide();
             }
