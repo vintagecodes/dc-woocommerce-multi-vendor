@@ -19,6 +19,6 @@ global  $WCMp;
 <?php if ( get_option( 'woocommerce_registration_generate_password' ) == 'yes' && $password_generated ) : ?>
 <p><?php printf( __( "Your password has been automatically generated: <strong>%s</strong>",  'dc-woocommerce-multi-vendor' ), esc_html( $user_pass ) ); ?></p>
 <?php endif; ?>
-<p><?php printf( __( 'You can access your account area here: %s.',  'dc-woocommerce-multi-vendor' ), get_permalink( wc_get_page_id( 'myaccount' ) ) ); ?></p>
+<p><?php printf( __( 'You can access your account area here: %s.',  'dc-woocommerce-multi-vendor' ), get_permalink( wcmp_vendor_dashboard_page_id() ) ); ?></p>
 
 <?php do_action( 'wcmp_email_footer' ); ?>
