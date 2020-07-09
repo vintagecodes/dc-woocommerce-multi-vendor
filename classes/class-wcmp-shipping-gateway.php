@@ -78,13 +78,13 @@ class WCMp_Shipping_Gateway {
             <div class="form-group">
                 <label for="" class="control-label col-sm-3 col-md-3"><?php _e( 'Method Title', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <div class="col-md-9 col-sm-9">
-                    <input id="method_title_fs" class="form-control" type="text" name="title" value="<?php echo isset($shipping_method['title']) ? $shipping_method['title'] : ''; ?>" placholder="<?php _e( 'Enter method title', 'dc-woocommerce-multi-vendor' ); ?>">
+                    <input id="method_title_fs" class="form-control" type="text" name="title" value="<?php echo isset($shipping_method['title']) ? $shipping_method['title'] : ''; ?>" placeholder="<?php _e( 'Enter method title', 'dc-woocommerce-multi-vendor' ); ?>">
                 </div>
             </div>
             <div class="form-group">
                 <label for="" class="control-label col-sm-3 col-md-3"><?php _e( 'Minimum order amount for free shipping', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <div class="col-md-9 col-sm-9">
-                    <input id="minimum_order_amount_fs" class="form-control" type="text" name="min_amount" value="<?php echo isset($shipping_method['settings']['min_amount']) ? $shipping_method['settings']['min_amount'] : ''; ?>" placholder="<?php _e( '0.00', 'dc-woocommerce-multi-vendor' ); ?>">
+                    <input id="minimum_order_amount_fs" class="form-control" type="text" name="min_amount" value="<?php echo isset($shipping_method['settings']['min_amount']) ? $shipping_method['settings']['min_amount'] : ''; ?>" placeholder="<?php _e( '0.00', 'dc-woocommerce-multi-vendor' ); ?>">
                 </div>
             </div>
             <input type="hidden" id="method_description_fs" name="description" value="<?php echo isset($shipping_method['settings']['description']) ? $shipping_method['settings']['description'] : ''; ?>" />
@@ -109,13 +109,13 @@ class WCMp_Shipping_Gateway {
             <div class="form-group">
                 <label for="" class="control-label col-sm-3 col-md-3"><?php _e( 'Method Title', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <div class="col-md-9 col-sm-9">
-                    <input id="method_title_fr" class="form-control" type="text" name="title" value="<?php echo isset($shipping_method['title']) ? $shipping_method['title'] : ''; ?>" placholder="<?php _e( 'Enter method title', 'dc-woocommerce-multi-vendor' ); ?>">
+                    <input id="method_title_fr" class="form-control" type="text" name="title" value="<?php echo isset($shipping_method['title']) ? $shipping_method['title'] : ''; ?>" placeholder="<?php _e( 'Enter method title', 'dc-woocommerce-multi-vendor' ); ?>">
                 </div>
             </div>
             <div class="form-group">
                 <label for="" class="control-label col-sm-3 col-md-3"><?php _e( 'Cost', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <div class="col-md-9 col-sm-9">
-                    <input id="method_cost_fr" class="form-control" type="text" name="cost" value="<?php echo isset($shipping_method['settings']['cost']) ? $shipping_method['settings']['cost'] : ''; ?>" placholder="<?php _e( '0.00', 'dc-woocommerce-multi-vendor' ); ?>">
+                    <input id="method_cost_fr" class="form-control" type="text" name="cost" value="<?php echo isset($shipping_method['settings']['cost']) ? $shipping_method['settings']['cost'] : ''; ?>" placeholder="<?php _e( '0.00', 'dc-woocommerce-multi-vendor' ); ?>">
                 </div>
             </div>
             <?php if( apply_filters( 'show_shipping_zone_tax', true ) ) { ?>
@@ -154,7 +154,7 @@ class WCMp_Shipping_Gateway {
                             <div class="form-group">
                                 <label for="" class="control-label col-sm-3 col-md-3"><?php printf( __( 'Cost of Shipping Class: "%s"', 'dc-woocommerce-multi-vendor' ), $shipping_class->name ); ?></label>
                                 <div class="col-md-9 col-sm-9">
-                                    <input id="<?php echo $shipping_class->slug; ?>" class="form-control sc_vals" type="text" name="class_cost_<?php echo $shipping_class->term_id; ?>" value="<?php echo isset($shipping_method['settings']['class_cost_'.$shipping_class->term_id]) ? $shipping_method['settings']['class_cost_'.$shipping_class->term_id] : ''; ?>" placholder="<?php _e( 'N/A', 'dc-woocommerce-multi-vendor' ); ?>" data-shipping_class_id="<?php echo $shipping_class->term_id; ?>">
+                                    <input id="<?php echo $shipping_class->slug; ?>" class="form-control sc_vals" type="text" name="class_cost_<?php echo $shipping_class->term_id; ?>" value="<?php echo isset($shipping_method['settings']['class_cost_'.$shipping_class->term_id]) ? $shipping_method['settings']['class_cost_'.$shipping_class->term_id] : ''; ?>" placeholder="<?php _e( 'N/A', 'dc-woocommerce-multi-vendor' ); ?>" data-shipping_class_id="<?php echo $shipping_class->term_id; ?>">
                                     <div class="description"><?php _e( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>.', 'dc-woocommerce-multi-vendor' ) . '<br/><br/>' . _e( 'Use <code>[qty]</code> for the number of items, <br/><code>[cost]</code> for the total cost of items, and <code>[fee percent="10" min_fee="20" max_fee=""]</code> for percentage based fees.', 'dc-woocommerce-multi-vendor' ); ?></div>
                                 </div>
                             </div>
@@ -190,13 +190,13 @@ class WCMp_Shipping_Gateway {
             <div class="form-group">
                 <label for="" class="control-label col-sm-3 col-md-3"><?php _e( 'Method Title', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <div class="col-md-9 col-sm-9">
-                    <input id="method_title_lp" class="form-control" type="text" name="title" value="<?php echo isset($shipping_method['title']) ? $shipping_method['title'] : ''; ?>" placholder="<?php _e( 'Enter method title', 'dc-woocommerce-multi-vendor' ); ?>">
+                    <input id="method_title_lp" class="form-control" type="text" name="title" value="<?php echo isset($shipping_method['title']) ? $shipping_method['title'] : ''; ?>" placeholder="<?php _e( 'Enter method title', 'dc-woocommerce-multi-vendor' ); ?>">
                 </div>
             </div>
             <div class="form-group">
                 <label for="" class="control-label col-sm-3 col-md-3"><?php _e( 'Cost', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <div class="col-md-9 col-sm-9">
-                    <input id="method_cost_lp" class="form-control" type="text" name="cost" value="<?php echo isset($shipping_method['settings']['cost']) ? $shipping_method['settings']['cost'] : ''; ?>" placholder="<?php _e( '0.00', 'dc-woocommerce-multi-vendor' ); ?>">
+                    <input id="method_cost_lp" class="form-control" type="text" name="cost" value="<?php echo isset($shipping_method['settings']['cost']) ? $shipping_method['settings']['cost'] : ''; ?>" placeholder="<?php _e( '0.00', 'dc-woocommerce-multi-vendor' ); ?>">
                 </div>
             </div>
             <?php if( apply_filters( 'show_shipping_zone_tax', true ) ) { ?>
