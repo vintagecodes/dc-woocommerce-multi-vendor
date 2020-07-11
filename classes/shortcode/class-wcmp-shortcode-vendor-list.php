@@ -17,6 +17,7 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
          * @return array
          */
         public static function get_vendors_query($args, $request = array(), $ignore_pagi = false) {
+            global $wpdb;
             $block_vendors = wp_list_pluck(wcmp_get_all_blocked_vendors(), 'id');
             $include_vendors = array();
             $default = array (
@@ -49,6 +50,58 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
                 }
                 //
                 $args['include'] = $include_vendors;
+                $vendor_args = wp_parse_args($args, $default);
+            } elseif (isset($request['vendor_sort_type']) && $request['vendor_sort_type'] == 'shipping' && isset($request['vendor_sort_category'])) {
+                $get_vendor = false;
+                $zone_id = '';
+                $location_code = '';
+                if (isset( $request['vendor_postcode_list'] ) && !empty( $request['vendor_postcode_list'] ) ) {
+                    $location_code = $request['vendor_postcode_list'];
+                } elseif ( isset( $request['vendor_country'] ) && isset($request['vendor_state']) && !empty($request['vendor_state']) && !empty($request['vendor_country']) ) {
+
+                    $location_code = $request['vendor_country'].':'.$request['vendor_state'];
+                } elseif (isset( $request['vendor_country'] )) {
+                    $search_zone_id = $wpdb->get_results(
+                    // phpcs:disable
+                    "SELECT location_code 
+                    FROM {$wpdb->prefix}woocommerce_shipping_zone_locations"
+                    );
+                    $woocommerce_zone_ids = is_array( $search_zone_id ) ? wp_list_pluck( $search_zone_id, 'location_code' ) : array();
+                    if ( in_array($request['vendor_country'], $woocommerce_zone_ids) ) {
+                        $country_code = $request['vendor_country'];
+                        $search_zone = $wpdb->get_results(
+                            // phpcs:disable
+                            "SELECT zone_id 
+                            FROM {$wpdb->prefix}woocommerce_shipping_zone_locations where location_code = '$country_code'"
+                        );
+                        $zone_id = $search_zone[0]->zone_id;
+                        $get_vendor = true;
+                    }
+                }
+                $search_results = $wpdb->get_results(
+                    "SELECT location_code
+                    FROM {$wpdb->prefix}wcmp_shipping_zone_locations"
+                    );
+                foreach ($search_results as $key => $value) {
+                  if ( $value->location_code == $location_code ) {
+                    $get_vendor = true;
+                  }
+                }
+                $vendor_ids = array();
+                if ( $get_vendor ) {
+                    $shipping_vendor = new WCMp_Vendor_Query(array(
+                        'number' => -1,
+                        'shipping_zone' => $zone_id,
+                        'shipping_location' => $location_code
+                        ));
+                    $vendor_ids = wp_list_pluck( $shipping_vendor->get_results(), 'ID' );
+                }
+                $wcmp_vendor_ids = get_wcmp_vendors(array(), 'ids');
+                if ( empty( $vendor_ids ) ) {
+                    $args['exclude'] = $wcmp_vendor_ids;
+                } else {
+                    $args['include'] = $vendor_ids;
+                }
                 $vendor_args = wp_parse_args($args, $default);
             } else {
                 $vendor_args = wp_parse_args($args, $default);
@@ -85,7 +138,10 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
             $WCMp->library->load_gmap_api();
             wp_register_style('wcmp_vendor_list', $frontend_assets_path . 'css/vendor-list' . $suffix . '.css', array(), $WCMp->version);
             wp_register_script('wcmp_vendor_list', $frontend_assets_path . 'js/vendor-list' . $suffix . '.js', array('jquery','wcmp-gmaps-api'), $WCMp->version, true);
-            
+            // country js
+            wp_enqueue_script( 'wc-country-select' );
+            wp_enqueue_script('wcmp_country_state_js');
+
             wp_enqueue_script('frontend_js');
             wp_enqueue_script('wcmp_vendor_list');
             wp_style_add_data('wcmp_vendor_list', 'rtl', 'replace');

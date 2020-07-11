@@ -98,6 +98,15 @@ jQuery(document).ready(function ($) {
             $('#vendor_sort_category').hide();
         }
     }).change();
+
+    // shipping sorting
+    $('#vendor_sort_type').change(function () {
+        if ($(this).val() == 'shipping') {
+            $('#vendor_country_list').show();
+        } else {
+            $('#vendor_country_list').hide();
+        }
+    }).change();
     
     /* Delete Product */
     $('.wcmp_fpm_delete').each(function() {
