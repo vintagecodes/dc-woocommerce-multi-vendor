@@ -20,6 +20,7 @@ class WCMp_Order {
         // Add extra vendor_id to shipping packages
         add_action('woocommerce_checkout_create_order_line_item', array(&$this, 'add_meta_date_in_order_line_item'), 10, 4);
         add_action('woocommerce_checkout_create_order_shipping_item', array(&$this, 'add_meta_date_in_shipping_package'), 10, 4);
+        add_action('woocommerce_analytics_update_order_stats', array(&$this, 'woocommerce_analytics_remove_suborder'));
         
         if (is_wcmp_version_less_3_4_0()) {
             
@@ -106,6 +107,26 @@ class WCMp_Order {
             $package_qty = array_sum(wp_list_pluck($package['contents'], 'quantity'));
             $item->add_meta_data('package_qty', $package_qty, true);
             do_action('wcmp_add_shipping_package_meta_data');
+        }
+    }
+
+    /**
+     * 
+     * Woocommerce admin dashboard restrict dual order report 
+     */
+    public function woocommerce_analytics_remove_suborder($order_id){
+        global $wpdb;
+        if (wp_get_post_parent_id($order_id)) {
+            $wpdb->delete( $wpdb->prefix.'wc_order_stats', array( 'order_id' => $order_id ) );
+            \WC_Cache_Helper::get_transient_version( 'woocommerce_reports', true );
+        }
+        // Only for version 3.5.4
+        $post_id = $wpdb->get_results("SELECT order_id FROM {$wpdb->prefix}wc_order_stats WHERE (parent_id != 0)");
+        if (!empty($post_id)) {
+           foreach ($post_id as $key => $value) {
+                $wpdb->delete( $wpdb->prefix.'wc_order_stats', array( 'order_id' => $value->order_id ) );
+                \WC_Cache_Helper::get_transient_version( 'woocommerce_reports', true );
+            } 
         }
     }
 
