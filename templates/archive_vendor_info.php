@@ -159,5 +159,7 @@ $template_class = apply_filters('can_vendor_edit_shop_template', false) && get_u
     <div class="description_data"> 
         <?php echo htmlspecialchars_decode( wpautop( $description ), ENT_QUOTES ); ?>
     </div>
-    <?php } ?>
+    <?php } 
+    do_action('after_wcmp_vendor_description', $vendor_id);
+    ?>
 </div>  
