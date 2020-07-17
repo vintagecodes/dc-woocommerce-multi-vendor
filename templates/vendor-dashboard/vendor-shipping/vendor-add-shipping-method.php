@@ -31,7 +31,7 @@
                 </article>
                 <footer>
                     <div class="inner">
-                        <button id="btn-ok" class="btn btn-default add-shipping-method"><?php _e( 'Add shipping method', 'dc-woocommerce-multi-vendor' ); ?></button>
+                        <button id="btn-ok" data-vendor_id="<?php echo $vendor_id; ?>" class="btn btn-default add-shipping-method"><?php _e( 'Add shipping method', 'dc-woocommerce-multi-vendor' ); ?></button>
                     </div>
                 </footer>
             </section>

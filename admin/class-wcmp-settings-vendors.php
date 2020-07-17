@@ -331,7 +331,8 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 		if(isset($_POST['wcmp_vendor_submit'])) {
 			if($_POST['wcmp_vendor_submit'] == 'update' && isset($_POST['user_id']) && $_POST['user_id'] > 0) {
 				$user_id = $_POST['user_id'];
-				
+				// Save shipping data
+				$WCMp->vendor_dashboard->save_vendor_shipping( $_GET['ID'], $_POST );
 				$errors = new WP_Error();
 				$vendor = get_wcmp_vendor($user_id);
 				if($vendor) {
@@ -601,6 +602,9 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 					<li> 
 						<a href="#vendor-application"><span class="dashicons dashicons-id-alt"></span> <?php echo __('Vendor Application', 'dc-woocommerce-multi-vendor'); ?></a>
 					</li>
+					<li> 
+						<a href="#vendor-shipping"><span class="dashicons dashicons-id-alt"></span> <?php echo __('Vendor Shipping', 'dc-woocommerce-multi-vendor'); ?></a>
+					</li>
 					<?php } 
 					do_action('wcmp_vendor_preview_tabs_post', $is_approved_vendor);
 					?>
@@ -690,6 +694,91 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 								echo '</div>';
 							}
 						?>
+					</div>
+					<div id="vendor-shipping">
+						<?php
+						global $woocommerce, $WCMp, $wpdb;
+
+						$vendor = get_wcmp_vendor($_GET['ID']);
+						$vendor_all_shipping_zones = wcmp_get_shipping_zone();
+
+						$vendor_shipping_data = get_user_meta($vendor->id, 'vendor_shipping_data', true);
+						?>
+						<div class="col-md-12">
+							<div class="panel panel-default panel-pading pannel-outer-heading">
+								<div class="panel-heading">
+									<h3><?php _e('Shipping zones', 'dc-woocommerce-multi-vendor'); ?></h3>
+								</div>
+								<div class="panel-body">
+									<div id="wcmp_settings_form_shipping_by_zone" class="wcmp-content shipping_type by_zone hide_if_shipping_disabled">
+										<table class="table wcmp-table shipping-zone-table">
+											<thead>
+												<tr>
+													<th><?php _e('Zone name', 'dc-woocommerce-multi-vendor'); ?></th>
+													<th><?php _e('Region(s)', 'dc-woocommerce-multi-vendor'); ?></th>
+													<th><?php _e('Shipping method(s)', 'dc-woocommerce-multi-vendor'); ?></th>
+													<th><?php _e('Actions', 'dc-woocommerce-multi-vendor'); ?></th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+												if (!empty($vendor_all_shipping_zones)) {
+													foreach ($vendor_all_shipping_zones as $key => $vendor_shipping_zones) {
+														?>
+														<tr>
+															<td>
+																<a href="JavaScript:void(0);" data-zone-id="<?php echo $vendor_shipping_zones['zone_id']; ?>" data-vendor_id="<?php echo $_GET['ID']; ?>" class="vendor_edit_zone modify-shipping-methods"><?php _e($vendor_shipping_zones['zone_name'], 'dc-woocommerce-multi-vendor'); ?></a> 
+															</td>
+															<td><?php _e($vendor_shipping_zones['formatted_zone_location'], 'dc-woocommerce-multi-vendor'); ?></td>
+															<td>
+																<div class="wcmp-shipping-zone-methods">
+																	<?php
+																	$vendor_shipping_methods = $vendor_shipping_zones['shipping_methods'];
+																	$vendor_shipping_methods_titles = array();
+																	if ($vendor_shipping_methods) :
+																		foreach ($vendor_shipping_methods as $key => $shipping_method) {
+																			$class_name = 'yes' === $shipping_method['enabled'] ? 'method_enabled' : 'method_disabled';
+																			$vendor_shipping_methods_titles[] = "<span class='wcmp-shipping-zone-method $class_name'>" . $shipping_method['title'] . "</span>";
+																		}
+																		endif;
+																		//$vendor_shipping_methods_titles = array_column($vendor_shipping_methods, 'title');
+																		$vendor_shipping_methods_titles = implode(', ', $vendor_shipping_methods_titles);
+
+																		if (empty($vendor_shipping_methods)) {
+																			?>
+																			<span><?php _e('No shipping methods offered to this zone.', 'dc-woocommerce-multi-vendor'); ?> </span>
+																			<?php } else { ?>
+																			<?php _e($vendor_shipping_methods_titles, 'dc-woocommerce-multi-vendor'); ?>
+																			<?php } ?>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="col-actions">
+																			<span class="view">
+																				<a href="JavaScript:void(0);" data-vendor_id="<?php echo $_GET['ID']; ?>" data-zone-id="<?php echo $vendor_shipping_zones['zone_id']; ?>" class="vendor_edit_zone modify-shipping-methods" title="View"><i class="wcmp-font ico-eye-icon"></i></a>
+																			</span> 
+																		</div>
+																		<div class="row-actions">
+																		</div>
+																	</td>
+																</tr>
+																<?php }
+															} else {
+																?>
+																<tr>
+																	<td colspan="3"><?php _e('No shipping zone found for configuration. Please contact with admin for manage your store shipping', 'dc-woocommerce-multi-vendor'); ?></td>
+																</tr>
+																<?php }
+																?>
+															</tbody>
+														</table>
+														<div id="vendor-shipping-methods"></div>
+													</div>
+												</div>
+											</div>
+								<?php do_action('wcmp_before_shipping_form_end_vendor_dashboard'); ?>
+							<div class="clear"></div>
+						</div>
 					</div>
 					<?php }
 					do_action('wcmp_vendor_preview_tabs_form_post', $is_approved_vendor);

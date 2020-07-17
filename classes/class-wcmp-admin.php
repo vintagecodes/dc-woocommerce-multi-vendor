@@ -36,6 +36,9 @@ class WCMp_Admin {
         add_filter('woocommerce_screen_ids', array(&$this, 'add_wcmp_screen_ids'));
         // Admin notice for advance frontend modules (Temp)
         add_action('admin_notices', array(&$this, 'advance_frontend_manager_notice'));
+        // vendor shipping capability
+        add_filter('wcmp_current_vendor_id', array(&$this, 'wcmp_vendor_shipping_admin_capability'));
+        add_filter('wcmp_dashboard_shipping_vendor', array(&$this, 'wcmp_vendor_shipping_admin_capability'));
         $this->actions_handler();
     }
     
@@ -364,6 +367,26 @@ class WCMp_Admin {
                 'in_fixed' => __('In Fixed', 'dc-woocommerce-multi-vendor'),
             )
         ));
+
+        // vendor admin shipping crontrol
+        $frontend_script_path = $WCMp->plugin_url . 'assets/frontend/js/';
+        $frontend_script_path = str_replace(array('http:', 'https:'), '', $frontend_script_path);
+        wp_register_script('wcmp-vendor-shipping', $frontend_script_path . 'vendor-shipping.js', array( 'jquery' ), $WCMp->version, true );
+
+        $frontend_style_path = $WCMp->plugin_url . 'assets/frontend/css/';
+        $frontend_style_path = str_replace(array('http:', 'https:'), '', $frontend_style_path);
+        $suffix = defined('WCMP_SCRIPT_DEBUG') && WCMP_SCRIPT_DEBUG ? '' : '.min';
+
+        if ( $screen->id == 'wcmp_page_vendors') {
+            wp_register_style('vandor-dashboard-style', $frontend_style_path . 'vendor_dashboard' . $suffix . '.css', array(), $WCMp->version);
+            wp_enqueue_style('vandor-dashboard-style');
+            $WCMp->library->load_bootstrap_style_lib();
+            $WCMp->library->load_select2_lib();
+            wp_enqueue_script('jquery-blockui');
+            wp_enqueue_script( 'wcmp-vendor-shipping' );
+            $WCMp->localize_script('wcmp-vendor-shipping');
+        }
+
         if (in_array($screen->id, $wcmp_admin_screens)) :
             $WCMp->library->load_qtip_lib();
             $WCMp->library->load_upload_lib();
@@ -585,6 +608,18 @@ class WCMp_Admin {
         </div>
         <?php 
         endif;
+    }
+
+    public function wcmp_vendor_shipping_admin_capability($current_id){
+        if( !is_user_wcmp_vendor($current_id) ){
+            if( isset($_POST['vendor_id'] )){
+                $current_id = $_POST['vendor_id'];
+            } else {
+                $current_id = $_GET['ID'];
+            }
+
+        } 
+        return $current_id;
     }
 
 }
