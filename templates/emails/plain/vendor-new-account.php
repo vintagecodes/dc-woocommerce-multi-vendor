@@ -20,7 +20,7 @@ echo sprintf( __( "Thanks for creating an account with %s. We have received your
 if ( get_option( 'woocommerce_registration_generate_password' ) === 'yes' && $password_generated )
 	echo sprintf( __( "Your password is <strong>%s</strong>.",  'dc-woocommerce-multi-vendor' ), $user_pass ) . "\n\n";
 
-echo sprintf( __( 'You can access your account area here: %s.',  'dc-woocommerce-multi-vendor' ), get_permalink( wc_get_page_id( 'myaccount' ) ) ) . "\n\n";
+echo sprintf( __( 'You can access your account area here: %s.',  'dc-woocommerce-multi-vendor' ), get_permalink( wcmp_vendor_dashboard_page_id() ) ) . "\n\n";
 
 echo "\n****************************************************\n\n";
 
