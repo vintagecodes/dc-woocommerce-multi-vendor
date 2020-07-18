@@ -22,7 +22,7 @@
 			<div class="form-group">
 			   	<label for="" class="control-label col-sm-3 col-md-3"><?php _e( 'Limit Zone Location', 'dc-woocommerce-multi-vendor' ); ?></label>
 			   	<div class="col-md-6 col-sm-9">
-			    	<input id="limit_zone_location" class="form-control" type="checkbox" name="<?php echo 'wcmp_shipping_zone['. $zone_id .'][_limit_zone_location]'; ?>" value="1" <?php checked( $want_to_limit_location, 1 ); ?>>
+			    	<input id="limit_zone_location" class="<?php echo is_user_wcmp_vendor(get_current_user_id()) ? 'form-control' : '' ?>" type="checkbox" name="<?php echo 'wcmp_shipping_zone['. $zone_id .'][_limit_zone_location]'; ?>" value="1" <?php checked( $want_to_limit_location, 1 ); ?>>
 			   	</div>
 			</div>
 		<?php } ?>
@@ -77,14 +77,14 @@
 									</div>
 								</td>
 								<td> 
-									<input id="method_status" class="form-control method-status" type="checkbox" name="<?php echo 'method_status'; ?>" value="<?php echo $vendor_shipping_method['instance_id']; ?>" <?php checked( ( $vendor_shipping_method['enabled'] == "yes" ), true ); ?>>
+									<input id="method_status <?php echo $vendor_shipping_method['instance_id']; ?>" data-vendor_id="<?php echo $vendor_id; ?>" class="<?php echo is_user_wcmp_vendor(get_current_user_id()) ? 'form-control' : '' ?> method-status" type="checkbox" name="<?php echo 'method_status'; ?>" value="<?php echo $vendor_shipping_method['instance_id']; ?>" <?php checked( ( $vendor_shipping_method['enabled'] == "yes" ), true ); ?>>
 								</td>
 								<td><?php _e($vendor_shipping_method['settings']['description'], 'dc-woocommerce-multi-vendor' ); ?></td>
 								<td>
 									<div class="col-actions edit_del_actions" data-zone_id="<?php echo $zone_id; ?>" data-instance_id="<?php echo $vendor_shipping_method['instance_id']; ?>" data-method_id="<?php echo $vendor_shipping_method['id']; ?>" data-method-settings='<?php echo json_encode($vendor_shipping_method); ?>'>
-										<span class="edit"><a href="javascript:void(0);" class="edit-shipping-method" title="<?php _e( 'Edit', 'dc-woocommerce-multi-vendor' ) ?>"><i class="wcmp-font ico-edit-pencil-icon"></i></a>
+										<span class="edit"><a href="javascript:void(0);" data-vendor_id="<?php echo $vendor_id; ?>" class="edit-shipping-method" title="<?php _e( 'Edit', 'dc-woocommerce-multi-vendor' ) ?>"><i class="wcmp-font ico-edit-pencil-icon"></i></a>
 										</span>|
-										<span class="delete"><a class="delete-shipping-method" href="javascript:void(0);" title="<?php _e( 'Delete', 'dc-woocommerce-multi-vendor' ) ?>"><i class="wcmp-font ico-delete-icon"></i></a></span>
+										<span class="delete"><a class="delete-shipping-method" data-vendor_id="<?php echo $vendor_id; ?>" href="javascript:void(0);" title="<?php _e( 'Delete', 'dc-woocommerce-multi-vendor' ) ?>"><i class="wcmp-font ico-delete-icon"></i></a></span>
 									</div>
 								</td>
 							</tr>
@@ -99,8 +99,12 @@
 			<a href="javascript:void(0);" class="btn btn-default wcmp-zone-method-add-btn show-shipping-methods"><i class="fa fa-plus"></i><?php _e( 'Add Shipping Method', 'dc-woocommerce-multi-vendor' ) ?></a>
 		</div>
 		<?php 
-                    $WCMp->template->get_template( 'vendor-dashboard/vendor-shipping/vendor-edit-shipping-method.php' );
-                    $WCMp->template->get_template( 'vendor-dashboard/vendor-shipping/vendor-add-shipping-method.php' );
+					$template_data = array(
+            			'vendor_id' => $vendor_id
+            		);
+
+                    $WCMp->template->get_template( 'vendor-dashboard/vendor-shipping/vendor-edit-shipping-method.php', $template_data);
+                    $WCMp->template->get_template( 'vendor-dashboard/vendor-shipping/vendor-add-shipping-method.php' , $template_data);
 		?>
 	</div>
 </div>

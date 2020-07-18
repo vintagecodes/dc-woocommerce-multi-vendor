@@ -33,7 +33,7 @@
                 </article>
                 <footer class="modal_footer" id="wcmp_shipping_method_edit_general_footer">
                     <div class="inner">
-                        <button class="btn btn-default update-shipping-method" id="wcmp_shipping_method_edit_button"><?php _e( 'Save changes', 'dc-woocommerce-multi-vendor' ); ?></button>
+                        <button class="btn btn-default update-shipping-method" data-vendor_id="<?php echo $vendor_id; ?>" id="wcmp_shipping_method_edit_button"><?php _e( 'Save changes', 'dc-woocommerce-multi-vendor' ); ?></button>
                     </div>
                 </footer> 
             </section>   
