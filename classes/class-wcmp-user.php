@@ -1012,14 +1012,17 @@ class WCMp_User {
      * WCMp set user cookies
      */
     public function set_wcmp_user_cookies() {
-        $current_user_id = get_current_user_id();
-        $_cookie_id = "_wcmp_user_cookie_".$current_user_id;
-        if ( ! headers_sent() ) {
-            $secure = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
-            if(!isset($_COOKIE[$_cookie_id])) { 
-                setcookie( $_cookie_id, uniqid('wcmp_cookie'), time() + YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure );
-            }else{
-                setcookie( $_cookie_id, $_COOKIE[$_cookie_id], time() + YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure );
+        global $WCMp;
+        if ( is_product() || is_tax($WCMp->taxonomy->taxonomy_name) ) {
+            $current_user_id = get_current_user_id();
+            $_cookie_id = "_wcmp_user_cookie_".$current_user_id;
+            if ( ! headers_sent() ) {
+                $secure = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
+                if(!isset($_COOKIE[$_cookie_id])) { 
+                    setcookie( $_cookie_id, uniqid('wcmp_cookie'), time() + YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure );
+                }else{
+                    setcookie( $_cookie_id, $_COOKIE[$_cookie_id], time() + YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, $secure );
+                }
             }
         }
     }

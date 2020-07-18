@@ -11,7 +11,7 @@
 if (!defined('ABSPATH'))
     exit; // Exit if accessed directly
 
-class DC_Widget_Vendor_Review_Widget extends WP_Widget {
+class WCMp_Widget_Vendor_Review_Widget extends WP_Widget {
     /**
      * Construct
      */
@@ -23,7 +23,6 @@ class DC_Widget_Vendor_Review_Widget extends WP_Widget {
         $this->widget_title = __('WCMp: Vendor Review', 'dc-woocommerce-multi-vendor');
         $this->widget_description = __('Add a vendor review widget on vendor\'s shop page and single product page.', 'dc-woocommerce-multi-vendor');
         $this->widget_cssclass = 'widget_wcmp_vendor_review';
-
 
         // Widget settings
         $widget_ops = array('classname' => $this->widget_cssclass, 'description' => $this->widget_description);
@@ -87,8 +86,7 @@ class DC_Widget_Vendor_Review_Widget extends WP_Widget {
                         }
                     }
                 }
-                // enqueue scripts
-                wp_enqueue_script( 'frontend_js' );
+               
                 // Set up widget title
                 if ( isset( $instance['title'] ) ) {
                     $title = apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
@@ -160,5 +158,4 @@ class DC_Widget_Vendor_Review_Widget extends WP_Widget {
         <span class="description"><?php _e('This widget shows vendor reviews.', 'dc-woocommerce-multi-vendor') ?> </span>
         <?php
     }
-
 }

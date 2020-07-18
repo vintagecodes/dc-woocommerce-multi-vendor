@@ -11,10 +11,10 @@
 
 global $WCMp;
 $review_count = count($comments) ;
-if($review_count > 3)	{ ?>
-<div id="wcmp_widget_vendor_review" style="height: 308px; overflow-y: scroll; width: 226px;" >
+if($review_count > 3) { ?>
+<div id="wcmp_widget_vendor_review" style="max-height: 300px; overflow-y: auto;" >
 <?php } else { ?>
-<div id="wcmp_widget_vendor_review" style=" height: auto; width: 226px;" >
+<div id="wcmp_widget_vendor_review">
 <?php
  }
 if($comments){

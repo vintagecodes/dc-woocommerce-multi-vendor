@@ -172,7 +172,6 @@ if (!empty($wcmp_vendor_registration_form_data) && is_array($wcmp_vendor_registr
                 <div class="wcmp-regi-form-row <?php if(!empty($value['cssClass'])){ echo $value['cssClass']; } else {  echo 'wcmp-regi-12'; } ?>">
                     <label><?php echo ($recaptcha_type == 'v2') ? __($value['label'],'dc-woocommerce-multi-vendor') : ''; ?><?php if($value['required']){ echo ' <span class="required">*</span>'; }?></label>
                     <?php echo $value['script']; ?>
-                    <input type="hidden" name="g-recaptchatype" value="<?php echo $recaptcha_type; ?>" />
                     <input type="hidden" name="wcmp_vendor_fields[<?php echo $key; ?>][value]" value="Verified" />
                     <input type="hidden" name="wcmp_vendor_fields[<?php echo $key; ?>][label]" value="<?php echo htmlentities($value['label']); ?>" />
                     <input type="hidden" name="wcmp_vendor_fields[<?php echo $key; ?>][type]" value="recaptcha" />
@@ -181,6 +180,7 @@ if (!empty($wcmp_vendor_registration_form_data) && is_array($wcmp_vendor_registr
                     <input type="hidden" name="recaptchav3_sitekey" value="<?php echo $sitekey; ?>" />
                     <input type="hidden" name="recaptchav3_secretkey" value="<?php echo $secretkey; ?>" />
                     <?php endif; ?>
+                    <input type="hidden" name="g-recaptchatype" value="<?php echo $recaptcha_type; ?>" />
                 </div>
                 <?php
                 break;

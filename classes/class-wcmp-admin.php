@@ -342,6 +342,7 @@ class WCMp_Admin {
             'wcmp_page_wcmp-extensions',
             'wcmp_page_vendors',
             'toplevel_page_dc-vendor-shipping',
+            'widgets',
 	    ));
         
         // Register scripts.
