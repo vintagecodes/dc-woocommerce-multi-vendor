@@ -3232,10 +3232,9 @@ class WCMp_Ajax {
         }
 
         $want_to_limit_location = !empty($zones['locations']);
-
+        $countries = $states = $cities = $postcodes = array();
+        
         if ($want_to_limit_location) {
-            $countries = $states = $cities = $postcodes = array();
-
             foreach ($zones['locations'] as $each_location) {
                 switch ($each_location['type']) {
                     case 'state':
