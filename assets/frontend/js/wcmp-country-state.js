@@ -64,14 +64,14 @@ jQuery( function( $ ) {
                     if ( $statebox.is( 'select' ) ) {
 
                             $parent.show().find( '.select2-container' ).remove();
-                            $statebox.replaceWith( '<input type="text" class="form-control inp-btm-margin regular-text input-text" name="' + input_name + '" id="' + input_id + '" placeholder="' + placeholder + '" />' );
+                            $statebox.replaceWith( '<input type="text" class="form-control inp-btm-margin regular-text input-text" name="' + input_name + '" id="' + input_id + '" placeholder="' + placeholder + '" style="display:none;" />' );
 
                             $( document.body ).trigger( 'country_to_state_changed', [country, $wrapper ] );
 
                     } else if ( $statebox.is( 'input[type="hidden"]' ) ) {
 
                             $parent.show().find( '.select2-container' ).remove();
-                            $statebox.replaceWith( '<input type="text" class="form-control inp-btm-margin regular-text input-text" name="' + input_name + '" id="' + input_id + '" placeholder="' + placeholder + '" />' );
+                            $statebox.replaceWith( '<input type="text" class="form-control inp-btm-margin regular-text input-text" name="' + input_name + '" id="' + input_id + '" placeholder="' + placeholder + '" style="display:none;" />' );
 
                             $( document.body ).trigger( 'country_to_state_changed', [country, $wrapper ] );
 

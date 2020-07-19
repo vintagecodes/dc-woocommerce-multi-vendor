@@ -91,20 +91,21 @@ jQuery(document).ready(function ($) {
 
     });
 
+    $('.vendors_sort_shipping_fields').hide();
+    $('#vendor_state').hide();
     $('#vendor_sort_type').change(function () {
         if ($(this).val() == 'category') {
             $('#vendor_sort_category').show();
         } else {
             $('#vendor_sort_category').hide();
         }
-    }).change();
-
-    // shipping sorting
-    $('#vendor_sort_type').change(function () {
+        // shipping zone
         if ($(this).val() == 'shipping') {
-            $('#vendor_country_list').show();
+            $('.vendors_sort_shipping_fields').show();
+            $('#vendor_state').show();
         } else {
-            $('#vendor_country_list').hide();
+            $('.vendors_sort_shipping_fields').hide();
+            $('#vendor_state').hide();
         }
     }).change();
     
