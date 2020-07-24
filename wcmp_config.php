@@ -5,4 +5,4 @@ define('WCMp_TEXT_DOMAIN', 'dc-woocommerce-multi-vendor');
 
 define('WCMp_PLUGIN_VERSION', '3.5.3');
 
-define('WCMP_SCRIPT_DEBUG', true);
+define('WCMP_SCRIPT_DEBUG', false);
