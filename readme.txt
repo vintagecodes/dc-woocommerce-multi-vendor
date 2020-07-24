@@ -1,11 +1,11 @@
 === WC Marketplace ===
-Contributors: Dualcube, greyparrots, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh89612
+Contributors: wcmp, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh89612
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.4.2
 Requires PHP: 5.6
-Stable tag: 3.5.3
+Stable tag: 3.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,22 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.5.4 - 2020-07-24 =
+* Added - Let customer search vendor as per vendor's shipping zone( vendor list shortcode ) #284
+* Added - Let admin set every vendor shiping from backend #373
+* Added - Add vendor search product in their shop #327
+* Added - Vendor Review widget #378
+* Enhancement - Vendor shipping state limitaion #369
+* Enhancement - Recaptcha in contact vendor widget #318
+* Enhancement - Add Order ID under Vendor payment history #386
+* Fix - Exclude sub order data from WooCommerce analytic #334
+* Fix - WCMp visitor cookie #367
+* Fix - Vendor is getting Failed order mail #390
+* Fix - New Vendor Account Email #393
+* Fix - PHP Warning #403
+* Fix - Attribute special character issue #394
+* Updated - Language file.
 
 = 3.5.3 - 2020-07-03 =
 * Added - Suspended Vendor Notification #357
