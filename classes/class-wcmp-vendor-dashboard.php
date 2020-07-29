@@ -2050,9 +2050,12 @@ Class WCMp_Admin_Dashboard {
             wp_die( -1 );
         }
 
-        if ( empty( $_POST['post_title'] ) ) {
+        if ( empty( $_POST['post_title'] ) || empty( $_POST['product_ids'] ) ) {
             if ( empty( $_POST['post_title'] ) ) {
                 wc_add_notice( __( "Coupon code can't be empty.", 'dc-woocommerce-multi-vendor' ), 'error' );
+            }
+            if ( empty( $_POST['product_ids'] ) ) {
+                wc_add_notice( __( 'Select atleast one product.', 'dc-woocommerce-multi-vendor' ), 'error' );
             }
             return;
         }
