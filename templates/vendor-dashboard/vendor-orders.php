@@ -68,7 +68,7 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
                     ?>
                     <?php do_action( 'wcmp_vendor_order_list_add_extra_filters', get_current_user_id() ); ?>
                     <button class="wcmp_black_btn btn btn-secondary" type="button" id="order_list_do_filter"><?php _e('Filter', 'dc-woocommerce-multi-vendor'); ?></button>
-                </div>
+                </div><br>
                 <table class="table table-striped table-bordered" id="wcmp-vendor-orders" style="width:100%;">
                     <thead>
                         <tr>
@@ -158,7 +158,6 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
             serverSide: true,
             searching: false,
             ordering: false,
-            lengthChange: false,
             responsive: true,
             drawCallback: function (settings) {
 //                $( "#filter_by_order_status" ).detach();
