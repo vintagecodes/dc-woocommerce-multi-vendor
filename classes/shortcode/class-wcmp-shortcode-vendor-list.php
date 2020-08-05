@@ -106,7 +106,7 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
             } else {
                 $vendor_args = wp_parse_args($args, $default);
             }
-            $query_paged =  ( ( is_front_page() && get_query_var('page') ) ? get_query_var('page') : ( get_query_var('paged') ) ) ? get_query_var('paged') : false;
+            $query_paged = is_front_page() ? get_query_var('page') : get_query_var('paged');
             if( $query_paged ) :
                 $current_page = max( 1, $query_paged );
                 $offset = ($current_page - 1) * $vendor_args['number'];
