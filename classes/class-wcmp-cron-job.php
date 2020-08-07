@@ -137,7 +137,7 @@ class WCMp_Cron_Job {
                     if ($vendor_weekly_orders && count($vendor_weekly_orders) > 0) {
                         foreach ($vendor_weekly_orders as $key => $data) {
                             if ($data->commission_id != 0 && $data->commission_id != '') {
-                                $order_data[$data->commission_id] = $data->order_id;
+                                $order_data[$data->commission_id] = $key;
                             }
                         }
                         if (count($order_data) > 0) {
@@ -213,7 +213,7 @@ class WCMp_Cron_Job {
                     if ($vendor_monthly_orders && count($vendor_monthly_orders) > 0) {
                         foreach ($vendor_monthly_orders as $key => $data) {
                             if ($data->commission_id != 0 && $data->commission_id != '') {
-                                $order_data[$data->commission_id] = $data->order_id;
+                                $order_data[$data->commission_id] = $key;
                             }
                         }
                         if (count($order_data) > 0) {
