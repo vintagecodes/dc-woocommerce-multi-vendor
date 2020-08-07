@@ -3134,7 +3134,7 @@ class WCMp_Ajax {
                     )
                 )
             );
-            $vendor_orders = wcmp_get_orders( $query, 'object' );
+            $vendor_orders = apply_filters('wcmp_widget_vendor_product_sales_report_orders', wcmp_get_orders( $query, 'object' ), $query);
             
             $sold_product_list = array();
             if ( $vendor_orders ) :
