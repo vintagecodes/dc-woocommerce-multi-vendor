@@ -62,7 +62,7 @@ class WCMp_Product {
         add_action('woocommerce_variation_options_tax', array($this, 'remove_filter_for_shipping_class'), 10, 3);
         add_action('admin_footer', array($this, 'wcmp_edit_product_footer'));
 
-        add_filter('woocommerce_product_review_list_args',  array($this, 'review_lists'));
+        add_action('pre_get_comments', array($this, 'review_lists'));
         add_filter('woocommerce_reviews_title',  array($this, 'review_title'), 10, 3);
         add_filter('woocommerce_product_tabs',  array($this, 'review_tab'));
 
@@ -297,13 +297,14 @@ class WCMp_Product {
         }
     }
 
-    public function review_lists($callback) {
-        $callback['type'] = 'review';
-        return $callback;
+    public function review_lists(\WP_Comment_Query $query) {
+        if ( $query->query_vars['type'] !== 'product_note' ) {
+            $query->query_vars['type__not_in'] = array_merge( (array) $query->query_vars['type__not_in'], array('product_note') );
+        }
     }
 
     public function review_title($reviews_title, $count, $product) {
-        $count = get_comments(array('post_id' => $product->get_id(), 'type' => 'review', 'count' => true));
+        $count = get_comments(array('post_id' => $product->get_id(), 'type__not_in' => array('product_note', 'comment'), 'count' => true));
         $reviews_title = sprintf( esc_html( _n( '%1$s review for %2$s', '%1$s reviews for %2$s', $count, 'woocommerce' ) ), esc_html( $count ), '<span>' . $product->get_title() . '</span>' );
         return $reviews_title;
     }
@@ -311,7 +312,8 @@ class WCMp_Product {
     public function review_tab($tabs) {
         global $product;
         if(isset($tabs['reviews'])) {
-            $count = get_comments(array('post_id' => $product->get_id(), 'type' => 'review', 'count' => true));
+            $count = get_comments(array('post_id' => $product->get_id(), 'type__not_in' => array('product_note', 'comment'), 'count' => true));
+
             $tabs['reviews'] = array(
                     'title'    => sprintf( __( 'Reviews (%d)', 'woocommerce' ), $count),
                     'priority' => 30,
