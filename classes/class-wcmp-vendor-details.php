@@ -999,10 +999,17 @@ class WCMp_Vendor {
                     'is_trashed' => ''
                 );
                 $args = apply_filters('get_vendor_orders_reports_of_default_query_args', wp_parse_args($args, $defaults));
-                $vendor_orders = $wpdb->get_results(
-                        $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_vendor_orders WHERE vendor_id=%d AND `created` BETWEEN %s AND %s AND `is_trashed`=%d", $args['vendor_id'], $args['start_date'], $args['end_date'], $args['is_trashed']
-                        )
+                $query = array(
+                    'author' => $args['vendor_id'],
+                    'date_query' => array(
+                        array(
+                            'after'     => $args['start_date'],
+                            'before'    => $args['end_date'],
+                            'inclusive' => true,
+                        ),
+                    )
                 );
+                $vendor_orders = wcmp_get_orders( $query, 'object' );
                 $reports = $vendor_orders;
                 break;
         }
