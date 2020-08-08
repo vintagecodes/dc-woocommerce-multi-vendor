@@ -167,7 +167,11 @@ final class WCMp_Woo_Helper {
                         $attribute_id = wc_attribute_taxonomy_id_by_name( $attribute['tax_name'] );
                     }
 
-                    $options = isset( $attribute['value'] ) ? stripslashes( $attribute['value'] ) : '';
+                    if( isset($attribute['value']) ) {
+                        $options = is_array( $attribute['value'] ) ? $attribute['value'] : stripslashes( $attribute['value'] );
+                    } else {
+                        $options ='';
+                    }
 
                     if ( is_array( $options ) ) {
                         // Term ids sent as array.
