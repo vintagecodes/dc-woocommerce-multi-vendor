@@ -111,6 +111,7 @@ class WCMp_Ajax {
         add_action('wp_ajax_wcmp_crop_image', array(&$this, 'wcmp_crop_image'));
         // WCMp shipping
         add_action('wp_ajax_wcmp-get-shipping-methods-by-zone', array($this, 'wcmp_get_shipping_methods_by_zone'));
+        add_action('wp_ajax_admin-get-vendor-shipping-methods-by-zone', array($this, 'admin_get_vendor_shipping_methods_by_zone'));
         add_action('wp_ajax_wcmp-add-shipping-method', array($this, 'wcmp_add_shipping_method'));
         add_action('wp_ajax_wcmp-update-shipping-method', array($this, 'wcmp_update_shipping_method'));
         add_action('wp_ajax_wcmp-delete-shipping-method', array($this, 'wcmp_delete_shipping_method'));
@@ -3271,6 +3272,282 @@ class WCMp_Ajax {
         wp_send_json_success($zone_html);
     }
 
+    public function admin_get_vendor_shipping_methods_by_zone(){
+        ?>
+        <div class="wrap">
+        <div id="icon-woocommerce" class="icon32 icon32-woocommerce-reports"><br/></div>
+        <h2><?php _e('Shipping', 'dc-woocommerce-multi-vendor'); ?></h2> <?php
+        $vendor_id = $_POST['vendor_id'];
+        if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
+            $WCMp->load_vendor_shipping();
+        }
+        $zones = WCMP_Shipping_Zone::get_zone($_POST['zoneID']);
+        if ($zones)
+        $zone = WC_Shipping_Zones::get_zone(absint($_POST['zoneID']));
+
+        $show_post_code_list = $show_state_list = $show_post_code_list = false;
+        $zone_id = $zones['data']['id'];
+        $zone_locations = $zones['data']['zone_locations'];
+
+        $zone_location_types = array_column(array_map('wcmp_convert_to_array', $zone_locations), 'type', 'code');
+
+        $selected_continent_codes = array_keys($zone_location_types, 'continent');
+
+        if (!$selected_continent_codes) {
+            $selected_continent_codes = array();
+        }
+
+        $selected_country_codes = array_keys($zone_location_types, 'country');
+        $all_states = WC()->countries->get_states();
+
+        $state_key_by_country = array();
+        $state_key_by_country = array_intersect_key($all_states, array_flip($selected_country_codes));
+
+        array_walk($state_key_by_country, 'wcmp_state_key_alter');
+
+        $state_key_by_country = call_user_func_array('array_merge', $state_key_by_country);
+
+        $show_limit_location_link = apply_filters('show_limit_location_link', (!in_array('postcode', $zone_location_types)));
+        $vendor_shipping_methods = $zones['shipping_methods'];
+        if ($show_limit_location_link) {
+            if (in_array('state', $zone_location_types)) {
+                $show_city_list = apply_filters('wcmp_city_select_dropdown_enabled', false);
+                $show_post_code_list = true;
+            } elseif (in_array('country', $zone_location_types)) {
+                $show_state_list = true;
+                $show_city_list = apply_filters('wcmp_city_select_dropdown_enabled', false);
+                $show_post_code_list = true;
+            }
+        }
+
+        $want_to_limit_location = !empty($zones['locations']);
+        $countries = $states = $cities = array();
+        $postcodes = '';
+        if ($want_to_limit_location) {
+            $postcodes = array();
+            foreach ($zones['locations'] as $each_location) {
+                switch ($each_location['type']) {
+                    case 'state':
+                        $states[] = $each_location['code'];
+                        break;
+                    case 'postcode':
+                        $postcodes[] = $each_location['code'];
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            $postcodes = implode(',', $postcodes);
+        }
+        
+        ?>
+        <input id="zone_id" class="form-control" type="hidden" name="<?php echo 'wcmp_shipping_zone[' . $zone_id . '][_zone_id]'; ?>" value="<?php echo $zone_id; ?>">
+        <table class="form-table wcmp-shipping-zone-settings wc-shipping-zone-settings">
+            <tbody>
+                <tr valign="top" class="">
+                    <th scope="row" class="titledesc">
+                        <label for="">
+                            <?php _e('Zone Name', 'dc-woocommerce-multi-vendor'); ?>
+                        </label>
+                    </th>
+                    <td class="forminp"><?php _e($zones['data']['zone_name'], 'dc-woocommerce-multi-vendor'); ?></td>
+                </tr>
+                <tr valign="top" class="">
+                    <th scope="row" class="titledesc">
+                        <label for="">
+                            <?php _e('Zone region', 'dc-woocommerce-multi-vendor'); ?>
+                        </label>
+                    </th>
+                    <td class="forminp"><?php _e($zones['formatted_zone_location'], 'dc-woocommerce-multi-vendor'); ?></td>
+                </tr>
+                <?php if ($show_limit_location_link && $zone_id !== 0) { ?>
+                    <tr valign="top" class="">
+                        <th scope="row" class="titledesc">
+                            <label for="">
+                                <?php _e('Limit Zone Location', 'dc-woocommerce-multi-vendor'); ?>
+                            </label>
+                        </th>
+                        <td class="forminp"><input id="limit_zone_location" class="" type="checkbox" name="<?php echo 'wcmp_shipping_zone[' . $zone_id . '][_limit_zone_location]'; ?>" value="1" <?php checked($want_to_limit_location, 1); ?>></td>
+                    </tr>
+                <?php } ?>
+                <?php if ($show_state_list) { ?>
+                    <tr valign="top" class="hide_if_zone_not_limited">
+                        <th scope="row" class="titledesc">
+                            <label for="">
+                                <?php _e('Select specific states', 'dc-woocommerce-multi-vendor'); ?>
+                            </label>
+                        </th>
+                        <td class="forminp">
+                            <select id="select_zone_states" class="form-control" name="<?php echo 'wcmp_shipping_zone[' . $zone_id . '][_select_zone_states][]'; ?>" multiple>
+                                <?php foreach ($state_key_by_country as $key => $value) { ?>
+                                    <option value="<?php echo $key; ?>" <?php selected(in_array($key, $states), true); ?>><?php echo $value; ?></option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                    </tr>
+                <?php } ?>
+                <?php if ($show_post_code_list) { ?>
+                    <tr valign="top" class="hide_if_zone_not_limited">
+                        <th scope="row" class="titledesc">
+                            <label for="">
+                                <?php _e('Set your postcode', 'dc-woocommerce-multi-vendor'); ?>
+                            </label>
+                        </th>
+                        <td class="forminp">
+                            <input id="select_zone_postcodes" class="form-control" type="text" name="<?php echo 'wcmp_shipping_zone[' . $zone_id . '][_select_zone_postcodes]'; ?>" value="<?php echo $postcodes; ?>" placeholder="<?php _e('Postcodes need to be comma separated', 'dc-woocommerce-multi-vendor'); ?>">
+                        </td>
+                    </tr>
+                <?php } ?>
+                <tr valign="top" class="">
+                    <th scope="row" class="titledesc">
+                        <label>
+                            <?php _e('Shipping methods', 'dc-woocommerce-multi-vendor'); ?>
+                            <?php echo wc_help_tip(__('Add your shipping method for appropiate zone', 'dc-woocommerce-multi-vendor')); // @codingStandardsIgnoreLine  ?>
+                        </label>
+                    </th>
+                    <td class="">
+                        <table class="wcmp-shipping-zone-methods wc-shipping-zone-methods widefat">
+                            <thead>
+                                <tr>   
+                                    <th class="wcmp-title wc-shipping-zone-method-title"><?php _e('Title', 'dc-woocommerce-multi-vendor'); ?></th>
+                                    <th class="wcmp-enabled wc-shipping-zone-method-enabled"><?php _e('Enabled', 'dc-woocommerce-multi-vendor'); ?></th> 
+                                    <th class="wcmp-description wc-shipping-zone-method-description"><?php _e('Description', 'dc-woocommerce-multi-vendor'); ?></th>
+                                    <th class="wcmp-action"><?php _e('Action', 'dc-woocommerce-multi-vendor'); ?></th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4">
+                                        <button type="submit" class="button wcmp-shipping-zone-show-method wc-shipping-zone-add-method" value="<?php esc_attr_e('Add shipping method', 'woocommerce'); ?>"><?php esc_html_e('Add shipping method', 'woocommerce'); ?></button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <?php if (empty($vendor_shipping_methods)) { ?> 
+                                    <tr>
+                                        <td colspan="4"><?php _e('You can add multiple shipping methods within this zone. Only customers within the zone will see them.', 'dc-woocommerce-multi-vendor'); ?></td>
+                                    </tr>
+                                    <?php
+                                } else { 
+                                    foreach ($vendor_shipping_methods as $vendor_shipping_method) {
+                                        ?>
+                                        <tr class="wcmp-shipping-zone-method">
+                                            <td><?php _e($vendor_shipping_method['title'], 'wcmp'); ?>
+                                                <div data-instance_id="<?php echo $vendor_shipping_method['instance_id']; ?>" data-method_id="<?php echo $vendor_shipping_method['id']; ?>" data-method-settings='<?php echo json_encode($vendor_shipping_method); ?>' class="row-actions edit_del_actions">
+                                                </div>
+                                            </td>
+                                            <td class="wcmp-shipping-zone-method-enabled wc-shipping-zone-method-enabled"> 
+                                                <span class="">
+                                                    <input id="method_status <?php echo $vendor_shipping_method['instance_id']; ?>" data-vendor_id="<?php echo $vendor_id; ?>" class="input-checkbox method-status" type="checkbox" name="method_status" value="<?php echo $vendor_shipping_method['instance_id']; ?>" <?php checked(( $vendor_shipping_method['enabled'] == "yes"), true); ?>>
+                                                </span>
+                                            </td>
+                                            <td><?php _e($vendor_shipping_method['settings']['description'], 'dc-woocommerce-multi-vendor'); ?></td>
+                                            <td>
+                                                <div class="col-actions edit_del_actions" data-instance_id="<?php echo $vendor_shipping_method['instance_id']; ?>" data-method_id="<?php echo $vendor_shipping_method['id']; ?>" data-method-settings='<?php echo json_encode($vendor_shipping_method); ?>'>
+                                                    <span class="edit"><a href="javascript:void(0);" data-vendor_id="<?php echo $vendor_id; ?>" class="edit-shipping-method" data-zone_id="<?php echo $zone_id; ?>" data-method_id="<?php echo $vendor_shipping_method['id']; ?>" data-instance_id="<?php echo $vendor_shipping_method['instance_id']; ?>" title="<?php _e('Edit', 'dc-woocommerce-multi-vendor') ?>"><?php _e('Edit', 'dc-woocommerce-multi-vendor') ?></a>
+                                                    </span>|
+                                                    <span class="delete"><a class="delete-shipping-method" data-vendor_id="<?php echo $vendor_id; ?>" href="javascript:void(0);" data-method_id="<?php echo $vendor_shipping_method['id']; ?>" data-instance_id="<?php echo $vendor_shipping_method['instance_id']; ?>" title="<?php _e('Delete', 'dc-woocommerce-multi-vendor') ?>"><?php _e('Delete', 'dc-woocommerce-multi-vendor') ?></a></span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+            
+            <script type="text/template" id="tmpl-wcmp-modal-add-shipping-method">
+                <div class="wc-backbone-modal wcmp-modal-add-shipping-method-modal">
+                <div class="wc-backbone-modal-content">
+                <section class="wc-backbone-modal-main" role="main">
+                <header class="wc-backbone-modal-header">
+                <h1><?php esc_html_e('Add shipping method', 'dc-woocommerce-multi-vendor'); ?></h1>
+                <button class="modal-close modal-close-link dashicons dashicons-no-alt">
+                <span class="screen-reader-text"><?php esc_html_e('Close modal panel', 'dc-woocommerce-multi-vendor'); ?></span>
+                </button>
+                </header>
+                <article>
+                <form action="" method="post">
+                <input type="hidden" name="zone_id" value="<?php echo $zone_id; ?>"/>
+                <input type="hidden" name="vendor_id" value="<?php echo $vendor_id; ?>"/>
+                
+                <div class="wc-shipping-zone-method-selector">
+                <p><?php esc_html_e('Choose the shipping method you wish to add. Only shipping methods which support zones are listed.', 'dc-woocommerce-multi-vendor'); ?></p>
+                <?php $shipping_methods = wcmp_get_shipping_methods(); ?>
+                <select id="shipping_method" class="form-control mt-15" name="wcmp_shipping_method">
+                <?php foreach ($shipping_methods as $key => $method) { ?>
+                    <option data-description="<?php echo esc_attr( wp_kses_post( wpautop( $method->get_method_description() ) ) ); ?>" value="<?php echo esc_attr( $method->id ); ?>"><?php echo esc_attr( $method->get_method_title() ); ?></option>
+                <?php } ?>
+                </select>
+                <div class="wc-shipping-zone-method-description"></div>
+                </div>
+                </form>
+                </article>
+                <footer>
+                <div class="inner">
+                <button id="btn-ok" data-vendor_id="<?php echo $vendor_id; ?>" class="button button-primary button-large wcmp-shipping-zone-add-method" data-zone_id="<?php echo $zone_id; ?>"><?php esc_html_e('Add shipping method', 'dc-woocommerce-multi-vendor'); ?></button>
+                </div>
+                </footer>
+                </section>
+                </div>
+                </div>
+                <div class="wc-backbone-modal-backdrop modal-close"></div>
+            </script>
+            <script type="text/template" id="tmpl-wcmp-modal-update-shipping-method">
+                <?php
+                global $WCMp;
+
+                $is_method_taxable_array = array(
+                    'none' => __('None', 'dc-woocommerce-multi-vendor'),
+                    'taxable' => __('Taxable', 'dc-woocommerce-multi-vendor')
+                );
+
+                $calculation_type = array(
+                    'class' => __('Per class: Charge shipping for each shipping class individually', 'dc-woocommerce-multi-vendor'),
+                    'order' => __('Per order: Charge shipping for the most expensive shipping class', 'dc-woocommerce-multi-vendor'),
+                );
+                ?>
+                <div class="wc-backbone-modal wcmp-modal-add-shipping-method-modal">
+                <div class="wc-backbone-modal-content">
+                <section class="wc-backbone-modal-main" role="main">
+                <header class="wc-backbone-modal-header">
+                <h1><?php _e( 'Edit Shipping Methods', 'dc-woocommerce-multi-vendor' ); ?></h1>
+                <button class="modal-close modal-close-link dashicons dashicons-no-alt">
+                <span class="screen-reader-text"><?php esc_html_e('Close modal panel', 'dc-woocommerce-multi-vendor'); ?></span>
+                </button>
+                </header>
+                <article class="wcmp-shipping-methods">
+                <form action="" method="post">
+                <input id="instance_id_selected_zone" class="form-control" type="hidden" name="zone_id" value="<?php echo $zone_id; ?>"> 
+                <input type="hidden" name="vendor_id" value="<?php echo $vendor_id; ?>"/>
+                <input id="method_id_selected" class="form-control" type="hidden" name="method_id" value="{{{ data.methodId }}}"> 
+                <input id="instance_id_selected" class="form-control" type="hidden" name="instance_id" value="{{{ data.instanceId }}}"> 
+                {{{ data.config_settings }}}
+     
+                </form>
+                </article>
+                <footer>
+                <div class="inner">
+                <button id="btn-ok" class="button button-primary button-large wcmp-shipping-zone-add-method" data-vendor_id="<?php echo $vendor_id; ?>" data-zone_id="<?php echo $zone_id; ?>"><?php esc_html_e('Save changes', 'dc-woocommerce-multi-vendor'); ?></button>
+                </div>
+                </footer>
+                </section>
+                </div>
+                </div>
+                <div class="wc-backbone-modal-backdrop modal-close"></div>
+            </script>
+        </table>
+        <br class="clear"/>
+        </div>
+        <?php
+        die;
+    }
+
     public function wcmp_add_shipping_method() {
         global $WCMp;
         $data = array(
@@ -3369,6 +3646,7 @@ class WCMp_Ajax {
         global $WCMp;
         $zone_id = isset($_POST['zoneId']) ? absint($_POST['zoneId']) : 0;
         $method_id = isset($_POST['methodId']) ? $_POST['methodId'] : '';
+        $instance_id = isset($_POST['instanceId']) ? $_POST['instanceId'] : '';
         if ($zone_id) {
             if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
                 $WCMp->load_vendor_shipping();
@@ -3380,13 +3658,12 @@ class WCMp_Ajax {
                 'none' => __('None', 'dc-woocommerce-multi-vendor'),
                 'taxable' => __('Taxable', 'dc-woocommerce-multi-vendor')
             );
-
+            $vendor_shipping_method = $vendor_shipping_methods[$method_id.':'.$instance_id];
             $calculation_type = array(
                 'class' => __('Per class: Charge shipping for each shipping class individually', 'dc-woocommerce-multi-vendor'),
                 'order' => __('Per order: Charge shipping for the most expensive shipping class', 'dc-woocommerce-multi-vendor'),
             );
             $settings_html = '';
-            foreach ($vendor_shipping_methods as $vendor_shipping_method) {
                 if ($vendor_shipping_method['id'] == 'free_shipping') {
                     $settings_html = '<!-- Free shipping -->'
                             . '<div class="shipping_form" id="' . $vendor_shipping_method['id'] . '">'
@@ -3501,7 +3778,6 @@ class WCMp_Ajax {
                     $settings_html = apply_filters('wcmp_vendor_backend_shipping_methods_edit_form_fields', $settings_html, get_current_user_id(), $zone_id, $vendor_shipping_method);
                 }
                 $config_settings[$vendor_shipping_method['id']] = $settings_html;
-            }
             $html_settings = isset($config_settings[$method_id]) ? $config_settings[$method_id] : '';
             wp_send_json($html_settings);
         }

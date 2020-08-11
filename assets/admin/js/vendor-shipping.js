@@ -8,6 +8,7 @@
             },
 
             init: function () {
+                this.shipping_zone_table = '.wcmp-shipping-zones';
                 this.table_shipping_zone_settings = '.wcmp-shipping-zone-settings';
                 this.table_shipping_zone_methods = '.wcmp-shipping-zone-methods';
                 this.modify_shipping_methods = '.modify-shipping-methods';
@@ -22,6 +23,8 @@
 
             bindEvents: function () {
                 /* events */
+                $(this.modify_shipping_methods).on('click', this.modify_shipping_methods_admin.bind(this));
+                $( document ).on('zone_settings_loaded', this.zoneLoadedEvents.bind(this));
                 $( document.body ).on( 'click', this.show_shipping_methods, this.showShippingMethods);
                 $( document.body ).on( 'wc_backbone_modal_response', this.addShippingMethod );
                 $( document.body ).on( 'wc_backbone_modal_response', this.updateShippingMethod );
@@ -31,6 +34,47 @@
                 $( document.body ).on( 'change', this.limit_zone_location, this.limitZoneLocation);
                 $( document.body ).on( 'change', '.wc-shipping-zone-method-selector select', this.onChangeShippingMethodSelector );
                 this.limitZoneLocation();
+            },
+
+            modify_shipping_methods_admin: function (event, zoneID) {
+
+                var appObj = this;
+                $('.wcmp-shipping-zones').block({
+                    message: null,
+                    overlayCSS: {
+                        background: '#fff',
+                        opacity: 0.6
+                    }
+                });
+
+                if (typeof event !== "undefined") {
+                    event.preventDefault();
+                    zoneID = $(event.currentTarget).data('zoneId');
+                    vendor_id = $(event.currentTarget).data('vendor_id');
+
+                }
+
+                var ajaxRequest = $.ajax({
+                    method: 'post',
+                    url: wcmp_vendor_shipping_script_data.ajaxurl,
+                    data: {
+                        action: 'admin-get-vendor-shipping-methods-by-zone',
+                        zoneID: zoneID,
+                        vendor_id:vendor_id
+                    },
+                    success: function (response) {
+                        $(appObj.table_shipping_zone_settings).html(response).show();
+                        $(appObj.shipping_zone_table).hide();
+                    },
+                    complete: function () {
+                         $('.wcmp-shipping-zones').unblock();
+                         $(document).trigger('zone_settings_loaded');
+                    }
+                });
+            },
+
+            zoneLoadedEvents: function (event) {
+                this.limitZoneLocation(event);
             },
 
             showShippingMethods: function (event) {
@@ -58,6 +102,7 @@
                     event.preventDefault();
                     var appObj = this;
                     var zoneId = posted_data.zone_id,
+                        vendor_id = posted_data.vendor_id,
                         shippingMethod = posted_data.wcmp_shipping_method;
                     if (zoneId == '') {
                         // alert(wcmp_dashboard_messages.shiping_zone_not_found);
@@ -67,7 +112,8 @@
                         var data = {
                             action: 'wcmp-add-shipping-method',
                             zoneID: zoneId,
-                            method: shippingMethod
+                            method: shippingMethod,
+                            vendor_id:vendor_id
                         };
 
                         $(this.add_shipping_methods).block({
@@ -86,9 +132,25 @@
                             data: data,
                             success: function (response) {
                                 if (response.success) {
-                                    location.reload();
-//                                    $('#wcmp_shipping_method_add_container').hide();
-//                                    this.modifyShippingMethods(undefined, zoneId);
+                                    
+                                    if( !vendor_id ){
+                                        location.reload();
+                                    } else {
+                                        var ajaxRequest = $.ajax({
+                                            method: 'post',
+                                            url: wcmp_vendor_shipping_script_data.ajaxurl,
+                                            data: {
+                                                action: 'admin-get-vendor-shipping-methods-by-zone',
+                                                zoneID: zoneId,
+                                                vendor_id:vendor_id
+                                            },
+                                            success: function (response_modify_section) {
+                                                $('.wcmp-shipping-zone-settings').html(response_modify_section).show();
+                                                $(document).trigger('zone_settings_loaded');
+                                            },
+                                        });
+                                    }
+
                                 } else {
 
                                 }
@@ -112,11 +174,13 @@
                 var instanceId = $(event.currentTarget).data('instance_id'),
                         methodId = $(event.currentTarget).data('method_id'),
                         zoneId = $(event.currentTarget).data('zone_id'),
+                        vendor_id = $(event.currentTarget).data('vendor_id'),
                         data = {
                             action: 'wcmp-configure-shipping-method',
                             zoneId: zoneId,
                             instanceId: instanceId,
-                            methodId: methodId
+                            methodId: methodId,
+                            vendor_id:vendor_id
                         };
                 $('#method_id_selected').val(methodId);
                 $('#instance_id_selected').val(instanceId);
@@ -149,6 +213,7 @@
                     var methodID = posted_data.method_id,
                         instanceId = posted_data.instance_id,
                         zoneId = posted_data.zone_id,
+                        vendor_id = posted_data.vendor_id,
                         data = {
                             action: 'wcmp-update-shipping-method',
                             zoneID: zoneId,
@@ -157,6 +222,7 @@
                                 instance_id: instanceId,
                                 zone_id: zoneId,
                                 method_id: methodID,
+                                vendor_id:vendor_id,
                                 settings: {}
                             }
                         };
@@ -167,8 +233,24 @@
                         data: data,
                         success: function (response) {
                             if (response.success) {
-                                location.reload();
-                                //appObj.modifyShippingMethods(undefined, zoneId);
+                                if( !vendor_id ){
+                                        location.reload();
+                                } else {
+                                    var ajaxRequest = $.ajax({
+                                        method: 'post',
+                                        url: wcmp_vendor_shipping_script_data.ajaxurl,
+                                        data: {
+                                            action: 'admin-get-vendor-shipping-methods-by-zone',
+                                            zoneID: zoneId,
+                                            vendor_id:vendor_id
+                                        },
+                                        success: function (response_modify_section) {
+                                            $('.wcmp-shipping-zone-settings').html(response_modify_section).show();
+                                            $(document).trigger('zone_settings_loaded');
+                                        },
+                                    });
+                                }
+
                             } else {
                                 alert(response.data);
                             }
@@ -185,12 +267,14 @@
 
                 if (confirm(script_data.i18n.deleteShippingMethodConfirmation)) {
                     var currentTarget = $(event.target).is(this.delete_shipping_method) ? event.target : $(event.target).closest(this.delete_shipping_method),
+                        vendor_id = $(event.currentTarget).data('vendor_id'),
                             instance_id = $(event.target).attr('data-instance_id'),
                             zoneId = $('#zone_id').val();
                     var data = data = {
                         action: 'wcmp-delete-shipping-method',
                         zoneID: zoneId,
-                        instance_id: instance_id
+                        instance_id: instance_id,
+                        vendor_id:vendor_id
                     };
 
                     if (zoneId == '') {
@@ -206,8 +290,24 @@
                             data: data,
                             success: function (response) {
                                 if (response.success) {
-                                    location.reload();
-                                    //appObj.modifyShippingMethods(undefined, zoneId);
+                                    if( !vendor_id ){
+                                        location.reload();
+                                    } else {
+                                        var ajaxRequest = $.ajax({
+                                            method: 'post',
+                                            url: wcmp_vendor_shipping_script_data.ajaxurl,
+                                            data: {
+                                                action: 'admin-get-vendor-shipping-methods-by-zone',
+                                                zoneID: zoneId,
+                                                vendor_id:vendor_id
+                                            },
+                                            success: function (response_modify_section) {
+                                                $('.wcmp-shipping-zone-settings').html(response_modify_section).show();
+                                                $(document).trigger('zone_settings_loaded');
+                                            },
+                                        });
+                                    }
+
                                 } else {
                                     alert(resp.data);
                                 }
@@ -220,6 +320,7 @@
             limitZoneLocation: function (event) {
                 if ($('#limit_zone_location').is(':checked')) {
                     $('.hide_if_zone_not_limited').show();
+                    $('#select_zone_states').select2();
                 } else {
                     $('.hide_if_zone_not_limited').hide();
                 }
@@ -230,6 +331,7 @@
 
                 var checked = $(event.target).is(':checked'),
                         value = $(event.target).val(),
+                        vendor_id = $(event.currentTarget).data('vendor_id'),
                         zoneId = $('#zone_id').val();
 
                 var data = {
@@ -237,6 +339,7 @@
                     zoneID: zoneId,
                     instance_id: value,
                     checked: checked,
+                    vendor_id:vendor_id
                 };
 
                 if (zoneId == '') {
