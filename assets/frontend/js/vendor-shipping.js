@@ -56,7 +56,6 @@
             if (typeof event !== "undefined") {
                 event.preventDefault();
                 zoneID = $(event.currentTarget).data('zoneId');
-                vendor_id = $(event.currentTarget).data('vendor_id');
             }
 
             var ajaxRequest = $.ajax({
@@ -65,7 +64,6 @@
                 data: {
                     action: 'wcmp-get-shipping-methods-by-zone',
                     zoneID: zoneID,
-                    vendor_id:vendor_id
                 },
                 success: function (response) {
                     $(appObj.vendor_shipping_methods).html(response.data.html).show();
@@ -109,7 +107,6 @@
             var appObj = this;
 
             var zoneId = $('#zone_id').val(),
-                vendor_id = $(event.currentTarget).data('vendor_id'),
                     shippingMethod = $('#shipping_method option:selected').val();
             if (zoneId == '') {
                 // alert(wcmp_dashboard_messages.shiping_zone_not_found);
@@ -120,7 +117,6 @@
                     action: 'wcmp-add-shipping-method',
                     zoneID: zoneId,
                     method: shippingMethod,
-                    vendor_id:vendor_id
                 };
 
                 $('#wcmp_shipping_method_add_button').block({
@@ -162,13 +158,11 @@
             var instanceId = $(event.currentTarget).parents('.edit_del_actions').data('instance_id'),
                 methodId = $(event.currentTarget).parents('.edit_del_actions').data('method_id'),
                 zoneId = $(event.currentTarget).parents('.edit_del_actions').data('zone_id'),
-                vendor_id = $(event.currentTarget).data('vendor_id'),
                 data = {
                     action: 'wcmp-vendor-configure-shipping-method',
                     zoneId: zoneId,
                     instanceId: instanceId,
                     methodId: methodId,
-                    vendor_id:vendor_id
                 };
                 
             var ajaxRequest = $.ajax({
@@ -197,7 +191,6 @@
             var methodID = $('#wcmp_shipping_method_edit_container #method_id_selected').val(),
                     instanceId = $('#wcmp_shipping_method_edit_container #instance_id_selected').val(),
                     zoneId = $('#zone_id').val(),
-                    vendor_id = $(event.currentTarget).data('vendor_id'),
                     data = {
                         action: 'wcmp-update-shipping-method',
                         zoneID: zoneId,
@@ -205,7 +198,6 @@
                             instance_id: instanceId,
                             zone_id: zoneId,
                             method_id: methodID,
-                            vendor_id:vendor_id,
                             settings: $('#wcmp-vendor-edit-shipping-form').serializeArray()
                         }
                     };
@@ -241,13 +233,11 @@
             if (confirm(wcmp_vendor_shipping_script_data.i18n.deleteShippingMethodConfirmation)) {
                 var currentTarget = $(event.target).is(this.delete_shipping_method) ? event.target : $(event.target).closest(this.delete_shipping_method),
                         instance_id = $(currentTarget).parents('.edit_del_actions').attr('data-instance_id'),
-                        vendor_id = $(event.currentTarget).data('vendor_id'),
                         zoneId = $('#zone_id').val();
                 var data = data = {
                     action: 'wcmp-delete-shipping-method',
                     zoneID: zoneId,
                     instance_id: instance_id,
-                    vendor_id:vendor_id
                 };
 
                 if (zoneId == '') {
@@ -289,7 +279,6 @@
 
             var checked = $(event.target).is(':checked'),
                     value = $(event.target).val(),
-                    vendor_id = $(event.currentTarget).data('vendor_id'),
                     zoneId = $('#zone_id').val();
 
             var data = {
@@ -297,7 +286,6 @@
                 zoneID: zoneId,
                 instance_id: value,
                 checked: checked,
-                vendor_id:vendor_id
             };
 
             if (zoneId == '') {

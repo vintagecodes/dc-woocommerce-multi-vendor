@@ -3263,7 +3263,6 @@ class WCMp_Ajax {
             'show_post_code_list' => $show_post_code_list,
             'postcodes' => $postcodes,
             'vendor_shipping_methods' => $vendor_shipping_methods,
-            'vendor_id' => $_POST['vendor_id']
         );
         $WCMp->template->get_template('vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php', $template_data);
         $zone_html['html'] = ob_get_clean();
