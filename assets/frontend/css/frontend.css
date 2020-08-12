@@ -354,6 +354,19 @@ a.wcmp_vendor_detail {
   .wcmp_review_loader img {
     margin: 2px auto; }
 
+  .wcmp_store_coupons span.wcmp-store-coupon-single.tips.text_tip {
+    border: 1px dashed #17a2b8;
+    background-color: #d9f2f6;
+    padding: 5px 10px;
+    margin-right: 10px;
+    float: left;
+    margin-top: 10px;
+    font-weight: 600;
+    color: #222;
+    font-size: 13px;
+    line-height: 20px;
+  }
+
 @media screen and (max-width: 480px) {
   .wcmp_vendor_banner_template.template1 .vendor_description {
     padding-bottom: 50px; }

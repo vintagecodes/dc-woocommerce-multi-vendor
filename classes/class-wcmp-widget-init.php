@@ -26,6 +26,10 @@ class WCMp_Widget_Init {
         require_once ('widgets/class-wcmp-widget-vendor-top-rated-products.php');
         require_once ('widgets/class-wcmp-widget-vendor-review.php');
         require_once ('widgets/class-wcmp-widget-vendor-product-search.php');
+        require_once ('widgets/class-wcmp-widget-vendor-policies.php');
+        require_once ('widgets/class-wcmp-widget-vendor-coupons.php');
+        require_once ('widgets/class-wcmp-widget-vendor-on-sale-products.php');
+        require_once ('widgets/class-wcmp-widget-vendor-recent-products.php');
 
         register_widget('DC_Widget_Vendor_Info');
         register_widget('DC_Widget_Vendor_List');
@@ -35,6 +39,10 @@ class WCMp_Widget_Init {
         register_widget('WCMp_Widget_Vendor_Top_Rated_Products');
         register_widget('WCMp_Widget_Vendor_Review_Widget');
         register_widget('WCMp_Widget_Vendor_Product_Search');
+        register_widget('WCMp_Widget_Vendor_Policies');
+        register_widget('WCMp_Widget_Vendor_Coupons');
+        register_widget('WCMp_Widget_Vendor_On_Sale_Products');
+        register_widget('WCMp_Widget_Vendor_Recent_Products');
     }
 
     /**

@@ -26,9 +26,12 @@ class WCMp_Settings_General {
     public function settings_page_init() {
         global $WCMp;
         $singleproductmultiseller_show_order_option = array();
-        foreach ($WCMp->taxonomy->get_wcmp_spmv_terms(array('orderby' => 'id')) as $key => $term){
-            $singleproductmultiseller_show_order_option[$term->slug] = $term->name;
-        }
+        $spmv_terms = $WCMp->taxonomy->get_wcmp_spmv_terms(array('orderby' => 'id'));
+        if( $spmv_terms ) :
+            foreach ($spmv_terms as $key => $term){
+                $singleproductmultiseller_show_order_option[$term->slug] = $term->name;
+            }
+        endif;
         $singleproductmultiseller_show_order_option = apply_filters('wcmp_spmv_setting_general_show_order_option', $singleproductmultiseller_show_order_option);
         $settings_tab_options = array("tab" => "{$this->tab}",
             "ref" => &$this,
