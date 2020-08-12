@@ -36,6 +36,10 @@ class WCMp_Admin {
         add_filter('woocommerce_screen_ids', array(&$this, 'add_wcmp_screen_ids'));
         // Admin notice for advance frontend modules (Temp)
         add_action('admin_notices', array(&$this, 'advance_frontend_manager_notice'));
+        // vendor shipping capability
+        add_filter('wcmp_current_vendor_id', array(&$this, 'wcmp_vendor_shipping_admin_capability'));
+        add_filter('wcmp_dashboard_shipping_vendor', array(&$this, 'wcmp_vendor_shipping_admin_capability'));
+
         $this->actions_handler();
     }
     
@@ -366,6 +370,15 @@ class WCMp_Admin {
             )
         ));
 
+        if ( $screen->id == 'wcmp_page_vendors') {
+            // Admin end shipping
+            $WCMp->localize_script('wcmp_vendor_shipping');
+            wp_enqueue_script('wcmp_vendor_shipping');
+            wp_enqueue_script('jquery-blockui');
+            wp_enqueue_style( 'woocommerce_admin_styles' );
+            $WCMp->library->load_select2_lib();
+        }
+
         if (in_array($screen->id, $wcmp_admin_screens)) :
             $WCMp->library->load_qtip_lib();
             $WCMp->library->load_upload_lib();
@@ -587,6 +600,17 @@ class WCMp_Admin {
         </div>
         <?php 
         endif;
+    }
+
+    public function wcmp_vendor_shipping_admin_capability($current_id){
+        if( !is_user_wcmp_vendor($current_id) ){
+            if( isset($_POST['vendor_id'] )){
+                $current_id = $_POST['vendor_id'];
+            } else {
+                $current_id = $_GET['ID'];
+            }
+        } 
+        return $current_id;
     }
 
 }
