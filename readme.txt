@@ -12,7 +12,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 ## WC Marketplace - brings you, your easiest and one stop solution to build a perfect online marketplace website.
 
 == Description ==
-### Number 1(#1) free multivendor marketplace plugin for a perfect eCommerce website.
+=== Best WooCommerce Multivendor Marketplace Solution - WC Marketplace ===
 Ever dreamt of having a store like Amazon, eBay, etsy, AirBnB or Flipkart? Then WC Marketplace will turn your dreams into a reality.
 You will have an online eCommerce store setup, where multiple merchants, vendors, traders or sellers can sell goods or services to customers in no time. ☺
 
@@ -191,6 +191,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 == Changelog ==
 
 = 3.5.5 - 2020-08-13 =
+* Added - Compatibility of WordPress 5.5 added
 * Added - Hooks to add export button for vendor and product report #453
 * Added - New filter added to adjust wp_query  #434
 * Added - Number of rows can be selected for orders table at vendor end #430
