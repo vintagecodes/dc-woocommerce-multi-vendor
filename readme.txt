@@ -1,18 +1,18 @@
-=== WC Marketplace ===
+=== Best WooCommerce Multivendor Marketplace Solution - WC Marketplace ===
 Contributors: wcmp, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh89612
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.4.2
+Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 3.5.4
+Stable tag: 3.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 ## WC Marketplace - brings you, your easiest and one stop solution to build a perfect online marketplace website.
 
 == Description ==
-### Number 1(#1) free multivendor marketplace plugin for a perfect eCommerce website.
+### Best free #1 multivendor marketplace plugin for a perfect WooCommerce website.
 Ever dreamt of having a store like Amazon, eBay, etsy, AirBnB or Flipkart? Then WC Marketplace will turn your dreams into a reality.
 You will have an online eCommerce store setup, where multiple merchants, vendors, traders or sellers can sell goods or services to customers in no time. ☺
 
@@ -189,6 +189,22 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.5.5 - 2020-08-13 =
+* Added - Compatibility of WordPress 5.5 added
+* Added - Hooks to add export button for vendor and product report #453
+* Added - New filter added to adjust wp_query  #434
+* Added - Number of rows can be selected for orders table at vendor end #430
+* Enhancement - Vendor Shop page New Widget Added #404
+* Fix - Attribute saving issue #436
+* Fix - Exclude the "product_note" comment_type from product reviews #429
+* Fix - CSV attachment to the monthly and weekly report email. #426
+* Fix - Coupon Validation #423
+* Fix - Vendor's can now update his/her particular shipping method from back end #442
+* Fix - WCMp Vendor tab display break issue and Screen Options no longer working #433
+* Fix - Re: Error paging vendor list #413
+* Fix - Shipping Data not saving #449
+* Updated - Language file.
 
 = 3.5.4 - 2020-07-24 =
 * Added - Let customer search vendor as per vendor's shipping zone( vendor list shortcode ) #284
