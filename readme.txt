@@ -194,16 +194,15 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 * Added - Hooks to add export button for vendor and product report #453
 * Added - New filter added to adjust wp_query  #434
 * Added - Number of rows can be selected for orders table at vendor end #430
-* Enhancement - New Vendor Added Widget #404
+* Enhancement - Vendor Shop page New Widget Added #404
 * Fix - Attribute saving issue #436
 * Fix - Exclude the "product_note" comment_type from product reviews #429
 * Fix - CSV attachment to the monthly and weekly report email. #426
 * Fix - Coupon Validation #423
-* Fix - vendor wp backend shipping method issue #442
-* Fix - Vendor view looks odd and Screen Options no longer working #433
+* Fix - Vendor's can now update his/her particular shipping method from back end #442
+* Fix - WCMp Vendor tab display break issue and Screen Options no longer working #433
 * Fix - Re: Error paging vendor list #413
 * Fix - Shipping Data not saving #449
-* Fix - Function return null issue
 * Updated - Language file.
 
 = 3.5.4 - 2020-07-24 =
