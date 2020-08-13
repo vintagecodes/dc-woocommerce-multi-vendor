@@ -12,7 +12,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 ## WC Marketplace - brings you, your easiest and one stop solution to build a perfect online marketplace website.
 
 == Description ==
-=== Best free #1 multivendor marketplace plugin for a perfect WooCommerce website. ===
+### Best free #1 multivendor marketplace plugin for a perfect WooCommerce website.
 Ever dreamt of having a store like Amazon, eBay, etsy, AirBnB or Flipkart? Then WC Marketplace will turn your dreams into a reality.
 You will have an online eCommerce store setup, where multiple merchants, vendors, traders or sellers can sell goods or services to customers in no time. ☺
 
