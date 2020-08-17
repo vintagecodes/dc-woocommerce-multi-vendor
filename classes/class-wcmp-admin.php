@@ -360,6 +360,7 @@ class WCMp_Admin {
         wp_register_script('wcmp_report_js', $WCMp->plugin_url . 'assets/admin/js/report' . $suffix . '.js', array('jquery'), $WCMp->version, true);
         wp_register_script('wcmp_vendor_js', $WCMp->plugin_url . 'assets/admin/js/vendor' . $suffix . '.js', array('jquery', 'woocommerce_admin'), $WCMp->version, true);
         wp_register_script('wcmp_vendor_shipping', $WCMp->plugin_url . 'assets/admin/js/vendor-shipping' . $suffix . '.js', array( 'jquery', 'wp-util', 'underscore', 'backbone', 'jquery-ui-sortable', 'wc-backbone-modal' ), $WCMp->version );
+        wp_register_script( 'wc-enhanced-select', WC()->plugin_url() . '/assets/js/admin/wc-enhanced-select' . $suffix . '.js', array( 'jquery', 'selectWoo' ), WC_VERSION );
 
         $WCMp->localize_script('wcmp_admin_js', array(
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -468,6 +469,7 @@ class WCMp_Admin {
         endif;
 
         if (in_array($screen->id, array('wcmp_page_reports', 'toplevel_page_wc-reports'))) :
+            wp_enqueue_script('wc-enhanced-select');
             wp_enqueue_script('WCMp_chosen');
             wp_enqueue_script('WCMp_ajax-chosen');
             wp_enqueue_script('wcmp-admin-product-js');
