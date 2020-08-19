@@ -30,10 +30,12 @@ class WCMp_Settings_Vendor_Registration {
             <div id="menu-settings-column" class="metabox-holder" ng-controller="postbox_menu">
                 <div id="side-sortables" class="meta-box-sortables ui-sortable">
                     <div class="postbox" ng-class="postboxClass">
-                        <button ng-click="togglePostbox()" aria-expanded="false" class="handlediv button-link" type="button"><span class="screen-reader-text">Toggle panel: Format</span><span aria-hidden="true" class="toggle-indicator"></span></button>
-                        <h3 class="hndl ui-sortable-handle">
-                            <span><?php echo __('Form Fields','dc-woocommerce-multi-vendor'); ?></span>
-                        </h3>
+                        <div class="postbox-header">
+                            <h3 class="hndle ui-sortable-handle">
+                                <span><?php echo __('Form Fields','dc-woocommerce-multi-vendor'); ?></span>
+                            </h3>
+                            <button ng-click="togglePostbox()" type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Format</span><span class="toggle-indicator" aria-hidden="true"></span></button>
+                        </div>
                         <div class="inside">
                             <p class="button-controls">
                                 <a href="#" ng-click="addFormField('textbox', 'Text Box', $event)" class="button-secondary"><?php echo __('Textbox','dc-woocommerce-multi-vendor'); ?></a>
@@ -67,10 +69,12 @@ class WCMp_Settings_Vendor_Registration {
                 </div>
                 <div id="side-sortables" class="meta-box-sortables ui-sortable">
                     <div class="postbox" ng-class="vendorStoreFieldClass">
-                        <button ng-click="togglevendorStoreField()" aria-expanded="false" class="handlediv button-link" type="button"><span class="screen-reader-text">Toggle panel: Format</span><span aria-hidden="true" class="toggle-indicator"></span></button>
-                        <h3 class="hndl ui-sortable-handle">
-                            <span><?php echo __('Vendor Store Fields','dc-woocommerce-multi-vendor'); ?></span>
-                        </h3>
+                        <div class="postbox-header">
+                            <h3 class="hndle ui-sortable-handle">
+                                <span><?php echo __('Vendor Store Fields','dc-woocommerce-multi-vendor'); ?></span>
+                            </h3>
+                            <button ng-click="togglevendorStoreField()" type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Format</span><span class="toggle-indicator" aria-hidden="true"></span></button>
+                        </div>
                         <div class="inside">
                             <p class="button-controls">
                                 <a href="#" ng-click="addFormField('vendor_description', 'Store Description', $event)" class="button-secondary"><?php echo __('Store Description','dc-woocommerce-multi-vendor'); ?></a>
@@ -115,8 +119,12 @@ class WCMp_Settings_Vendor_Registration {
                             <ul class="meta-box-sortables" ui-sortable="fieldSortableOptions" ng-model="fields">
                                 <li ng-repeat="(parentIndex,field) in fields track by $index">
                                     <div class="postbox" ng-class="{'closed' : field.hidden }">
-                                        <button aria-expanded="false" ng-click="togglePostboxField($index)" class="handlediv button-link" type="button"><span class="screen-reader-text">Toggle panel: Format</span><span aria-hidden="true" class="toggle-indicator"></span></button>
-                                        <h2 class="hndle ui-sortable-handle" ng-dblclick="togglePostboxField($index)"><span>{{field.label}}</span></h2>
+                                        <div class="postbox-header">
+                                            <h3 class="hndle ui-sortable-handle" ng-dblclick="togglePostboxField($index)">
+                                                <span>{{field.label}}</span>
+                                            </h3>
+                                            <button ng-click="togglePostboxField($index)" type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Format</span><span class="toggle-indicator" aria-hidden="true"></span></button>
+                                        </div>
                                         <div class="inside">
                                             <div id="post-formats-select">
                                                 <div ng-include src="partialUrl+field.partial"></div>

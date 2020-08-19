@@ -21,7 +21,7 @@
     return this.each(function() {
       return $(this).next('.chosen-container').find(".search-field > input, .chosen-search > input").bind('keyup', function() {
         var field, msg, success, val;
-        val = $.trim($(this).attr('value'));
+        val = $.trim($(this).val());
         msg = val.length < options.minTermLength ? "Keep typing..." : "Looking for '" + val + "'";
         select.next('.chosen-container').find('.no-results').text(msg);
         if (val === $(this).data('prevVal')) {
