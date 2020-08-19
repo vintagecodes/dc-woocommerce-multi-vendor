@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: WC Marketplace 3.4.11\n"
 "Report-Msgid-Bugs-To: https://github.com/dualcube/dc-woocommerce-multi-"
 "vendor/issues\n"
-"POT-Creation-Date: 2020-08-13 04:16+0000\n"
+"POT-Creation-Date: 2020-08-19 07:55+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1685,11 +1685,11 @@ msgstr ""
 msgid "Form Fields"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:39
+#: admin/class-wcmp-settings-vendor-registration.php:41
 msgid "Textbox"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:42 
+#: admin/class-wcmp-settings-vendor-registration.php:44 
 #: admin/class-wcmp-settings-vendors.php:34 
 #: admin/class-wcmp-settings-general-customer_support_details.php:34 
 #: templates/vendor-dashboard/profile.php:37 
@@ -1698,62 +1698,62 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:45
+#: admin/class-wcmp-settings-vendor-registration.php:47
 msgid "Url"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:48
+#: admin/class-wcmp-settings-vendor-registration.php:50
 msgid "Textarea"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:51
+#: admin/class-wcmp-settings-vendor-registration.php:53
 msgid "List"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:54
+#: admin/class-wcmp-settings-vendor-registration.php:56
 msgid "Checkbox"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:57
+#: admin/class-wcmp-settings-vendor-registration.php:59
 msgid "Recaptcha"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:60
+#: admin/class-wcmp-settings-vendor-registration.php:62
 msgid "Attachment"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:63
+#: admin/class-wcmp-settings-vendor-registration.php:65
 msgid "Section"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:72
+#: admin/class-wcmp-settings-vendor-registration.php:74
 msgid "Vendor Store Fields"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:76 
+#: admin/class-wcmp-settings-vendor-registration.php:80 
 #: admin/class-wcmp-settings-vendors.php:478 
 #: templates/vendor-dashboard/shop-front.php:141
 msgid "Store Description"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:79 
+#: admin/class-wcmp-settings-vendor-registration.php:83 
 #: classes/class-wcmp-user.php:384
 msgid "Address 1"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:82 
+#: admin/class-wcmp-settings-vendor-registration.php:86 
 #: classes/class-wcmp-user.php:390
 msgid "Address 2"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:85 
+#: admin/class-wcmp-settings-vendor-registration.php:89 
 #: admin/class-wcmp-settings-vendors.php:479 classes/class-wcmp-user.php:432 
 #: templates/vendor-dashboard/vendor-policy.php:69 
 #: templates/vendor-dashboard/shop-front.php:159
 msgid "Phone"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:88 
+#: admin/class-wcmp-settings-vendor-registration.php:92 
 #: admin/class-wcmp-settings-vendors.php:482 
 #: admin/class-wcmp-settings-general-customer_support_details.php:40 
 #: classes/class-wcmp-user.php:426 
@@ -1761,7 +1761,7 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:91 
+#: admin/class-wcmp-settings-vendor-registration.php:95 
 #: admin/class-wcmp-settings-vendors.php:483 
 #: admin/class-wcmp-settings-general-customer_support_details.php:38 
 #: classes/class-wcmp-user.php:420 
@@ -1769,7 +1769,7 @@ msgstr ""
 msgid "State"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:94 
+#: admin/class-wcmp-settings-vendor-registration.php:98 
 #: admin/class-wcmp-settings-vendors.php:484 
 #: admin/class-wcmp-settings-general-customer_support_details.php:39 
 #: classes/class-wcmp-user.php:396 
@@ -1778,22 +1778,22 @@ msgstr ""
 msgid "City"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:97 
+#: admin/class-wcmp-settings-vendor-registration.php:101 
 #: classes/class-wcmp-user.php:402
 msgid "Postcode"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:100 
+#: admin/class-wcmp-settings-vendor-registration.php:104 
 #: classes/class-wcmp-user.php:624 classes/class-wcmp-post-transaction.php:196 
 #: classes/class-wcmp-post-transaction.php:199
 msgid "PayPal Email"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:113
+#: admin/class-wcmp-settings-vendor-registration.php:117
 msgid "Build your form here"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendor-registration.php:130
+#: admin/class-wcmp-settings-vendor-registration.php:138
 #, php-format
 msgid "Use %s, %s, %s CSS class to customize the form"
 msgstr ""
@@ -3756,23 +3756,23 @@ msgid ""
 "announcements."
 msgstr ""
 
-#: classes/class-wcmp-admin.php:368
+#: classes/class-wcmp-admin.php:369
 msgid "In Percentage"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:369
+#: classes/class-wcmp-admin.php:370
 msgid "In Fixed"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:538
+#: classes/class-wcmp-admin.php:540
 msgid "Regenerate order commissions"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:571
+#: classes/class-wcmp-admin.php:573
 msgid "Regenerated order commission."
 msgstr ""
 
-#: classes/class-wcmp-admin.php:598
+#: classes/class-wcmp-admin.php:600
 #, php-format
 msgid ""
 "%sAdvance Frontend Manager%s will not work with latest WCMp (v%s), so please "
