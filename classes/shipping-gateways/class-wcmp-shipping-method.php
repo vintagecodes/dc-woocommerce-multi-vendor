@@ -288,7 +288,8 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
                 'default'     => 'off'
             );
         }
-
+        
+        $rates = apply_filters('wcmp_get_rates_for_custom_shipping', $rates, $package );
         // send shipping rates to WooCommerce
         if( is_array( $rates ) && count( $rates ) > 0 ) {
             // cycle through rates to send and alter post-add settings
