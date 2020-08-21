@@ -37,5 +37,6 @@ if ($vendor) {
     $html .= apply_filters('wcmp_after_seller_info_tab', '');
     $html .= '</div>';
     echo $html;
+    do_action('wcmp_after_vendor_tab');
 }
 ?>
