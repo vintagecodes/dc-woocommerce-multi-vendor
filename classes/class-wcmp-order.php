@@ -1340,6 +1340,7 @@ class WCMp_Order {
         if( !is_wc_endpoint_url( 'view-order' ) ) return;
         if( !wcmp_get_order( $order->get_id() ) ) return;
         $refund_settings = get_option( 'wcmp_payment_refund_payment_settings_name', true );
+        if ( isset( $refund_settings['disable_refund_customer_end'] ) && $refund_settings['disable_refund_customer_end'] == 'Enable' ) return;
         $refund_reason_options = ( isset( $refund_settings['refund_order_msg'] ) && $refund_settings['refund_order_msg'] ) ? explode( "||", $refund_settings['refund_order_msg'] ) : array();
         $refund_button_text = apply_filters( 'wcmp_customer_my_account_refund_request_button_text', __( 'Request a refund', 'dc-woocommerce-multi-vendor' ), $order );
         // Print refund messages, if any

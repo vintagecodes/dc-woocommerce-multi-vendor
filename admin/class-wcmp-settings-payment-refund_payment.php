@@ -52,7 +52,8 @@ class WCMp_Settings_Refund_Payment {
                     "title"  => __( 'Refund Settings', 'dc-woocommerce-multi-vendor' ),
                     "fields" => array_merge($automatic_method, array(
                             "refund_days"                => array( 'title' => __( 'Refund Duration( Days )', 'dc-woocommerce-multi-vendor' ), 'type' => 'number', 'id' => 'refund_days', 'label_for' => 'refund_days', 'text' => __( 'Number of Days for the refund period.', 'dc-woocommerce-multi-vendor' ), 'name' => 'refund_days' ), // Checkbox
-                            'refund_order_msg' => array('title' => __('Reasons For Refund ', 'dc-woocommerce-multi-vendor'), 'type' => 'textarea', 'name' => 'refund_order_msg', 'id' => 'refund_order_msg', 'label_for' => 'refund_order_msg', 'rows' => 4, 'cols' => 40, 'raw_value' => true, 'hints' => __('Refund order massage', 'dc-woocommerce-multi-vendor'),'placeholder' => __('Enter every option with || seperated ', 'dc-woocommerce-multi-vendor'),'desc'=>__('Enter messages using || to seperate reasons' ,'dc-woocommerce-multi-vendor') )
+                            'refund_order_msg' => array('title' => __('Reasons For Refund ', 'dc-woocommerce-multi-vendor'), 'type' => 'textarea', 'name' => 'refund_order_msg', 'id' => 'refund_order_msg', 'label_for' => 'refund_order_msg', 'rows' => 4, 'cols' => 40, 'raw_value' => true, 'hints' => __('Refund order massage', 'dc-woocommerce-multi-vendor'),'placeholder' => __('Enter every option with || seperated ', 'dc-woocommerce-multi-vendor'),'desc'=>__('Enter messages using || to seperate reasons' ,'dc-woocommerce-multi-vendor') ),
+                            "disable_refund_customer_end" => array('title' => __('Disable refund request for customer', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'disable_refund_customer_endd', 'label_for' => 'disable_refund_customer_endd', 'text' => __('Remove capability to customer from refund request', 'dc-woocommerce-multi-vendor'), 'name' => 'disable_refund_customer_end', 'value' => 'Enable'), // Checkbox
                         )
                     ),
                 ),
@@ -82,6 +83,10 @@ class WCMp_Settings_Refund_Payment {
 
         if ( isset( $input['refund_order_msg'] ) ) {
             $new_input['refund_order_msg'] = $input['refund_order_msg'];
+        }
+
+        if ( isset( $input['disable_refund_customer_end'] ) ) {
+            $new_input['disable_refund_customer_end'] = $input['disable_refund_customer_end'];
         }
 
         if ( ! $hasError ) {
