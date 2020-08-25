@@ -42,7 +42,7 @@ Class WCMp_Admin_Dashboard {
         add_filter( 'wcmp_vendor_submit_product', array( &$this, 'wcmp_vendor_dashboard_add_product_url' ), 10 );
 
         // Submit comment
-        add_action( 'before_wcmp_vendor_dashboard', array( &$this, 'wcmp_vendor_submit_comment' ) );
+        add_action( 'before_wcmp_vendor_dashboard', array( &$this, 'submit_comment' ) );
 
         // Init export functions
         $this->export_csv();
@@ -429,7 +429,7 @@ Class WCMp_Admin_Dashboard {
      * @access public
      * @return void
      */
-    public function wcmp_vendor_submit_comment() {
+    public function submit_comment() {
         global $WCMp;
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!empty($_POST['wcmp_submit_comment'])) {
