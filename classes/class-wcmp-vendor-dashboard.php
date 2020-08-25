@@ -41,11 +41,11 @@ Class WCMp_Admin_Dashboard {
         add_filter( 'wcmp_vendor_dashboard_add_product_url', array( &$this, 'wcmp_vendor_dashboard_add_product_url' ), 10 );
         add_filter( 'wcmp_vendor_submit_product', array( &$this, 'wcmp_vendor_dashboard_add_product_url' ), 10 );
 
+        // Submit comment
+        add_action( 'before_wcmp_vendor_dashboard', array( &$this, 'submit_comment' ) );
+
         // Init export functions
         $this->export_csv();
-
-        // Init submit comment
-        $this->submit_comment();
 
         $this->vendor_withdrawl();
 
@@ -434,7 +434,7 @@ Class WCMp_Admin_Dashboard {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!empty($_POST['wcmp_submit_comment'])) {
                 // verify nonce
-                if ($_POST['vendor_add_order_nonce'] && !wp_verify_nonce($_POST['vendor_add_order_nonce'], 'dc-vendor-add-order-comment'))
+                if (isset($_POST['vendor_add_order_nonce']) && !wp_verify_nonce($_POST['vendor_add_order_nonce'], 'dc-vendor-add-order-comment'))
                     return false;
                 $vendor = get_current_vendor();
                 // Don't submit empty comments
