@@ -39,6 +39,8 @@ class WCMp_Frontend {
         // store visitors stats
         if(!apply_filters('wcmp_is_disable_store_visitors_stats', false))
             add_action('template_redirect', array(&$this, 'wcmp_store_visitors_stats'), 99);
+
+        add_filter('woocommerce_get_zone_criteria', array(&$this, 'wcmp_shipping_zone_same_region_criteria'), 10, 3);
     }
 
     /**
@@ -553,6 +555,28 @@ class WCMp_Frontend {
                 wcmp_save_visitor_stats($product_vendor->id, $ip_data);
             }
         }
+    }
+
+    public function wcmp_shipping_zone_same_region_criteria( $criteria, $package, $postcode_locations ) {
+        global $wpdb;
+        $postcode  = wc_normalize_postcode( wc_clean( $package['destination']['postcode'] ) );
+        if( !$postcode ) return $criteria;
+        $search_results = $wpdb->get_results(
+            "SELECT vendor_id,zone_id
+            FROM {$wpdb->prefix}wcmp_shipping_zone_locations where location_code = '$postcode'"
+            );
+        $match_rates = array();
+        if ( !empty( $search_results ) ) {
+            foreach ($search_results as $key => $value) {
+                if( $value->vendor_id == $package['vendor_id'] ) {
+                    $match_rates[] = $value->zone_id;
+                }
+            }
+            if( !empty( $match_rates ) ) {
+                $criteria[] = 'AND zones.zone_id IN (' . implode( ',', $match_rates ) . ')';
+            }
+        }
+        return $criteria;
     }
 
 }
