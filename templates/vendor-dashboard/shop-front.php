@@ -360,6 +360,7 @@ $_wp_editor_settings = apply_filters('wcmp_vendor_storefront_wp_editor_settings'
                         </div>
                     </div>
                     <!-- from group end -->
+                    <?php do_action( 'wcmp_vendor_add_store_data', $vendor ); ?>
                 </div>
             </div>
         </div>

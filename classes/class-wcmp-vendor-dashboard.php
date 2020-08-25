@@ -1168,6 +1168,7 @@ Class WCMp_Admin_Dashboard {
             update_user_meta($user_id, 'timezone_string', $_POST['timezone_string']);
             update_user_meta($user_id, 'gmt_offset', $_POST['gmt_offset']);
         }
+        do_action('wcmp_save_custom_store_data', $user_id, $post);
     }
 
     /**
