@@ -1,6 +1,15 @@
-/* global wcmp_seller_review_rating_js_script_data */
+ /* global wcmp_seller_review_rating_js_script_data */
 
 jQuery(document).ready(function ($) {
+    var show = localStorage.getItem('show');
+    if(show === 'true'){
+        $('#wcmp_vendor_reviews #respond p#wcmp_seller_review_rating')
+                                .html(wcmp_seller_review_rating_js_script_data.messages.review_success_msg_txt)
+                                .addClass('success_review_msg')
+                                .removeClass('error_review_msg');
+        localStorage.removeItem('show');
+    }
+
     $('#wcmp_vendor_reviews #respond #rating').hide().before('<p class="stars"><span><a class="star-1" href="#">1</a><a class="star-2" href="#">2</a><a class="star-3" href="#">3</a><a class="star-4" href="#">4</a><a class="star-5" href="#">5</a></span></p>');
 
     $('body')
@@ -35,14 +44,11 @@ jQuery(document).ready(function ($) {
                 }
                 $.post(wcmp_seller_review_rating_js_script_data.ajax_url, data, function (response) {
                     if (response == 1) {
-                        $('#wcmp_vendor_reviews #respond p#wcmp_seller_review_rating')
-                                .html(wcmp_seller_review_rating_js_script_data.messages.review_success_msg_txt)
-                                .addClass('success_review_msg')
-                                .removeClass('error_review_msg');
                         $rating.val('');
                         $('#wcmp_vendor_reviews #respond #comment').val('');
                         $(".stars").removeClass('selected');
                         setTimeout(location.reload(), 2000);
+                        localStorage.setItem('show', 'true');
                     } else {
                         $('#wcmp_vendor_reviews #respond p#wcmp_seller_review_rating')
                                 .html(wcmp_seller_review_rating_js_script_data.messages.review_failed_msg_txt)
