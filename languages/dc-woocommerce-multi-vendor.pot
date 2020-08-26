@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: WC Marketplace 3.4.11\n"
 "Report-Msgid-Bugs-To: https://github.com/dualcube/dc-woocommerce-multi-"
 "vendor/issues\n"
-"POT-Creation-Date: 2020-08-19 07:55+0000\n"
+"POT-Creation-Date: 2020-08-26 04:41+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -506,7 +506,7 @@ msgstr ""
 #: admin/class-wcmp-settings-capabilities-order.php:65 
 #: admin/class-wcmp-settings-vendor-general.php:155 
 #: admin/class-wcmp-settings-capabilities-miscellaneous.php:70 
-#: admin/class-wcmp-settings-payment-refund_payment.php:89 
+#: admin/class-wcmp-settings-payment-refund_payment.php:94 
 #: admin/class-wcmp-settings-vendor-dashboard.php:99 
 #: admin/class-wcmp-settings-capabilities-product.php:123
 msgid "Vendor Settings Updated"
@@ -1296,6 +1296,14 @@ msgstr ""
 msgid "Enter messages using || to seperate reasons"
 msgstr ""
 
+#: admin/class-wcmp-settings-payment-refund_payment.php:56
+msgid "Disable refund request for customer"
+msgstr ""
+
+#: admin/class-wcmp-settings-payment-refund_payment.php:56
+msgid "Remove capability to customer from refund request"
+msgstr ""
+
 #: admin/class-wcmp-settings-reports.php:29 
 #: admin/class-wcmp-settings-reports.php:35 
 #: classes/class-wcmp-vendor-hooks.php:170
@@ -1987,32 +1995,32 @@ msgid "Timezone"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:490 
-#: templates/vendor-dashboard/shop-front.php:375
+#: templates/vendor-dashboard/shop-front.php:376
 msgid "Facebook"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:491 
-#: templates/vendor-dashboard/shop-front.php:382
+#: templates/vendor-dashboard/shop-front.php:383
 msgid "Twitter"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:492 
-#: templates/vendor-dashboard/shop-front.php:389
+#: templates/vendor-dashboard/shop-front.php:390
 msgid "LinkedIn"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:493 
-#: templates/vendor-dashboard/shop-front.php:396
+#: templates/vendor-dashboard/shop-front.php:397
 msgid "Google Plus"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:494 
-#: templates/vendor-dashboard/shop-front.php:403
+#: templates/vendor-dashboard/shop-front.php:404
 msgid "YouTube"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:495 
-#: templates/vendor-dashboard/shop-front.php:410
+#: templates/vendor-dashboard/shop-front.php:411
 msgid "Instagram"
 msgstr ""
 
@@ -2709,20 +2717,20 @@ msgctxt "post type singular name"
 msgid "Knowledgebase"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:134 classes/class-wcmp-frontend.php:145 
+#: classes/class-wcmp-frontend.php:136 classes/class-wcmp-frontend.php:147 
 #: classes/class-wcmp-user.php:143 classes/class-wcmp-user.php:154
 msgid "Please Verify  Recaptcha"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:162 classes/class-wcmp-user.php:170
+#: classes/class-wcmp-frontend.php:164 classes/class-wcmp-user.php:170
 msgid "Please Upload valid file"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:169 classes/class-wcmp-user.php:176
+#: classes/class-wcmp-frontend.php:171 classes/class-wcmp-user.php:176
 msgid "File upload limit exceeded"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:301
+#: classes/class-wcmp-frontend.php:303
 msgid " Shipping"
 msgstr ""
 
@@ -2826,27 +2834,27 @@ msgctxt "Order note"
 msgid "Sync from vendor's suborders: "
 msgstr ""
 
-#: classes/class-wcmp-order.php:1344
+#: classes/class-wcmp-order.php:1345
 msgid "Request a refund"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1362
+#: classes/class-wcmp-order.php:1363
 msgid "Please mention your reason for refund"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1377
+#: classes/class-wcmp-order.php:1378
 msgid "Others reason"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1381 classes/class-wcmp-order.php:1388
+#: classes/class-wcmp-order.php:1382 classes/class-wcmp-order.php:1389
 msgid "Refund reason"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1395
+#: classes/class-wcmp-order.php:1396
 msgid "Provide additional information"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1400 templates/wcmp-vendor-review-form.php:61 
+#: classes/class-wcmp-order.php:1401 templates/wcmp-vendor-review-form.php:61 
 #: classes/widgets/class-wcmp-widget-vendor-quick-info.php:151 
 #: classes/widgets/class-wcmp-widget-vendor-quick-info.php:172 
 #: templates/vendor-dashboard/vendor-orders.php:134 
@@ -2860,61 +2868,61 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1433
+#: classes/class-wcmp-order.php:1434
 msgid "Kindly choose a refund reason"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1451 classes/class-wcmp-order.php:1531
+#: classes/class-wcmp-order.php:1452 classes/class-wcmp-order.php:1532
 msgid " ."
 msgstr ""
 
-#: classes/class-wcmp-order.php:1459 classes/class-wcmp-order.php:1539
+#: classes/class-wcmp-order.php:1460 classes/class-wcmp-order.php:1540
 msgid "."
 msgstr ""
 
-#: classes/class-wcmp-order.php:1467
+#: classes/class-wcmp-order.php:1468
 msgid "Refund request successfully placed."
 msgstr ""
 
-#: classes/class-wcmp-order.php:1474
+#: classes/class-wcmp-order.php:1475
 msgid "Customer refund status"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1481 
+#: classes/class-wcmp-order.php:1482 
 #: templates/emails/customer-order-refund-request.php:29 
 #: templates/vendor-dashboard/vendor-orders/views/html-order-refund-customer.php:28
 msgid "Refund Status"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1482 
+#: classes/class-wcmp-order.php:1483 
 #: templates/vendor-dashboard/vendor-orders/views/html-order-refund-customer.php:29
 msgid "Refund Requested"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1483 
+#: classes/class-wcmp-order.php:1484 
 #: templates/vendor-dashboard/vendor-orders/views/html-order-refund-customer.php:30
 msgid "Refund Accepted"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1484 
+#: classes/class-wcmp-order.php:1485 
 #: templates/vendor-dashboard/vendor-orders/views/html-order-refund-customer.php:31
 msgid "Refund Rejected"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1493
+#: classes/class-wcmp-order.php:1494
 msgid "Please Provide Some Reason"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1496 
+#: classes/class-wcmp-order.php:1497 
 #: templates/vendor-dashboard/vendor-orders/views/html-order-refund-customer.php:42
 msgid "Update status"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1525
+#: classes/class-wcmp-order.php:1526
 msgid "accepted"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1527
+#: classes/class-wcmp-order.php:1528
 msgid "rejected"
 msgstr ""
 
@@ -3283,7 +3291,7 @@ msgstr ""
 msgid "Cost of Shipping Class: \"%s\""
 msgstr ""
 
-#: classes/class-wcmp-shipping-gateway.php:157 classes/class-wcmp-email.php:92
+#: classes/class-wcmp-shipping-gateway.php:157 classes/class-wcmp-email.php:94
 msgid "N/A"
 msgstr ""
 
@@ -3509,25 +3517,25 @@ msgstr ""
 msgid "Re applied to become a vendor"
 msgstr ""
 
-#: classes/class-wcmp-email.php:88
+#: classes/class-wcmp-email.php:90
 msgid "WCMp Footer text"
 msgstr ""
 
-#: classes/class-wcmp-email.php:89
+#: classes/class-wcmp-email.php:91
 msgid "The text to appear in the footer of WCMp emails."
 msgstr ""
 
 #. %s: site name
-#: classes/class-wcmp-email.php:95
+#: classes/class-wcmp-email.php:97
 #, php-format
 msgid "%s - Powered by WC Marketplace"
 msgstr ""
 
-#: classes/class-wcmp-email.php:164
+#: classes/class-wcmp-email.php:166
 msgid "Customer Support Details of : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:171 classes/class-wcmp-email.php:238 
+#: classes/class-wcmp-email.php:173 classes/class-wcmp-email.php:240 
 #: templates/customer_support_details_to_buyer.php:48 
 #: templates/customer_support_details_to_buyer.php:84 
 #: templates/vendor_message_to_buyer.php:48 
@@ -3535,7 +3543,7 @@ msgstr ""
 msgid "Email : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:178 classes/class-wcmp-email.php:248 
+#: classes/class-wcmp-email.php:180 classes/class-wcmp-email.php:250 
 #: templates/customer_support_details_to_buyer.php:53 
 #: templates/customer_support_details_to_buyer.php:89 
 #: templates/vendor_message_to_buyer.php:53 
@@ -3543,39 +3551,39 @@ msgstr ""
 msgid "Phone : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:183
+#: classes/class-wcmp-email.php:185
 msgid "Return Address of : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:188 classes/class-wcmp-email.php:264
+#: classes/class-wcmp-email.php:190 classes/class-wcmp-email.php:266
 msgid "Address Line 1 : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:193 classes/class-wcmp-email.php:274
+#: classes/class-wcmp-email.php:195 classes/class-wcmp-email.php:276
 msgid "Address Line 2 : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:198 classes/class-wcmp-email.php:284
+#: classes/class-wcmp-email.php:200 classes/class-wcmp-email.php:286
 msgid "State : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:203 classes/class-wcmp-email.php:294
+#: classes/class-wcmp-email.php:205 classes/class-wcmp-email.php:296
 msgid "City : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:208 classes/class-wcmp-email.php:304
+#: classes/class-wcmp-email.php:210 classes/class-wcmp-email.php:306
 msgid "Country : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:213 classes/class-wcmp-email.php:314
+#: classes/class-wcmp-email.php:215 classes/class-wcmp-email.php:316
 msgid "Zip Code : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:232
+#: classes/class-wcmp-email.php:234
 msgid "Customer Support Details :"
 msgstr ""
 
-#: classes/class-wcmp-email.php:257
+#: classes/class-wcmp-email.php:259
 msgid "Our Return Address :"
 msgstr ""
 
@@ -4491,6 +4499,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-new-question.php:143 
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:148 
 #: classes/emails/class-wcmp-email-vendor-transaction.php:146 
+#: classes/emails/class-wcmp-email-vendor-review.php:145 
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:137 
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:164 
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:138 
@@ -4505,6 +4514,7 @@ msgid "Enable/Disable"
 msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-new-question.php:145 
+#: classes/emails/class-wcmp-email-vendor-review.php:147 
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:139 
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:166 
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:158 
@@ -4519,6 +4529,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-new-question.php:149 
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:154 
 #: classes/emails/class-wcmp-email-vendor-transaction.php:152 
+#: classes/emails/class-wcmp-email-vendor-review.php:151 
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:143 
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:177 
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:144 
@@ -4536,6 +4547,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-new-question.php:151 
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:156 
 #: classes/emails/class-wcmp-email-vendor-transaction.php:154 
+#: classes/emails/class-wcmp-email-vendor-review.php:153 
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:145 
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:179 
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:146 
@@ -4555,6 +4567,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-new-question.php:156 
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:161 
 #: classes/emails/class-wcmp-email-vendor-transaction.php:159 
+#: classes/emails/class-wcmp-email-vendor-review.php:158 
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:150 
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:184 
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:151 
@@ -4569,6 +4582,7 @@ msgid "Email Heading"
 msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-new-question.php:158 
+#: classes/emails/class-wcmp-email-vendor-review.php:160 
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:152 
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:186 
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:171 
@@ -4586,6 +4600,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-new-question.php:163 
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:168 
 #: classes/emails/class-wcmp-email-vendor-transaction.php:166 
+#: classes/emails/class-wcmp-email-vendor-review.php:165 
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:157 
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:191 
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:158 
@@ -4600,6 +4615,7 @@ msgid "Email Type"
 msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-new-question.php:165 
+#: classes/emails/class-wcmp-email-vendor-review.php:167 
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:159 
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:193 
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:178 
@@ -4612,6 +4628,7 @@ msgid "Choose which format of email to be sent."
 msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-new-question.php:169 
+#: classes/emails/class-wcmp-email-vendor-review.php:171 
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:163 
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:197 
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:182 
@@ -4624,6 +4641,7 @@ msgid "Plain Text"
 msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-new-question.php:170 
+#: classes/emails/class-wcmp-email-vendor-review.php:172 
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:164 
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:198 
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:183 
@@ -4636,6 +4654,7 @@ msgid "HTML"
 msgstr ""
 
 #: classes/emails/class-wcmp-email-admin-new-question.php:171 
+#: classes/emails/class-wcmp-email-vendor-review.php:173 
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:165 
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:199 
 #: classes/emails/class-wcmp-email-vendor-notify-shipped.php:184 
@@ -4719,6 +4738,24 @@ msgstr ""
 
 #: classes/emails/class-wcmp-email-vendor-transaction.php:90
 msgid "Vendor's New Transaction"
+msgstr ""
+
+#: classes/emails/class-wcmp-email-vendor-review.php:30
+msgid "Review Vendor"
+msgstr ""
+
+#: classes/emails/class-wcmp-email-vendor-review.php:31
+msgid ""
+"Review Vendor notification emails are sent when vendor get review from "
+"customer."
+msgstr ""
+
+#: classes/emails/class-wcmp-email-vendor-review.php:84
+msgid "{customer_name} left a review for {vendor_name} shop "
+msgstr ""
+
+#: classes/emails/class-wcmp-email-vendor-review.php:94
+msgid "{vendor_name} shop got a new {rating}-star review"
 msgstr ""
 
 #: classes/emails/class-wcmp-email-send-report-abuse.php:29
@@ -5780,6 +5817,25 @@ msgid ""
 "request is being processed.The order details are as follows:"
 msgstr ""
 
+#: templates/emails/vendor-review.php:22
+msgid "Review details"
+msgstr ""
+
+#: templates/emails/vendor-review.php:24
+#, php-format
+msgid "<span class='text'><strong>Customer Name : </strong>%s</span>"
+msgstr ""
+
+#: templates/emails/vendor-review.php:28
+#, php-format
+msgid "<span class='text'><strong>Rating : </strong>%s out of 5</span>"
+msgstr ""
+
+#: templates/emails/vendor-review.php:32
+#, php-format
+msgid "<span class='text'><strong>Comment : </strong>%s</span>"
+msgstr ""
+
 #: templates/vendor-dashboard/profile.php:27
 msgid "Enter your First Name here"
 msgstr ""
@@ -5816,7 +5872,7 @@ msgstr ""
 #: templates/vendor-dashboard/vendor-billing.php:229 
 #: templates/vendor-dashboard/vendor-policy.php:111 
 #: templates/vendor-dashboard/vendor-shipping.php:96 
-#: templates/vendor-dashboard/shop-front.php:450
+#: templates/vendor-dashboard/shop-front.php:451
 msgid "Save Options"
 msgstr ""
 
@@ -6097,11 +6153,11 @@ msgstr ""
 msgid "Please contact your administrator to enable Google map feature."
 msgstr ""
 
-#: templates/vendor-dashboard/shop-front.php:369
+#: templates/vendor-dashboard/shop-front.php:370
 msgid "Social Media"
 msgstr ""
 
-#: templates/vendor-dashboard/shop-front.php:423
+#: templates/vendor-dashboard/shop-front.php:424
 msgid "Shop Template"
 msgstr ""
 
@@ -6702,6 +6758,30 @@ msgstr ""
 
 #: templates/emails/plain/suspend-vendor-account.php.php:31
 msgid "Kindly contact your Administrator for further details."
+msgstr ""
+
+#: templates/emails/plain/vendor-review.php:19
+msgid "Hi,"
+msgstr ""
+
+#: templates/emails/plain/vendor-review.php:21
+#, php-format
+msgid "A new Review has been added by - %s"
+msgstr ""
+
+#: templates/emails/plain/vendor-review.php:23
+#, php-format
+msgid "Vendor Name : %s"
+msgstr ""
+
+#: templates/emails/plain/vendor-review.php:26
+#, php-format
+msgid "Rating : %s out of 5"
+msgstr ""
+
+#: templates/emails/plain/vendor-review.php:29
+#, php-format
+msgid "Comment : %s"
 msgstr ""
 
 #: templates/vendor-dashboard/vendor-orders/vendor-order-details.php:22
