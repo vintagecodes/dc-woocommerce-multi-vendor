@@ -4416,7 +4416,7 @@ class WCMp_Ajax {
             //get ending balance
             $ending_data = reset( $vendor_ledgers );
             $ending_balance = ( $ending_data->balance && $ending_data->balance != '' ) ? $ending_data->balance : 0;
-            $vendor_ledgers = array_slice( $vendor_all_ledgers, $requestData['start'], $requestData['length'] );
+            $vendor_ledgers = apply_filters( 'wcmp_vendor_banking_ledger_lists', array_slice( $vendor_all_ledgers, $requestData['start'], $requestData['length'] ), $vendor, $requestData );
             $data = array();
             if ( $vendor_ledgers ) {
                 foreach ($vendor_ledgers as $ledger ) {
