@@ -151,6 +151,9 @@ class WCMp_Shortcode {
         );
         if (!empty($vendor)) {
             $user = get_user_by('login', $vendor);
+            $user = get_user_by('slug', $vendor);
+            $user = get_user_by('email', $vendor);
+            $user = get_user_by('ID', $vendor);
         }
 
         if (!empty($vendor)) {
@@ -214,6 +217,9 @@ class WCMp_Shortcode {
 
         if (!empty($vendor)) {
             $user = get_user_by('login', $vendor);
+            $user = get_user_by('slug', $vendor);
+            $user = get_user_by('email', $vendor);
+            $user = get_user_by('ID', $vendor);
         }
 
         $args = array(
@@ -419,6 +425,9 @@ class WCMp_Shortcode {
         );
         if (!empty($vendor)) {
             $user = get_user_by('login', $vendor);
+            $user = get_user_by('slug', $vendor);
+            $user = get_user_by('email', $vendor);
+            $user = get_user_by('ID', $vendor);
         }
         if (!empty($vendor)) {
             $term_id = get_user_meta($user->ID, '_vendor_term_id', true);
@@ -495,6 +504,9 @@ class WCMp_Shortcode {
         );
         if (!empty($vendor)) {
             $user = get_user_by('login', $vendor);
+            $user = get_user_by('slug', $vendor);
+            $user = get_user_by('email', $vendor);
+            $user = get_user_by('ID', $vendor);
         }
 
         if (!empty($vendor)) {
@@ -561,6 +573,9 @@ class WCMp_Shortcode {
         );
         if (!empty($vendor)) {
             $user = get_user_by('login', $vendor);
+            $user = get_user_by('slug', $vendor);
+            $user = get_user_by('email', $vendor);
+            $user = get_user_by('ID', $vendor);
         }
 
         if (!empty($vendor)) {
@@ -631,6 +646,9 @@ class WCMp_Shortcode {
 
         if (!empty($vendor)) {
             $user = get_user_by('login', $vendor);
+            $user = get_user_by('slug', $vendor);
+            $user = get_user_by('email', $vendor);
+            $user = get_user_by('ID', $vendor);
         }
 
         if (!empty($vendor)) {
@@ -719,6 +737,9 @@ class WCMp_Shortcode {
 
         if (!empty($vendor)) {
             $user = get_user_by('login', $vendor);
+            $user = get_user_by('slug', $vendor);
+            $user = get_user_by('email', $vendor);
+            $user = get_user_by('ID', $vendor);
         }
 
         if (!empty($vendor)) {
