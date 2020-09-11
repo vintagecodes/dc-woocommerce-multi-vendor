@@ -327,13 +327,23 @@ class WCMp_Order {
                 $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
                 $vendor = get_wcmp_product_vendors($value['product_id']);
                 if ($vendor) {
-                    wc_add_order_item_meta($key, '_vendor_id', $vendor->id);
-                    wc_add_order_item_meta($key, $general_cap, $vendor->page_title);
+                    if ( !wc_get_order_item_meta( $key, '_vendor_id' ) ) 
+                        wc_add_order_item_meta($key, '_vendor_id', $vendor->id);
+                    
+                    if ( !wc_get_order_item_meta( $key, $general_cap ) ) 
+                        wc_add_order_item_meta($key, $general_cap, $vendor->page_title);
                 }
             }
         }
-        $has_sub_order = get_post_meta($order_id, 'has_wcmp_sub_order', true) ? true : false;
-        if($has_sub_order) return;
+        
+        $suborders = get_wcmp_suborders( $order_id, false, false);
+        if (!empty($suborders)) {
+            foreach ($suborders as $key => $value) {
+                $commission_id = get_post_meta( $value, '_commission_id', true );
+                wp_delete_post( $commission_id, true );
+                wp_delete_post( $value, true );
+            }
+        }
         $this->wcmp_create_orders($order_id, array(), $order, true);
     }
     
