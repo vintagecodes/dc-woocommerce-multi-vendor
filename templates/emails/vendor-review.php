@@ -2,7 +2,7 @@
 /**
  * The template for displaying demo plugin content.
  *
- * Override this template by copying it to yourtheme/dc-product-vendor/emails/plain/vendor-review.php
+ * Override this template by copying it to yourtheme/dc-product-vendor/emails/vendor-review.php
  *
  * @author 		WC Marketplace
  * @package 	dc-product-vendor/Templates
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $customer_name  = isset( $customer_name ) ? $customer_name : '';
 $review = isset( $review ) ? $review : '';
-$rating = isset( $rating ) ? absint($rating) : '';
+$rating = isset( $rating ) ? absint( $rating ) : '';
 
 do_action( 'woocommerce_email_header', $email_heading ); ?>
 
@@ -23,7 +23,7 @@ do_action( 'woocommerce_email_header', $email_heading ); ?>
         <ul>
             <li><?php printf( __( "<span class='text'><strong>Customer Name : </strong>%s</span>", 'dc-woocommerce-multi-vendor' ), $customer_name ); ?>
             </li>
-            <?php if(!empty($rating)){ ?>
+            <?php if( !empty( $rating ) ){ ?>
 	        <li>
                 <?php printf( __( "<span class='text'><strong>Rating : </strong>%s out of 5</span>", 'dc-woocommerce-multi-vendor' ), $rating ); ?>
 	        </li>

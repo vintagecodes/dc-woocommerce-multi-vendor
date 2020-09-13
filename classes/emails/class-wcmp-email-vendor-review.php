@@ -64,7 +64,7 @@ if (!class_exists('WC_Email_Vendor_Review')) :
 
                 $this->recipient = get_option('admin_email');
                 if( apply_filters( 'wcmp_vendor_review_email_goes_to_vendor', true, $this->vendor ) )
-                $this->recipient .= ',' . sanitize_email($vendor->user_data->user_email);
+                $this->recipient .= ',' . sanitize_email( $vendor->user_data->user_email );
             
                 if ( ! $this->is_enabled() || ! $this->get_recipient() ) {
                     return;
@@ -81,7 +81,7 @@ if (!class_exists('WC_Email_Vendor_Review')) :
          * @return string
          */
         public function get_default_subject() {
-            return apply_filters('wcmp_vendor_review_vendor_email_subject',__('{customer_name} left a review for {vendor_name} shop ', 'dc-woocommerce-multi-vendor'), $this->object);
+            return apply_filters('wcmp_vendor_review_vendor_email_subject', __('{customer_name} left a review for {vendor_name} shop ', 'dc-woocommerce-multi-vendor'), $this->object);
         } 
 
         /**
@@ -101,7 +101,7 @@ if (!class_exists('WC_Email_Vendor_Review')) :
          * @return string
          */
         function get_content_html() {
-            return wc_get_template_html($this->template_html, array(
+            return wc_get_template_html( $this->template_html, array(
                 'email_heading' => $this->get_heading(),
                 'vendor' => $this->vendor,
                 'customer_name' => $this->customer_name,
@@ -110,7 +110,7 @@ if (!class_exists('WC_Email_Vendor_Review')) :
                 'sent_to_admin' => false,
                 'plain_text' => false,
                 'email'         => $this,
-                    ), '', $this->template_base);
+                    ), 'dc-product-vendor/', $this->template_base );
         }
 
         /**
@@ -120,7 +120,7 @@ if (!class_exists('WC_Email_Vendor_Review')) :
          * @return string
          */
         function get_content_plain() {
-            return wc_get_template_html($this->template_plain, array(
+            return wc_get_template_html( $this->template_plain, array(
                 'email_heading' => $this->get_heading(),
                 'vendor' => $this->vendor,
                 'customer_name' => $this->customer_name,
@@ -129,7 +129,7 @@ if (!class_exists('WC_Email_Vendor_Review')) :
                 'sent_to_admin' => false,
                 'plain_text' => true,
                 'email'         => $this,
-                    ), '', $this->template_base);
+                    ), 'dc-product-vendor/', $this->template_base );
         }
 
         /**
