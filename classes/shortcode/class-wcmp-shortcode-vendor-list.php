@@ -209,11 +209,13 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
             );
             $WCMp->localize_script('wcmp_vendor_list', apply_filters('wcmp_vendor_list_script_data_params',$script_param, $_REQUEST));
             $radius = apply_filters('wcmp_vendor_list_filter_radius_data', array(5,10,20,30,50));
+            $big_pagi = 999999999; // need an unlikely integer
             $data = apply_filters('wcmp_vendor_list_data', array(
                 'total'   => ceil($vendors_total/$query['number']),
                 'current' => is_front_page() ? max( 1, ( get_query_var('page') ) ) : max( 1, get_query_var('paged') ),
                 'per_page' => $query['number'],
-                'base'    => get_pagenum_link(1) . '%_%',
+                //'base'    => get_pagenum_link(1) . '%_%',
+                'base'    => str_replace( $big_pagi, '%#%', esc_url( get_pagenum_link( $big_pagi ) ) ),
                 'format'  => 'page/%#%/',
                 'vendors'   => $vendors,
                 'vendor_total' => $vendors_total,
