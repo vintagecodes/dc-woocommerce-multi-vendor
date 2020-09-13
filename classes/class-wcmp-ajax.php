@@ -3790,7 +3790,6 @@ class WCMp_Ajax {
         $zone_id = isset($_POST['zoneId']) ? absint($_POST['zoneId']) : 0;
         $method_id = isset($_POST['methodId']) ? $_POST['methodId'] : '';
         $instance_id = isset($_POST['instanceId']) ? $_POST['instanceId'] : '';
-        if ($zone_id) {
             if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
                 $WCMp->load_vendor_shipping();
             }
@@ -3816,7 +3815,6 @@ class WCMp_Ajax {
             }
             wp_send_json(array('settings_html' => $settings_html));
             die;
-        }
     }
     
     
