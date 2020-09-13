@@ -50,6 +50,9 @@ class WCMp_Order {
             add_action('woocommerce_checkout_order_processed', array(&$this, 'wcmp_create_orders'), 10, 3);
             add_action('woocommerce_after_checkout_validation', array($this, 'wcmp_check_order_awaiting_payment'));
             add_action( 'woocommerce_rest_insert_shop_order_object',array($this,'wcmp_create_orders_via_rest_callback'), 10, 3 );
+            // Add product for sub order
+            add_action( 'woocommerce_ajax_order_items_added',array($this, 'woocommerce_ajax_order_items_added'), 10, 2 );
+            add_action( 'woocommerce_before_delete_order_item',array($this, 'woocommerce_before_delete_order_item') );
             // Order Refund
             add_action('woocommerce_order_refunded', array($this, 'wcmp_order_refunded'), 10, 2);
             add_action('woocommerce_refund_deleted', array($this, 'wcmp_refund_deleted'), 10, 2);
@@ -323,7 +326,7 @@ class WCMp_Order {
 
         $items = $order->get_items();
         foreach ($items as $key => $value) {
-            if ( $order && wp_get_post_parent_id( $order->get_id() ) == 0 || (function_exists('wcs_is_subscription') && wcs_is_subscription( $order )) ) {
+            if ( $order || (function_exists('wcs_is_subscription') && wcs_is_subscription( $order )) ) {
                 $general_cap = apply_filters('wcmp_sold_by_text', __('Sold By', 'dc-woocommerce-multi-vendor'));
                 $vendor = get_wcmp_product_vendors($value['product_id']);
                 if ($vendor) {
@@ -364,6 +367,50 @@ class WCMp_Order {
         $this->wcmp_create_orders($order->get_id(), array(), $order, true);
     }
 
+    public function woocommerce_ajax_order_items_added( $added_items, $order ) {
+        if (wp_get_post_parent_id($order->get_id())) {
+            foreach ( $added_items as $item_id => $item_data ) {
+                $parent_order = wc_get_order( wp_get_post_parent_id( $order->get_id() ) );
+                $item = new WC_Order_Item_Product();
+                $product = wc_get_product( $item_data->get_product_id() );
+                $item->set_props(
+                    array(
+                        'quantity'     => $item_data->get_quantity(),
+                        'variation'    => $item_data->get_variation_id(),
+                        'subtotal'     => $item_data->get_subtotal(),
+                        'total'        => $item_data->get_total(),
+                        'subtotal_tax' => $item_data->get_subtotal_tax(),
+                        'total_tax'    => $item_data->get_total_tax(),
+                        'taxes'        => $item_data->get_taxes(),
+                        )
+                    );
+                if ( $product ) {
+                    $item->set_props(
+                        array(
+                            'name'         => $product->get_name(),
+                            'tax_class'    => $product->get_tax_class(),
+                            'product_id'   => $product->is_type( 'variation' ) ? $product->get_parent_id() : $product->get_id(),
+                            'variation_id' => $product->is_type( 'variation' ) ? $product->get_id() : 0,
+                            )
+                        );
+                }
+
+                $item->set_backorder_meta();
+
+                $parent_order->add_item( $item );
+                $parent_order->save();
+                $parent_order->calculate_totals();
+            }
+        }
+    }
+    
+    public function woocommerce_before_delete_order_item( $item_id ) {
+        global $WCMp;
+        $parent_item_id = $WCMp->order->get_vendor_parent_order_item_id($item_id);
+        if ($parent_item_id) {
+            wc_delete_order_item( $parent_item_id );
+        }
+    }
     /**
      * Create a new vendor order programmatically
      *
