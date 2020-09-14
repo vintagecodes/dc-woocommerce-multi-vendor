@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: WC Marketplace 3.4.11\n"
 "Report-Msgid-Bugs-To: https://github.com/dualcube/dc-woocommerce-multi-"
 "vendor/issues\n"
-"POT-Creation-Date: 2020-08-26 04:41+0000\n"
+"POT-Creation-Date: 2020-09-14 08:08+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2745,14 +2745,14 @@ msgid "Commission - %s"
 msgstr ""
 
 #: classes/class-wcmp-calculate-commission.php:448 
-#: classes/class-wcmp-order.php:394
+#: classes/class-wcmp-order.php:451
 msgctxt "Commission date parsed by strftime"
 msgid "%B %e, %Y @ %I:%M %p"
 msgstr ""
 
 #: classes/class-wcmp-capabilities.php:165 
-#: classes/class-wcmp-capabilities.php:185 classes/class-wcmp-order.php:89 
-#: classes/class-wcmp-order.php:327 classes/class-wcmp-order.php:345
+#: classes/class-wcmp-capabilities.php:185 classes/class-wcmp-order.php:92 
+#: classes/class-wcmp-order.php:330 classes/class-wcmp-order.php:358
 msgid "Sold By"
 msgstr ""
 
@@ -2809,52 +2809,52 @@ msgstr ""
 msgid "5 Star"
 msgstr ""
 
-#: classes/class-wcmp-order.php:233 classes/class-wcmp-order.php:1166
+#: classes/class-wcmp-order.php:236 classes/class-wcmp-order.php:1223
 msgid "Suborders"
 msgstr ""
 
-#: classes/class-wcmp-order.php:256 classes/class-wcmp-order.php:1179
+#: classes/class-wcmp-order.php:259 classes/class-wcmp-order.php:1236
 msgctxt "Order table details"
 msgid "for"
 msgstr ""
 
-#: classes/class-wcmp-order.php:394
+#: classes/class-wcmp-order.php:451
 #, php-format
 msgid "Vendor Order &ndash; %s"
 msgstr ""
 
-#: classes/class-wcmp-order.php:746
+#: classes/class-wcmp-order.php:803
 msgctxt "Order note"
 msgid "Update via parent order: "
 msgstr ""
 
-#: classes/class-wcmp-order.php:784 classes/class-wcmp-order.php:793 
-#: classes/class-wcmp-order.php:805
+#: classes/class-wcmp-order.php:841 classes/class-wcmp-order.php:850 
+#: classes/class-wcmp-order.php:862
 msgctxt "Order note"
 msgid "Sync from vendor's suborders: "
 msgstr ""
 
-#: classes/class-wcmp-order.php:1345
+#: classes/class-wcmp-order.php:1402
 msgid "Request a refund"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1363
+#: classes/class-wcmp-order.php:1420
 msgid "Please mention your reason for refund"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1378
+#: classes/class-wcmp-order.php:1435
 msgid "Others reason"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1382 classes/class-wcmp-order.php:1389
+#: classes/class-wcmp-order.php:1439 classes/class-wcmp-order.php:1446
 msgid "Refund reason"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1396
+#: classes/class-wcmp-order.php:1453
 msgid "Provide additional information"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1401 templates/wcmp-vendor-review-form.php:61 
+#: classes/class-wcmp-order.php:1458 templates/wcmp-vendor-review-form.php:61 
 #: classes/widgets/class-wcmp-widget-vendor-quick-info.php:151 
 #: classes/widgets/class-wcmp-widget-vendor-quick-info.php:172 
 #: templates/vendor-dashboard/vendor-orders.php:134 
@@ -2868,61 +2868,61 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1434
+#: classes/class-wcmp-order.php:1491
 msgid "Kindly choose a refund reason"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1452 classes/class-wcmp-order.php:1532
+#: classes/class-wcmp-order.php:1509 classes/class-wcmp-order.php:1589
 msgid " ."
 msgstr ""
 
-#: classes/class-wcmp-order.php:1460 classes/class-wcmp-order.php:1540
+#: classes/class-wcmp-order.php:1517 classes/class-wcmp-order.php:1597
 msgid "."
 msgstr ""
 
-#: classes/class-wcmp-order.php:1468
+#: classes/class-wcmp-order.php:1525
 msgid "Refund request successfully placed."
 msgstr ""
 
-#: classes/class-wcmp-order.php:1475
+#: classes/class-wcmp-order.php:1532
 msgid "Customer refund status"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1482 
+#: classes/class-wcmp-order.php:1539 
 #: templates/emails/customer-order-refund-request.php:29 
 #: templates/vendor-dashboard/vendor-orders/views/html-order-refund-customer.php:28
 msgid "Refund Status"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1483 
+#: classes/class-wcmp-order.php:1540 
 #: templates/vendor-dashboard/vendor-orders/views/html-order-refund-customer.php:29
 msgid "Refund Requested"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1484 
+#: classes/class-wcmp-order.php:1541 
 #: templates/vendor-dashboard/vendor-orders/views/html-order-refund-customer.php:30
 msgid "Refund Accepted"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1485 
+#: classes/class-wcmp-order.php:1542 
 #: templates/vendor-dashboard/vendor-orders/views/html-order-refund-customer.php:31
 msgid "Refund Rejected"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1494
+#: classes/class-wcmp-order.php:1551
 msgid "Please Provide Some Reason"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1497 
+#: classes/class-wcmp-order.php:1554 
 #: templates/vendor-dashboard/vendor-orders/views/html-order-refund-customer.php:42
 msgid "Update status"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1526
+#: classes/class-wcmp-order.php:1583
 msgid "accepted"
 msgstr ""
 
-#: classes/class-wcmp-order.php:1528
+#: classes/class-wcmp-order.php:1585
 msgid "rejected"
 msgstr ""
 
