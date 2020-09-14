@@ -3,9 +3,9 @@ Contributors: wcmp, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh8961
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.5
+Tested up to: 5.5.1
 Requires PHP: 5.6
-Stable tag: 3.5.7
+Stable tag: 3.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,18 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.5.8 - 2020-09-15 =
+Added - Filter in Banking Overriew Section #49
+Added - Added additional hooks for membership
+Fix – Email template override issue #493
+Fix –  Security issues with nonce value #497
+Fix – Category Restriction issue for coupon validation #494
+Fix –  Vendor List category search issue in the second page #457
+Fix – Vendor ID Parameter for WCMp shortcode not working #476
+Fix –  Vendor can't edit shipping method of Location Not covered zone #431
+Fix –  Main order and sub order syunc issue when adding a product mnaully in a order #472 
+* Updated - Language file.
 
 = 3.5.7 - 2020-08-26 =
 Added - Keep displaying Vendor's review message to customer #480
