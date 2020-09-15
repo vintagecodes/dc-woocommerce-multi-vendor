@@ -3264,7 +3264,7 @@ class WCMp_Ajax {
             'states' => $states,
             'state_key_by_country' => $state_key_by_country,
             'show_post_code_list' => $show_post_code_list,
-            'postcodes' => $postcodes,
+            'postcodes' => $postcodes ? $postcodes : '',
             'vendor_shipping_methods' => $vendor_shipping_methods,
         );
         $WCMp->template->get_template('vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php', $template_data);
