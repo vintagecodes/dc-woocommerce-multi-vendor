@@ -903,12 +903,12 @@ class WCMp_User {
                             $errors->add('vendor_slug_exists', __('Slug already exists', 'dc-woocommerce-multi-vendor'));
                         }
                     } elseif ($fieldkey == 'vendor_description') {
-                        update_user_meta($user_id, '_' . $fieldkey, $_POST[$fieldkey]);
+                        update_user_meta($user_id, '_' . $fieldkey, wc_clean(wp_unslash($_POST[$fieldkey])));
                     } else {
-                        update_user_meta($user_id, '_' . $fieldkey, $_POST[$fieldkey]);
+                        update_user_meta($user_id, '_' . $fieldkey, wc_clean(wp_unslash($_POST[$fieldkey])));
                     }
                 } else if (isset($_POST['vendor_commission']) && $fieldkey == 'vendor_commission') {
-                    update_user_meta($user_id, '_vendor_commission', $_POST[$fieldkey]);
+                    update_user_meta($user_id, '_vendor_commission', absint( $_POST[$fieldkey] ));
                 } else if (!isset($_POST['vendor_hide_description']) && $fieldkey == 'vendor_hide_description') {
                     delete_user_meta($user_id, '_vendor_hide_description');
                 } else if (!isset($_POST['vendor_hide_address']) && $fieldkey == 'vendor_hide_address') {
