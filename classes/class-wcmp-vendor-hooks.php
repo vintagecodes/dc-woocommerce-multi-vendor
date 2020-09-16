@@ -583,9 +583,9 @@ class WCMp_Vendor_Hooks {
         $vendor = get_current_vendor();
         $suffix       = defined( 'WCMP_SCRIPT_DEBUG' ) && WCMP_SCRIPT_DEBUG ? '' : '.min';
         if ( isset( $_POST['wcmp-submit-mark-as-ship'] ) ) {
-            $order_id = $_POST['order_id'];
-            $tracking_id = $_POST['tracking_id'];
-            $tracking_url = $_POST['tracking_url'];
+           $order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
+            $tracking_id = isset( $_POST['tracking_id'] ) ? wc_clean( wp_unslash( $_POST['tracking_id'] ) ) : 0;
+            $tracking_url = isset( $_POST['tracking_url'] ) ? esc_url( $_POST['tracking_url'] ) : '';
             $vendor->set_order_shipped( $order_id, $tracking_id, $tracking_url );
         }
         $vendor_order = $wp->query_vars[get_wcmp_vendor_settings( 'wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders' )];

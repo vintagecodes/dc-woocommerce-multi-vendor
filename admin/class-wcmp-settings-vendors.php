@@ -393,13 +393,13 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 				}
 			} else if($_POST['wcmp_vendor_submit'] == 'add_new') {
 				$userdata = array(
-					'user_login' => $_POST['user_login'],
-					'user_pass' => $_POST['password'],
-					'user_email' => $_POST['user_email'],
-					'user_nicename' => $_POST['user_nicename'],
-					'first_name' => $_POST['first_name'],
-					'last_name' => $_POST['last_name'],
-					'role' => 'dc_vendor'
+					'user_login' => isset( $_POST['user_login'] ) ? sanitize_user( $_POST['user_login'] ) : '',
+					'user_pass' => isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '',
+					'user_email' => isset( $_POST['user_email'] ) ? sanitize_email( $_POST['user_email'] ) : '',
+					'user_nicename' => isset( $_POST['user_nicename'] ) ? sanitize_text_field( wp_unslash( $_POST['user_nicename'] ) ) : '',
+					'first_name' => isset( $_POST['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['first_name'] ) ) : '',
+					'last_name' => isset( $_POST['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['last_name'] ) ) : '',
+					'role' => 'dc_vendor',
 				);
 				$user_id = wp_insert_user( $userdata ) ;
 				if ( is_wp_error( $user_id ) ) {
