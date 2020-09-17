@@ -976,32 +976,32 @@ class WCMp_Vendor_Hooks {
 						}
 					}
 				}
-                        /**
-                         * Action hook to modify vendor re submit application before save.
-                         *
-                         * @since 3.4.5
-                         */
-                        do_action( 'wcmp_before_reapply_vendor_application_save', $_POST, get_current_vendor( $user->ID ) );
-        		update_user_meta( $user->ID, 'wcmp_vendor_fields', $_POST['wcmp_vendor_fields']);
+                /**
+                 * Action hook to modify vendor re submit application before save.
+                 *
+                 * @since 3.4.5
+                 */
+                do_action( 'wcmp_before_reapply_vendor_application_save', $_POST, get_current_vendor( $user->ID ) );
+        		update_user_meta( $user->ID, 'wcmp_vendor_fields', array_filter( array_map( 'wc_clean', (array) $_POST['wcmp_vendor_fields'] ) ) );
         		$user->remove_cap( 'dc_rejected_vendor' );
         		$user->add_cap( 'dc_pending_vendor' );
-        		/**
-                         * Action hook to modify vendor re submit application after save.
-                         *
-                         * @since 3.4.5
-                         */
-                        do_action( 'wcmp_after_reapply_vendor_application_save', $_POST, get_current_vendor( $user->ID ) );
+		        /**
+                 * Action hook to modify vendor re submit application after save.
+                 *
+                 * @since 3.4.5
+                 */
+                do_action( 'wcmp_after_reapply_vendor_application_save', $_POST, get_current_vendor( $user->ID ) );
         		$wcmp_vendor_rejection_notes = unserialize( get_user_meta( $user->ID, 'wcmp_vendor_rejection_notes', true ) );
 				$wcmp_vendor_rejection_notes[time()] = array(
 						'note_by' => $user->ID,
 						'note' => __( 'Re applied to become a vendor', 'dc-woocommerce-multi-vendor' ));
 				update_user_meta( $user->ID, 'wcmp_vendor_rejection_notes', serialize( $wcmp_vendor_rejection_notes ) );
-                                /**
-                         * Action hook to modify vendor re submit application after note save.
-                         *
-                         * @since 3.4.5
-                         */
-                        do_action( 'wcmp_after_reapply_vendor_application_saved_notes', $_POST, get_current_vendor( $user->ID ) );
+                /**
+                * Action hook to modify vendor re submit application after note save.
+                *
+                * @since 3.4.5
+                */
+                do_action( 'wcmp_after_reapply_vendor_application_saved_notes', $_POST, get_current_vendor( $user->ID ) );
         	}
     	}
     }

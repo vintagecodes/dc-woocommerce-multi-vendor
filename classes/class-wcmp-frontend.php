@@ -97,7 +97,7 @@ class WCMp_Frontend {
                     }
                 }
             }
-            $wcmp_vendor_fields = $_POST['wcmp_vendor_fields'];
+            $wcmp_vendor_fields = isset( $_POST['wcmp_vendor_fields'] ) ? array_filter( array_map( 'wc_clean', (array) $_POST['wcmp_vendor_fields'] ) ) : '';
 
             $wcmp_vendor_fields = apply_filters('wcmp_save_registration_fields', $wcmp_vendor_fields, $customer_id);
             update_user_meta($customer_id, 'wcmp_vendor_fields', $wcmp_vendor_fields);
