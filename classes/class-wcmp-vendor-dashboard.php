@@ -494,8 +494,8 @@ Class WCMp_Admin_Dashboard {
      */
     public function vendor_tools_handler() {
         $vendor = get_current_vendor();
-        $wpnonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : '';
-        $tools_action = isset($_REQUEST['tools_action']) ? $_REQUEST['tools_action'] : '';
+        $wpnonce = isset($_REQUEST['_wpnonce']) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
+        $tools_action = isset($_REQUEST['tools_action']) ? sanitize_text_field( wp_unslash( $_REQUEST['tools_action'] ) ) : '';
         if ($wpnonce && wp_verify_nonce($wpnonce, 'wcmp_clear_vendor_transients') && $tools_action && $tools_action == 'clear_all_transients') {
             if (current_user_can('delete_published_products')) {
                 if ($vendor->clear_all_transients($vendor->id)) {
@@ -1745,7 +1745,7 @@ Class WCMp_Admin_Dashboard {
     }
 
     public function vendor_updater_handler() {
-        $wpnonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : '';
+        $wpnonce = isset($_REQUEST['_wpnonce']) ? sanitize_text_field( wp_unslash($_REQUEST['_wpnonce']) ) : '';
         if ($wpnonce && wp_verify_nonce($wpnonce, 'wcmp-vendor-store-updater')) {
             $do_update = filter_input(INPUT_POST, 'do_update_store_address');
             $do_skip = filter_input(INPUT_POST, 'do_reject_store_updater');

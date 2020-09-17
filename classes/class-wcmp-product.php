@@ -284,7 +284,7 @@ class WCMp_Product {
         $screen = get_current_screen();
         // disable product title from being edit
         if (isset($_GET['post'])) {
-            $current_post_id = $_GET['post'];
+            $current_post_id = intval( $_GET['post'] );
             if (get_post_type($current_post_id) == 'product') {
                 $product = wc_get_product($current_post_id);
                 $is_spmv_pro = get_post_meta($current_post_id, '_wcmp_spmv_product', true);
@@ -380,7 +380,7 @@ class WCMp_Product {
     function check_sku_is_unique($post_id) {
         global $WCMp;
         if (isset($_POST) && !empty($_POST)) {
-            $sku = isset($_POST['_sku']) ? $_POST['_sku'] : '';
+            $sku = isset( $_POST['_sku'] ) ? wc_clean( wp_unslash( $_POST['_sku'] ) ) : null;
             $post = get_post($post_id);
             if ($post->post_type == 'product' && !empty($sku)) {
                 $args = array(
@@ -418,7 +418,7 @@ class WCMp_Product {
         if (is_user_wcmp_vendor($current_user_id)) {
             add_filter('manage_product_posts_columns', array($this, 'remove_featured_star'), 15);
             if (isset($_GET['post'])) {
-                $current_post_id = $_GET['post'];
+                $current_post_id = intval( $_GET['post'] );
                 if (get_post_type($current_post_id) == 'product') {
 
                     if (in_array(get_post_status($current_post_id), array('draft', 'publish', 'pending'))) {
@@ -475,7 +475,7 @@ class WCMp_Product {
         if (!is_user_wcmp_vendor(get_current_vendor_id())) {
             if ('product' == $typenow) {
                 if ($typenow == $post_type) {
-                    $selected = isset($_GET[$taxonomy]) ? $_GET[$taxonomy] : '';
+                    $selected = isset($_GET[$taxonomy]) ? wc_clean( wp_unslash( $_GET[$taxonomy] ) ) : '';
                     $info_taxonomy = get_taxonomy($taxonomy);
                     wp_dropdown_categories(array(
                         'show_option_all' => __("Show All {$info_taxonomy->label}"),
@@ -909,13 +909,13 @@ class WCMp_Product {
         $post = get_post($post_id);
         if ($post->post_type == 'product') {
             if (isset($_POST['_wcmp_cancallation_policy'])) {
-                update_post_meta($post_id, '_wcmp_cancallation_policy', $_POST['_wcmp_cancallation_policy']);
+                update_post_meta($post_id, '_wcmp_cancallation_policy', sanitize_textarea_field($_POST['_wcmp_cancallation_policy']));
             }
             if (isset($_POST['_wcmp_refund_policy'])) {
-                update_post_meta($post_id, '_wcmp_refund_policy', $_POST['_wcmp_refund_policy']);
+                update_post_meta($post_id, '_wcmp_refund_policy', sanitize_textarea_field($_POST['_wcmp_refund_policy']));
             }
             if (isset($_POST['_wcmp_shipping_policy'])) {
-                update_post_meta($post_id, '_wcmp_shipping_policy', $_POST['_wcmp_shipping_policy']);
+                update_post_meta($post_id, '_wcmp_shipping_policy', sanitize_textarea_field($_POST['_wcmp_shipping_policy']));
             }
         }
     }
@@ -946,19 +946,19 @@ class WCMp_Product {
             if( !empty($products) ) {
                 foreach( $products as $product ) {
                     if (isset($_POST['commision'])) {
-                        update_post_meta($product, '_commission_per_product', $_POST['commision']);
+                        update_post_meta($product, '_commission_per_product', floatval(sanitize_text_field( $_POST['commision'])));
                     }
 
                     if (isset($_POST['commission_percentage'])) {
-                        update_post_meta($product, '_commission_percentage_per_product', $_POST['commission_percentage']);
+                        update_post_meta($product, '_commission_percentage_per_product', floatval(sanitize_text_field($_POST['commission_percentage'])));
                     }
 
                     if (isset($_POST['fixed_with_percentage_qty'])) {
-                        update_post_meta($product, '_commission_fixed_with_percentage_qty', $_POST['fixed_with_percentage_qty']);
+                        update_post_meta($product, '_commission_fixed_with_percentage_qty', floatval(sanitize_text_field($_POST['fixed_with_percentage_qty'])));
                     }
 
                     if (isset($_POST['fixed_with_percentage'])) {
-                        update_post_meta($product, '_commission_fixed_with_percentage', $_POST['fixed_with_percentage']);
+                        update_post_meta($product, '_commission_fixed_with_percentage', floatval(sanitize_text_field($_POST['fixed_with_percentage'])));
                     }
 
                     if (isset($_POST['choose_vendor']) && !empty($_POST['choose_vendor'])) {
@@ -971,7 +971,7 @@ class WCMp_Product {
 
                         }
 
-                        $vendor = get_wcmp_vendor_by_term($_POST['choose_vendor']);
+                        $vendor = get_wcmp_vendor_by_term(absint($_POST['choose_vendor']));
                         if (!wp_is_post_revision($product)) {
                             // unhook this function so it doesn't loop infinitely
                             remove_action('save_post', array($this, 'process_vendor_data'));
@@ -1006,28 +1006,28 @@ class WCMp_Product {
             if (isset($_POST['variable_post_id']) && !empty($_POST['variable_post_id'])) {
                 foreach ($_POST['variable_post_id'] as $post_key => $value) {
                     if (isset($_POST['variable_product_vendors_commission'][$post_key])) {
-                        $commission = $_POST['variable_product_vendors_commission'][$post_key];
+                        $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission'][$post_key]));
                         update_post_meta($value, '_product_vendors_commission', $commission);
                     }
 
                     if (isset($_POST['variable_product_vendors_commission_percentage'][$post_key])) {
-                        $commission = $_POST['variable_product_vendors_commission_percentage'][$post_key];
+                        $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_percentage'][$post_key]));
                         update_post_meta($value, '_product_vendors_commission_percentage', $commission);
                     }
 
                     if (isset($_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key])) {
-                        $commission = $_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key];
+                        $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key]));
                         update_post_meta($value, '_product_vendors_commission_fixed_per_trans', $commission);
                     }
 
                     if (isset($_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key])) {
-                        $commission = $_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key];
+                        $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key]));
                         update_post_meta($value, '_product_vendors_commission_fixed_per_qty', $commission);
                     }
 
                     if (isset($_POST['dc_variable_shipping_class'][$post_key])) {
                         $_POST['dc_variable_shipping_class'][$post_key] = !empty($_POST['dc_variable_shipping_class'][$post_key]) ? (int) $_POST['dc_variable_shipping_class'][$post_key] : '';
-                        $array = wp_set_object_terms($value, $_POST['dc_variable_shipping_class'][$post_key], 'product_shipping_class');
+                        $array = wp_set_object_terms($value, floatval(sanitize_text_field($_POST['dc_variable_shipping_class'][$post_key])), 'product_shipping_class');
                         unset($_POST['dc_variable_shipping_class'][$post_key]);
                     }
                 }
@@ -1051,31 +1051,31 @@ class WCMp_Product {
         if (isset($_POST['variable_post_id']) && !empty($_POST['variable_post_id'])) {
             foreach ($_POST['variable_post_id'] as $post_key => $value) {
                 if (isset($_POST['variable_product_vendors_commission'][$post_key])) {
-                    $commission = $_POST['variable_product_vendors_commission'][$post_key];
+                    $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission'][$post_key]));
                     update_post_meta($value, '_product_vendors_commission', $commission);
                     unset($_POST['variable_product_vendors_commission'][$post_key]);
                 }
 
                 if (isset($_POST['variable_product_vendors_commission_percentage'][$post_key])) {
-                    $commission = $_POST['variable_product_vendors_commission_percentage'][$post_key];
+                    $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_percentage'][$post_key]));
                     update_post_meta($value, '_product_vendors_commission_percentage', $commission);
                     unset($_POST['variable_product_vendors_commission_percentage'][$post_key]);
                 }
 
                 if (isset($_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key])) {
-                    $commission = $_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key];
+                    $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key]));
                     update_post_meta($value, '_product_vendors_commission_fixed_per_trans', $commission);
                     unset($_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key]);
                 }
 
                 if (isset($_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key])) {
-                    $commission = $_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key];
+                    $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key]));
                     update_post_meta($value, '_product_vendors_commission_fixed_per_qty', $commission);
                     unset($_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key]);
                 }
                 if (isset($_POST['dc_variable_shipping_class'][$post_key])) {
                     $_POST['dc_variable_shipping_class'][$post_key] = !empty($_POST['dc_variable_shipping_class'][$post_key]) ? (int) $_POST['dc_variable_shipping_class'][$post_key] : '';
-                    $array = wp_set_object_terms($value, $_POST['dc_variable_shipping_class'][$post_key], 'product_shipping_class');
+                    $array = wp_set_object_terms($value, floatval(sanitize_text_field($_POST['dc_variable_shipping_class'][$post_key])), 'product_shipping_class');
                     unset($_POST['dc_variable_shipping_class'][$post_key]);
                 }
             }

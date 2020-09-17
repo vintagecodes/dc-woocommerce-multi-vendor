@@ -423,14 +423,14 @@ class WCMp_Vendor_Hooks {
     public function wcmp_vendor_dashboard_vendor_report_endpoint() {
         global $WCMp;
         if ( isset( $_POST['wcmp_stat_start_dt'] ) ) {
-            $start_date = $_POST['wcmp_stat_start_dt'];
+            $start_date = wc_clean( wp_unslash( $_POST['wcmp_stat_start_dt'] ) );
         } else {
             // hard-coded '01' for first day     
             $start_date = date( 'Y-m-01' );
         }
 
         if ( isset( $_POST['wcmp_stat_end_dt'] ) ) {
-            $end_date = $_POST['wcmp_stat_end_dt'];
+            $end_date = wc_clean( wp_unslash( $_POST['wcmp_stat_end_dt'] ) );
         } else {
             // hard-coded '01' for first day
             $end_date = date( 'Y-m-d' );
@@ -649,13 +649,13 @@ class WCMp_Vendor_Hooks {
             $WCMp->library->load_dataTable_lib();
 
             if ( ! empty( $_POST['wcmp_start_date_order'] ) ) {
-                $start_date = $_POST['wcmp_start_date_order'];
+                $start_date = wc_clean( wp_unslash( $_POST['wcmp_start_date_order'] ) );
             } else {
                 $start_date = date( 'Y-m-01' );
             }
 
             if ( ! empty( $_POST['wcmp_end_date_order'] ) ) {
-                $end_date = $_POST['wcmp_end_date_order'];
+                $end_date = wc_clean( wp_unslash( $_POST['wcmp_end_date_order'] ) );
             } else {
                 $end_date = date( 'Y-m-d' );
             }

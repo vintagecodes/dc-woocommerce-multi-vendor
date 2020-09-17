@@ -376,10 +376,10 @@ class WCMp_Ajax {
 
     function wcmp_add_review_rating_vendor() {
         global $WCMp, $wpdb;
-        $review = $_POST['comment'];
-        $rating = isset($_POST['rating']) ? $_POST['rating'] : false;
-        $comment_parent = isset($_POST['comment_parent']) ? $_POST['comment_parent'] : 0;
-        $vendor_id = $_POST['vendor_id'];
+        $review = isset( $_POST['comment'] ) ? wc_clean( $_POST['comment'] ) : '';
+        $rating = isset($_POST['rating']) ? intval( wp_unslash( $_POST['rating'] ) ): false;
+        $comment_parent = isset($_POST['comment_parent']) ? absint($_POST['comment_parent']) : 0;
+        $vendor_id = isset($_POST['vendor_id']) ? absint( $_POST['vendor_id'] ) : 0;
         $current_user = wp_get_current_user();
         $comment_approve_by_settings = get_option('comment_moderation') ? 0 : 1;
         if (!empty($review)) {
@@ -388,8 +388,8 @@ class WCMp_Ajax {
                 $data = array(
                     'comment_post_ID' => wcmp_vendor_dashboard_page_id(),
                     'comment_author' => $current_user->display_name,
-                    'comment_author_email' => $current_user->user_email,
-                    'comment_author_url' => $current_user->user_url,
+                    'comment_author_email' => sanitize_email($current_user->user_email),
+                    'comment_author_url' => esc_url($current_user->user_url),
                     'comment_content' => $review,
                     'comment_type' => 'wcmp_vendor_rating',
                     'comment_parent' => $comment_parent,
