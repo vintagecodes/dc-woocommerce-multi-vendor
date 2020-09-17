@@ -1082,17 +1082,17 @@ Class WCMp_Admin_Dashboard {
                 }
 
                 if ($fieldkey == 'vendor_description') {
-                    update_user_meta($user_id, '_' . $fieldkey, $post[$fieldkey]);
+                    update_user_meta($user_id, '_' . $fieldkey, wc_clean(wp_unslash($post[$fieldkey])));
                 } elseif ($fieldkey == 'vendor_country') {
-                    $country_code = $post[$fieldkey];
-                    $country_data = WC()->countries->get_countries();
+                    $country_code = wc_clean(wp_unslash( $post[$fieldkey] ) );
+                    $country_data = wc_clean(wp_unslash( WC()->countries->get_countries() ) );
                     $country_name = ( isset($country_data[$country_code]) ) ? $country_data[$country_code] : $country_code; //To get country name by code
                     update_user_meta($user_id, '_' . $fieldkey, $country_name);
                     update_user_meta($user_id, '_' . $fieldkey . '_code', $country_code);
                 } elseif ($fieldkey == 'vendor_state') {
                     $country_code = $post['vendor_country'];
-                    $state_code = $post[$fieldkey];
-                    $state_data = WC()->countries->get_states($country_code);
+                    $state_code = wc_clean(wp_unslash( $post[$fieldkey] ) );
+                    $state_data = wc_clean(wp_unslash( WC()->countries->get_states($country_code) ) );
                     $state_name = ( isset($state_data[$state_code]) ) ? $state_data[$state_code] : $state_code; //to get State name by state code
                     update_user_meta($user_id, '_' . $fieldkey, $state_name);
                     update_user_meta($user_id, '_' . $fieldkey . '_code', $state_code);
@@ -1133,29 +1133,29 @@ Class WCMp_Admin_Dashboard {
             }
         }
         if (isset($_POST['_shop_template']) && !empty($_POST['_shop_template'])) {
-            update_user_meta($user_id, '_shop_template', $_POST['_shop_template']);
+            update_user_meta($user_id, '_shop_template', wc_clean($_POST['_shop_template']));
         }
         if (isset($_POST['_store_location']) && !empty($_POST['_store_location'])) {
-            update_user_meta($user_id, '_store_location', $_POST['_store_location']);
+            update_user_meta($user_id, '_store_location', wc_clean($_POST['_store_location']));
         }
         if (isset($_POST['store_address_components']) && !empty($_POST['store_address_components'])) {
             $address_components = wcmp_get_geocoder_components(json_decode(stripslashes($_POST['store_address_components']), true));
             if (isset($_POST['_store_location']) && !empty($_POST['_store_location'])) {
-                $address_components['formatted_address'] = $_POST['_store_location'];
+                $address_components['formatted_address'] = wc_clean($_POST['_store_location']);
             }
             if (isset($_POST['_store_lat']) && !empty($_POST['_store_lat'])) {
-                $address_components['latitude'] = $_POST['_store_lat'];
+                $address_components['latitude'] = wc_clean($_POST['_store_lat']);
             }
             if (isset($_POST['_store_lng']) && !empty($_POST['_store_lng'])) {
-                $address_components['longitude'] = $_POST['_store_lng'];
+                $address_components['longitude'] = wc_clean($_POST['_store_lng']);
             }
             update_user_meta($user_id, '_store_address_components', $address_components);
         }
         if (isset($_POST['_store_lat']) && !empty($_POST['_store_lat'])) {
-            update_user_meta($user_id, '_store_lat', $_POST['_store_lat']);
+            update_user_meta($user_id, '_store_lat', wc_clean($_POST['_store_lat']));
         }
         if (isset($_POST['_store_lng']) && !empty($_POST['_store_lng'])) {
-            update_user_meta($user_id, '_store_lng', $_POST['_store_lng']);
+            update_user_meta($user_id, '_store_lng', wc_clean($_POST['_store_lng']));
         }
         if (isset($_POST['timezone_string']) && !empty($_POST['timezone_string'])) {
             if (!empty($_POST['timezone_string']) && preg_match('/^UTC[+-]/', $_POST['timezone_string'])) {
@@ -1165,8 +1165,8 @@ Class WCMp_Admin_Dashboard {
             } else {
                 $_POST['gmt_offset'] = 0;
             }
-            update_user_meta($user_id, 'timezone_string', $_POST['timezone_string']);
-            update_user_meta($user_id, 'gmt_offset', $_POST['gmt_offset']);
+            update_user_meta($user_id, 'timezone_string', wc_clean($_POST['timezone_string']));
+            update_user_meta($user_id, 'gmt_offset', wc_clean($_POST['gmt_offset']));
         }
         do_action('wcmp_save_custom_store_data', $user_id, $post);
     }
@@ -1248,14 +1248,13 @@ Class WCMp_Admin_Dashboard {
             $has_error = false;
             $userdata = array(
                 'ID' => $vendor_user_id,
-                //'user_email' => $_POST['vendor_profile_data']['user_email'],
-                'first_name' => $_POST['vendor_profile_data']['first_name'],
-                'last_name' => $_POST['vendor_profile_data']['last_name'],
+                'first_name' => isset( $_POST['vendor_profile_data']['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['vendor_profile_data']['first_name'] ) ) : '',
+                'last_name' => isset( $_POST['vendor_profile_data']['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['vendor_profile_data']['last_name'] ) ) : '',
             );
 
-            $pass_cur = !empty( $_POST['vendor_profile_data']['password_current'] ) ? $_POST['vendor_profile_data']['password_current'] : '';
-            $pass1 = !empty( $_POST['vendor_profile_data']['password_1'] ) ? $_POST['vendor_profile_data']['password_1'] : '';
-            $pass2 = !empty( $_POST['vendor_profile_data']['password_2'] ) ? $_POST['vendor_profile_data']['password_2'] : '';
+            $pass_cur = !empty( $_POST['vendor_profile_data']['password_current'] ) ? sanitize_text_field( wp_unslash($_POST['vendor_profile_data']['password_current']) ) : '';
+            $pass1 = !empty( $_POST['vendor_profile_data']['password_1'] ) ? sanitize_text_field( wp_unslash($_POST['vendor_profile_data']['password_1']) ) : '';
+            $pass2 = !empty( $_POST['vendor_profile_data']['password_2'] ) ? sanitize_text_field( wp_unslash($_POST['vendor_profile_data']['password_2']) ) : '';
             $email = !empty( $_POST['vendor_profile_data']['user_email'] ) ? $_POST['vendor_profile_data']['user_email'] : '';
             $save_pass = true;
             
@@ -1301,7 +1300,7 @@ Class WCMp_Admin_Dashboard {
 
             $user_id = wp_update_user($userdata);
 
-            $profile_updt = update_user_meta($vendor_user_id, '_vendor_profile_image', $_POST['vendor_profile_data']['vendor_profile_image']);
+            $profile_updt = update_user_meta($vendor_user_id, '_vendor_profile_image', wc_clean($_POST['vendor_profile_data']['vendor_profile_image']));
 
             if ($profile_updt || $user_id) {
                 wc_add_notice( __('Profile Data Updated', 'dc-woocommerce-multi-vendor'), 'success' );

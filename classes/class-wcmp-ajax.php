@@ -2355,8 +2355,8 @@ class WCMp_Ajax {
                 }
             }
         } elseif ($handler == 'search') {
-            $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
-            $product_id = isset($_POST['product_ID']) ? $_POST['product_ID'] : 0;
+            $keyword = isset($_POST['keyword']) ? wc_clean( $_POST['keyword'] ) : '';
+            $product_id = isset($_POST['product_ID']) ? absint( $_POST['product_ID'] ) : 0;
             $product = wc_get_product($product_id);
             if ($product) {
                 //$vendor = get_wcmp_product_vendors( $product->get_id() );
@@ -2434,7 +2434,7 @@ class WCMp_Ajax {
                 $no_data = 1;
             }
         } elseif ($handler == 'answer') {
-            $ques_ID = isset($_POST['key']) ? $_POST['key'] : '';
+            $ques_ID = isset($_POST['key']) ? wc_clean( $_POST['key'] ) : '';
             $reply = isset($_POST['reply']) ? sanitize_textarea_field($_POST['reply']) : '';
             $vendor = get_wcmp_vendor(get_current_user_id());
             $question_info = $WCMp->product_qna->get_Question($ques_ID);
@@ -2443,11 +2443,11 @@ class WCMp_Ajax {
             if ($vendor && $reply && $ques_ID) {
                 $_is_answer_given = $WCMp->product_qna->get_Answers($ques_ID);
                 if (isset($_is_answer_given[0]) && count($_is_answer_given[0]) > 0) {
-                    $result = $WCMp->product_qna->updateAnswer($_is_answer_given[0]->ans_ID, array('ans_details' => sanitize_textarea_field($reply)));
+                    $result = $WCMp->product_qna->updateAnswer($_is_answer_given[0]->ans_ID, array('ans_details' => $reply));
                 } else {
                     $result = $WCMp->product_qna->createAnswer(array(
                         'ques_ID' => $ques_ID,
-                        'ans_details' => sanitize_textarea_field($reply),
+                        'ans_details' => $reply,
                         'ans_by' => $vendor->id,
                         'ans_created' => date('Y-m-d H:i:s', current_time('timestamp')),
                         'ans_vote' => ''
