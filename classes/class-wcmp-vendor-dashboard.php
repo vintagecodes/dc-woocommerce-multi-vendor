@@ -668,7 +668,7 @@ Class WCMp_Admin_Dashboard {
                                         </label>
                                     </th>
                                     <td class="forminp">
-                                        <input id="select_zone_postcodes" class="form-control" type="text" name="<?php echo 'wcmp_shipping_zone[' . $zone_id . '][_select_zone_postcodes]'; ?>" value="<?php echo $postcodes; ?>" placeholder="<?php _e('Postcodes need to be comma separated', 'dc-woocommerce-multi-vendor'); ?>">
+                                        <input id="select_zone_postcodes" class="form-control" type="text" name="<?php echo 'wcmp_shipping_zone[' . $zone_id . '][_select_zone_postcodes]'; ?>" value="<?php echo $postcodes; ?>" placeholder="<?php esc_attr_e('Postcodes need to be comma separated', 'dc-woocommerce-multi-vendor'); ?>">
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -2444,7 +2444,7 @@ Class WCMp_Admin_Dashboard {
             <div class="store-address-container">
                 
                 <label class="location-prompt" for="store_name"><?php esc_html_e('Store Name', 'dc-woocommerce-multi-vendor'); ?></label>
-                <input type="text" id="store_name" class="location-input" name="store_name" value="<?php echo esc_attr( $store_name ); ?>"  placeholder="<?php _e('Enter your Store Name here', 'dc-woocommerce-multi-vendor'); ?>" />
+                <input type="text" id="store_name" class="location-input" name="store_name" value="<?php echo esc_attr( $store_name ); ?>"  placeholder="<?php esc_attr_e('Enter your Store Name here', 'dc-woocommerce-multi-vendor'); ?>" />
                 
                 <label for="store_country" class="location-prompt"><?php esc_html_e( 'Where is your store based?', 'woocommerce' ); ?></label>
                 <select id="store_country" name="store_country" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'woocommerce' ); ?>" class="location-input wc-enhanced-select dropdown">

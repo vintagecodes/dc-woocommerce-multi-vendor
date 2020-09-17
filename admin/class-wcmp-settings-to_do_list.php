@@ -204,7 +204,7 @@ class WCMp_Settings_To_Do_List {
 
                                                 </div>
                                                 <div class="wcmp-product-dismiss-modal modal-body">
-                                                    <textarea class="form-control" rows="5" id="dismiss-reason-<?php echo $get_pending_product->ID; ?>" placeholder="<?php echo __('Add your note for seller', 'dc-woocommerce-multi-vendor'); ?>"></textarea>
+                                                    <textarea class="form-control" rows="5" id="dismiss-reason-<?php echo $get_pending_product->ID; ?>" placeholder="<?php esc_attr_e('Add your note for seller', 'dc-woocommerce-multi-vendor'); ?>"></textarea>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" data-type="product" data-id="<?php echo $get_pending_product->ID; ?>" id="dismiss_request" name="dismiss_request" class="button action vendor_dismiss_submit"><?php echo __('Add', 'dc-woocommerce-multi-vendor'); ?></button>

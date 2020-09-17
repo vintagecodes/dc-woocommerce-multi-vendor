@@ -785,7 +785,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 							// Do Nothing
 						} else if(in_array('dc_pending_vendor', $user->roles)) {
 							$button_html = '<div class="wcmp-vendor-modal-main">
-												<textarea class="pending-vendor-note form-control" data-note-author-id="' . get_current_user_id() . '"placeholder="' . __( 'Optional note for acceptance / rejection', 'dc-woocommerce-multi-vendor' ) . '" name=""></textarea>
+												<textarea class="pending-vendor-note form-control" data-note-author-id="' . get_current_user_id() . '"placeholder="' . esc_attr_e( 'Optional note for acceptance / rejection', 'dc-woocommerce-multi-vendor' ) . '" name=""></textarea>
 												<div id="wc-backbone-modal-dialog">
 													<button class="button button-primary wcmp-action-button vendor-approve-btn wcmp-primary-btn" data-vendor-id="' . $user->ID . '" data-ajax-action="activate_pending_vendor">' . __('Approve', 'dc-woocommerce-multi-vendor') . '</button>
 													<button class="button button-primary wcmp-action-button vendor-reject-btn pull-right" data-vendor-id="' . $user->ID . '" data-ajax-action="reject_pending_vendor">' . __('Reject', 'dc-woocommerce-multi-vendor') . '</button>

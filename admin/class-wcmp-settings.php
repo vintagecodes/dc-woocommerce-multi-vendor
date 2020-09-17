@@ -581,7 +581,7 @@ class WCMp_Settings {
                                 <label for="report_title"><?php _e( 'Title', 'dc-woocommerce-multi-vendor' ) ?></label>
                             </th>
                             <td class="forminp">
-                                <input type="text" name="report_title" id="report_title" value="" placeholder="Title" style="width:100%;">
+                                <input type="text" name="report_title" id="report_title" value="" placeholder="<?php esc_attr_e('Title', 'dc-woocommerce-multi-vendor'); ?>" style="width:100%;">
                             </td>
 			</tr>
                         <tr class="" valign="top">

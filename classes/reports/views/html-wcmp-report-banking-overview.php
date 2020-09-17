@@ -40,8 +40,8 @@ $vendor = isset($vendor) ? $vendor : '';
 								}
 							?>
 							<input type="hidden" name="range" value="custom" />
-							<input type="text" size="9" placeholder="yyyy-mm-dd" value="<?php if ( ! empty( $_GET['start_date'] ) ) echo esc_attr( $_GET['start_date'] ); ?>" name="start_date" class="range_datepicker from" id="from_banking_overview" />
-							<input type="text" size="9" placeholder="yyyy-mm-dd" value="<?php if ( ! empty( $_GET['end_date'] ) ) echo esc_attr( $_GET['end_date'] ); ?>" name="end_date" class="range_datepicker to" id="to_banking_overview" />
+							<input type="text" size="9" placeholder="<?php esc_attr_e('yyyy-mm-dd', 'dc-woocommerce-multi-vendor' ); ?>" value="<?php if ( ! empty( $_GET['start_date'] ) ) echo esc_attr( $_GET['start_date'] ); ?>" name="start_date" class="range_datepicker from" id="from_banking_overview" />
+							<input type="text" size="9" placeholder="<?php esc_attr_e('yyyy-mm-dd', 'dc-woocommerce-multi-vendor' ); ?>" value="<?php if ( ! empty( $_GET['end_date'] ) ) echo esc_attr( $_GET['end_date'] ); ?>" name="end_date" class="range_datepicker to" id="to_banking_overview" />
 							<input type="submit" class="button" value="<?php esc_attr_e( 'Go', 'dc-woocommerce-multi-vendor' ); ?>" />
 						</div>
 					</form>
@@ -51,7 +51,7 @@ $vendor = isset($vendor) ? $vendor : '';
 		<div class="left_align pad_left" style="float: left">
 			<form method="post" action="">
 				<p>
-					<select id="vendor" name="vendor" class="ajax_chosen_select_vendor banking_overview_vendor" data-placeholder="<?php _e( 'Search for a vendor...', 'dc-woocommerce-multi-vendor' ); ?>" style="min-width:210px;">
+					<select id="vendor" name="vendor" class="ajax_chosen_select_vendor banking_overview_vendor" data-placeholder="<?php esc_attr_e( 'Search for a vendor...', 'dc-woocommerce-multi-vendor' ); ?>" style="min-width:210px;">
 						<?php echo $option; ?>
 					</select>
 					<input type="button" style="vertical-align: top;" class="banking_overview_report_search submit button" value="<?php _e( 'Show', 'dc-woocommerce-multi-vendor' ); ?>" />

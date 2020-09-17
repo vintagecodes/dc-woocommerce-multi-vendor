@@ -174,7 +174,7 @@ class WCMp_Admin {
     function wcmp_taxonomy_slug_input() {
         $permalinks = get_option('dc_vendors_permalinks');
         ?>
-        <input name="dc_product_vendor_taxonomy_slug" type="text" class="regular-text code" value="<?php if (isset($permalinks['vendor_shop_base'])) echo esc_attr($permalinks['vendor_shop_base']); ?>" placeholder="<?php echo _x('vendor', 'slug', 'dc-woocommerce-multi-vendor') ?>" />
+        <input name="dc_product_vendor_taxonomy_slug" type="text" class="regular-text code" value="<?php if (isset($permalinks['vendor_shop_base'])) echo esc_attr($permalinks['vendor_shop_base']); ?>" placeholder="<?php esc_attr_e('vendor', 'slug', 'dc-woocommerce-multi-vendor') ?>" />
         <?php
     }
 

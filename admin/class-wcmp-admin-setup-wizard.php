@@ -439,7 +439,7 @@ class WCMp_Admin_Setup_Wizard {
                         $permalinks = get_option('dc_vendors_permalinks');
                         $vendor_slug = empty($permalinks['vendor_shop_base']) ? _x('', 'slug', 'dc-woocommerce-multi-vendor') : $permalinks['vendor_shop_base'];
                         ?>
-                        <input type="text" id="vendor_store_url" name="vendor_store_url" placeholder="vendor" value="<?php echo $vendor_slug; ?>" />
+                        <input type="text" id="vendor_store_url" name="vendor_store_url" placeholder="<?php esc_attr_e('vendor', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo $vendor_slug; ?>" />
                         <p class="description"><?php _e('Define vendor store URL (' . site_url() . '/[this-text]/[seller-name])', 'dc-woocommerce-multi-vendor') ?></p>
                     </td>
                 </tr>
