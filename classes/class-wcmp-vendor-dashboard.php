@@ -442,8 +442,8 @@ Class WCMp_Admin_Dashboard {
                     return false;
                 // Only submit if the order has the product belonging to this vendor
                 $order = wc_get_order($_POST['order_id']);
-                $comment = esc_textarea($_POST['comment_text']);
-                $note_type = isset($_POST['note_type']) ? $_POST['note_type'] : '';
+                $comment = wc_clean( wp_unslash( $_POST['comment_text'] ) );
+                $note_type = isset($_POST['note_type']) ? wc_clean( wp_unslash( $_POST['note_type'] ) ) : '';
 		        $is_customer_note = ( 'customer' === $note_type ) ? 1 : 0;
                 $comment_id = $order->add_order_note($comment, $is_customer_note, true);
                 if( $is_customer_note ){
@@ -465,13 +465,13 @@ Class WCMp_Admin_Dashboard {
                 // verify nonce
                 if ($_POST['vendor_add_product_nonce'] && !wp_verify_nonce($_POST['vendor_add_product_nonce'], 'dc-vendor-add-product-comment'))
                     return false;
-                $user_id = $_POST['current_user_id'];
+                $user_id = absint( $_POST['current_user_id'] );
                 // Don't submit empty comments
                 if (empty($_POST['product_comment_text']))
                     return false;
                 // Only submit if the order has the product belonging to this vendor
                 $product = wc_get_product($_POST['product_id']);
-                $comment = esc_textarea($_POST['product_comment_text']);
+                $comment = wc_clean( wp_unslash($_POST['product_comment_text']) );
                 $comment_id = WCMp_Product::add_product_note($product->get_id(), $comment, $user_id);
                 // update comment author & email
                 add_comment_meta($comment_id, '_author_id', $user_id);
@@ -752,7 +752,7 @@ Class WCMp_Admin_Dashboard {
                             <?php $shipping_methods = wcmp_get_shipping_methods(); ?>
                             <select id="shipping_method" class="form-control mt-15" name="wcmp_shipping_method">
                             <?php foreach ($shipping_methods as $key => $method) { ?>
-                                <option data-description="<?php echo esc_attr( wp_kses_post( wpautop( $method->get_method_description() ) ) ); ?>" value="<?php echo esc_attr( $method->id ); ?>"><?php echo esc_attr( $method->get_method_title() ); ?></option>
+                                <option data-description="<?php echo esc_attr( wp_kses_post( wpautop( $method->get_method_description() ) ) ); ?>" value="<?php echo esc_attr( $method->id ); ?>"><?php echo esc_html( $method->get_method_title() ); ?></option>
                             <?php } ?>
                             </select>
                             <div class="wc-shipping-zone-method-description"></div>

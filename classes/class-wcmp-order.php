@@ -1570,7 +1570,7 @@ class WCMp_Order {
         if( !wcmp_get_order( $post_id ) ) return;
         if( !isset( $_POST['cust_refund_status'] ) ) $post_id;
         if( isset( $_POST['refund_order_customer'] ) && $_POST['refund_order_customer'] ) {
-            update_post_meta( $post_id, '_customer_refund_order', $_POST['refund_order_customer'] );
+            update_post_meta( $post_id, '_customer_refund_order', wc_clean( wp_unslash( $_POST['refund_order_customer'] ) ) );
             // trigger customer email
             if( in_array( $_POST['refund_order_customer'], array( 'refund_reject', 'refund_accept' ) ) ) {
 

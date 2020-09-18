@@ -1354,14 +1354,14 @@ class WCMp_Commission {
         $is_updated = false;
         $prev_commission_amount = get_post_meta($post_id, '_commission_amount', true);
         if (isset($_POST['_commission_amount'])) {
-            $is_updated = update_post_meta($post_id, '_commission_amount', floatval($_POST['_commission_amount']));
+            $is_updated = update_post_meta($post_id, '_commission_amount', floatval(sanitize_text_field($_POST['_commission_amount'])));
         }
         
         $order_id = get_post_meta($post_id, '_commission_order_id', true);
         $order = wc_get_order($order_id);
         if (isset($_POST['commission_status']) && in_array($_POST['commission_status'], array('refunded', 'partial_refunded'))) {
             if($order && $order->get_refunds()){
-                update_post_meta($post_id, '_paid_status', $_POST['commission_status']);
+                update_post_meta($post_id, '_paid_status', wc_clean(wp_unslash($_POST['commission_status'])));
             }else{
                 set_transient('wcmp_comm_save_status_'.$post_id, __('Please make order refundable first.', 'dc-woocommerce-multi-vendor'), MINUTE_IN_SECONDS);
             }
@@ -1369,7 +1369,7 @@ class WCMp_Commission {
             if( $_POST['commission_status'] == 'paid' ) {
                 $this->wcmp_mark_commission_paid( array( $post_id ) ) ;
             }
-            update_post_meta($post_id, '_paid_status', $_POST['commission_status']);
+            update_post_meta($post_id, '_paid_status', wc_clean(wp_unslash($_POST['commission_status'])));
         }
         
         do_action('wcmp_save_vendor_commission', $post_id, $is_updated, $_POST);

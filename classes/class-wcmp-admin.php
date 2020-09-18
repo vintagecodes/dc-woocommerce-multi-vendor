@@ -607,9 +607,9 @@ class WCMp_Admin {
     public function wcmp_vendor_shipping_admin_capability($current_id){
         if( !is_user_wcmp_vendor($current_id) ){
             if( isset($_POST['vendor_id'] )){
-                $current_id = $_POST['vendor_id'];
+                $current_id = absint($_POST['vendor_id']);
             } else {
-                $current_id = $_GET['ID'];
+                $current_id = absint($_GET['ID']);
             }
         } 
         return $current_id;

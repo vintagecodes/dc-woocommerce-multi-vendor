@@ -616,7 +616,7 @@ class WCMp_Ajax {
 
     public function wcmp_msg_refresh_tab_data() {
         global $wpdb, $WCMp;
-        $tab = $_POST['tabname'];
+        $tab = wc_clean( $_POST['tabname'] );
         $WCMp->template->get_template('vendor-dashboard/vendor-announcements/vendor-announcements' . str_replace("_", "-", $tab) . '.php');
         die;
     }
@@ -822,8 +822,8 @@ class WCMp_Ajax {
         global $WCMp;
         
         $chart_arr = $html_chart = '';
-        $dropdown_selected = isset($_POST['sort_choosen']) ? $_POST['sort_choosen'] : '';
-        $total_sales_data = isset($_POST['total_sales_data']) ? $_POST['total_sales_data'] : array();
+        $dropdown_selected = isset($_POST['sort_choosen']) ? wc_clean( wp_unslash( $_POST['sort_choosen'] ) ) : '';
+        $total_sales_data = isset($_POST['total_sales_data']) ? wc_clean( wp_unslash( $_POST['total_sales_data'] ) ) : array();
         $arr_by_total_sales = $arr_by_admin_earning = $arr_by_vendor_earning = array();
 
         if( $total_sales_data ){
@@ -869,20 +869,20 @@ class WCMp_Ajax {
             }
 
             $report_html = '
-                <h4>' . __("Sales and Earnings", 'dc-woocommerce-multi-vendor') . '</h4>
+                <h4>' . esc_html_e("Sales and Earnings", 'dc-woocommerce-multi-vendor') . '</h4>
                 <div class="bar_indecator">
                     <div class="bar1">&nbsp;</div>
-                    <span class="">' . __('Gross Sales', 'dc-woocommerce-multi-vendor') . '</span>
+                    <span class="">' . esc_html_e('Gross Sales', 'dc-woocommerce-multi-vendor') . '</span>
                     <div class="bar2">&nbsp;</div>
-                    <span class="">' . __('Admin Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+                    <span class="">' . esc_html_e('Admin Earnings', 'dc-woocommerce-multi-vendor') . '</span>
                     <div class="bar3">&nbsp;</div>
-                    <span class="">' . __('Vendor Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+                    <span class="">' . esc_html_e('Vendor Earnings', 'dc-woocommerce-multi-vendor') . '</span>
                 </div>
                 <table class="bar_chart">
                     <thead>
                         <tr>
-                            <th>' . __("Month", 'dc-woocommerce-multi-vendor') . '</th>
-                            <th colspan="2">' . __("Sales Report", 'dc-woocommerce-multi-vendor') . '</th>
+                            <th>' . esc_html_e("Month", 'dc-woocommerce-multi-vendor') . '</th>
+                            <th colspan="2">' . esc_html_e("Sales Report", 'dc-woocommerce-multi-vendor') . '</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -891,7 +891,7 @@ class WCMp_Ajax {
                 </table>
             ';
         } else {
-            $report_html = '<tr><td colspan="3">' . __('No product was sold in the given period.', 'dc-woocommerce-multi-vendor') . '</td></tr>';
+            $report_html = '<tr><td colspan="3">' . esc_html_e('No product was sold in the given period.', 'dc-woocommerce-multi-vendor') . '</td></tr>';
         }
 
         echo $report_html;
@@ -914,7 +914,7 @@ class WCMp_Ajax {
     function search_product_data() {
         global $WCMp;
 
-        $product_id = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
+        $product_id = isset($_POST['product_id']) ? absint( $_POST['product_id'] ) : 0;
         $orders = isset($_POST['orders']) ? $_POST['orders'] : array();
         $start_date = isset($_POST['start_date']) ? wc_clean( wp_unslash( $_POST['start_date'] ) ): '';
         $end_date = isset($_POST['end_date']) ? wc_clean( wp_unslash( $_POST['end_date'] ) ) : '';
@@ -1331,7 +1331,7 @@ class WCMp_Ajax {
         } else if ($type == 'shop_coupon') {
             update_post_meta($id, '_dismiss_to_do_list', 'true');
         } else if ($type == 'product') {
-            $reason = esc_textarea($_POST['reason']);
+            $reason = wc_clean( wp_unslash( $_POST['reason'] ) );
             $vendor = get_wcmp_vendor($post->post_author);
             $email_vendor = WC()->mailer()->emails['WC_Email_Vendor_Product_Rejected'];
             $email_vendor->trigger($id, $post, $vendor, $reason);
@@ -1544,12 +1544,12 @@ class WCMp_Ajax {
         $html = '';
         if (isset($_POST['s']) && sanitize_text_field($_POST['s'])) {
             $args1 = array(
-                'search' => '*' . esc_attr($_POST['s']) . '*',
+                'search' => '*' . wc_clean($_POST['s']) . '*',
                 'search_columns' => array('display_name', 'user_login', 'user_nicename'),
             );
             $args2 = array(
                 'meta_key' => '_vendor_page_title',
-                'meta_value' => esc_attr($_POST['s']),
+                'meta_value' => wc_clean($_POST['s']),
                 'meta_compare' => 'LIKE',
             );
             $vendors1 = get_wcmp_vendors($args1);
@@ -1565,8 +1565,8 @@ class WCMp_Ajax {
                     <img width="50" height="50" class="vendor_img" style="display: inline;" src="' . $vendor->image . '" id="vendor_image_display">
                     </div>
                     <div style=" width: 75%;  display: inline;  padding: 10px;">
-                            <a href="' . esc_attr($vendor->permalink) . '">
-                                ' . $vendor_term->name . '
+                            <a href="' . esc_url($vendor->permalink) . '">
+                                ' . esc_html_e($vendor_term->name) . '
                             </a>
                     </div>
                 </div>';
@@ -1574,7 +1574,7 @@ class WCMp_Ajax {
             } else {
                 $html .= '<div style=" width: 100%; margin-bottom: 5px; clear: both; display: block;">
                     <div style="display: inline;  padding: 10px;">
-                        ' . __('No Vendor Matched!', 'dc-woocommerce-multi-vendor') . '
+                        ' . esc_html_e('No Vendor Matched!', 'dc-woocommerce-multi-vendor') . '
                     </div>
                 </div>';
             }
@@ -1672,7 +1672,7 @@ class WCMp_Ajax {
 
     public function delete_fpm_product() {
 
-        $proid = $_POST['proid'];
+        $proid = absint($_POST['proid']);
 
         if ($proid) {
             if (wp_delete_post($proid)) {
@@ -3576,12 +3576,12 @@ class WCMp_Ajax {
                     $settings_html = '<!-- Free shipping -->'
                             . '<div class="shipping_form" id="' . $vendor_shipping_method['id'] . '">'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placeholder="'.esc_attr_e( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Minimum order amount for free shipping', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Minimum order amount for free shipping', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="minimum_order_amount_fs" class="form-control" type="text" name="min_amount" value="'.$vendor_shipping_method['settings']['min_amount'].'" placeholder="'.esc_attr_e( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
@@ -3589,7 +3589,7 @@ class WCMp_Ajax {
                             . '<input type="hidden" id="method_cost_fs" name="cost" value="0" />'
                             . '<input type="hidden" id="method_tax_status_fs" name="tax_status" value="none" />'
                             . '<!--div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Description', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Description', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<textarea id="method_description_fs" class="form-control" name="method_description">' . $vendor_shipping_method['settings']['description'] . '</textarea>'
                             . '</div></div--></div>';
@@ -3597,18 +3597,18 @@ class WCMp_Ajax {
                     $settings_html = '<!-- Local Pickup -->'
                             . '<div class="shipping_form " id="' . $vendor_shipping_method['id'] . '">'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placeholder="'.esc_attr_e( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Cost', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Cost', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="method_cost_lp" class="form-control" type="text" name="cost" value="'.$vendor_shipping_method['settings']['cost'].'" placeholder="'.esc_attr_e( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>';
                             if( apply_filters( 'wcmp_show_shipping_zone_tax', true ) ) {
                             $settings_html .= '<div class="form-group">'
-                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Tax Status', 'dc-woocommerce-multi-vendor' ).'</label>'
+                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.esc_html_e( 'Tax Status', 'dc-woocommerce-multi-vendor' ).'</label>'
                                     . '<div class="col-md-9 col-sm-9">'
                                     . '<select id="method_tax_status_lp" class="form-control" name="tax_status">';
                                 foreach( $is_method_taxable_array as $key => $value ) { 
@@ -3618,7 +3618,7 @@ class WCMp_Ajax {
                             }
                     $settings_html .= '<input type="hidden" id="method_description_lp" name="description" value="'.$vendor_shipping_method['settings']['description'].'" />'
                             . '<!--div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Description', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Description', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<textarea id="method_description_lp" class="form-control" name="method_description">' . $vendor_shipping_method['settings']['description'] . '</textarea>'
                             . '</div></div--></div>';
@@ -3626,18 +3626,18 @@ class WCMp_Ajax {
                     $settings_html = '<!-- Flat rate -->'
                             . '<div class="shipping_form" id="' . $vendor_shipping_method['id'] . '">'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placeholder="'.esc_attr_e( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Cost', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Cost', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<input id="method_cost_fr" class="form-control" type="text" name="cost" value="'.$vendor_shipping_method['settings']['cost'].'" placeholder="'.esc_attr_e( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>';
                             if( apply_filters( 'wcmp_show_shipping_zone_tax', true ) ) { 
                             $settings_html .= '<div class="form-group">'
-                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Tax Status', 'dc-woocommerce-multi-vendor' ).'</label>'
+                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.esc_html_e( 'Tax Status', 'dc-woocommerce-multi-vendor' ).'</label>'
                                     . '<div class="col-md-9 col-sm-9">'
                                     . '<select id="method_tax_status_fr" class="form-control" name="tax_status">';
                                 foreach( $is_method_taxable_array as $key => $value ) { 
@@ -3647,31 +3647,31 @@ class WCMp_Ajax {
                             }
                             $settings_html .= '<input type="hidden" id="method_description_fr" name="description" value="'.$vendor_shipping_method['settings']['description'].'" />'
                                     . '<!--div class="form-group">'
-                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Description', 'dc-woocommerce-multi-vendor' ).'</label>'
+                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.esc_html_e( 'Description', 'dc-woocommerce-multi-vendor' ).'</label>'
                                     . '<div class="col-md-9 col-sm-9">'
                                     . '<textarea id="method_description_fr" class="form-control" name="method_description">'.$vendor_shipping_method['settings']['description'].'</textarea>'
                                     . '</div></div-->';
                             if (!apply_filters( 'wcmp_hide_vendor_shipping_classes', false )) { 
                             $settings_html .= '<div class="wcmp_shipping_classes"><hr>'
-                                    . '<h2>'.__('Shipping Class Cost', 'dc-woocommerce-multi-vendor').'</h2>'
-                                    . '<div class="description mb-15">'.__('These costs can be optionally entered based on the shipping class set per product (This cost will be added with the shipping cost above).', 'dc-woocommerce-multi-vendor').'</div>';
+                                    . '<h2>'.esc_html_e('Shipping Class Cost', 'dc-woocommerce-multi-vendor').'</h2>'
+                                    . '<div class="description mb-15">'.esc_html_e('These costs can be optionally entered based on the shipping class set per product (This cost will be added with the shipping cost above).', 'dc-woocommerce-multi-vendor').'</div>';
       
                             $shipping_classes = get_vendor_shipping_classes();
 
                             if(empty($shipping_classes)) {
-                            $settings_html .= '<div class="no_shipping_classes">' . __("No Shipping Classes set by Admin", 'dc-woocommerce-multi-vendor') . '</div>';
+                            $settings_html .= '<div class="no_shipping_classes">' . esc_html_e("No Shipping Classes set by Admin", 'dc-woocommerce-multi-vendor') . '</div>';
                             } else {
                                 foreach ($shipping_classes as $shipping_class ) {
                                     $settings_html .= '<div class="form-group">'
-                                            . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Cost of Shipping Class:', 'dc-woocommerce-multi-vendor' ) .' '. $shipping_class->name .'</label>'
+                                            . '<label for="" class="control-label col-sm-3 col-md-3">'.esc_html_e( 'Cost of Shipping Class:', 'dc-woocommerce-multi-vendor' ) .' '. $shipping_class->name .'</label>'
                                             . '<div class="col-md-9 col-sm-9">'
                                             . '<input type="hidden" name="shipping_class_id" value="'.$shipping_class->term_id.'" />'
                                             . '<input id="'.$shipping_class->slug.'" class="form-control sc_vals" type="text" name="class_cost_'.$shipping_class->term_id.'" value="'.$vendor_shipping_method['settings']['class_cost_'.$shipping_class->term_id].'" placeholder="'.esc_attr_e( 'N/A', 'dc-woocommerce-multi-vendor' ).'" data-shipping_class_id="'. $shipping_class->term_id.'">'
-                                            . '<div class="description">'.__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>.', 'dc-woocommerce-multi-vendor' ) . '<br/><br/>' . __( 'Use <code>[qty]</code> for the number of items, <br/><code>[cost]</code> for the total cost of items, and <code>[fee percent="10" min_fee="20" max_fee=""]</code> for percentage based fees.', 'dc-woocommerce-multi-vendor' ).'</div>'
+                                            . '<div class="description">'.esc_html_e( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>.', 'dc-woocommerce-multi-vendor' ) . '<br/><br/>' . esc_html_e( 'Use <code>[qty]</code> for the number of items, <br/><code>[cost]</code> for the total cost of items, and <code>[fee percent="10" min_fee="20" max_fee=""]</code> for percentage based fees.', 'dc-woocommerce-multi-vendor' ).'</div>'
                                             . '</div></div>';
                                 }
                             $settings_html .= '<div class="form-group">'
-                                    . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Calculation type', 'dc-woocommerce-multi-vendor') . '</label>'
+                                    . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Calculation type', 'dc-woocommerce-multi-vendor') . '</label>'
                                     . '<div class="col-md-9 col-sm-9">'
                                     . '<select id="calculation_type" class="form-control" name="calculation_type">';
                             foreach ($calculation_type as $key => $value) {

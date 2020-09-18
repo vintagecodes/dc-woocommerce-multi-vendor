@@ -539,7 +539,7 @@ class WCMp_Product {
                 <span class="title"><?php esc_html_e('Vendor', 'dc-woocommerce-multi-vendor'); ?></span>
                 <span class="input-text-wrap vendor_bulk">
                     <select name="choose_vendor_bulk" id="choose_vendor_ajax_bulk" class="ajax_chosen_select_vendor" data-placeholder="<?php esc_attr_e('Search for vendor', 'dc-woocommerce-multi-vendor') ?>" style="width:300px;" >
-                        <option value="0"><?php _e("Choose a vendor", 'dc-woocommerce-multi-vendor') ?></option>
+                        <option value="0"><?php esc_html_e("Choose a vendor", 'dc-woocommerce-multi-vendor') ?></option>
                     </select>
                 </span>
             </span>
@@ -1328,12 +1328,12 @@ class WCMp_Product {
             $show_in_popup = apply_filters('wcmp_show_report_abuse_form_popup', true, $product)
             ?>
             <div class="wcmp-report-abouse-wrapper">
-                <a href="javascript:void(0);" id="report_abuse"><?php echo $report_abuse_text; ?></a>
+                <a href="javascript:void(0);" id="report_abuse"><?php echo esc_html($report_abuse_text); ?></a>
                 <div id="report_abuse_form"  class="<?php echo ( $show_in_popup ) ? 'report-abouse-modal' : ''; ?>" tabindex="-1" style="display: none;">
                     <div class="<?php echo ( $show_in_popup ) ? 'modal-content' : 'toggle-content'; ?>">
                         <div class="modal-header">
                             <button type="button" class="close">&times;</button>
-                            <h2 class="wcmp-abuse-report-title1"><?php _e('Report an abuse for product ', 'dc-woocommerce-multi-vendor') . ' ' . the_title(); ?> </h2>
+                            <h2 class="wcmp-abuse-report-title1"><?php esc_html_e('Report an abuse for product ', 'dc-woocommerce-multi-vendor') . ' ' . the_title(); ?> </h2>
                         </div>
                         <div class="modal-body">
                             <p class="field-row">
@@ -1351,7 +1351,7 @@ class WCMp_Product {
                         </div> 
                         <div class="modal-footer">
                             <input type="hidden" class="report_abuse_product_id" value="<?php echo $product->get_id(); ?>">
-                            <button type="button" class="btn btn-primary submit-report-abuse" name="report_abuse[submit]"><?php _e('Report', 'dc-woocommerce-multi-vendor'); ?></button>
+                            <button type="button" class="btn btn-primary submit-report-abuse" name="report_abuse[submit]"><?php esc_html_e('Report', 'dc-woocommerce-multi-vendor'); ?></button>
                         </div>
                     </div>
                 </div>

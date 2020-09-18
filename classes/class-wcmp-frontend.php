@@ -136,9 +136,9 @@ class WCMp_Frontend {
                 $validation_errors->add('recaptcha is not validate', __('Please Verify  Recaptcha', 'dc-woocommerce-multi-vendor'));
             }
         }elseif(isset($_POST['g-recaptchatype']) && $_POST['g-recaptchatype'] == 'v3') {
-            $recaptcha_secret = isset($_POST['recaptchav3_secretkey']) ? $_POST['recaptchav3_secretkey'] : '';
+            $recaptcha_secret = isset($_POST['recaptchav3_secretkey']) ? wc_clean( $_POST['recaptchav3_secretkey'] ) : '';
             $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
-            $recaptcha_response = isset($_POST['recaptchav3Response']) ? $_POST['recaptchav3Response'] : '';
+            $recaptcha_response = isset($_POST['recaptchav3Response']) ? wc_clean( $_POST['recaptchav3Response'] ) : '';
 
             $recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
             $recaptcha = json_decode($recaptcha);

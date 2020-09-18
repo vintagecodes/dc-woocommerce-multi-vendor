@@ -37,7 +37,7 @@ class WCMp_Report_Product extends WC_Admin_Report {
 
         if (isset($_POST['search_product'])) {
             $is_variation = false;
-            $product_id = $_POST['search_product'];
+            $product_id = absint($_POST['search_product']);
 
             $_product = wc_get_product($product_id);
 
@@ -50,7 +50,7 @@ class WCMp_Report_Product extends WC_Admin_Report {
         }
 
         if (isset($product_id)) {
-            $option = '<option value="' . $product_id . '" selected="selected">' . $title . '</option>';
+            $option = '<option value="' . esc_attr($product_id) . '" selected="selected">' . esc_html($title) . '</option>';
         } else {
             $option = '<option></option>';
         }
