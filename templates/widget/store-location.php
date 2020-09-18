@@ -31,5 +31,5 @@ if(!empty($store_lat) && !empty($store_lng)) : ?>
         });
     })(jQuery);');
 endif; ?>
-    <a href="<?php echo $gmaps_link ?>" target="_blank"><?php _e( 'Show in Google Maps', 'dc-woocommerce-multi-vendor' ) ?></a>
+    <a href="<?php echo esc_url($gmaps_link); ?>" target="_blank"><?php esc_html_e( 'Show in Google Maps', 'dc-woocommerce-multi-vendor' ) ?></a>
 </div>

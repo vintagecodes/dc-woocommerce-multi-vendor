@@ -21,17 +21,17 @@ global $WCMp, $post, $wpdb;
 if (count($more_product_array) > 0) {
     $i = 0;
     ?>
-    <div class="ajax_loader_class_msg"><img src="<?php echo $WCMp->plugin_url ?>assets/images/ajax-loader.gif" alt="ajax-loader" /></div>
+    <div class="ajax_loader_class_msg"><img src="<?php echo esc_url($WCMp->plugin_url ?>assets/images/ajax-loader.gif) " alt="ajax-loader" /></div>
     <div class="container">		
         <div class="row rowhead">
-            <div class="rowsub "><?php echo __('Vendor', 'dc-woocommerce-multi-vendor'); ?></div>
-            <div class="rowsub"><?php echo __('Price', 'dc-woocommerce-multi-vendor'); ?></div>
+            <div class="rowsub "><?php echo esc_html_e('Vendor', 'dc-woocommerce-multi-vendor'); ?></div>
+            <div class="rowsub"><?php echo esc_html_e('Price', 'dc-woocommerce-multi-vendor'); ?></div>
             <div class="rowsub">
                 <select name="wcmp_multiple_product_sorting" id="wcmp_multiple_product_sorting" class="wcmp_multiple_product_sorting" attrid="<?php echo $post->ID; ?>" >
-                    <option value="price"><?php echo __('Price Low To High', 'dc-woocommerce-multi-vendor'); ?></option>
-                    <option value="price_high"><?php echo __('Price High To Low', 'dc-woocommerce-multi-vendor'); ?></option>
-                    <option value="rating"><?php echo __('Rating High To Low', 'dc-woocommerce-multi-vendor'); ?></option>
-                    <option value="rating_low"><?php echo __('Rating Low To High', 'dc-woocommerce-multi-vendor'); ?></option>
+                    <option value="price"><?php echo esc_html_e('Price Low To High', 'dc-woocommerce-multi-vendor'); ?></option>
+                    <option value="price_high"><?php echo esc_html_e('Price High To Low', 'dc-woocommerce-multi-vendor'); ?></option>
+                    <option value="rating"><?php echo esc_html_e('Rating High To Low', 'dc-woocommerce-multi-vendor'); ?></option>
+                    <option value="rating_low"><?php echo esc_html_e('Rating Low To High', 'dc-woocommerce-multi-vendor'); ?></option>
                 </select>
             </div>
             <div style="clear:both;"></div>
@@ -45,7 +45,7 @@ if (count($more_product_array) > 0) {
     ?>
     <div class="container">
         <div class="row">
-    <?php echo __('Sorry no more offers available', 'dc-woocommerce-multi-vendor'); ?>
+    <?php echo esc_html_e('Sorry no more offers available', 'dc-woocommerce-multi-vendor'); ?>
         </div>
     </div>	
 <?php }
