@@ -10,7 +10,6 @@
 class WCMp_Ajax {
 
     public function __construct() {
-        //$general_singleproductmultisellersettings = get_option('wcmp_general_singleproductmultiseller_settings_name');
         add_action('wp_ajax_woocommerce_json_search_vendors', array(&$this, 'woocommerce_json_search_vendors'));
         add_action('wp_ajax_activate_pending_vendor', array(&$this, 'activate_pending_vendor'));
         add_action('wp_ajax_reject_pending_vendor', array(&$this, 'reject_pending_vendor'));
@@ -856,52 +855,6 @@ class WCMp_Ajax {
         }
         
         
-//        $sort_choosen = isset($_POST['sort_choosen']) ? $_POST['sort_choosen'] : '';
-//        $report_array = isset($_POST['report_array']) ? $_POST['report_array'] : array();
-//        $report_bk = isset($_POST['report_bk']) ? $_POST['report_bk'] : array();
-//        $max_total_sales = isset($_POST['max_total_sales']) ? $_POST['max_total_sales'] : 0;
-//        $total_sales_sort = isset($_POST['total_sales_sort']) ? $_POST['total_sales_sort'] : array();
-//        $admin_earning_sort = isset($_POST['admin_earning_sort']) ? $_POST['admin_earning_sort'] : array();
-//        ;
-//
-//        $i = 0;
-//        $max_value = 10;
-//        $report_sort_arr = array();
-//
-//        if ($sort_choosen == 'total_sales_desc') {
-//            arsort($total_sales_sort);
-//            foreach ($total_sales_sort as $product_id => $value) {
-//                if ($i++ < $max_value) {
-//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
-//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
-//                }
-//            }
-//        } else if ($sort_choosen == 'total_sales_asc') {
-//            asort($total_sales_sort);
-//            foreach ($total_sales_sort as $product_id => $value) {
-//                if ($i++ < $max_value) {
-//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
-//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
-//                }
-//            }
-//        } else if ($sort_choosen == 'admin_earning_desc') {
-//            arsort($admin_earning_sort);
-//            foreach ($admin_earning_sort as $product_id => $value) {
-//                if ($i++ < $max_value) {
-//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
-//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
-//                }
-//            }
-//        } else if ($sort_choosen == 'admin_earning_asc') {
-//            asort($admin_earning_sort);
-//            foreach ($admin_earning_sort as $product_id => $value) {
-//                if ($i++ < $max_value) {
-//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
-//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
-//                }
-//            }
-//        }
-
         $report_chart = $report_html = '';
 
         if (sizeof($total_sales_data) > 0) {
@@ -1010,22 +963,6 @@ class WCMp_Ajax {
                                 $total_sales[$date]['admin_earning'] = $total_sales[$date]['total_sales'] - $total_sales[$date]['vendor_earning'];
                             
                             }
-                            
-                            
-
-//                            $item = new WC_Order_Item_Product($order_obj->order_item_id);
-//                            $gross_sales += $item->get_subtotal();
-//                            $total_sales[$date] = isset($total_sales[$date]) ? ( $total_sales[$date] + $item->get_subtotal() ) : $item->get_subtotal();
-//                            $vendors_orders_amount = get_wcmp_vendor_order_amount(array('order_id' => $order->get_id(), 'product_id' => $order_obj->product_id));
-//
-//                            $vendor_earning = $vendors_orders_amount['commission_amount'];
-//                            if ($vendor = get_wcmp_vendor(get_current_vendor_id()))
-//                                $admin_earnings[$date] = isset($admin_earnings[$date]) ? ( $admin_earnings[$date] + $vendor_earning ) : $vendor_earning;
-//                            else
-//                                $admin_earnings[$date] = isset($admin_earnings[$date]) ? ( $admin_earnings[$date] + $item->get_subtotal() - $vendor_earning ) : $item->get_subtotal() - $vendor_earning;
-//
-//                            if ($total_sales[$date] > $max_total_sales)
-//                                $max_total_sales = $total_sales[$date];
                         }
                     }
 
@@ -1592,28 +1529,7 @@ class WCMp_Ajax {
         $check = !empty($name) && !empty($from_email) && !empty($user_message);
 
         if ($check) {
-            //$product = get_post(absint($product_id));
             $vendor = get_wcmp_product_vendors($product_id);
-//            $vendor_term = get_term($vendor->term_id);
-//            $subject = __('Report an abuse for product', 'dc-woocommerce-multi-vendor') . get_the_title($product_id);
-//
-//            $to = sanitize_email(get_option('admin_email'));
-//            $from_email = sanitize_email($from_email);
-//            $headers = "From: {$name} <{$from_email}>" . "\r\n";
-//
-//            $message = sprintf(__("User %s (%s) is reporting an abuse on the following product: \n", 'dc-woocommerce-multi-vendor'), $name, $from_email);
-//            $message .= sprintf(__("Product details: %s (ID: #%s) \n", 'dc-woocommerce-multi-vendor'), $product->post_title, $product->ID);
-//
-//            $message .= sprintf(__("Vendor shop: %s \n", 'dc-woocommerce-multi-vendor'), $vendor_term->name);
-//
-//            $message .= sprintf(__("Message: %s\n", 'dc-woocommerce-multi-vendor'), $user_message);
-//            $message .= "\n\n\n";
-//
-//            $message .= sprintf(__("Product page:: %s\n", 'dc-woocommerce-multi-vendor'), get_the_permalink($product->ID));
-//
-//            /* === Send Mail === */
-//            $response = wp_mail($to, $subject, $message, $headers);
-            
             $mail = WC()->mailer()->emails['WC_Email_Send_Report_Abuse'];
             $result = $mail->trigger( $vendor, $_POST );
         }
@@ -2312,7 +2228,7 @@ class WCMp_Ajax {
      */
     public function wcmp_customer_ask_qna_handler() {
         global $WCMp, $wpdb;
-        $handler = isset($_POST['handler']) ? $_POST['handler'] : '';
+        $handler = isset($_POST['handler']) ? wc_clean($_POST['handler']) : '';
         $msg = '';
         $no_data = '';
         $qna_data = '';
@@ -2475,7 +2391,7 @@ class WCMp_Ajax {
             }
         } elseif ($handler == 'vote_answer') {
             $ans_ID = isset($_POST['ans_ID']) ? (int) $_POST['ans_ID'] : '';
-            $vote_type = isset($_POST['vote']) ? $_POST['vote'] : '';
+            $vote_type = isset($_POST['vote']) ? wc_clean($_POST['vote']) : '';
             $ans_row = $WCMp->product_qna->get_Answer($ans_ID);
             $ques_row = $WCMp->product_qna->get_Question($ans_row->ques_ID);
             $vote = maybe_unserialize($ans_row->ans_vote);
@@ -2503,7 +2419,7 @@ class WCMp_Ajax {
         } elseif ($handler == 'update_answer') {
             $result = false;
             $ans_ID = isset($_POST['key']) ? (int) $_POST['key'] : '';
-            $answer = isset($_POST['answer']) ? $_POST['answer'] : '';
+            $answer = isset($_POST['answer']) ? wc_clean($_POST['answer']) : '';
             if ($ans_ID) {
                 $result = $WCMp->product_qna->updateAnswer($ans_ID, array('ans_details' => sanitize_textarea_field($answer)));
             }
@@ -3647,8 +3563,8 @@ class WCMp_Ajax {
     public function wcmp_configure_shipping_method(){
         global $WCMp;
         $zone_id = isset($_POST['zoneId']) ? absint($_POST['zoneId']) : 0;
-        $method_id = isset($_POST['methodId']) ? $_POST['methodId'] : '';
-        $instance_id = isset($_POST['instanceId']) ? $_POST['instanceId'] : '';
+        $method_id = isset($_POST['methodId']) ? wc_clean($_POST['methodId']) : '';
+        $instance_id = isset($_POST['instanceId']) ? wc_clean($_POST['instanceId']) : '';
         if ($zone_id) {
             if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
                 $WCMp->load_vendor_shipping();
@@ -3820,8 +3736,8 @@ class WCMp_Ajax {
     
     public function wcmp_product_classify_next_level_list_categories() {
         $term_id = isset($_POST['term_id']) ? (int) $_POST['term_id'] : 0;
-        $taxonomy = isset($_POST['taxonomy']) ? $_POST['taxonomy'] : '';
-        $cat_level = isset($_POST['cat_level']) ? $_POST['cat_level'] : 0;
+        $taxonomy = isset($_POST['taxonomy']) ? wc_clean($_POST['taxonomy']) : '';
+        $cat_level = isset($_POST['cat_level']) ? wc_clean($_POST['cat_level']) : 0;
         $term = get_term($term_id, $taxonomy);
         $child_terms = get_term_children($term_id, $taxonomy);
         $html_level = '';
@@ -3859,7 +3775,7 @@ class WCMp_Ajax {
 
     public function show_product_classify_next_level_from_searched_term() {
         $term_id = isset($_POST['term_id']) ? (int) $_POST['term_id'] : 0;
-        $taxonomy = isset($_POST['taxonomy']) ? $_POST['taxonomy'] : '';
+        $taxonomy = isset($_POST['taxonomy']) ? wc_clean($_POST['taxonomy']) : '';
         $hierarchy = get_ancestors($term_id, $taxonomy);
         $html_level = $html_hierarchy = '';
         //print_r($hierarchy);die;
@@ -3908,7 +3824,7 @@ class WCMp_Ajax {
 
     public function wcmp_product_classify_search_category_level() {
         global $WCMp, $wpdb;
-        $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
+        $keyword = isset($_POST['keyword']) ? wc_clean( wp_unslash( $_POST['keyword'] ) ) : '';
         if (!empty($keyword)) {
             $query = apply_filters("wcmp_product_classify_search_category_level_args", array(
                 'taxonomy' => 'product_cat',
@@ -3933,8 +3849,6 @@ class WCMp_Ajax {
                         $html_search_result .= '<li>' . $h_term->name . '</li>';
                     }
                     $html_search_result .= '</ul></li>';
-
-                    //$html_search_result .= '<a class="list-group-item"><span class="add-term" data-term-id="'.$term_id.'">&plus;</span>&nbsp;&nbsp;'.implode( ' <i class="wcmp-font ico-right-arrow-icon"></i> ', $term_crumb ).'</a>';
                 }
             } else {
                 $html_search_result .= '<li class="list-group-item"><p>' . __('No results found', 'dc-woocommerce-multi-vendor') . '</p></li>';
@@ -3946,7 +3860,7 @@ class WCMp_Ajax {
 
     public function wcmp_list_a_product_by_name_or_gtin() {
         global $WCMp, $wpdb;
-        $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
+        $keyword = isset($_POST['keyword']) ? wc_clean( wp_unslash( $_POST['keyword'] ) ) : '';
         $html = '';
         if (!empty($keyword)) {
             $ids = array();
@@ -4034,7 +3948,7 @@ class WCMp_Ajax {
 
     public function wcmp_set_classified_product_terms() {
         $term_id = isset($_POST['term_id']) ? (int) $_POST['term_id'] : 0;
-        $taxonomy = isset($_POST['taxonomy']) ? $_POST['taxonomy'] : '';
+        $taxonomy = isset($_POST['taxonomy']) ? wc_clean($_POST['taxonomy']) : '';
         $user_id = get_current_user_id();
         $url = '';
         if (is_user_wcmp_vendor($user_id)) {
@@ -4388,7 +4302,7 @@ class WCMp_Ajax {
     
     public function wcmp_order_status_changed(){
         $order_id = isset( $_POST['order_id'] ) ? (int) $_POST['order_id'] : 0;
-        $selected_status = isset( $_POST['selected_status'] ) ? $_POST['selected_status'] : '';
+        $selected_status = isset( $_POST['selected_status'] ) ? wc_clean($_POST['selected_status']) : '';
         $order = wc_get_order( $order_id );
         if( $order ) {
             // fetch actual status
