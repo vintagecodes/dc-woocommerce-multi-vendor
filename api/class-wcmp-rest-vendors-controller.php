@@ -457,11 +457,11 @@ class WCMp_REST_API_Vendors_Controller extends WC_REST_Controller {
 			'_vendor_bank_name' => isset($request['payment']['bank_name']) ? wc_clean( wp_unslash( $request['payment']['bank_name'] ) ): '',
 			'_vendor_bank_address' => isset($request['payment']['bank_address']) ? wc_clean( wp_unslash( $request['payment']['bank_address'] ) ) : '',
 			'_vendor_account_holder_name' => isset($request['payment']['account_holder_name']) ? wc_clean( wp_unslash( $request['payment']['account_holder_name'] ) ): '',
-			'_vendor_bank_account_number' => isset($request['payment']['bank_account_number']) ? wc_clean( wp_unslash( $request['payment']['bank_account_number'] : ) )'',
+			'_vendor_bank_account_number' => isset($request['payment']['bank_account_number']) ? wc_clean( wp_unslash( $request['payment']['bank_account_number'] ) ) : '',
 			'_vendor_aba_routing_number' => isset($request['payment']['aba_routing_number']) ? wc_clean( wp_unslash( $request['payment']['aba_routing_number'] ) ) : '',
 			'_vendor_destination_currency' => isset($request['payment']['destination_currency']) ? wc_clean( wp_unslash( $request['payment']['destination_currency'] ) ) : '',
 			'_vendor_iban' => isset($request['payment']['iban']) ? wc_clean( wp_unslash( $request['payment']['iban'] ) ): '',
-			'_vendor_paypal_email' => isset($request['payment']['paypal_email']) ? wc_clean( wp_unslash( $request['payment']['paypal_email'] : '',
+			'_vendor_paypal_email' => isset($request['payment']['paypal_email']) ? wc_clean( wp_unslash( $request['payment']['paypal_email'] ) ) : '',
 			'_vendor_message_to_buyers' => wc_clean( wp_unslash( $request['message_to_buyers'] ) )
 		);
 		foreach($vendor_meta_key_list as $key => $value) {

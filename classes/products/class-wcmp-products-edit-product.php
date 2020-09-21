@@ -89,10 +89,6 @@ class WCMp_Products_Edit_Product {
                                 return false;
                             }
                         }
-//                        if ( ! ( current_vendor_can( 'edit_product' ) && current_vendor_can( 'edit_published_products' ) ) ) {
-//                            $this->error_msg = __( 'Sorry, you are not allowed to edit this item.', 'dc-woocommerce-multi-vendor' );
-//                            return false;
-//                        }
                         return true;
                     }
                     $this->error_msg = __( 'You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?', 'dc-woocommerce-multi-vendor' );

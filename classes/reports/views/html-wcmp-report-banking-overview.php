@@ -24,7 +24,7 @@ $vendor = isset($vendor) ? $vendor : '';
 					}
 				?>
 				<li class="custom <?php echo $current_range == 'custom' ? 'active' : ''; ?>">
-					<?php _e( 'Custom', 'dc-woocommerce-multi-vendor' ); ?>
+					<?php esc_html_e( 'Custom', 'dc-woocommerce-multi-vendor' ); ?>
 					<form method="GET">
 						<div>
 							<?php
@@ -54,7 +54,7 @@ $vendor = isset($vendor) ? $vendor : '';
 					<select id="vendor" name="vendor" class="ajax_chosen_select_vendor banking_overview_vendor" data-placeholder="<?php esc_attr_e( 'Search for a vendor...', 'dc-woocommerce-multi-vendor' ); ?>" style="min-width:210px;">
 						<?php echo $option; ?>
 					</select>
-					<input type="button" style="vertical-align: top;" class="banking_overview_report_search submit button" value="<?php _e( 'Show', 'dc-woocommerce-multi-vendor' ); ?>" />
+					<input type="button" style="vertical-align: top;" class="banking_overview_report_search submit button" value="<?php esc_attr_e( 'Show', 'dc-woocommerce-multi-vendor' ); ?>" />
 				</p>
 			</form>
 		</div>
@@ -100,11 +100,11 @@ $vendor = isset($vendor) ? $vendor : '';
 	                    $status = $ledger->ref_status;
 	                    if($ref_type == 'Commission') {
 	                        $link = admin_url('post.php?post=' . $ledger->order_id . '&action=edit');
-	                        $ref_link = '<a href="'.$link.'">#'.$ledger->order_id.'</a>';
+	                        $ref_link = '<a href="'.esc_url($link).'">#'.$ledger->order_id.'</a>';
 	                    } elseif($ref_type == 'Refund' && $ref_type == 'Withdrawal') {
 	                        $com_id = get_post_meta( $ledger->order_id, '_commission_id', true );
 	                        $link = admin_url('post.php?post=' . $com_id . '&action=edit');
-	                        $ref_link = '<a href="'.$link.'">#'.$com_id.'</a>';
+	                        $ref_link = '<a href="'.esc_url($link).'">#'.$com_id.'</a>';
 	                    }
 	                    $credit = ( $ledger->credit ) ? wc_price($ledger->credit, array('currency' => $currency)) : '';
 	                    $debit = ( $ledger->debit ) ? wc_price($ledger->debit, array('currency' => $currency)) : '';
@@ -122,14 +122,14 @@ $vendor = isset($vendor) ? $vendor : '';
 							<?php
 							foreach($banking_datas as $key => $data) {
 								if( in_array($key, $headers) )
-									echo "<td class='total_row'>".$data."</td>";
+									echo "<td class='total_row'>".esc_html($data)."</td>";
 							}
 							?>
 						</tr>
 						<?php
 	                }
 	            } else {
-	            	echo '<tr><td colspan="3">' . __('No records found.', 'dc-woocommerce-multi-vendor') . '</td></tr>';
+	            	echo '<tr><td colspan="3">' . esc_html_e('No records found.', 'dc-woocommerce-multi-vendor') . '</td></tr>';
 	            }
 	            
 				?>

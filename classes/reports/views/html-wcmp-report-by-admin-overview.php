@@ -20,7 +20,7 @@ global $WCMp;
                     }
                 ?>
                 <li class="custom <?php echo $current_range == 'custom' ? 'active' : ''; ?>">
-                    <?php _e( 'Custom', 'dc-woocommerce-multi-vendor' ); ?>
+                    <?php esc_html_e( 'Custom', 'dc-woocommerce-multi-vendor' ); ?>
                     <form method="GET">
                         <div>
                             <?php
@@ -57,37 +57,37 @@ global $WCMp;
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="wcmp_displaybox2 text-center">
-                                                <h4><a href="#"><?php _e('Net Sales', 'dc-woocommerce-multi-vendor'); ?></a></h4>
+                                                <h4><a href="#"><?php esc_html_e('Net Sales', 'dc-woocommerce-multi-vendor'); ?></a></h4>
                                                 <h3><?php echo wc_price($sales); ?></h3>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="wcmp_displaybox2 text-center">
-                                                <h4><a href ="<?php echo admin_url('edit.php?post_type=dc_commission'); ?>"><?php _e('My Earnings', 'dc-woocommerce-multi-vendor'); ?></a></h4>
+                                                <h4><a href ="<?php echo esc_url(admin_url('edit.php?post_type=dc_commission')); ?>"><?php esc_html_e('My Earnings', 'dc-woocommerce-multi-vendor'); ?></a></h4>
                                                 <h3><?php echo wc_price($admin_earning); ?></h3>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="wcmp_displaybox2 text-center">
-                                                <h4><a href ="<?php echo admin_url('admin.php?page=vendors'); ?>"><?php _e('Signup Vendors', 'dc-woocommerce-multi-vendor'); ?></a></h4>
+                                                <h4><a href ="<?php echo esc_url(admin_url('admin.php?page=vendors')); ?>"><?php esc_html_e('Signup Vendors', 'dc-woocommerce-multi-vendor'); ?></a></h4>
                                                 <h3><?php echo $vendors; ?></h3>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="wcmp_displaybox2 text-center">
-                                                <h4><a href ="<?php echo admin_url('admin.php?page=wcmp-to-do'); ?>"><?php _e('Pending Vendors', 'dc-woocommerce-multi-vendor'); ?></a></h4>
+                                                <h4><a href ="<?php echo esc_url(admin_url('admin.php?page=wcmp-to-do')); ?>"><?php esc_html_e('Pending Vendors', 'dc-woocommerce-multi-vendor'); ?></a></h4>
                                                 <h3><?php echo $pending_vendors; ?></h3>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="wcmp_displaybox2 text-center">
-                                                <h4><a href ="<?php echo admin_url('admin.php?page=wcmp-to-do'); ?>"><?php _e('Awaiting Products', 'dc-woocommerce-multi-vendor'); ?></a></h4>
-                                                <h3><?php echo $products; ?></h3>
+                                                <h4><a href ="<?php echo esc_url(admin_url('admin.php?page=wcmp-to-do')); ?>"><?php esc_html_e('Awaiting Products', 'dc-woocommerce-multi-vendor'); ?></a></h4>
+                                                <h3><?php echo esc_html($products); ?></h3>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="wcmp_displaybox2 text-center">
-                                                <h4><a href ="<?php echo admin_url('admin.php?page=wcmp-to-do'); ?>"><?php _e('Awaiting Withdrawals', 'dc-woocommerce-multi-vendor'); ?></a></h4>
+                                                <h4><a href ="<?php echo esc_url(admin_url('admin.php?page=wcmp-to-do')); ?>"><?php _e('Awaiting Withdrawals', 'dc-woocommerce-multi-vendor'); ?></a></h4>
                                                 <h3><?php echo wc_price($transactions); ?></h3>
                                             </div>
                                         </div>

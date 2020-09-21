@@ -346,8 +346,8 @@ class WCMp_Ajax {
 
     function single_product_multiple_vendors_sorting() {
         global $WCMp;
-        $sorting_value = wc_clean( wp_unslash( $_POST['sorting_value'] ) );
-        $attrid = wc_clean( wp_unslash( $_POST['attrid'] ) );
+        $sorting_value = $_POST['sorting_value'];
+        $attrid = $_POST['attrid'];
         $more_products = $WCMp->product->get_multiple_vendors_array_for_single_product($attrid);
         $more_product_array = $more_products['more_product_array'];
         $results = $more_products['results'];
@@ -427,7 +427,7 @@ class WCMp_Ajax {
     }
 
     function wcmp_copy_to_new_draft() {
-        $post_id = absint( $_POST['postid'] );
+        $post_id = $_POST['postid'];
         $post = get_post($post_id);
         echo wp_nonce_url(admin_url('edit.php?post_type=product&action=duplicate_product&post=' . $post->ID), 'woocommerce-duplicate-product_' . $post->ID);
         die;
@@ -435,7 +435,7 @@ class WCMp_Ajax {
 
     public function wcmp_create_duplicate_product() {
         global $WCMp;
-        $product_id = absint( $_POST['product_id'] );
+        $product_id = $_POST['product_id'];
         $parent_post = get_post($product_id);
         $redirect_url = isset($_POST['redirect_url']) ? $_POST['redirect_url'] : esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product')));
         $product = wc_get_product($product_id);
@@ -499,7 +499,7 @@ class WCMp_Ajax {
         check_ajax_referer('search-products', 'security');
         $user = wp_get_current_user();
         $term = wc_clean(empty($term) ? stripslashes($_REQUEST['protitle']) : $term);
-        $is_admin = wc_clean( wp_unslash( $_REQUEST['is_admin'] ) );
+        $is_admin = $_REQUEST['is_admin'];
 
         if (empty($term)) {
             wp_die();
@@ -510,10 +510,15 @@ class WCMp_Ajax {
 
         $include = array();
         foreach ($ids as $id) {
+//            $_product = wc_get_product($id);
+//            if ($_product && !$_product->get_parent_id()) {
+//                $include[] = $_product->get_id();
+//            }
             $product_map_id = get_post_meta($id, '_wcmp_spmv_map_id', true);
             if ($product_map_id) {
                 $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_products_map WHERE product_map_id=%d", $product_map_id));
                 $product_ids = wp_list_pluck($results, 'product_id');
+                //$first_inserted_map_pro_key = array_search(min(wp_list_pluck($results, 'ID')), wp_list_pluck($results, 'ID'));
                 if($product_ids){
                     $include[] = min($product_ids);
                 }
@@ -554,7 +559,7 @@ class WCMp_Ajax {
 
     public function wcmp_dismiss_dashboard_message() {
         global $wpdb, $WCMp;
-        $post_id = absint($_POST['post_id']);
+        $post_id = $_POST['post_id'];
         $current_user = wp_get_current_user();
         $current_user_id = $current_user->ID;
         $data_msg_deleted = get_user_meta($current_user_id, '_wcmp_vendor_message_deleted', true);
@@ -616,7 +621,7 @@ class WCMp_Ajax {
 
     public function wcmp_msg_refresh_tab_data() {
         global $wpdb, $WCMp;
-        $tab = wc_clean( $_POST['tabname'] );
+        $tab = $_POST['tabname'];
         $WCMp->template->get_template('vendor-dashboard/vendor-announcements/vendor-announcements' . str_replace("_", "-", $tab) . '.php');
         die;
     }
@@ -625,8 +630,8 @@ class WCMp_Ajax {
         global $wpdb, $WCMp;
         $current_user = wp_get_current_user();
         $current_user_id = $current_user->ID;
-        $post_id = wc_clean( wp_unslash( $_POST['msg_id'] ) );
-        $actionmode = wc_clean( wp_unslash( $_POST['actionmode'] ) );
+        $post_id = $_POST['msg_id'];
+        $actionmode = $_POST['actionmode'];
         if ($actionmode == "mark_delete") {
             $data_msg_deleted = get_user_meta($current_user_id, '_wcmp_vendor_message_deleted', true);
             if (!empty($data_msg_deleted)) {
@@ -697,11 +702,11 @@ class WCMp_Ajax {
         global $wpdb, $WCMp;
         $user = wp_get_current_user();
         $vendor = get_wcmp_vendor($user->ID);
-        $today_or_weekly = wc_clean( $_POST['today_or_weekly'] );
-        $current_page =  wc_clean( $_POST['current_page'] );
-        $next_page = wc_clean( $_POST['next_page'] );
-        $total_page = wc_clean( $_POST['total_page'] );
-        $perpagedata = wc_clean( $_POST['perpagedata'] );
+        $today_or_weekly = $_POST['today_or_weekly'];
+        $current_page = $_POST['current_page'];
+        $next_page = $_POST['next_page'];
+        $total_page = $_POST['total_page'];
+        $perpagedata = $_POST['perpagedata'];
         if ($next_page <= $total_page) {
             if ($next_page > 1) {
                 $start = ($next_page - 1) * $perpagedata;
@@ -717,11 +722,11 @@ class WCMp_Ajax {
         global $wpdb, $WCMp;
         $user = wp_get_current_user();
         $vendor = get_wcmp_vendor($user->ID);
-        $today_or_weekly = wc_clean( $_POST['today_or_weekly'] );
-        $current_page =  wc_clean( $_POST['current_page'] );
-        $next_page = wc_clean( $_POST['next_page'] );
-        $total_page = wc_clean( $_POST['total_page'] );
-        $perpagedata = wc_clean( $_POST['perpagedata'] );
+        $today_or_weekly = $_POST['today_or_weekly'];
+        $current_page = $_POST['current_page'];
+        $next_page = $_POST['next_page'];
+        $total_page = $_POST['total_page'];
+        $perpagedata = $_POST['perpagedata'];
         if ($next_page <= $total_page) {
             if ($next_page > 1) {
                 $start = ($next_page - 1) * $perpagedata;
@@ -737,9 +742,9 @@ class WCMp_Ajax {
         global $WCMp, $wpdb;
 
         if (isset($_GET['action']) && isset($_GET['order_id']) && isset($_GET['nonce'])) {
-            $action = wc_clean( wp_unslash( $_GET['action'] ) );
-            $order_id = absint( $_GET['order_id'] );
-            $nonce = wc_clean( wp_unslash( $_REQUEST["nonce"] ) );
+            $action = $_GET['action'];
+            $order_id = $_GET['order_id'];
+            $nonce = $_REQUEST["nonce"];
 
             if (!wp_verify_nonce($nonce, $action))
                 die('Invalid request');
@@ -750,7 +755,9 @@ class WCMp_Ajax {
                 die('Invalid request');
             $order_data = array();
             $commission_id = get_post_meta( $order_id, '_commission_id', true );
+            //$customer_orders = $wpdb->get_results("SELECT DISTINCT commission_id from `{$wpdb->prefix}wcmp_vendor_orders` where vendor_id = " . $vendor->id . " AND order_id = " . $order_id, ARRAY_A);
             if (!empty($commission_id)) {
+                //$commission_id = $customer_orders[0]['commission_id'];
                 $order_data[$commission_id] = $order_id;
                 $WCMp->vendor_dashboard->generate_csv($order_data, $vendor);
             }
@@ -764,7 +771,7 @@ class WCMp_Ajax {
     function unassign_vendor() {
         global $WCMp;
 
-        $product_id = absint($_POST['product_id']);
+        $product_id = $_POST['product_id'];
         $vendor = get_wcmp_product_vendors($product_id);
         $admin_id = get_current_user_id();
         if (current_user_can('administrator')) {
@@ -822,8 +829,8 @@ class WCMp_Ajax {
         global $WCMp;
         
         $chart_arr = $html_chart = '';
-        $dropdown_selected = isset($_POST['sort_choosen']) ? wc_clean( wp_unslash( $_POST['sort_choosen'] ) ) : '';
-        $total_sales_data = isset($_POST['total_sales_data']) ? wc_clean( wp_unslash( $_POST['total_sales_data'] ) ) : array();
+        $dropdown_selected = isset($_POST['sort_choosen']) ? $_POST['sort_choosen'] : '';
+        $total_sales_data = isset($_POST['total_sales_data']) ? $_POST['total_sales_data'] : array();
         $arr_by_total_sales = $arr_by_admin_earning = $arr_by_vendor_earning = array();
 
         if( $total_sales_data ){
@@ -848,6 +855,53 @@ class WCMp_Ajax {
             }
         }
         
+        
+//        $sort_choosen = isset($_POST['sort_choosen']) ? $_POST['sort_choosen'] : '';
+//        $report_array = isset($_POST['report_array']) ? $_POST['report_array'] : array();
+//        $report_bk = isset($_POST['report_bk']) ? $_POST['report_bk'] : array();
+//        $max_total_sales = isset($_POST['max_total_sales']) ? $_POST['max_total_sales'] : 0;
+//        $total_sales_sort = isset($_POST['total_sales_sort']) ? $_POST['total_sales_sort'] : array();
+//        $admin_earning_sort = isset($_POST['admin_earning_sort']) ? $_POST['admin_earning_sort'] : array();
+//        ;
+//
+//        $i = 0;
+//        $max_value = 10;
+//        $report_sort_arr = array();
+//
+//        if ($sort_choosen == 'total_sales_desc') {
+//            arsort($total_sales_sort);
+//            foreach ($total_sales_sort as $product_id => $value) {
+//                if ($i++ < $max_value) {
+//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
+//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
+//                }
+//            }
+//        } else if ($sort_choosen == 'total_sales_asc') {
+//            asort($total_sales_sort);
+//            foreach ($total_sales_sort as $product_id => $value) {
+//                if ($i++ < $max_value) {
+//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
+//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
+//                }
+//            }
+//        } else if ($sort_choosen == 'admin_earning_desc') {
+//            arsort($admin_earning_sort);
+//            foreach ($admin_earning_sort as $product_id => $value) {
+//                if ($i++ < $max_value) {
+//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
+//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
+//                }
+//            }
+//        } else if ($sort_choosen == 'admin_earning_asc') {
+//            asort($admin_earning_sort);
+//            foreach ($admin_earning_sort as $product_id => $value) {
+//                if ($i++ < $max_value) {
+//                    $report_sort_arr[$product_id]['total_sales'] = $report_bk[$product_id]['total_sales'];
+//                    $report_sort_arr[$product_id]['admin_earning'] = $report_bk[$product_id]['admin_earning'];
+//                }
+//            }
+//        }
+
         $report_chart = $report_html = '';
 
         if (sizeof($total_sales_data) > 0) {
@@ -869,20 +923,20 @@ class WCMp_Ajax {
             }
 
             $report_html = '
-                <h4>' . esc_html_e("Sales and Earnings", 'dc-woocommerce-multi-vendor') . '</h4>
+                <h4>' . __("Sales and Earnings", 'dc-woocommerce-multi-vendor') . '</h4>
                 <div class="bar_indecator">
                     <div class="bar1">&nbsp;</div>
-                    <span class="">' . esc_html_e('Gross Sales', 'dc-woocommerce-multi-vendor') . '</span>
+                    <span class="">' . __('Gross Sales', 'dc-woocommerce-multi-vendor') . '</span>
                     <div class="bar2">&nbsp;</div>
-                    <span class="">' . esc_html_e('Admin Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+                    <span class="">' . __('Admin Earnings', 'dc-woocommerce-multi-vendor') . '</span>
                     <div class="bar3">&nbsp;</div>
-                    <span class="">' . esc_html_e('Vendor Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+                    <span class="">' . __('Vendor Earnings', 'dc-woocommerce-multi-vendor') . '</span>
                 </div>
                 <table class="bar_chart">
                     <thead>
                         <tr>
-                            <th>' . esc_html_e("Month", 'dc-woocommerce-multi-vendor') . '</th>
-                            <th colspan="2">' . esc_html_e("Sales Report", 'dc-woocommerce-multi-vendor') . '</th>
+                            <th>' . __("Month", 'dc-woocommerce-multi-vendor') . '</th>
+                            <th colspan="2">' . __("Sales Report", 'dc-woocommerce-multi-vendor') . '</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -891,7 +945,7 @@ class WCMp_Ajax {
                 </table>
             ';
         } else {
-            $report_html = '<tr><td colspan="3">' . esc_html_e('No product was sold in the given period.', 'dc-woocommerce-multi-vendor') . '</td></tr>';
+            $report_html = '<tr><td colspan="3">' . __('No product was sold in the given period.', 'dc-woocommerce-multi-vendor') . '</td></tr>';
         }
 
         echo $report_html;
@@ -914,10 +968,10 @@ class WCMp_Ajax {
     function search_product_data() {
         global $WCMp;
 
-        $product_id = isset($_POST['product_id']) ? absint( $_POST['product_id'] ) : 0;
+        $product_id = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
         $orders = isset($_POST['orders']) ? $_POST['orders'] : array();
-        $start_date = isset($_POST['start_date']) ? wc_clean( wp_unslash( $_POST['start_date'] ) ): '';
-        $end_date = isset($_POST['end_date']) ? wc_clean( wp_unslash( $_POST['end_date'] ) ) : '';
+        $start_date = isset($_POST['start_date']) ? $_POST['start_date'] : '';
+        $end_date = isset($_POST['end_date']) ? $_POST['end_date'] : '';
 
         $report_chart = $report_html = '';
 
@@ -925,6 +979,8 @@ class WCMp_Ajax {
 
             $total_sales = $admin_earnings = array();
             $max_total_sales = 0;
+
+            //$product_orders = get_wcmp_vendor_orders(array('product_id' => $product_id));
 
             if (!empty($orders)) {
 
@@ -954,6 +1010,22 @@ class WCMp_Ajax {
                                 $total_sales[$date]['admin_earning'] = $total_sales[$date]['total_sales'] - $total_sales[$date]['vendor_earning'];
                             
                             }
+                            
+                            
+
+//                            $item = new WC_Order_Item_Product($order_obj->order_item_id);
+//                            $gross_sales += $item->get_subtotal();
+//                            $total_sales[$date] = isset($total_sales[$date]) ? ( $total_sales[$date] + $item->get_subtotal() ) : $item->get_subtotal();
+//                            $vendors_orders_amount = get_wcmp_vendor_order_amount(array('order_id' => $order->get_id(), 'product_id' => $order_obj->product_id));
+//
+//                            $vendor_earning = $vendors_orders_amount['commission_amount'];
+//                            if ($vendor = get_wcmp_vendor(get_current_vendor_id()))
+//                                $admin_earnings[$date] = isset($admin_earnings[$date]) ? ( $admin_earnings[$date] + $vendor_earning ) : $vendor_earning;
+//                            else
+//                                $admin_earnings[$date] = isset($admin_earnings[$date]) ? ( $admin_earnings[$date] + $item->get_subtotal() - $vendor_earning ) : $item->get_subtotal() - $vendor_earning;
+//
+//                            if ($total_sales[$date] > $max_total_sales)
+//                                $max_total_sales = $total_sales[$date];
                         }
                     }
 
@@ -977,27 +1049,27 @@ class WCMp_Ajax {
                 }
 
                 $report_html = '
-					<h4>' . __("Sales and Earnings", 'dc-woocommerce-multi-vendor') . '</h4>
-					<div class="bar_indecator">
-						<div class="bar1">&nbsp;</div>
-						<span class="">' . __('Gross Sales', 'dc-woocommerce-multi-vendor') . '</span>
-						<div class="bar2">&nbsp;</div>
-						<span class="">' . __('Admin Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+                    <h4>' . __("Sales and Earnings", 'dc-woocommerce-multi-vendor') . '</h4>
+                    <div class="bar_indecator">
+                        <div class="bar1">&nbsp;</div>
+                        <span class="">' . __('Gross Sales', 'dc-woocommerce-multi-vendor') . '</span>
+                        <div class="bar2">&nbsp;</div>
+                        <span class="">' . __('Admin Earnings', 'dc-woocommerce-multi-vendor') . '</span>
                                                 <div class="bar3">&nbsp;</div>
-						<span class="">' . __('Vendor Earnings', 'dc-woocommerce-multi-vendor') . '</span>
-					</div>
-					<table class="bar_chart">
-						<thead>
-							<tr>
-								<th>' . __("Month", 'dc-woocommerce-multi-vendor') . '</th>
-								<th colspan="2">' . __("Sales Report", 'dc-woocommerce-multi-vendor') . '</th>
-							</tr>
-						</thead>
-						<tbody>
-							' . $report_chart . '
-						</tbody>
-					</table>
-				';
+                        <span class="">' . __('Vendor Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+                    </div>
+                    <table class="bar_chart">
+                        <thead>
+                            <tr>
+                                <th>' . __("Month", 'dc-woocommerce-multi-vendor') . '</th>
+                                <th colspan="2">' . __("Sales Report", 'dc-woocommerce-multi-vendor') . '</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ' . $report_chart . '
+                        </tbody>
+                    </table>
+                ';
             } else {
                 $report_html = '<tr><td colspan="3">' . __('This product was not sold in the given period.', 'dc-woocommerce-multi-vendor') . '</td></tr>';
             }
@@ -1018,11 +1090,11 @@ class WCMp_Ajax {
 
         $chosen_product_ids = $vendor_id = $vendor = false;
         $gross_sales = $my_earning = $vendor_earning = 0;
-        $vendor_term_id = absint($_POST['vendor_id']);
+        $vendor_term_id = $_POST['vendor_id'];
         $vendor = get_wcmp_vendor_by_term($vendor_term_id);
         $vendor_id = $vendor->id;
-        $start_date = wc_clean( wp_unslash($_POST['start_date'] ) );
-        $end_date = wc_clean( wp_unslash( $_POST['end_date'] ) );
+        $start_date = $_POST['start_date'];
+        $end_date = $_POST['end_date'];
 
         if ($vendor_id) {
             if ($vendor)
@@ -1176,8 +1248,8 @@ class WCMp_Ajax {
         $vendor_term_id = isset( $_POST['vendor_id'] ) ? absint( $_POST['vendor_id'] ) : 0;
         $vendor = get_wcmp_vendor_by_term($vendor_term_id);
         $vendor_id = ( $vendor ) ? $vendor->id : 0;
-        $start_date = isset( $_POST['start_date'] ) ? wc_clean( wp_unslash( $_POST['start_date'] ) ) : '';
-        $end_date = isset( $_POST['end_date'] ) ? wc_clean( wp_unslash( $_POST['end_date'] ) ) : '';
+        $start_date = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
+        $end_date = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
 
         if ( $vendor ) {
             $requestData = array('from_date'=> date("Y-m-d", $start_date) , 'to_date' => date("Y-m-d", $end_date) );
@@ -1195,7 +1267,7 @@ class WCMp_Ajax {
     function vendor_report_sort() {
         global $WCMp;
         $chart_arr = $html_chart = '';
-        $dropdown_selected = isset($_POST['sort_choosen']) ? wc_clean( wp_unslash($_POST['sort_choosen']) ) : '';
+        $dropdown_selected = isset($_POST['sort_choosen']) ? $_POST['sort_choosen'] : '';
         $total_sales_data = isset($_POST['total_sales_data']) ? $_POST['total_sales_data'] : array();
         $arr_by_total_sales = $arr_by_admin_earning = $arr_by_vendor_earning = array();
         
@@ -1227,16 +1299,16 @@ class WCMp_Ajax {
                 $admin_earning_width = ( $report['admin_earning'] > 0 ) ? ( $report['admin_earning'] / round($report['total_sales']) ) * 100 : 0;
                 $vendor_earning_width = ( $report['vendor_earning'] > 0 ) ? ( $report['vendor_earning'] / round($report['total_sales']) ) * 100 : 0;
                 $chart_arr .= '<tr><th><a href="user-edit.php?user_id=' . $vendor_id . '">' . $vendor->page_title . '</a></th>
-					<td class="sales_prices" width="1%">
+                    <td class="sales_prices" width="1%">
                                             <span>' . wc_price($report['total_sales']) . '</span>'
                                             . '<span class="alt">' . wc_price($report['admin_earning']) . '</span>'
                                             . '<span class="alt">' . wc_price($report['vendor_earning']) . '</span>
                                         </td>
-					<td class="bars">
-						<span class="gross_bar" style="width:' . esc_attr($total_sales_width) . '%">&nbsp;</span>
-						<span class="admin_bar alt" style="width:' . esc_attr($admin_earning_width) . '%">&nbsp;</span>
+                    <td class="bars">
+                        <span class="gross_bar" style="width:' . esc_attr($total_sales_width) . '%">&nbsp;</span>
+                        <span class="admin_bar alt" style="width:' . esc_attr($admin_earning_width) . '%">&nbsp;</span>
                                                 <span class="vendor_bar alt" style="width:' . esc_attr($vendor_earning_width) . '%">&nbsp;</span>
-					</td></tr>';
+                    </td></tr>';
                 }
             }
 
@@ -1274,9 +1346,10 @@ class WCMp_Ajax {
      */
     function transaction_done_button() {
         global $WCMp;
-        $transaction_id = wc_clean($_POST['trans_id']);
-        $vendor_id = absint($_POST['vendor_id']);
+        $transaction_id = $_POST['trans_id'];
+        $vendor_id = $_POST['vendor_id'];
         $vendor = get_wcmp_vendor_by_term( $vendor_id );
+        //if()
         update_post_meta($transaction_id, 'paid_date', date("Y-m-d H:i:s"));
         $commission_detail = get_post_meta($transaction_id, 'commission_detail', true);
         if ($commission_detail && is_array($commission_detail)) {
@@ -1323,21 +1396,21 @@ class WCMp_Ajax {
     function dismiss_vendor_to_do_list() {
         global $WCMp;
 
-        $id = absint($_POST['id']);
-        $type = wc_clean( wp_unslash($_POST['type']) );
+        $id = $_POST['id'];
+        $type = $_POST['type'];
         $post = get_post($id);
         if ($type == 'user') {
             update_user_meta($id, '_dismiss_to_do_list', 'true');
         } else if ($type == 'shop_coupon') {
             update_post_meta($id, '_dismiss_to_do_list', 'true');
         } else if ($type == 'product') {
-            $reason = wc_clean( wp_unslash( $_POST['reason'] ) );
+            $reason = esc_textarea($_POST['reason']);
             $vendor = get_wcmp_vendor($post->post_author);
             $email_vendor = WC()->mailer()->emails['WC_Email_Vendor_Product_Rejected'];
             $email_vendor->trigger($id, $post, $vendor, $reason);
             update_post_meta($id, '_dismiss_to_do_list', 'true');
             $comment_id = WCMp_Product::add_product_note($id, $reason, get_current_user_id());
-            update_post_meta($id, '_comment_dismiss', wc_clean($comment_id));
+            update_post_meta($id, '_comment_dismiss', $comment_id);
             add_comment_meta($comment_id, '_author_id', get_current_user_id());
         } else if ($type == 'dc_commission') {
             update_post_meta($id, '_dismiss_to_do_list', 'true');
@@ -1514,12 +1587,33 @@ class WCMp_Ajax {
         $name = sanitize_text_field($_POST['name']);
         $from_email = sanitize_email($_POST['email']);
         $user_message = sanitize_text_field($_POST['msg']);
-        $product_id = absint($_POST['product_id']);
+        $product_id = sanitize_text_field($_POST['product_id']);
 
         $check = !empty($name) && !empty($from_email) && !empty($user_message);
 
         if ($check) {
+            //$product = get_post(absint($product_id));
             $vendor = get_wcmp_product_vendors($product_id);
+//            $vendor_term = get_term($vendor->term_id);
+//            $subject = __('Report an abuse for product', 'dc-woocommerce-multi-vendor') . get_the_title($product_id);
+//
+//            $to = sanitize_email(get_option('admin_email'));
+//            $from_email = sanitize_email($from_email);
+//            $headers = "From: {$name} <{$from_email}>" . "\r\n";
+//
+//            $message = sprintf(__("User %s (%s) is reporting an abuse on the following product: \n", 'dc-woocommerce-multi-vendor'), $name, $from_email);
+//            $message .= sprintf(__("Product details: %s (ID: #%s) \n", 'dc-woocommerce-multi-vendor'), $product->post_title, $product->ID);
+//
+//            $message .= sprintf(__("Vendor shop: %s \n", 'dc-woocommerce-multi-vendor'), $vendor_term->name);
+//
+//            $message .= sprintf(__("Message: %s\n", 'dc-woocommerce-multi-vendor'), $user_message);
+//            $message .= "\n\n\n";
+//
+//            $message .= sprintf(__("Product page:: %s\n", 'dc-woocommerce-multi-vendor'), get_the_permalink($product->ID));
+//
+//            /* === Send Mail === */
+//            $response = wp_mail($to, $subject, $message, $headers);
+            
             $mail = WC()->mailer()->emails['WC_Email_Send_Report_Abuse'];
             $result = $mail->trigger( $vendor, $_POST );
         }
@@ -1544,12 +1638,12 @@ class WCMp_Ajax {
         $html = '';
         if (isset($_POST['s']) && sanitize_text_field($_POST['s'])) {
             $args1 = array(
-                'search' => '*' . wc_clean($_POST['s']) . '*',
+                'search' => '*' . esc_attr($_POST['s']) . '*',
                 'search_columns' => array('display_name', 'user_login', 'user_nicename'),
             );
             $args2 = array(
                 'meta_key' => '_vendor_page_title',
-                'meta_value' => wc_clean($_POST['s']),
+                'meta_value' => esc_attr($_POST['s']),
                 'meta_compare' => 'LIKE',
             );
             $vendors1 = get_wcmp_vendors($args1);
@@ -1565,8 +1659,8 @@ class WCMp_Ajax {
                     <img width="50" height="50" class="vendor_img" style="display: inline;" src="' . $vendor->image . '" id="vendor_image_display">
                     </div>
                     <div style=" width: 75%;  display: inline;  padding: 10px;">
-                            <a href="' . esc_url($vendor->permalink) . '">
-                                ' . esc_html_e($vendor_term->name) . '
+                            <a href="' . esc_attr($vendor->permalink) . '">
+                                ' . $vendor_term->name . '
                             </a>
                     </div>
                 </div>';
@@ -1574,7 +1668,7 @@ class WCMp_Ajax {
             } else {
                 $html .= '<div style=" width: 100%; margin-bottom: 5px; clear: both; display: block;">
                     <div style="display: inline;  padding: 10px;">
-                        ' . esc_html_e('No Vendor Matched!', 'dc-woocommerce-multi-vendor') . '
+                        ' . __('No Vendor Matched!', 'dc-woocommerce-multi-vendor') . '
                     </div>
                 </div>';
             }
@@ -1672,7 +1766,7 @@ class WCMp_Ajax {
 
     public function delete_fpm_product() {
 
-        $proid = absint($_POST['proid']);
+        $proid = $_POST['proid'];
 
         if ($proid) {
             if (wp_delete_post($proid)) {
@@ -2093,8 +2187,8 @@ class WCMp_Ajax {
                 'suppress_filters' => true
             ), $vendor, $requestData );
             $vendor_total_coupons = get_posts($args);
-            $args['offset'] = wc_clean($requestData['start']);
-            $args['posts_per_page'] = wc_clean($requestData['length']);
+            $args['offset'] = $requestData['start'];
+            $args['posts_per_page'] = $requestData['length'];
             $vendor_coupons = get_posts($args);
             $data = array();
             if ($vendor_coupons) {
@@ -2218,7 +2312,7 @@ class WCMp_Ajax {
      */
     public function wcmp_customer_ask_qna_handler() {
         global $WCMp, $wpdb;
-        $handler = isset($_POST['handler']) ? wc_clean( wp_unslash( $_POST['handler'] ) ): '';
+        $handler = isset($_POST['handler']) ? $_POST['handler'] : '';
         $msg = '';
         $no_data = '';
         $qna_data = '';
@@ -2381,7 +2475,7 @@ class WCMp_Ajax {
             }
         } elseif ($handler == 'vote_answer') {
             $ans_ID = isset($_POST['ans_ID']) ? (int) $_POST['ans_ID'] : '';
-            $vote_type = isset($_POST['vote']) ? wc_clean( wp_unslash( $_POST['vote'] ) ) : '';
+            $vote_type = isset($_POST['vote']) ? $_POST['vote'] : '';
             $ans_row = $WCMp->product_qna->get_Answer($ans_ID);
             $ques_row = $WCMp->product_qna->get_Question($ans_row->ques_ID);
             $vote = maybe_unserialize($ans_row->ans_vote);
@@ -2408,8 +2502,8 @@ class WCMp_Ajax {
             }
         } elseif ($handler == 'update_answer') {
             $result = false;
-            $ans_ID = isset($_POST['key']) ? wc_clean( $_POST['key'] ) : '';
-            $answer = isset($_POST['answer']) ? wc_clean( wp_unslash( $_POST['answer'] ) ) : '';
+            $ans_ID = isset($_POST['key']) ? (int) $_POST['key'] : '';
+            $answer = isset($_POST['answer']) ? $_POST['answer'] : '';
             if ($ans_ID) {
                 $result = $WCMp->product_qna->updateAnswer($ans_ID, array('ans_details' => sanitize_textarea_field($answer)));
             }
@@ -2482,7 +2576,7 @@ class WCMp_Ajax {
                                         <h4 class="modal-title">' . __('Reply to ', 'dc-woocommerce-multi-vendor') . $comment_by . '</h4>
                                     </div>
                                     <div class="wcmp-widget-modal modal-body">
-                                            <textarea class="form-control" rows="5" id="comment-content-' . $comment->comment_ID . '" placeholder="' . esc_attr_e('Enter reply...', 'dc-woocommerce-multi-vendor') . '"></textarea>
+                                            <textarea class="form-control" rows="5" id="comment-content-' . $comment->comment_ID . '" placeholder="' . __('Enter reply...', 'dc-woocommerce-multi-vendor') . '"></textarea>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" data-comment_id="' . $comment->comment_ID . '" data-vendor_id="' . get_current_vendor_id() . '" class="btn btn-default wcmp-comment-reply">' . __('Comment', 'dc-woocommerce-multi-vendor') . '</button>
@@ -2550,7 +2644,7 @@ class WCMp_Ajax {
                                             </div>
                                             <div class="wcmp-widget-modal modal-body">
                                                     <label class="qna-question">' . stripslashes($data->ques_details) . '</label>
-                                                    <textarea class="form-control" rows="5" id="qna-reply-' . $data->ques_ID . '" placeholder="' . esc_attr_e('Post your answer...', 'dc-woocommerce-multi-vendor') . '"></textarea>
+                                                    <textarea class="form-control" rows="5" id="qna-reply-' . $data->ques_ID . '" placeholder="' . __('Post your answer...', 'dc-woocommerce-multi-vendor') . '"></textarea>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" data-key="' . $data->ques_ID . '" class="btn btn-default wcmp-add-qna-reply">' . __('Add', 'dc-woocommerce-multi-vendor') . '</button>
@@ -2633,7 +2727,7 @@ class WCMp_Ajax {
                     if (!isset($have_answer[0])) {
                         $status = '<span class="unanswered label label-default">' . __('Unanswered', 'dc-woocommerce-multi-vendor') . '</span>';
                         $details .= '<div class="wcmp-question-details-modal modal-body">
-                                        <textarea class="form-control" rows="5" id="qna-reply-' . $question->ques_ID . '" placeholder="' . esc_attr_e('Post your answer...', 'dc-woocommerce-multi-vendor') . '"></textarea>
+                                        <textarea class="form-control" rows="5" id="qna-reply-' . $question->ques_ID . '" placeholder="' . __('Post your answer...', 'dc-woocommerce-multi-vendor') . '"></textarea>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" data-key="' . $question->ques_ID . '" class="btn btn-default wcmp-add-qna-reply">' . __('Add', 'dc-woocommerce-multi-vendor') . '</button>
@@ -2712,9 +2806,9 @@ class WCMp_Ajax {
         if(!empty($_POST['question_id'])){
             $question_id = (int)$_POST['question_id'];
             if(!empty($_POST['question_type']) && !empty($_POST['data_action'])){
-                $q_type = wc_clean( wp_unslash($_POST['question_type']) );
-                $action = wc_clean( wp_unslash($_POST['data_action']) );
-                $vendor = get_wcmp_product_vendors(absint($_POST['product']));
+                $q_type = $_POST['question_type'];
+                $action = $_POST['data_action'];
+                $vendor = get_wcmp_product_vendors($_POST['product']);
                 if($action == 'rejected'){
                     $WCMp->product_qna->deleteQuestion( $question_id );
                     delete_transient('wcmp_customer_qna_for_vendor_' . $vendor->id);
@@ -2737,8 +2831,8 @@ class WCMp_Ajax {
         }
 
         if (isset($_GET['vendor_id']) && isset($_GET['vendor_id']) && isset($_GET['nonce'])) {
-            $vendor_id = absint($_GET['vendor_id']);
-            $nonce = wc_clean( wp_unslash($_REQUEST["nonce"]);
+            $vendor_id = $_GET['vendor_id'];
+            $nonce = $_REQUEST["nonce"];
 
             if (!wp_verify_nonce($nonce, 'wcmp-vendors'))
                 wp_die(__('Invalid request', 'dc-woocommerce-multi-vendor'));
@@ -3039,7 +3133,7 @@ class WCMp_Ajax {
                     array(
                         'key'       => '_commission_id',
                         'value'   => 0,
-			'compare' => '!=',
+            'compare' => '!=',
                     )
                 )
             );
@@ -3100,7 +3194,7 @@ class WCMp_Ajax {
             if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
                 $WCMp->load_vendor_shipping();
             }
-            $zones = WCMP_Shipping_Zone::get_zone(absint($_POST['zoneID']));
+            $zones = WCMP_Shipping_Zone::get_zone($_POST['zoneID']);
         }
 
         $show_post_code_list = $show_state_list = $show_post_code_list = false;
@@ -3185,11 +3279,11 @@ class WCMp_Ajax {
         <div class="wrap">
         <div id="icon-woocommerce" class="icon32 icon32-woocommerce-reports"><br/></div>
         <h2><?php _e('Shipping', 'dc-woocommerce-multi-vendor'); ?></h2> <?php
-        $vendor_id = absint($_POST['vendor_id']);
+        $vendor_id = $_POST['vendor_id'];
         if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
             $WCMp->load_vendor_shipping();
         }
-        $zones = WCMP_Shipping_Zone::get_zone(absint($_POST['zoneID']));
+        $zones = WCMP_Shipping_Zone::get_zone($_POST['zoneID']);
         if ($zones)
         $zone = WC_Shipping_Zones::get_zone(absint($_POST['zoneID']));
 
@@ -3303,7 +3397,7 @@ class WCMp_Ajax {
                             </label>
                         </th>
                         <td class="forminp">
-                            <input id="select_zone_postcodes" class="form-control" type="text" name="<?php echo 'wcmp_shipping_zone[' . $zone_id . '][_select_zone_postcodes]'; ?>" value="<?php echo $postcodes; ?>" placeholder="<?php esc_attr_e('Postcodes need to be comma separated', 'dc-woocommerce-multi-vendor'); ?>">
+                            <input id="select_zone_postcodes" class="form-control" type="text" name="<?php echo 'wcmp_shipping_zone[' . $zone_id . '][_select_zone_postcodes]'; ?>" value="<?php echo $postcodes; ?>" placeholder="<?php _e('Postcodes need to be comma separated', 'dc-woocommerce-multi-vendor'); ?>">
                         </td>
                     </tr>
                 <?php } ?>
@@ -3459,8 +3553,8 @@ class WCMp_Ajax {
     public function wcmp_add_shipping_method() {
         global $WCMp;
         $data = array(
-            'zone_id' => absint($_POST['zoneID']),
-            'method_id' => wc_clean( wp_unslash($_POST['method']) )
+            'zone_id' => $_POST['zoneID'],
+            'method_id' => $_POST['method']
         );
         if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
             $WCMp->load_vendor_shipping();
@@ -3476,8 +3570,8 @@ class WCMp_Ajax {
 
     public function wcmp_update_shipping_method() {
         global $WCMp;
-        $args = wc_clean( wp_unslash($_POST['args']);
-        $posted_data = isset($_POST['posted_data']) ? wc_clean( wp_unslash($_POST['posted_data'])) : array();
+        $args = $_POST['args'];
+        $posted_data = isset($_POST['posted_data']) ? $_POST['posted_data'] : array();
         $form_fields = array();
         if(isset($args['settings'])){
             foreach ($args['settings'] as $field) {
@@ -3515,8 +3609,8 @@ class WCMp_Ajax {
     public function wcmp_delete_shipping_method() {
         global $WCMp;
         $data = array(
-            'zone_id' => absint($_POST['zoneID']),
-            'instance_id' => absint($_POST['instance_id'])
+            'zone_id' => $_POST['zoneID'],
+            'instance_id' => $_POST['instance_id']
         );
         
         if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
@@ -3535,8 +3629,8 @@ class WCMp_Ajax {
     public function wcmp_toggle_shipping_method() {
         global $WCMp;
         $data = array(
-            'instance_id' => absint( $_POST['instance_id'] ),
-            'zone_id' => absint( $_POST['zoneID'] ),
+            'instance_id' => $_POST['instance_id'],
+            'zone_id' => $_POST['zoneID'],
             'checked' => ( $_POST['checked'] == 'true' ) ? 1 : 0
         );
         if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
@@ -3553,8 +3647,8 @@ class WCMp_Ajax {
     public function wcmp_configure_shipping_method(){
         global $WCMp;
         $zone_id = isset($_POST['zoneId']) ? absint($_POST['zoneId']) : 0;
-        $method_id = isset($_POST['methodId']) ? wc_clean( wp_unslash( $_POST['methodId'] ) ) : '';
-        $instance_id = isset($_POST['instanceId']) ? absint( $_POST['instanceId'] ) : '';
+        $method_id = isset($_POST['methodId']) ? $_POST['methodId'] : '';
+        $instance_id = isset($_POST['instanceId']) ? $_POST['instanceId'] : '';
         if ($zone_id) {
             if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
                 $WCMp->load_vendor_shipping();
@@ -3576,20 +3670,20 @@ class WCMp_Ajax {
                     $settings_html = '<!-- Free shipping -->'
                             . '<div class="shipping_form" id="' . $vendor_shipping_method['id'] . '">'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
-                            . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placeholder="'.esc_attr_e( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
+                            . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placeholder="'.__( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Minimum order amount for free shipping', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Minimum order amount for free shipping', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
-                            . '<input id="minimum_order_amount_fs" class="form-control" type="text" name="min_amount" value="'.$vendor_shipping_method['settings']['min_amount'].'" placeholder="'.esc_attr_e( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
+                            . '<input id="minimum_order_amount_fs" class="form-control" type="text" name="min_amount" value="'.$vendor_shipping_method['settings']['min_amount'].'" placeholder="'.__( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
                             . '<input type="hidden" id="method_description_fs" name="description" value="'.$vendor_shipping_method['settings']['description'].'" />'
                             . '<input type="hidden" id="method_cost_fs" name="cost" value="0" />'
                             . '<input type="hidden" id="method_tax_status_fs" name="tax_status" value="none" />'
                             . '<!--div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Description', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Description', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<textarea id="method_description_fs" class="form-control" name="method_description">' . $vendor_shipping_method['settings']['description'] . '</textarea>'
                             . '</div></div--></div>';
@@ -3597,18 +3691,18 @@ class WCMp_Ajax {
                     $settings_html = '<!-- Local Pickup -->'
                             . '<div class="shipping_form " id="' . $vendor_shipping_method['id'] . '">'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
-                            . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placeholder="'.esc_attr_e( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
+                            . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placeholder="'.__( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Cost', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Cost', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
-                            . '<input id="method_cost_lp" class="form-control" type="text" name="cost" value="'.$vendor_shipping_method['settings']['cost'].'" placeholder="'.esc_attr_e( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
+                            . '<input id="method_cost_lp" class="form-control" type="text" name="cost" value="'.$vendor_shipping_method['settings']['cost'].'" placeholder="'.__( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>';
                             if( apply_filters( 'wcmp_show_shipping_zone_tax', true ) ) {
                             $settings_html .= '<div class="form-group">'
-                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.esc_html_e( 'Tax Status', 'dc-woocommerce-multi-vendor' ).'</label>'
+                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Tax Status', 'dc-woocommerce-multi-vendor' ).'</label>'
                                     . '<div class="col-md-9 col-sm-9">'
                                     . '<select id="method_tax_status_lp" class="form-control" name="tax_status">';
                                 foreach( $is_method_taxable_array as $key => $value ) { 
@@ -3618,7 +3712,7 @@ class WCMp_Ajax {
                             }
                     $settings_html .= '<input type="hidden" id="method_description_lp" name="description" value="'.$vendor_shipping_method['settings']['description'].'" />'
                             . '<!--div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Description', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Description', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
                             . '<textarea id="method_description_lp" class="form-control" name="method_description">' . $vendor_shipping_method['settings']['description'] . '</textarea>'
                             . '</div></div--></div>';
@@ -3626,18 +3720,18 @@ class WCMp_Ajax {
                     $settings_html = '<!-- Flat rate -->'
                             . '<div class="shipping_form" id="' . $vendor_shipping_method['id'] . '">'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Method Title', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
-                            . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placeholder="'.esc_attr_e( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
+                            . '<input id="method_title_fs" class="form-control" type="text" name="title" value="'.$vendor_shipping_method['title'].'" placeholder="'.__( 'Enter method title', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>'
                             . '<div class="form-group">'
-                            . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Cost', 'dc-woocommerce-multi-vendor') . '</label>'
+                            . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Cost', 'dc-woocommerce-multi-vendor') . '</label>'
                             . '<div class="col-md-9 col-sm-9">'
-                            . '<input id="method_cost_fr" class="form-control" type="text" name="cost" value="'.$vendor_shipping_method['settings']['cost'].'" placeholder="'.esc_attr_e( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
+                            . '<input id="method_cost_fr" class="form-control" type="text" name="cost" value="'.$vendor_shipping_method['settings']['cost'].'" placeholder="'.__( '0.00', 'dc-woocommerce-multi-vendor' ).'">'
                             . '</div></div>';
                             if( apply_filters( 'wcmp_show_shipping_zone_tax', true ) ) { 
                             $settings_html .= '<div class="form-group">'
-                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.esc_html_e( 'Tax Status', 'dc-woocommerce-multi-vendor' ).'</label>'
+                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Tax Status', 'dc-woocommerce-multi-vendor' ).'</label>'
                                     . '<div class="col-md-9 col-sm-9">'
                                     . '<select id="method_tax_status_fr" class="form-control" name="tax_status">';
                                 foreach( $is_method_taxable_array as $key => $value ) { 
@@ -3647,31 +3741,31 @@ class WCMp_Ajax {
                             }
                             $settings_html .= '<input type="hidden" id="method_description_fr" name="description" value="'.$vendor_shipping_method['settings']['description'].'" />'
                                     . '<!--div class="form-group">'
-                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.esc_html_e( 'Description', 'dc-woocommerce-multi-vendor' ).'</label>'
+                                    . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Description', 'dc-woocommerce-multi-vendor' ).'</label>'
                                     . '<div class="col-md-9 col-sm-9">'
                                     . '<textarea id="method_description_fr" class="form-control" name="method_description">'.$vendor_shipping_method['settings']['description'].'</textarea>'
                                     . '</div></div-->';
                             if (!apply_filters( 'wcmp_hide_vendor_shipping_classes', false )) { 
                             $settings_html .= '<div class="wcmp_shipping_classes"><hr>'
-                                    . '<h2>'.esc_html_e('Shipping Class Cost', 'dc-woocommerce-multi-vendor').'</h2>'
-                                    . '<div class="description mb-15">'.esc_html_e('These costs can be optionally entered based on the shipping class set per product (This cost will be added with the shipping cost above).', 'dc-woocommerce-multi-vendor').'</div>';
+                                    . '<h2>'.__('Shipping Class Cost', 'dc-woocommerce-multi-vendor').'</h2>'
+                                    . '<div class="description mb-15">'.__('These costs can be optionally entered based on the shipping class set per product (This cost will be added with the shipping cost above).', 'dc-woocommerce-multi-vendor').'</div>';
       
                             $shipping_classes = get_vendor_shipping_classes();
 
                             if(empty($shipping_classes)) {
-                            $settings_html .= '<div class="no_shipping_classes">' . esc_html_e("No Shipping Classes set by Admin", 'dc-woocommerce-multi-vendor') . '</div>';
+                            $settings_html .= '<div class="no_shipping_classes">' . __("No Shipping Classes set by Admin", 'dc-woocommerce-multi-vendor') . '</div>';
                             } else {
                                 foreach ($shipping_classes as $shipping_class ) {
                                     $settings_html .= '<div class="form-group">'
-                                            . '<label for="" class="control-label col-sm-3 col-md-3">'.esc_html_e( 'Cost of Shipping Class:', 'dc-woocommerce-multi-vendor' ) .' '. $shipping_class->name .'</label>'
+                                            . '<label for="" class="control-label col-sm-3 col-md-3">'.__( 'Cost of Shipping Class:', 'dc-woocommerce-multi-vendor' ) .' '. $shipping_class->name .'</label>'
                                             . '<div class="col-md-9 col-sm-9">'
                                             . '<input type="hidden" name="shipping_class_id" value="'.$shipping_class->term_id.'" />'
-                                            . '<input id="'.$shipping_class->slug.'" class="form-control sc_vals" type="text" name="class_cost_'.$shipping_class->term_id.'" value="'.$vendor_shipping_method['settings']['class_cost_'.$shipping_class->term_id].'" placeholder="'.esc_attr_e( 'N/A', 'dc-woocommerce-multi-vendor' ).'" data-shipping_class_id="'. $shipping_class->term_id.'">'
-                                            . '<div class="description">'.esc_html_e( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>.', 'dc-woocommerce-multi-vendor' ) . '<br/><br/>' . esc_html_e( 'Use <code>[qty]</code> for the number of items, <br/><code>[cost]</code> for the total cost of items, and <code>[fee percent="10" min_fee="20" max_fee=""]</code> for percentage based fees.', 'dc-woocommerce-multi-vendor' ).'</div>'
+                                            . '<input id="'.$shipping_class->slug.'" class="form-control sc_vals" type="text" name="class_cost_'.$shipping_class->term_id.'" value="'.$vendor_shipping_method['settings']['class_cost_'.$shipping_class->term_id].'" placeholder="'.__( 'N/A', 'dc-woocommerce-multi-vendor' ).'" data-shipping_class_id="'. $shipping_class->term_id.'">'
+                                            . '<div class="description">'.__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>.', 'dc-woocommerce-multi-vendor' ) . '<br/><br/>' . __( 'Use <code>[qty]</code> for the number of items, <br/><code>[cost]</code> for the total cost of items, and <code>[fee percent="10" min_fee="20" max_fee=""]</code> for percentage based fees.', 'dc-woocommerce-multi-vendor' ).'</div>'
                                             . '</div></div>';
                                 }
                             $settings_html .= '<div class="form-group">'
-                                    . '<label for="" class="control-label col-sm-3 col-md-3">' . esc_html_e('Calculation type', 'dc-woocommerce-multi-vendor') . '</label>'
+                                    . '<label for="" class="control-label col-sm-3 col-md-3">' . __('Calculation type', 'dc-woocommerce-multi-vendor') . '</label>'
                                     . '<div class="col-md-9 col-sm-9">'
                                     . '<select id="calculation_type" class="form-control" name="calculation_type">';
                             foreach ($calculation_type as $key => $value) {
@@ -3694,40 +3788,40 @@ class WCMp_Ajax {
     public function wcmp_vendor_configure_shipping_method(){
         global $WCMp;
         $zone_id = isset($_POST['zoneId']) ? absint($_POST['zoneId']) : 0;
-        $method_id = isset($_POST['methodId']) ? wc_clean( wp_unslash( $_POST['methodId'] ) ) : '';
-        $instance_id = isset($_POST['instanceId']) ? absint( $_POST['instanceId'] ) : '';
-        if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
-            $WCMp->load_vendor_shipping();
-        }
-        $zones = WCMP_Shipping_Zone::get_zone($zone_id);
-        $vendor_shipping_methods = $zones['shipping_methods'];
-        $config_settings = array();
-        $is_method_taxable_array = array(
-            'none' => __('None', 'dc-woocommerce-multi-vendor'),
-            'taxable' => __('Taxable', 'dc-woocommerce-multi-vendor')
-        );
+        $method_id = isset($_POST['methodId']) ? $_POST['methodId'] : '';
+        $instance_id = isset($_POST['instanceId']) ? $_POST['instanceId'] : '';
+            if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
+                $WCMp->load_vendor_shipping();
+            }
+            $zones = WCMP_Shipping_Zone::get_zone($zone_id);
+            $vendor_shipping_methods = $zones['shipping_methods'];
+            $config_settings = array();
+            $is_method_taxable_array = array(
+                'none' => __('None', 'dc-woocommerce-multi-vendor'),
+                'taxable' => __('Taxable', 'dc-woocommerce-multi-vendor')
+            );
 
-        $calculation_type = array(
-            'class' => __('Per class: Charge shipping for each shipping class individually', 'dc-woocommerce-multi-vendor'),
-            'order' => __('Per order: Charge shipping for the most expensive shipping class', 'dc-woocommerce-multi-vendor'),
-        );
+            $calculation_type = array(
+                'class' => __('Per class: Charge shipping for each shipping class individually', 'dc-woocommerce-multi-vendor'),
+                'order' => __('Per order: Charge shipping for the most expensive shipping class', 'dc-woocommerce-multi-vendor'),
+            );
 
-        $settings_html = '';
-        if(isset($vendor_shipping_methods[$method_id.':'.$instance_id])){
-            $shipping_method = $vendor_shipping_methods[$method_id.':'.$instance_id];
-            ob_start();
-            do_action( 'wcmp_vendor_shipping_'.$method_id.'_configure_form_fields', $shipping_method, $_POST );
-            $settings_html = ob_get_clean();
-        }
-        wp_send_json(array('settings_html' => $settings_html));
-        die;
+            $settings_html = '';
+            if(isset($vendor_shipping_methods[$method_id.':'.$instance_id])){
+                $shipping_method = $vendor_shipping_methods[$method_id.':'.$instance_id];
+                ob_start();
+                do_action( 'wcmp_vendor_shipping_'.$method_id.'_configure_form_fields', $shipping_method, $_POST );
+                $settings_html = ob_get_clean();
+            }
+            wp_send_json(array('settings_html' => $settings_html));
+            die;
     }
     
     
     public function wcmp_product_classify_next_level_list_categories() {
         $term_id = isset($_POST['term_id']) ? (int) $_POST['term_id'] : 0;
-        $taxonomy = isset($_POST['taxonomy']) ? wc_clean( wp_unslash( $_POST['taxonomy'] ) ) : '';
-        $cat_level = isset($_POST['cat_level']) ? wc_clean( wp_unslash( $_POST['cat_level'] ) ) : 0;
+        $taxonomy = isset($_POST['taxonomy']) ? $_POST['taxonomy'] : '';
+        $cat_level = isset($_POST['cat_level']) ? $_POST['cat_level'] : 0;
         $term = get_term($term_id, $taxonomy);
         $child_terms = get_term_children($term_id, $taxonomy);
         $html_level = '';
@@ -3765,9 +3859,10 @@ class WCMp_Ajax {
 
     public function show_product_classify_next_level_from_searched_term() {
         $term_id = isset($_POST['term_id']) ? (int) $_POST['term_id'] : 0;
-        $taxonomy = isset($_POST['taxonomy']) ? wc_clean( wp_unslash( $_POST['taxonomy'] ) ) : '';
+        $taxonomy = isset($_POST['taxonomy']) ? $_POST['taxonomy'] : '';
         $hierarchy = get_ancestors($term_id, $taxonomy);
         $html_level = $html_hierarchy = '';
+        //print_r($hierarchy);die;
         $level = 1;
         $parent = 0;
         if ($hierarchy) {
@@ -3813,7 +3908,7 @@ class WCMp_Ajax {
 
     public function wcmp_product_classify_search_category_level() {
         global $WCMp, $wpdb;
-        $keyword = isset($_POST['keyword']) ? wc_clean( wp_unslash($_POST['keyword']) ) : '';
+        $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
         if (!empty($keyword)) {
             $query = apply_filters("wcmp_product_classify_search_category_level_args", array(
                 'taxonomy' => 'product_cat',
@@ -3838,6 +3933,8 @@ class WCMp_Ajax {
                         $html_search_result .= '<li>' . $h_term->name . '</li>';
                     }
                     $html_search_result .= '</ul></li>';
+
+                    //$html_search_result .= '<a class="list-group-item"><span class="add-term" data-term-id="'.$term_id.'">&plus;</span>&nbsp;&nbsp;'.implode( ' <i class="wcmp-font ico-right-arrow-icon"></i> ', $term_crumb ).'</a>';
                 }
             } else {
                 $html_search_result .= '<li class="list-group-item"><p>' . __('No results found', 'dc-woocommerce-multi-vendor') . '</p></li>';
@@ -3849,7 +3946,7 @@ class WCMp_Ajax {
 
     public function wcmp_list_a_product_by_name_or_gtin() {
         global $WCMp, $wpdb;
-        $keyword = isset($_POST['keyword']) ? wc_clean( wp_unslash($_POST['keyword']) ) : '';
+        $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
         $html = '';
         if (!empty($keyword)) {
             $ids = array();
@@ -3864,6 +3961,7 @@ class WCMp_Ajax {
                     if ($product && $product_map_id) {
                         $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_products_map WHERE product_map_id=%d", $product_map_id));
                         $product_ids = wp_list_pluck($results, 'product_id');
+                        //$first_inserted_map_pro_key = array_search(min(wp_list_pluck($results, 'ID')), wp_list_pluck($results, 'ID'));
                         if($product_ids){
                             $include[] = min($product_ids);
                         }
@@ -3896,6 +3994,7 @@ class WCMp_Ajax {
                             // product cat
                             $product_cats = '';
                             $termlist = array();
+                            //$terms = wp_get_post_terms( $product_object->get_id(), 'product_cat', array( 'fields' => 'ids' ) );
                             $terms = get_the_terms($product_object->get_id(), 'product_cat');
                             if (!$terms) {
                                 $product_cats = '<span class="na">&ndash;</span>';
@@ -3903,6 +4002,7 @@ class WCMp_Ajax {
                                 $terms_arr = array();
                                 $terms = apply_filters('wcmp_vendor_product_list_row_product_categories', $terms, $product_object);
                                 foreach ($terms as $term) {
+                                    //$h_term = get_term_by('term_id', $term_id, 'product_cat');
                                     $terms_arr[] = $term->name;
                                 }
                                 $product_cats = implode(' | ', $terms_arr);
@@ -3934,7 +4034,7 @@ class WCMp_Ajax {
 
     public function wcmp_set_classified_product_terms() {
         $term_id = isset($_POST['term_id']) ? (int) $_POST['term_id'] : 0;
-        $taxonomy = isset($_POST['taxonomy']) ? sanitize_text_field( wp_unslash( $_POST['taxonomy'] ) ) : '';
+        $taxonomy = isset($_POST['taxonomy']) ? $_POST['taxonomy'] : '';
         $user_id = get_current_user_id();
         $url = '';
         if (is_user_wcmp_vendor($user_id)) {
@@ -4249,7 +4349,7 @@ class WCMp_Ajax {
         $wpdb->hide_errors();
 
         $order_id     = intval( $_POST['order_id'] );
-        $product_ids  = absint( $_POST['product_ids'] );
+        $product_ids  = $_POST['product_ids'];
         $loop         = intval( $_POST['loop'] );
         $file_counter = 0;
         $order        = wc_get_order( $order_id );
@@ -4288,13 +4388,14 @@ class WCMp_Ajax {
     
     public function wcmp_order_status_changed(){
         $order_id = isset( $_POST['order_id'] ) ? (int) $_POST['order_id'] : 0;
-        $selected_status = isset( $_POST['selected_status'] ) ? wc_clean( wp_unslash( $_POST['selected_status'] ) ) : '';
+        $selected_status = isset( $_POST['selected_status'] ) ? $_POST['selected_status'] : '';
         $order = wc_get_order( $order_id );
         if( $order ) {
             // fetch actual status
             $status = str_replace( 'wc-', '', $selected_status );
             $order->update_status( $status );
             wp_send_json( array( 'status_name' => esc_html( wc_get_order_status_name( $order->get_status() ) ), 'status_key' => $selected_status ) );
+            //echo esc_html( wc_get_order_status_name( $order->get_status() ) );
         }
         die;
     }
