@@ -92,10 +92,10 @@ class WCMp_Notices {
         	return;
     	}
     	if(isset($_POST['_wcmp_vendor_notices_url'])) {
-    		update_post_meta($post_id, '_wcmp_vendor_notices_url', $_POST['_wcmp_vendor_notices_url']);
+    		update_post_meta($post_id, '_wcmp_vendor_notices_url', esc_url($_POST['_wcmp_vendor_notices_url']));
 		}
 		if(isset($_POST['show_announcement_vendors'])) {
-			update_post_meta($post_id, '_wcmp_vendor_notices_vendors', $_POST['show_announcement_vendors']);
+			update_post_meta($post_id, '_wcmp_vendor_notices_vendors', array_filter($_POST['show_announcement_vendors']));
 		} 
 	}
 

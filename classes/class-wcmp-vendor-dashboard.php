@@ -1022,7 +1022,7 @@ Class WCMp_Admin_Dashboard {
             if (isset($_POST['wcmp_download_vendor_order_csv'])) {
                 $vendor = get_current_vendor();
                 $order_data = array();
-                $order_ids = isset($_POST['selected_orders']) ? $_POST['selected_orders'] : array();
+                $order_ids = isset($_POST['selected_orders']) ? array_filter($_POST['selected_orders']) : array();
                 if ($order_ids && count($order_ids) > 0) {
                     foreach ($order_ids as $order_id) {
                         $vorder = wcmp_get_order($order_id);
