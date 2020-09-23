@@ -582,7 +582,7 @@ class WCMp_Admin {
             update_post_meta($commission_id, '_paid_status', 'unpaid');
 
             // add commission id with associated vendor order
-            update_post_meta($order->get_id(), '_commission_id', $commission_id);
+            update_post_meta($order->get_id(), '_commission_id', absint($commission_id));
             // Mark commissions as processed
             update_post_meta($order->get_id(), '_commissions_processed', 'yes');
         }

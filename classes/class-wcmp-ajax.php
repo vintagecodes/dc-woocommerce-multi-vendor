@@ -457,7 +457,7 @@ class WCMp_Ajax {
             }
             $gtin_code = get_post_meta($product->get_id(), '_wcmp_gtin_code', true);
             if ($gtin_code)
-                update_post_meta($duplicate_product->get_id(), '_wcmp_gtin_code', $gtin_code);
+                update_post_meta($duplicate_product->get_id(), '_wcmp_gtin_code', wc_clean($gtin_code));
 
             $has_wcmp_spmv_map_id = get_post_meta($product->get_id(), '_wcmp_spmv_map_id', true);
             if ($has_wcmp_spmv_map_id) {
@@ -1340,7 +1340,7 @@ class WCMp_Ajax {
             $email_vendor->trigger($id, $post, $vendor, $reason);
             update_post_meta($id, '_dismiss_to_do_list', 'true');
             $comment_id = WCMp_Product::add_product_note($id, $reason, get_current_user_id());
-            update_post_meta($id, '_comment_dismiss', $comment_id);
+            update_post_meta($id, '_comment_dismiss', absint($comment_id));
             add_comment_meta($comment_id, '_author_id', get_current_user_id());
         } else if ($type == 'dc_commission') {
             update_post_meta($id, '_dismiss_to_do_list', 'true');
@@ -2410,7 +2410,7 @@ class WCMp_Ajax {
             }
         } elseif ($handler == 'update_answer') {
             $result = false;
-            $ans_ID = isset($_POST['key']) ? (int) $_POST['key'] : '';
+            $ans_ID = isset($_POST['key']) ? absint($_POST['key']) : '';
             $answer = isset($_POST['answer']) ? wc_clean($_POST['answer']) : '';
             if ($ans_ID) {
                 $result = $WCMp->product_qna->updateAnswer($ans_ID, array('ans_details' => sanitize_textarea_field($answer)));
@@ -4254,9 +4254,9 @@ class WCMp_Ajax {
 
         $wpdb->hide_errors();
 
-        $order_id     = intval( $_POST['order_id'] );
-        $product_ids  = $_POST['product_ids'];
-        $loop         = intval( $_POST['loop'] );
+        $order_id     = isset( $_POST['order_id'] ) ? absint($_POST['order_id']) : 0;
+        $product_ids  = isset( $_POST['product_ids'] ) ? array_filter( array_map( 'intval', (array) $_POST['product_ids'] ) ) : array();
+        $loop         = isset( $_POST['loop'] ) ? absint($_POST['loop']) : 0;
         $file_counter = 0;
         $order        = wc_get_order( $order_id );
 

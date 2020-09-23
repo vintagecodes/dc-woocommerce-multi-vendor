@@ -77,7 +77,7 @@ Class WCMp_Admin_Dashboard {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_POST['vendor_get_paid'])) {
                 $vendor = get_wcmp_vendor(get_current_vendor_id());
-                $commissions = isset($_POST['commissions']) ? $_POST['commissions'] : array();
+                $commissions = isset($_POST['commissions']) ? array_filter($_POST['commissions']) : array();
                 if (!empty($commissions)) {
                     $payment_method = get_user_meta($vendor->id, '_vendor_payment_mode', true);
                     if ($payment_method) {
@@ -229,8 +229,8 @@ Class WCMp_Admin_Dashboard {
             $vendor = get_wcmp_vendor($user->ID);
             if (isset($_POST['wcmp_stat_export']) && !empty($_POST['wcmp_stat_export']) && $vendor && apply_filters('can_wcmp_vendor_export_orders_csv', true, $vendor->id)) {
                 $vendor = apply_filters('wcmp_order_details_export_vendor', $vendor);
-                $start_date = isset($_POST['wcmp_stat_start_dt']) ? $_POST['wcmp_stat_start_dt'] : date('Y-m-01');
-                $end_date = isset($_POST['wcmp_stat_end_dt']) ? $_POST['wcmp_stat_end_dt'] : date('Y-m-d');
+                $start_date = isset($_POST['wcmp_stat_start_dt']) ? wc_clean($_POST['wcmp_stat_start_dt']) : date('Y-m-01');
+                $end_date = isset($_POST['wcmp_stat_end_dt']) ? wc_clean($_POST['wcmp_stat_end_dt']) : date('Y-m-d');
                 $start_date = strtotime('-1 day', strtotime($start_date));
                 $end_date = strtotime('+1 day', strtotime($end_date));
                 $query = array(
@@ -442,7 +442,7 @@ Class WCMp_Admin_Dashboard {
                     return false;
                 // Only submit if the order has the product belonging to this vendor
                 $order = wc_get_order($_POST['order_id']);
-                $comment = wc_clean( wp_unslash( $_POST['comment_text'] ) );
+                $comment = isset($_POST['comment_text']) ? wc_clean( wp_unslash( $_POST['comment_text'] ) ) : '';
                 $note_type = isset($_POST['note_type']) ? wc_clean( wp_unslash( $_POST['note_type'] ) ) : '';
 		        $is_customer_note = ( 'customer' === $note_type ) ? 1 : 0;
                 $comment_id = $order->add_order_note($comment, $is_customer_note, true);
@@ -465,13 +465,13 @@ Class WCMp_Admin_Dashboard {
                 // verify nonce
                 if ($_POST['vendor_add_product_nonce'] && !wp_verify_nonce($_POST['vendor_add_product_nonce'], 'dc-vendor-add-product-comment'))
                     return false;
-                $user_id = absint( $_POST['current_user_id'] );
+                $user_id = isset($_POST['current_user_id']) ? absint( $_POST['current_user_id'] ) : '';
                 // Don't submit empty comments
                 if (empty($_POST['product_comment_text']))
                     return false;
                 // Only submit if the order has the product belonging to this vendor
                 $product = wc_get_product($_POST['product_id']);
-                $comment = wc_clean( wp_unslash($_POST['product_comment_text']) );
+                $comment = isset($_POST['product_comment_text']) ? wc_clean( wp_unslash($_POST['product_comment_text']) ) : '';
                 $comment_id = WCMp_Product::add_product_note($product->get_id(), $comment, $user_id);
                 // update comment author & email
                 add_comment_meta($comment_id, '_author_id', $user_id);
@@ -534,7 +534,7 @@ Class WCMp_Admin_Dashboard {
         ?>
         <div class="wrap">
             <div id="icon-woocommerce" class="icon32 icon32-woocommerce-reports"><br/></div>
-            <h2><?php _e('Shipping', 'dc-woocommerce-multi-vendor'); ?></h2>
+            <h2><?php esc_html_e('Shipping', 'dc-woocommerce-multi-vendor'); ?></h2>
             <form name="vendor_shipping_form" method="post">
                 <?php wp_nonce_field( 'backend_vendor_shipping_data', 'vendor_shipping_data' ); ?>
                 <?php 
@@ -2067,7 +2067,7 @@ Class WCMp_Admin_Dashboard {
         $post = get_post( $post_id );
         $coupon = new WC_Coupon( $post_id );
         // Check for dupe coupons.
-        $coupon_code = wc_format_coupon_code( $_POST['post_title'] );
+        $coupon_code = wc_format_coupon_code( wc_clean($_POST['post_title']) );
         $id_from_code = wc_get_coupon_id_by_code( $coupon_code, $post_id );
 
         if ( $id_from_code ) {
@@ -2121,21 +2121,21 @@ Class WCMp_Admin_Dashboard {
             $error = $coupon->set_props(
                 array(
                     'code'                        => $title,
-                    'discount_type'               => wc_clean( $_POST['discount_type'] ),
-                    'amount'                      => wc_format_decimal( $_POST['coupon_amount'] ),
-                    'date_expires'                => wc_clean( $_POST['expiry_date'] ),
+                    'discount_type'               => isset($_POST['discount_type']) ? wc_clean( $_POST['discount_type'] ) : '',
+                    'amount'                      => isset($_POST['coupon_amount']) ? wc_format_decimal( $_POST['coupon_amount'] ) : 0,
+                    'date_expires'                => isset($_POST['expiry_date']) ? wc_clean( $_POST['expiry_date'] ) : '',
                     'individual_use'              => isset( $_POST['individual_use'] ),
                     'product_ids'                 => isset( $_POST['product_ids'] ) ? array_filter( array_map( 'intval', (array) $_POST['product_ids'] ) ) : array(),
                     'excluded_product_ids'        => isset( $_POST['exclude_product_ids'] ) ? array_filter( array_map( 'intval', (array) $_POST['exclude_product_ids'] ) ) : array(),
-                    'usage_limit'                 => absint( $_POST['usage_limit'] ),
-                    'usage_limit_per_user'        => absint( $_POST['usage_limit_per_user'] ),
-                    'limit_usage_to_x_items'      => absint( $_POST['limit_usage_to_x_items'] ),
-                    'free_shipping'               => isset( $_POST['free_shipping'] ),
+                    'usage_limit'                 => isset($_POST['usage_limit']) ? absint( $_POST['usage_limit'] ) : 0,
+                    'usage_limit_per_user'        => isset($_POST['usage_limit_per_user']) ? absint( $_POST['usage_limit_per_user'] ) : 0,
+                    'limit_usage_to_x_items'      => isset($_POST['limit_usage_to_x_items']) ? absint( $_POST['limit_usage_to_x_items'] ) : 0,
+                    'free_shipping'               => isset( $_POST['free_shipping'] ) ? wc_clean( $_POST['free_shipping'] ) : '',
                     'product_categories'          => array_filter( array_map( 'intval', $product_categories ) ),
                     'excluded_product_categories' => array_filter( array_map( 'intval', $exclude_product_categories ) ),
-                    'exclude_sale_items'          => isset( $_POST['exclude_sale_items'] ),
-                    'minimum_amount'              => wc_format_decimal( $_POST['minimum_amount'] ),
-                    'maximum_amount'              => wc_format_decimal( $_POST['maximum_amount'] ),
+                    'exclude_sale_items'          => isset( $_POST['exclude_sale_items'] ) ? wc_clean( $_POST['exclude_sale_items'] ) : '',
+                    'minimum_amount'              => isset($_POST['minimum_amount']) ? wc_format_decimal( $_POST['minimum_amount'] ) : 0,
+                    'maximum_amount'              => isset($_POST['maximum_amount']) ?wc_format_decimal( $_POST['maximum_amount'] ) : 0,
                     'email_restrictions'          => array_filter( array_map( 'trim', explode( ',', wc_clean( $_POST['customer_email'] ) ) ) ),
                 )
             );

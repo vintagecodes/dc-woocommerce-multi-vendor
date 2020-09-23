@@ -28,7 +28,7 @@ do_action('before_wcmp_vendor_dashboard_product_list_table');
                         'draft' => __('Draft', 'dc-woocommerce-multi-vendor'),
                         'trash' => __('Trash', 'dc-woocommerce-multi-vendor')
                     ));
-                    $current_status = isset($_GET['post_status']) ? $_GET['post_status'] : 'all';
+                    $current_status = isset($_GET['post_status']) ? wc_clean($_GET['post_status']) : 'all';
                     echo '<ul class="subsubsub by_status nav nav-pills category-filter-nav">';
                     //$array_keys = array_keys($statuses);
                     foreach ($statuses as $key => $label) {

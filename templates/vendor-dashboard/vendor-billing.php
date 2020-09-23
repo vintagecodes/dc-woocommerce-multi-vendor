@@ -118,10 +118,10 @@ $vendor_payment_mode_select = apply_filters('wcmp_vendor_payment_mode', $payment
 						$secret_key = $testmode ? get_wcmp_vendor_settings('test_secret_key', 'payment', 'stripe_gateway') : get_wcmp_vendor_settings('live_secret_key', 'payment', 'stripe_gateway');
 						if (isset($client_id) && isset($secret_key)) {
 							if (isset($_GET['code'])) {
-								$code = $_GET['code'];
+								$code = wc_clean($_GET['code']);
 								if (!is_user_logged_in()) {
 									if (isset($_GET['state'])) {
-										$user_id = $_GET['state'];
+										$user_id = wc_clean($_GET['state']);
 									}
 								}
 								if (isset($resp['access_token']) || get_user_meta($user_id, 'vendor_connected', true) == 1) {

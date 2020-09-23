@@ -909,13 +909,13 @@ class WCMp_Product {
         $post = get_post($post_id);
         if ($post->post_type == 'product') {
             if (isset($_POST['_wcmp_cancallation_policy'])) {
-                update_post_meta($post_id, '_wcmp_cancallation_policy', sanitize_textarea_field($_POST['_wcmp_cancallation_policy']));
+                update_post_meta($post_id, '_wcmp_cancallation_policy', wc_clean(wp_unslash($_POST['_wcmp_cancallation_policy'])));
             }
             if (isset($_POST['_wcmp_refund_policy'])) {
-                update_post_meta($post_id, '_wcmp_refund_policy', sanitize_textarea_field($_POST['_wcmp_refund_policy']));
+                update_post_meta($post_id, '_wcmp_refund_policy', wc_clean(wp_unslash($_POST['_wcmp_refund_policy'])));
             }
             if (isset($_POST['_wcmp_shipping_policy'])) {
-                update_post_meta($post_id, '_wcmp_shipping_policy', sanitize_textarea_field($_POST['_wcmp_shipping_policy']));
+                update_post_meta($post_id, '_wcmp_shipping_policy', wc_clean(wp_unslash($_POST['_wcmp_shipping_policy'])));
             }
         }
     }

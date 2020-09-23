@@ -1414,7 +1414,7 @@ class WCMp_Commission {
                 return $post_id;
             }
             if (isset($_POST['_paid_status'])) {
-                $status = $_POST['_paid_status'];
+                $status = wc_clean($_POST['_paid_status']);
                 if ($status == 'paid') {
                     $commission = $this->get_commission($post_id);
                     $vendor = $commission->vendor;
