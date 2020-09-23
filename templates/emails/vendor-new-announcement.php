@@ -15,11 +15,11 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
 $text_align = is_rtl() ? 'right' : 'left';
 ?>
 
-<p><?php printf(__('%s', 'dc-woocommerce-multi-vendor'),  $post_title); ?></p>
+<p><?php printf(esc_html__('%s', 'dc-woocommerce-multi-vendor'),  $post_title); ?></p>
 
 <?php $announcement_link = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_announcements_endpoint', 'vendor', 'general', 'vendor-announcements'))); ?>
-<p><?php printf(__('This is to inform you that we recently updated the article %s. You can always check the changes from here  %s. We would request you to check the same and take the necessary action if required.'), $post_title, $announcement_link ); ?></p>
+<p><?php printf(esc_html__('This is to inform you that we recently updated the article %s. You can always check the changes from here  %s. We would request you to check the same and take the necessary action if required.'), $post_title, $announcement_link ); ?></p>
 
-<p><?php printf(__('%s continued use of the Store, will be subject to the updated terms.', 'dc-woocommerce-multi-vendor'), $single); ?></p>
+<p><?php printf(esc_html__('%s continued use of the Store, will be subject to the updated terms.', 'dc-woocommerce-multi-vendor'), $single); ?></p>
 
 <?php do_action('wcmp_email_footer'); ?>

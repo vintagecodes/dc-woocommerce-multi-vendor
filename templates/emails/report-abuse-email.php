@@ -18,7 +18,7 @@ $name = isset( $object['name'] ) ? $object['name'] : '';
 $message = isset( $object['msg'] ) ? $object['msg'] : '';
 $product = wc_get_product( absint( $object['product_id'] ) );
 do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
-<p style="text-align:<?php echo $text_align; ?>;" ><?php printf(__( 'A customer is reporting an abuse on the product - %s (ID: #%s). Details are as follows:', 'dc-woocommerce-multi-vendor' ), $product->get_title(), $product->get_id() ); ?></p>
+<p style="text-align:<?php echo $text_align; ?>;" ><?php printf(esc_html__( 'A customer is reporting an abuse on the product - %s (ID: #%s). Details are as follows:', 'dc-woocommerce-multi-vendor' ), $product->get_title(), $product->get_id() ); ?></p>
 <div style="font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; margin-bottom: 40px;">
         <h2><?php _e( 'Product details', 'dc-woocommerce-multi-vendor' ); ?></h2>
         <ul>

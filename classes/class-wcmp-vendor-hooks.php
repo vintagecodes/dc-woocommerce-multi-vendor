@@ -934,7 +934,7 @@ class WCMp_Vendor_Hooks {
         if ( $_SERVER['REQUEST_METHOD'] == 'POST' && is_user_wcmp_rejected_vendor($user->ID) && $WCMp->endpoints->get_current_endpoint() == 'rejected-vendor-reapply') {
         	if(isset($_POST['reapply_vendor_application']) && isset($_POST['wcmp_vendor_fields'])) {
         		if (isset($_FILES['wcmp_vendor_fields'])) {
-					$attacment_files = $_FILES['wcmp_vendor_fields'];
+					$attacment_files = array_filter($_FILES['wcmp_vendor_fields']);
 					$files = array();
 					$count = 0;
 					if (!empty($attacment_files) && is_array($attacment_files)) {

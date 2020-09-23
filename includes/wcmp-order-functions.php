@@ -103,7 +103,6 @@ function get_refund_commission_amount($refund_id, $context = 'view') {
         if( isset($commission_refunded_data[$refund_id][$commission_id]) ){
             $refund_commission_data = $commission_refunded_data[$refund_id][$commission_id];
             return array_sum($refund_commission_data);
-            //return $context == 'view' ? wc_price($refund_commission, array('currency' => $order->get_currency())) : $refund_commission;
         }
     }
     return false;

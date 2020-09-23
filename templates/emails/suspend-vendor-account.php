@@ -15,13 +15,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 ?>
 <?php do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
-<p><?php printf( __('Hello %s,', 'dc-woocommerce-multi-vendor'), $user_login ); ?> <p>
+<p><?php printf( esc_html__('Hello %s,', 'dc-woocommerce-multi-vendor'), $user_login ); ?> <p>
 
-<p><?php printf( __('We are sorry to inform you that your following account with us on %s has been suspended.', 'dc-woocommerce-multi-vendor'), get_option( 'blogname' ) ); ?> <p>
+<p><?php printf( esc_html__('We are sorry to inform you that your following account with us on %s has been suspended.', 'dc-woocommerce-multi-vendor'), get_option( 'blogname' ) ); ?> <p>
 <p>
-	<?php printf( __( "Username: %s",  'dc-woocommerce-multi-vendor' ), $user_login ); ?><br/>
+	<?php printf( esc_html__( "Username: %s",  'dc-woocommerce-multi-vendor' ), $user_login ); ?><br/>
 	<?php _e( "Status: Suspended",  'dc-woocommerce-multi-vendor' ); ?><br/>
-	<?php printf( __( "Login URL: %s",  'dc-woocommerce-multi-vendor' ), wcmp_get_vendor_dashboard_endpoint_url( 'dashboard' ) ); ?><br/>
+	<?php printf( esc_html__( "Login URL: %s",  'dc-woocommerce-multi-vendor' ), wcmp_get_vendor_dashboard_endpoint_url( 'dashboard' ) ); ?><br/>
 	
 </p>
 <p><?php _e('Kindly contact your Administrator for further details. ', 'dc-woocommerce-multi-vendor'); ?> <p>

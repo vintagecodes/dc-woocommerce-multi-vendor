@@ -55,7 +55,7 @@ class WCMp_Frontend {
         if (isset($_POST['wcmp_vendor_fields']) && isset($_POST['pending_vendor'])) {
 
             if (isset($_FILES['wcmp_vendor_fields'])) {
-                $attacment_files = $_FILES['wcmp_vendor_fields'];
+                $attacment_files = array_filter($_FILES['wcmp_vendor_fields']);
                 $files = array();
                 $count = 0;
                 if (!empty($attacment_files) && is_array($attacment_files)) {
@@ -149,7 +149,7 @@ class WCMp_Frontend {
         }
         
         if (isset($_FILES['wcmp_vendor_fields'])) {
-            $attacment_files = $_FILES['wcmp_vendor_fields'];
+            $attacment_files = array_filter($_FILES['wcmp_vendor_fields']);
             if (!empty($attacment_files) && is_array($attacment_files)) {
                 foreach ($attacment_files['name'] as $key => $value) {
                     $file_type = array();
