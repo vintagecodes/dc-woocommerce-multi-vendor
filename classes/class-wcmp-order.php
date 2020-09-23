@@ -214,11 +214,6 @@ class WCMp_Order {
     }
     
     public function woocommerce_email_enabled($enabled, $object ){
-//        $is_editpost_action = ! empty( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array('editpost','edit') );
-//
-//        if ( $is_editpost_action && ! empty( $_REQUEST['post_ID'] ) && wp_get_post_parent_id( $_REQUEST['post_ID'] ) == 0 && $object instanceof WC_Order && $_REQUEST['post_ID'] != $object->get_id() ) {
-//            return false;
-//        }
         if(!$object) return $enabled;
         $is_vendor_order = ($object) ? wcmp_get_order($object->get_id()) : false;
         $is_migrated_order = get_post_meta($object->get_id(), '_order_migration', true);
@@ -1494,9 +1489,9 @@ class WCMp_Order {
         if( !isset( $wp->query_vars['view-order'] ) ) return;
         $order_id = $wp->query_vars['view-order'];
         $order = wc_get_order( $order_id );
-        $reason_option = isset( $_REQUEST['refund_reason_option'] ) ? $_REQUEST['refund_reason_option'] : '';
-        $refund_reason_other = isset( $_REQUEST['refund_reason_other'] ) ? $_REQUEST['refund_reason_other'] : '';
-        $refund_request_addi_info = isset( $_REQUEST['refund_request_addi_info'] ) ? $_REQUEST['refund_request_addi_info'] : '';
+        $reason_option = isset( $_REQUEST['refund_reason_option'] ) ? wc_clean( wp_unslash($_REQUEST['refund_reason_option'])) : '';
+        $refund_reason_other = isset( $_REQUEST['refund_reason_other'] ) ? wc_clean( wp_unslash($_REQUEST['refund_reason_other'])) : '';
+        $refund_request_addi_info = isset( $_REQUEST['refund_request_addi_info'] ) ? wc_clean( wp_unslash($_REQUEST['refund_request_addi_info'])) : '';
         $refund_settings = get_option( 'wcmp_payment_refund_payment_settings_name', true );
         $refund_reason_options = ( isset( $refund_settings['refund_order_msg'] ) && $refund_settings['refund_order_msg'] ) ? explode( "||", $refund_settings['refund_order_msg'] ) : array();
         $refund_reason = (( $reason_option == 'others' ) ? $refund_reason_other : isset( $refund_reason_options[$reason_option] )) ? $refund_reason_options[$reason_option] : ''; 

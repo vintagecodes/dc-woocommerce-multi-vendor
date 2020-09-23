@@ -102,9 +102,9 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 		$option = $screen->get_option('per_page', 'option');
 		$per_page = get_user_meta($user, $option, true);
 		
-		$search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
+		$search = ( isset( $_REQUEST['s'] ) ) ? wc_clean($_REQUEST['s']) : false;
 		
-		$query_role = ( !empty( $_GET['role'] ) ? $_GET['role'] : 'all');
+		$query_role = ( !empty( $_GET['role'] ) ? wc_clean($_GET['role']) : 'all');
 		
 		if($query_role == 'approved') {
 			$roles_in_array = array('dc_vendor');
@@ -699,10 +699,10 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 						<table class="wcmp-shipping-zones wc-shipping-zones widefat">
 							<thead>
 								<tr>
-									<th><?php _e('Zone name', 'dc-woocommerce-multi-vendor'); ?></th>
-									<th><?php _e('Region(s)', 'dc-woocommerce-multi-vendor'); ?></th>
-									<th><?php _e('Shipping method(s)', 'dc-woocommerce-multi-vendor'); ?></th>
-									<th><?php _e('Actions', 'dc-woocommerce-multi-vendor'); ?></th>
+									<th><?php esc_html_e('Zone name', 'dc-woocommerce-multi-vendor'); ?></th>
+									<th><?php esc_html_e('Region(s)', 'dc-woocommerce-multi-vendor'); ?></th>
+									<th><?php esc_html_e('Shipping method(s)', 'dc-woocommerce-multi-vendor'); ?></th>
+									<th><?php esc_html_e('Actions', 'dc-woocommerce-multi-vendor'); ?></th>
 								</tr>
 							</thead>
 							<tbody class="wcmp-shipping-zone-rows wc-shipping-zone-rows">
@@ -712,9 +712,9 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 										?>
 										<tr data-id="0" class="wc-shipping-zone-worldwide">
 											<td class="wc-shipping-zone-name">
-												<a href="JavaScript:void(0);" data-vendor_id="<?php echo $_GET['ID']; ?>" data-zone-id="<?php echo $vendor_shipping_zones['zone_id']; ?>" class="vendor_edit_zone modify-shipping-methods"><?php _e($vendor_shipping_zones['zone_name'], 'dc-woocommerce-multi-vendor'); ?></a> 
+												<a href="JavaScript:void(0);" data-vendor_id="<?php echo esc_attr($_GET['ID']); ?>" data-zone-id="<?php echo esc_attr($vendor_shipping_zones['zone_id']); ?>" class="vendor_edit_zone modify-shipping-methods"><?php esc_html_e($vendor_shipping_zones['zone_name'], 'dc-woocommerce-multi-vendor'); ?></a> 
 											</td>
-											<td class="wc-shipping-zone-region"><?php _e($vendor_shipping_zones['formatted_zone_location'], 'dc-woocommerce-multi-vendor'); ?></td>
+											<td class="wc-shipping-zone-region"><?php esc_html_e($vendor_shipping_zones['formatted_zone_location'], 'dc-woocommerce-multi-vendor'); ?></td>
 											<td class="wc-shipping-zone-methods">
 												<ul class="wcmp-shipping-zone-methods">
 													<?php

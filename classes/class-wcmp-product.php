@@ -506,7 +506,7 @@ class WCMp_Product {
 
             if (isset($_REQUEST['choose_vendor_bulk']) && !empty($_REQUEST['choose_vendor_bulk'])) {
                 if (is_numeric($_REQUEST['choose_vendor_bulk'])) {
-                    $vendor_term = $_REQUEST['choose_vendor_bulk'];
+                    $vendor_term = wc_clean($_REQUEST['choose_vendor_bulk']);
 
                     $term = get_term($vendor_term, $WCMp->taxonomy->taxonomy_name);
                     wp_delete_object_term_relationships($product_id, $WCMp->taxonomy->taxonomy_name);
@@ -1463,8 +1463,8 @@ class WCMp_Product {
     function wcmp_delete_product_action() {
         $products_url = wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_products_endpoint', 'vendor', 'general', 'products'));
         $delete_product_redirect_url = apply_filters('wcmp_vendor_redirect_after_delete_product_action', $products_url);
-        $wpnonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : '';
-        $product_id = isset($_REQUEST['product_id']) ? (int) $_REQUEST['product_id'] : 0;
+        $wpnonce = isset($_REQUEST['_wpnonce']) ? wc_clean($_REQUEST['_wpnonce']) : '';
+        $product_id = isset($_REQUEST['product_id']) ? absint($_REQUEST['product_id']) : 0;
         $vendor = get_wcmp_product_vendors($product_id);
         $current_user_ids = apply_filters( 'wcmp_product_current_id' , array( get_current_user_id() ) , $vendor );
         if ($wpnonce && wp_verify_nonce($wpnonce, 'wcmp_delete_product') && $product_id && in_array($vendor->id, $current_user_ids )) {

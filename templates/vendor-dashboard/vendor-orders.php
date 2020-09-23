@@ -93,10 +93,10 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
             </div>
             <?php endif; ?>
             <?php if (isset($_POST['wcmp_start_date_order'])) : ?>
-                <input type="hidden" name="wcmp_start_date_order" value="<?php echo $_POST['wcmp_start_date_order']; ?>" />
+                <input type="hidden" name="wcmp_start_date_order" value="<?php echo isset($_POST['wcmp_start_date_order']) ? $_POST['wcmp_start_date_order'] : date('Y-m-d'); ?>" />
             <?php endif; ?>
             <?php if (isset($_POST['wcmp_end_date_order'])) : ?>
-                <input type="hidden" name="wcmp_end_date_order" value="<?php echo $_POST['wcmp_end_date_order']; ?>" />
+                <input type="hidden" name="wcmp_end_date_order" value="<?php echo isset($_POST['wcmp_end_date_order']) ? $_POST['wcmp_end_date_order'] : date('Y-m-d'); ?>" />
             <?php endif; ?>    
             </form>
         </div>

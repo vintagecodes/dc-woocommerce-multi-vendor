@@ -1785,12 +1785,12 @@ class WCMp_Commission {
         global $typenow, $wp_query;
         if ($typenow == $this->post_type && isset($_GET['commission_status']) && !empty($_GET['commission_status'])) {
             $vars['meta_key'] = '_paid_status';
-            $vars['meta_value'] = $_GET['commission_status'];
+            $vars['meta_value'] = wc_clean($_GET['commission_status']);
         }
         // by vendor
         if ($typenow == $this->post_type && isset($_GET['commission_vendor']) && !empty($_GET['commission_vendor'])) {
             $vars['meta_key'] = '_commission_vendor';
-            $vars['meta_value'] = $_GET['commission_vendor'];
+            $vars['meta_value'] = wc_clean($_GET['commission_vendor']);
         }
         return $vars;
     }

@@ -147,7 +147,7 @@ class WCMp_Settings {
         <div class="wrap blank-wrap"><h3><?php _e( 'Transaction Details', 'dc-woocommerce-multi-vendor' ); ?></h3></div>
         <div class="wrap wcmp-settings-wrap panel-body">
             <?php
-            $_is_trans_details_page = isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : '';
+            $_is_trans_details_page = isset( $_REQUEST['page'] ) ? wc_clean($_REQUEST['page']) : '';
             $trans_id = isset( $_REQUEST['trans_id'] ) ? absint( $_REQUEST['trans_id'] ) : 0;
             if ( $_is_trans_details_page == 'wcmp-transaction-details' && $trans_id != 0 ) {
                 $transaction = get_post( $trans_id );
@@ -481,7 +481,7 @@ class WCMp_Settings {
                     }
                 } else if ( $tab == 'capabilities' ) {
                     if ( isset( $_GET['tab_section'] ) ) {
-                        $tab_section = $_GET['tab_section'];
+                        $tab_section = wc_clean($_GET['tab_section']);
                     } else {
                         $tab_section = 'product';
                     }
@@ -492,7 +492,7 @@ class WCMp_Settings {
                 } else if ( $tab == 'wcmp-addons' ) {
                     do_action( "settings_page_{$tab}_tab_init", $tab );
                 } else if ( isset( $_GET['tab_section'] ) && $_GET['tab_section'] && $_GET['tab_section'] != 'general' && $tab != 'general' && $tab != 'payment' ) {
-                    $tab_section = $_GET['tab_section'];
+                    $tab_section = wc_clean($_GET['tab_section']);
                     settings_fields( "wcmp_{$tab}_{$tab_section}_settings_group" );
                     do_action( "wcmp_{$tab}_{$tab_section}_settings_before_submit" );
                     do_settings_sections( "wcmp-{$tab}-{$tab_section}-settings-admin" );

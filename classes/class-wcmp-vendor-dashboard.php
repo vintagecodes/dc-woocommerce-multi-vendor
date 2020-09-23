@@ -1572,9 +1572,9 @@ Class WCMp_Admin_Dashboard {
             $last_seven_day_date = date('Y-m-d H:i:s', strtotime('-7 days'));
             // Mark as shipped
             if (isset($_POST['wcmp-submit-mark-as-ship'])) {
-                $order_id = $_POST['order_id'];
-                $tracking_id = $_POST['tracking_id'];
-                $tracking_url = $_POST['tracking_url'];
+                $order_id = isset($_POST['order_id']) ? absint($_POST['order_id']) : 0;
+                $tracking_id = isset($_POST['tracking_id']) ? wc_clean($_POST['tracking_id']) : '';
+                $tracking_url = isset($_POST['tracking_url']) ? esc_url($_POST['tracking_url']) : '';
                 $vendor->set_order_shipped($order_id, $tracking_id, $tracking_url);
             }
 
@@ -1745,7 +1745,7 @@ Class WCMp_Admin_Dashboard {
     }
 
     public function vendor_updater_handler() {
-        $wpnonce = isset($_REQUEST['_wpnonce']) ? sanitize_text_field( wp_unslash($_REQUEST['_wpnonce']) ) : '';
+        $wpnonce = isset($_REQUEST['_wpnonce']) ? sanitize_text_field( $_REQUEST['_wpnonce'] ) : '';
         if ($wpnonce && wp_verify_nonce($wpnonce, 'wcmp-vendor-store-updater')) {
             $do_update = filter_input(INPUT_POST, 'do_update_store_address');
             $do_skip = filter_input(INPUT_POST, 'do_reject_store_updater');
@@ -1794,7 +1794,7 @@ Class WCMp_Admin_Dashboard {
                 wp_die( -1 );
             }
             $errors = array();
-            $product_id = intval( $_POST['post_ID'] );
+            $product_id = isset($_POST['post_ID']) ? intval( $_POST['post_ID'] ) : 0;
             $post_object = get_post( $product_id );
             $product = wc_get_product( $product_id );
 
@@ -2063,7 +2063,7 @@ Class WCMp_Admin_Dashboard {
             return;
         }
 
-        $post_id = absint( $_POST['post_ID'] );
+        $post_id = isset($_POST['post_ID']) ? absint( $_POST['post_ID'] ) : 0;
         $post = get_post( $post_id );
         $coupon = new WC_Coupon( $post_id );
         // Check for dupe coupons.

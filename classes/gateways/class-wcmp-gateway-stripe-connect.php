@@ -204,10 +204,10 @@ class WCMp_Gateway_Stripe_Connect extends WCMp_Payment_Gateway {
             $secret_key = $testmode ? get_wcmp_vendor_settings('test_secret_key', 'payment', 'stripe_gateway') : get_wcmp_vendor_settings('live_secret_key', 'payment', 'stripe_gateway');
             if (isset($client_id) && isset($secret_key)) {
                 if (isset($_REQUEST['code'])) {
-                    $code = $_REQUEST['code'];
+                    $code = wc_clean($_REQUEST['code']);
                     if (!is_user_logged_in()) {
                         if (isset($_REQUEST['state'])) {
-                            $user_id = $_REQUEST['state'];
+                            $user_id = wc_clean($_REQUEST['state']);
                         }
                     }else{
                         $user_id = get_current_user_id();
