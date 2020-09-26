@@ -49,7 +49,7 @@ function assign_shop_coupon_to_vendor($object, $request, $new_shop_coupon) {
 		if(isset($vendor->user_data->roles) && in_array('dc_vendor', $vendor->user_data->roles)) {
 			$update_post_author = array(
 				'ID' => $object->get_id(),
-				'post_author' => $request['vendor'],
+				'post_author' => absint($request['vendor']),
 			);
 			
 			wp_update_post( $update_post_author );

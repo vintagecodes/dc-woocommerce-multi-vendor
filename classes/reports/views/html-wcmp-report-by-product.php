@@ -37,8 +37,8 @@ global $WCMp;
 								}
 							?>
 							<input type="hidden" name="range" value="custom" />
-							<input type="text" size="9" placeholder="yyyy-mm-dd" value="<?php if ( ! empty( $_GET['start_date'] ) ) echo esc_attr( $_GET['start_date'] ); ?>" name="start_date" class="range_datepicker from" id="from_product" />
-							<input type="text" size="9" placeholder="yyyy-mm-dd" value="<?php if ( ! empty( $_GET['end_date'] ) ) echo esc_attr( $_GET['end_date'] ); ?>" name="end_date" class="range_datepicker to" id="to_product" />
+							<input type="text" size="9" placeholder="<?php esc_attr_e('yyyy-mm-dd', 'dc-woocommerce-multi-vendor' ); ?>" value="<?php if ( ! empty( $_GET['start_date'] ) ) echo esc_attr( $_GET['start_date'] ); ?>" name="start_date" class="range_datepicker from" id="from_product" />
+							<input type="text" size="9" placeholder="<?php esc_attr_e('yyyy-mm-dd', 'dc-woocommerce-multi-vendor' ); ?>" value="<?php if ( ! empty( $_GET['end_date'] ) ) echo esc_attr( $_GET['end_date'] ); ?>" name="end_date" class="range_datepicker to" id="to_product" />
 							<input type="submit" class="button" value="<?php esc_attr_e( 'Go', 'dc-woocommerce-multi-vendor' ); ?>" />
 						</div>
 					</form>
@@ -48,10 +48,10 @@ global $WCMp;
 		<div class="left_align pad_left">
 			<form name="search_product_form" method="post" action="">
 				<p>
-					<select id="search_product" name="search_product" class="wc-product-search" data-placeholder="<?php _e('Search for a product...', 'dc-woocommerce-multi-vendor') ?>" data-action="wcmp_json_search_products_and_variations" style="min-width:210px;">
+					<select id="search_product" name="search_product" class="wc-product-search" data-placeholder="<?php esc_attr_e('Search for a product...', 'dc-woocommerce-multi-vendor') ?>" data-action="wcmp_json_search_products_and_variations" style="min-width:210px;">
 						<?php echo $option; ?>
 					</select> 
-					<input type="button" style="vertical-align: top;" class="product_report_search submit button" value="<?php _e( 'Show', 'dc-woocommerce-multi-vendor' ); ?>" />
+					<input type="button" style="vertical-align: top;" class="product_report_search submit button" value="<?php esc_attr_e( 'Show', 'dc-woocommerce-multi-vendor' ); ?>" />
 					<?php do_action( 'wcmp_frontend_report_product_filter', $start_date, $end_date ); ?>
 				</p>
 			</form>

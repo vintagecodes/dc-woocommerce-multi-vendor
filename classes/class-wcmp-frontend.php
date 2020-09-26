@@ -55,7 +55,7 @@ class WCMp_Frontend {
         if (isset($_POST['wcmp_vendor_fields']) && isset($_POST['pending_vendor'])) {
 
             if (isset($_FILES['wcmp_vendor_fields'])) {
-                $attacment_files = $_FILES['wcmp_vendor_fields'];
+                $attacment_files = array_filter($_FILES['wcmp_vendor_fields']);
                 $files = array();
                 $count = 0;
                 if (!empty($attacment_files) && is_array($attacment_files)) {
@@ -97,7 +97,7 @@ class WCMp_Frontend {
                     }
                 }
             }
-            $wcmp_vendor_fields = $_POST['wcmp_vendor_fields'];
+            $wcmp_vendor_fields = isset( $_POST['wcmp_vendor_fields'] ) ? array_filter( array_map( 'wc_clean', (array) $_POST['wcmp_vendor_fields'] ) ) : '';
 
             $wcmp_vendor_fields = apply_filters('wcmp_save_registration_fields', $wcmp_vendor_fields, $customer_id);
             update_user_meta($customer_id, 'wcmp_vendor_fields', $wcmp_vendor_fields);
@@ -136,9 +136,9 @@ class WCMp_Frontend {
                 $validation_errors->add('recaptcha is not validate', __('Please Verify  Recaptcha', 'dc-woocommerce-multi-vendor'));
             }
         }elseif(isset($_POST['g-recaptchatype']) && $_POST['g-recaptchatype'] == 'v3') {
-            $recaptcha_secret = isset($_POST['recaptchav3_secretkey']) ? $_POST['recaptchav3_secretkey'] : '';
+            $recaptcha_secret = isset($_POST['recaptchav3_secretkey']) ? wc_clean( $_POST['recaptchav3_secretkey'] ) : '';
             $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
-            $recaptcha_response = isset($_POST['recaptchav3Response']) ? $_POST['recaptchav3Response'] : '';
+            $recaptcha_response = isset($_POST['recaptchav3Response']) ? wc_clean( $_POST['recaptchav3Response'] ) : '';
 
             $recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
             $recaptcha = json_decode($recaptcha);
@@ -149,7 +149,7 @@ class WCMp_Frontend {
         }
         
         if (isset($_FILES['wcmp_vendor_fields'])) {
-            $attacment_files = $_FILES['wcmp_vendor_fields'];
+            $attacment_files = array_filter($_FILES['wcmp_vendor_fields']);
             if (!empty($attacment_files) && is_array($attacment_files)) {
                 foreach ($attacment_files['name'] as $key => $value) {
                     $file_type = array();

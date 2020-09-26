@@ -134,7 +134,7 @@ class WCMp_Seller_Review_Rating {
             function save_wcmp_rating_meta_box($comment_data) {
                 if (isset($_POST['vendor_rating']) && !empty($_POST['vendor_rating'])) {
                     if (isset($_POST['comment_ID']) && !empty($_POST['comment_ID'])) {
-                        update_comment_meta($_POST['comment_ID'], 'vendor_rating', $_POST['vendor_rating']);
+                        update_comment_meta($_POST['comment_ID'], 'vendor_rating', absint( $_POST['vendor_rating'] ) );
                     }
                 }
                 return $comment_data;

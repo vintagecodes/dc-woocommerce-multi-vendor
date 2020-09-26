@@ -4,11 +4,11 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * @class 		WCMp User Class
+ * @class       WCMp User Class
  *
- * @version		2.2.0
- * @package		WCMp
- * @author 		WC Marketplace
+ * @version     2.2.0
+ * @package     WCMp
+ * @author      WC Marketplace
  */
 class WCMp_User {
 
@@ -61,23 +61,23 @@ class WCMp_User {
     }
     
     function remove_wp_admin_access_for_suspended_vendor() {
-		if(is_user_wcmp_vendor(get_current_vendor_id())) {
-			$is_block = get_user_meta(get_current_vendor_id(), '_vendor_turn_off', true);
-			if( $is_block && is_admin() ) {
-				wp_redirect(get_permalink(wcmp_vendor_dashboard_page_id()));
-				exit;
-			}
-		}
-	}
-	
-	function remove_backend_access_for_suspended_vendor($panel_nav) {
-		if(is_user_wcmp_vendor(get_current_vendor_id())) {
-			$is_block = get_user_meta(get_current_vendor_id(), '_vendor_turn_off', true);
-			if($is_block) unset($panel_nav['wp-admin']);
-		}
-					
-		return $panel_nav;
-	}
+        if(is_user_wcmp_vendor(get_current_vendor_id())) {
+            $is_block = get_user_meta(get_current_vendor_id(), '_vendor_turn_off', true);
+            if( $is_block && is_admin() ) {
+                wp_redirect(get_permalink(wcmp_vendor_dashboard_page_id()));
+                exit;
+            }
+        }
+    }
+    
+    function remove_backend_access_for_suspended_vendor($panel_nav) {
+        if(is_user_wcmp_vendor(get_current_vendor_id())) {
+            $is_block = get_user_meta(get_current_vendor_id(), '_vendor_turn_off', true);
+            if($is_block) unset($panel_nav['wp-admin']);
+        }
+                    
+        return $panel_nav;
+    }
 
     /**
      * Wordpress Login redirect
@@ -156,7 +156,7 @@ class WCMp_User {
                 }
 
                 if (isset($_FILES['wcmp_vendor_fields'])) {
-                    $attacment_files = $_FILES['wcmp_vendor_fields'];
+                    $attacment_files = array_filter($_FILES['wcmp_vendor_fields']);
                     if (!empty($attacment_files) && is_array($attacment_files)) {
                         foreach ($attacment_files['name'] as $key => $value) {
                             $file_type = array();
@@ -187,7 +187,7 @@ class WCMp_User {
                 }
 
                 if (isset($_FILES['wcmp_vendor_fields'])) {
-                    $attacment_files = $_FILES['wcmp_vendor_fields'];
+                    $attacment_files = array_filter($_FILES['wcmp_vendor_fields']);
                     $files = array();
                     $count = 0;
                     if (!empty($attacment_files) && is_array($attacment_files)) {
@@ -229,7 +229,7 @@ class WCMp_User {
                         }
                     }
                 }
-                $wcmp_vendor_fields = $_POST['wcmp_vendor_fields'];
+                $wcmp_vendor_fields = isset( $_POST['wcmp_vendor_fields'] ) ? array_filter( array_map( 'wc_clean', (array) $_POST['wcmp_vendor_fields'] ) ) : '';
 
                 $wcmp_vendor_fields = apply_filters('wcmp_save_registration_fields', $wcmp_vendor_fields, $customer_id);
                 update_user_meta($customer_id, 'wcmp_vendor_fields', $wcmp_vendor_fields);
@@ -485,7 +485,7 @@ class WCMp_User {
                 'url' => $vendor->get_image('banner') ? $vendor->get_image('banner') : '',
                 'value' => $vendor->banner,
                 'class' => "user-profile-fields"
-            ), // Upload			
+            ), // Upload            
             "vendor_csd_return_address1" => array(
                 'label' => __('Customer address1', 'dc-woocommerce-multi-vendor'),
                 'type' => 'text',
@@ -671,7 +671,7 @@ class WCMp_User {
         if (is_array($user->roles) && in_array('administrator', $user->roles)) {
             $fields['vendor_commission'] = array(
                 'label' => __('Commission Amount', 'dc-woocommerce-multi-vendor'),
-                'type' => 'text',
+                'type' => 'number',
                 'value' => $vendor->commission,
                 'class' => "user-profile-fields regular-text"
             );
@@ -703,13 +703,13 @@ class WCMp_User {
                 unset($fields['vendor_commission']);
                 $fields['vendor_commission_percentage'] = array(
                     'label' => __('Commission Percentage(%)', 'dc-woocommerce-multi-vendor'),
-                    'type' => 'text',
+                    'type' => 'number',
                     'value' => $vendor->commission_percentage,
                     'class' => 'user-profile-fields regular-text'
                 );
                 $fields['vendor_commission_fixed_with_percentage'] = array(
                     'label' => __('Commission(fixed), Per Transaction', 'dc-woocommerce-multi-vendor'),
-                    'type' => 'text',
+                    'type' => 'number',
                     'value' => $vendor->commission_fixed_with_percentage,
                     'class' => 'user-profile-fields regular-text'
                 );
@@ -719,13 +719,13 @@ class WCMp_User {
                 unset($fields['vendor_commission']);
                 $fields['vendor_commission_percentage'] = array(
                     'label' => __('Commission Percentage(%)', 'dc-woocommerce-multi-vendor'),
-                    'type' => 'text',
+                    'type' => 'number',
                     'value' => $vendor->commission_percentage,
                     'class' => 'user-profile-fields regular-text'
                 );
                 $fields['vendor_commission_fixed_with_percentage_qty'] = array(
                     'label' => __('Commission Fixed Per Unit', 'dc-woocommerce-multi-vendor'),
-                    'type' => 'text',
+                    'type' => 'number',
                     'value' => $vendor->commission_fixed_with_percentage_qty,
                     'class' => 'user-profile-fields regular-text'
                 );
@@ -903,12 +903,12 @@ class WCMp_User {
                             $errors->add('vendor_slug_exists', __('Slug already exists', 'dc-woocommerce-multi-vendor'));
                         }
                     } elseif ($fieldkey == 'vendor_description') {
-                        update_user_meta($user_id, '_' . $fieldkey, $_POST[$fieldkey]);
+                        update_user_meta($user_id, '_' . $fieldkey, wc_clean(wp_unslash($_POST[$fieldkey])));
                     } else {
-                        update_user_meta($user_id, '_' . $fieldkey, $_POST[$fieldkey]);
+                        update_user_meta($user_id, '_' . $fieldkey, wc_clean(wp_unslash($_POST[$fieldkey])));
                     }
                 } else if (isset($_POST['vendor_commission']) && $fieldkey == 'vendor_commission') {
-                    update_user_meta($user_id, '_vendor_commission', $_POST[$fieldkey]);
+                    update_user_meta($user_id, '_vendor_commission', absint( $_POST[$fieldkey] ));
                 } else if (!isset($_POST['vendor_hide_description']) && $fieldkey == 'vendor_hide_description') {
                     delete_user_meta($user_id, '_vendor_hide_description');
                 } else if (!isset($_POST['vendor_hide_address']) && $fieldkey == 'vendor_hide_address') {
@@ -1028,16 +1028,16 @@ class WCMp_User {
     }
     
     /**
-	* avatar_override()
-	*
-	* Overrides an avatar with a profile image
-	*
-	* @param string $avatar SRC to the avatar
-	* @param mixed $id_or_email 
-	* @param int $size Size of the image
-	* @param string $default URL to the default image
-	* @param string $alt Alternative text
-	**/
+    * avatar_override()
+    *
+    * Overrides an avatar with a profile image
+    *
+    * @param string $avatar SRC to the avatar
+    * @param mixed $id_or_email 
+    * @param int $size Size of the image
+    * @param string $default URL to the default image
+    * @param string $alt Alternative text
+    **/
     public function wcmp_user_avatar_override( $avatar, $id_or_email, $size, $default, $alt, $args=array()) {
         //Get user data
         if ( is_numeric( $id_or_email ) ) {
@@ -1060,7 +1060,7 @@ class WCMp_User {
             'avatar',
             sprintf( 'avatar-%s', esc_attr( $size ) ),
             'photo'
-        );	
+        );  
         if ( isset( $args[ 'class' ] ) ) {
             if ( is_array( $args['class'] ) ) {
                 $classes = array_merge( $classes, $args['class'] );

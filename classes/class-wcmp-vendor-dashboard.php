@@ -77,7 +77,7 @@ Class WCMp_Admin_Dashboard {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_POST['vendor_get_paid'])) {
                 $vendor = get_wcmp_vendor(get_current_vendor_id());
-                $commissions = isset($_POST['commissions']) ? $_POST['commissions'] : array();
+                $commissions = isset($_POST['commissions']) ? array_filter($_POST['commissions']) : array();
                 if (!empty($commissions)) {
                     $payment_method = get_user_meta($vendor->id, '_vendor_payment_mode', true);
                     if ($payment_method) {
@@ -229,8 +229,8 @@ Class WCMp_Admin_Dashboard {
             $vendor = get_wcmp_vendor($user->ID);
             if (isset($_POST['wcmp_stat_export']) && !empty($_POST['wcmp_stat_export']) && $vendor && apply_filters('can_wcmp_vendor_export_orders_csv', true, $vendor->id)) {
                 $vendor = apply_filters('wcmp_order_details_export_vendor', $vendor);
-                $start_date = isset($_POST['wcmp_stat_start_dt']) ? $_POST['wcmp_stat_start_dt'] : date('Y-m-01');
-                $end_date = isset($_POST['wcmp_stat_end_dt']) ? $_POST['wcmp_stat_end_dt'] : date('Y-m-d');
+                $start_date = isset($_POST['wcmp_stat_start_dt']) ? wc_clean($_POST['wcmp_stat_start_dt']) : date('Y-m-01');
+                $end_date = isset($_POST['wcmp_stat_end_dt']) ? wc_clean($_POST['wcmp_stat_end_dt']) : date('Y-m-d');
                 $start_date = strtotime('-1 day', strtotime($start_date));
                 $end_date = strtotime('+1 day', strtotime($end_date));
                 $query = array(
@@ -442,8 +442,8 @@ Class WCMp_Admin_Dashboard {
                     return false;
                 // Only submit if the order has the product belonging to this vendor
                 $order = wc_get_order($_POST['order_id']);
-                $comment = esc_textarea($_POST['comment_text']);
-                $note_type = isset($_POST['note_type']) ? $_POST['note_type'] : '';
+                $comment = isset($_POST['comment_text']) ? wc_clean( wp_unslash( $_POST['comment_text'] ) ) : '';
+                $note_type = isset($_POST['note_type']) ? wc_clean( wp_unslash( $_POST['note_type'] ) ) : '';
 		        $is_customer_note = ( 'customer' === $note_type ) ? 1 : 0;
                 $comment_id = $order->add_order_note($comment, $is_customer_note, true);
                 if( $is_customer_note ){
@@ -465,13 +465,13 @@ Class WCMp_Admin_Dashboard {
                 // verify nonce
                 if ($_POST['vendor_add_product_nonce'] && !wp_verify_nonce($_POST['vendor_add_product_nonce'], 'dc-vendor-add-product-comment'))
                     return false;
-                $user_id = $_POST['current_user_id'];
+                $user_id = isset($_POST['current_user_id']) ? absint( $_POST['current_user_id'] ) : '';
                 // Don't submit empty comments
                 if (empty($_POST['product_comment_text']))
                     return false;
                 // Only submit if the order has the product belonging to this vendor
                 $product = wc_get_product($_POST['product_id']);
-                $comment = esc_textarea($_POST['product_comment_text']);
+                $comment = isset($_POST['product_comment_text']) ? wc_clean( wp_unslash($_POST['product_comment_text']) ) : '';
                 $comment_id = WCMp_Product::add_product_note($product->get_id(), $comment, $user_id);
                 // update comment author & email
                 add_comment_meta($comment_id, '_author_id', $user_id);
@@ -494,8 +494,8 @@ Class WCMp_Admin_Dashboard {
      */
     public function vendor_tools_handler() {
         $vendor = get_current_vendor();
-        $wpnonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : '';
-        $tools_action = isset($_REQUEST['tools_action']) ? $_REQUEST['tools_action'] : '';
+        $wpnonce = isset($_REQUEST['_wpnonce']) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
+        $tools_action = isset($_REQUEST['tools_action']) ? sanitize_text_field( wp_unslash( $_REQUEST['tools_action'] ) ) : '';
         if ($wpnonce && wp_verify_nonce($wpnonce, 'wcmp_clear_vendor_transients') && $tools_action && $tools_action == 'clear_all_transients') {
             if (current_user_can('delete_published_products')) {
                 if ($vendor->clear_all_transients($vendor->id)) {
@@ -534,7 +534,7 @@ Class WCMp_Admin_Dashboard {
         ?>
         <div class="wrap">
             <div id="icon-woocommerce" class="icon32 icon32-woocommerce-reports"><br/></div>
-            <h2><?php _e('Shipping', 'dc-woocommerce-multi-vendor'); ?></h2>
+            <h2><?php esc_html_e('Shipping', 'dc-woocommerce-multi-vendor'); ?></h2>
             <form name="vendor_shipping_form" method="post">
                 <?php wp_nonce_field( 'backend_vendor_shipping_data', 'vendor_shipping_data' ); ?>
                 <?php 
@@ -668,7 +668,7 @@ Class WCMp_Admin_Dashboard {
                                         </label>
                                     </th>
                                     <td class="forminp">
-                                        <input id="select_zone_postcodes" class="form-control" type="text" name="<?php echo 'wcmp_shipping_zone[' . $zone_id . '][_select_zone_postcodes]'; ?>" value="<?php echo $postcodes; ?>" placeholder="<?php _e('Postcodes need to be comma separated', 'dc-woocommerce-multi-vendor'); ?>">
+                                        <input id="select_zone_postcodes" class="form-control" type="text" name="<?php echo 'wcmp_shipping_zone[' . $zone_id . '][_select_zone_postcodes]'; ?>" value="<?php echo $postcodes; ?>" placeholder="<?php esc_attr_e('Postcodes need to be comma separated', 'dc-woocommerce-multi-vendor'); ?>">
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -752,7 +752,7 @@ Class WCMp_Admin_Dashboard {
                             <?php $shipping_methods = wcmp_get_shipping_methods(); ?>
                             <select id="shipping_method" class="form-control mt-15" name="wcmp_shipping_method">
                             <?php foreach ($shipping_methods as $key => $method) { ?>
-                                <option data-description="<?php echo esc_attr( wp_kses_post( wpautop( $method->get_method_description() ) ) ); ?>" value="<?php echo esc_attr( $method->id ); ?>"><?php echo esc_attr( $method->get_method_title() ); ?></option>
+                                <option data-description="<?php echo esc_attr( wp_kses_post( wpautop( $method->get_method_description() ) ) ); ?>" value="<?php echo esc_attr( $method->id ); ?>"><?php echo esc_html( $method->get_method_title() ); ?></option>
                             <?php } ?>
                             </select>
                             <div class="wc-shipping-zone-method-description"></div>
@@ -1022,7 +1022,7 @@ Class WCMp_Admin_Dashboard {
             if (isset($_POST['wcmp_download_vendor_order_csv'])) {
                 $vendor = get_current_vendor();
                 $order_data = array();
-                $order_ids = isset($_POST['selected_orders']) ? $_POST['selected_orders'] : array();
+                $order_ids = isset($_POST['selected_orders']) ? array_filter($_POST['selected_orders']) : array();
                 if ($order_ids && count($order_ids) > 0) {
                     foreach ($order_ids as $order_id) {
                         $vorder = wcmp_get_order($order_id);
@@ -1082,17 +1082,17 @@ Class WCMp_Admin_Dashboard {
                 }
 
                 if ($fieldkey == 'vendor_description') {
-                    update_user_meta($user_id, '_' . $fieldkey, $post[$fieldkey]);
+                    update_user_meta($user_id, '_' . $fieldkey, wc_clean(wp_unslash($post[$fieldkey])));
                 } elseif ($fieldkey == 'vendor_country') {
-                    $country_code = $post[$fieldkey];
-                    $country_data = WC()->countries->get_countries();
+                    $country_code = wc_clean(wp_unslash( $post[$fieldkey] ) );
+                    $country_data = wc_clean(wp_unslash( WC()->countries->get_countries() ) );
                     $country_name = ( isset($country_data[$country_code]) ) ? $country_data[$country_code] : $country_code; //To get country name by code
                     update_user_meta($user_id, '_' . $fieldkey, $country_name);
                     update_user_meta($user_id, '_' . $fieldkey . '_code', $country_code);
                 } elseif ($fieldkey == 'vendor_state') {
                     $country_code = $post['vendor_country'];
-                    $state_code = $post[$fieldkey];
-                    $state_data = WC()->countries->get_states($country_code);
+                    $state_code = wc_clean(wp_unslash( $post[$fieldkey] ) );
+                    $state_data = wc_clean(wp_unslash( WC()->countries->get_states($country_code) ) );
                     $state_name = ( isset($state_data[$state_code]) ) ? $state_data[$state_code] : $state_code; //to get State name by state code
                     update_user_meta($user_id, '_' . $fieldkey, $state_name);
                     update_user_meta($user_id, '_' . $fieldkey . '_code', $state_code);
@@ -1133,29 +1133,29 @@ Class WCMp_Admin_Dashboard {
             }
         }
         if (isset($_POST['_shop_template']) && !empty($_POST['_shop_template'])) {
-            update_user_meta($user_id, '_shop_template', $_POST['_shop_template']);
+            update_user_meta($user_id, '_shop_template', wc_clean($_POST['_shop_template']));
         }
         if (isset($_POST['_store_location']) && !empty($_POST['_store_location'])) {
-            update_user_meta($user_id, '_store_location', $_POST['_store_location']);
+            update_user_meta($user_id, '_store_location', wc_clean($_POST['_store_location']));
         }
         if (isset($_POST['store_address_components']) && !empty($_POST['store_address_components'])) {
             $address_components = wcmp_get_geocoder_components(json_decode(stripslashes($_POST['store_address_components']), true));
             if (isset($_POST['_store_location']) && !empty($_POST['_store_location'])) {
-                $address_components['formatted_address'] = $_POST['_store_location'];
+                $address_components['formatted_address'] = wc_clean($_POST['_store_location']);
             }
             if (isset($_POST['_store_lat']) && !empty($_POST['_store_lat'])) {
-                $address_components['latitude'] = $_POST['_store_lat'];
+                $address_components['latitude'] = wc_clean($_POST['_store_lat']);
             }
             if (isset($_POST['_store_lng']) && !empty($_POST['_store_lng'])) {
-                $address_components['longitude'] = $_POST['_store_lng'];
+                $address_components['longitude'] = wc_clean($_POST['_store_lng']);
             }
             update_user_meta($user_id, '_store_address_components', $address_components);
         }
         if (isset($_POST['_store_lat']) && !empty($_POST['_store_lat'])) {
-            update_user_meta($user_id, '_store_lat', $_POST['_store_lat']);
+            update_user_meta($user_id, '_store_lat', wc_clean($_POST['_store_lat']));
         }
         if (isset($_POST['_store_lng']) && !empty($_POST['_store_lng'])) {
-            update_user_meta($user_id, '_store_lng', $_POST['_store_lng']);
+            update_user_meta($user_id, '_store_lng', wc_clean($_POST['_store_lng']));
         }
         if (isset($_POST['timezone_string']) && !empty($_POST['timezone_string'])) {
             if (!empty($_POST['timezone_string']) && preg_match('/^UTC[+-]/', $_POST['timezone_string'])) {
@@ -1165,8 +1165,8 @@ Class WCMp_Admin_Dashboard {
             } else {
                 $_POST['gmt_offset'] = 0;
             }
-            update_user_meta($user_id, 'timezone_string', $_POST['timezone_string']);
-            update_user_meta($user_id, 'gmt_offset', $_POST['gmt_offset']);
+            update_user_meta($user_id, 'timezone_string', wc_clean($_POST['timezone_string']));
+            update_user_meta($user_id, 'gmt_offset', wc_clean($_POST['gmt_offset']));
         }
         do_action('wcmp_save_custom_store_data', $user_id, $post);
     }
@@ -1248,14 +1248,13 @@ Class WCMp_Admin_Dashboard {
             $has_error = false;
             $userdata = array(
                 'ID' => $vendor_user_id,
-                //'user_email' => $_POST['vendor_profile_data']['user_email'],
-                'first_name' => $_POST['vendor_profile_data']['first_name'],
-                'last_name' => $_POST['vendor_profile_data']['last_name'],
+                'first_name' => isset( $_POST['vendor_profile_data']['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['vendor_profile_data']['first_name'] ) ) : '',
+                'last_name' => isset( $_POST['vendor_profile_data']['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['vendor_profile_data']['last_name'] ) ) : '',
             );
 
-            $pass_cur = !empty( $_POST['vendor_profile_data']['password_current'] ) ? $_POST['vendor_profile_data']['password_current'] : '';
-            $pass1 = !empty( $_POST['vendor_profile_data']['password_1'] ) ? $_POST['vendor_profile_data']['password_1'] : '';
-            $pass2 = !empty( $_POST['vendor_profile_data']['password_2'] ) ? $_POST['vendor_profile_data']['password_2'] : '';
+            $pass_cur = !empty( $_POST['vendor_profile_data']['password_current'] ) ? sanitize_text_field( wp_unslash($_POST['vendor_profile_data']['password_current']) ) : '';
+            $pass1 = !empty( $_POST['vendor_profile_data']['password_1'] ) ? sanitize_text_field( wp_unslash($_POST['vendor_profile_data']['password_1']) ) : '';
+            $pass2 = !empty( $_POST['vendor_profile_data']['password_2'] ) ? sanitize_text_field( wp_unslash($_POST['vendor_profile_data']['password_2']) ) : '';
             $email = !empty( $_POST['vendor_profile_data']['user_email'] ) ? $_POST['vendor_profile_data']['user_email'] : '';
             $save_pass = true;
             
@@ -1301,7 +1300,7 @@ Class WCMp_Admin_Dashboard {
 
             $user_id = wp_update_user($userdata);
 
-            $profile_updt = update_user_meta($vendor_user_id, '_vendor_profile_image', $_POST['vendor_profile_data']['vendor_profile_image']);
+            $profile_updt = update_user_meta($vendor_user_id, '_vendor_profile_image', wc_clean($_POST['vendor_profile_data']['vendor_profile_image']));
 
             if ($profile_updt || $user_id) {
                 wc_add_notice( __('Profile Data Updated', 'dc-woocommerce-multi-vendor'), 'success' );
@@ -1573,9 +1572,9 @@ Class WCMp_Admin_Dashboard {
             $last_seven_day_date = date('Y-m-d H:i:s', strtotime('-7 days'));
             // Mark as shipped
             if (isset($_POST['wcmp-submit-mark-as-ship'])) {
-                $order_id = $_POST['order_id'];
-                $tracking_id = $_POST['tracking_id'];
-                $tracking_url = $_POST['tracking_url'];
+                $order_id = isset($_POST['order_id']) ? absint($_POST['order_id']) : 0;
+                $tracking_id = isset($_POST['tracking_id']) ? wc_clean($_POST['tracking_id']) : '';
+                $tracking_url = isset($_POST['tracking_url']) ? esc_url($_POST['tracking_url']) : '';
                 $vendor->set_order_shipped($order_id, $tracking_id, $tracking_url);
             }
 
@@ -1746,7 +1745,7 @@ Class WCMp_Admin_Dashboard {
     }
 
     public function vendor_updater_handler() {
-        $wpnonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : '';
+        $wpnonce = isset($_REQUEST['_wpnonce']) ? sanitize_text_field( $_REQUEST['_wpnonce'] ) : '';
         if ($wpnonce && wp_verify_nonce($wpnonce, 'wcmp-vendor-store-updater')) {
             $do_update = filter_input(INPUT_POST, 'do_update_store_address');
             $do_skip = filter_input(INPUT_POST, 'do_reject_store_updater');
@@ -1795,7 +1794,7 @@ Class WCMp_Admin_Dashboard {
                 wp_die( -1 );
             }
             $errors = array();
-            $product_id = intval( $_POST['post_ID'] );
+            $product_id = isset($_POST['post_ID']) ? intval( $_POST['post_ID'] ) : 0;
             $post_object = get_post( $product_id );
             $product = wc_get_product( $product_id );
 
@@ -2064,11 +2063,11 @@ Class WCMp_Admin_Dashboard {
             return;
         }
 
-        $post_id = absint( $_POST['post_ID'] );
+        $post_id = isset($_POST['post_ID']) ? absint( $_POST['post_ID'] ) : 0;
         $post = get_post( $post_id );
         $coupon = new WC_Coupon( $post_id );
         // Check for dupe coupons.
-        $coupon_code = wc_format_coupon_code( $_POST['post_title'] );
+        $coupon_code = wc_format_coupon_code( wc_clean($_POST['post_title']) );
         $id_from_code = wc_get_coupon_id_by_code( $coupon_code, $post_id );
 
         if ( $id_from_code ) {
@@ -2122,21 +2121,21 @@ Class WCMp_Admin_Dashboard {
             $error = $coupon->set_props(
                 array(
                     'code'                        => $title,
-                    'discount_type'               => wc_clean( $_POST['discount_type'] ),
-                    'amount'                      => wc_format_decimal( $_POST['coupon_amount'] ),
-                    'date_expires'                => wc_clean( $_POST['expiry_date'] ),
+                    'discount_type'               => isset($_POST['discount_type']) ? wc_clean( $_POST['discount_type'] ) : '',
+                    'amount'                      => isset($_POST['coupon_amount']) ? wc_format_decimal( $_POST['coupon_amount'] ) : 0,
+                    'date_expires'                => isset($_POST['expiry_date']) ? wc_clean( $_POST['expiry_date'] ) : '',
                     'individual_use'              => isset( $_POST['individual_use'] ),
                     'product_ids'                 => isset( $_POST['product_ids'] ) ? array_filter( array_map( 'intval', (array) $_POST['product_ids'] ) ) : array(),
                     'excluded_product_ids'        => isset( $_POST['exclude_product_ids'] ) ? array_filter( array_map( 'intval', (array) $_POST['exclude_product_ids'] ) ) : array(),
-                    'usage_limit'                 => absint( $_POST['usage_limit'] ),
-                    'usage_limit_per_user'        => absint( $_POST['usage_limit_per_user'] ),
-                    'limit_usage_to_x_items'      => absint( $_POST['limit_usage_to_x_items'] ),
-                    'free_shipping'               => isset( $_POST['free_shipping'] ),
+                    'usage_limit'                 => isset($_POST['usage_limit']) ? absint( $_POST['usage_limit'] ) : 0,
+                    'usage_limit_per_user'        => isset($_POST['usage_limit_per_user']) ? absint( $_POST['usage_limit_per_user'] ) : 0,
+                    'limit_usage_to_x_items'      => isset($_POST['limit_usage_to_x_items']) ? absint( $_POST['limit_usage_to_x_items'] ) : 0,
+                    'free_shipping'               => isset( $_POST['free_shipping'] ) ? wc_clean( $_POST['free_shipping'] ) : '',
                     'product_categories'          => array_filter( array_map( 'intval', $product_categories ) ),
                     'excluded_product_categories' => array_filter( array_map( 'intval', $exclude_product_categories ) ),
-                    'exclude_sale_items'          => isset( $_POST['exclude_sale_items'] ),
-                    'minimum_amount'              => wc_format_decimal( $_POST['minimum_amount'] ),
-                    'maximum_amount'              => wc_format_decimal( $_POST['maximum_amount'] ),
+                    'exclude_sale_items'          => isset( $_POST['exclude_sale_items'] ) ? wc_clean( $_POST['exclude_sale_items'] ) : '',
+                    'minimum_amount'              => isset($_POST['minimum_amount']) ? wc_format_decimal( $_POST['minimum_amount'] ) : 0,
+                    'maximum_amount'              => isset($_POST['maximum_amount']) ?wc_format_decimal( $_POST['maximum_amount'] ) : 0,
                     'email_restrictions'          => array_filter( array_map( 'trim', explode( ',', wc_clean( $_POST['customer_email'] ) ) ) ),
                 )
             );
@@ -2445,7 +2444,7 @@ Class WCMp_Admin_Dashboard {
             <div class="store-address-container">
                 
                 <label class="location-prompt" for="store_name"><?php esc_html_e('Store Name', 'dc-woocommerce-multi-vendor'); ?></label>
-                <input type="text" id="store_name" class="location-input" name="store_name" value="<?php echo esc_attr( $store_name ); ?>"  placeholder="<?php _e('Enter your Store Name here', 'dc-woocommerce-multi-vendor'); ?>" />
+                <input type="text" id="store_name" class="location-input" name="store_name" value="<?php echo esc_attr( $store_name ); ?>"  placeholder="<?php esc_attr_e('Enter your Store Name here', 'dc-woocommerce-multi-vendor'); ?>" />
                 
                 <label for="store_country" class="location-prompt"><?php esc_html_e( 'Where is your store based?', 'woocommerce' ); ?></label>
                 <select id="store_country" name="store_country" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'woocommerce' ); ?>" class="location-input wc-enhanced-select dropdown">

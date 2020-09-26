@@ -42,7 +42,7 @@ if (is_user_logged_in() && is_user_wcmp_vendor($current_vendor_id) && !current_u
                         <div class="product-search-wrapper categories-search-wrapper">
                             <div class="form-text"><?php _e('Search category', 'dc-woocommerce-multi-vendor'); ?></div>
                             <div class="form-input">
-                                <input id="search-categories-keyword" type="text" placeholder="<?php _e('Example: tshirt, music, album etc...', 'dc-woocommerce-multi-vendor'); ?>">
+                                <input id="search-categories-keyword" type="text" placeholder="<?php esc_attr_e('Example: tshirt, music, album etc...', 'dc-woocommerce-multi-vendor'); ?>">
                                 <ul id="searched-categories-results" class="list-group">
                                     
                                 </ul>
@@ -80,7 +80,7 @@ if (is_user_logged_in() && is_user_wcmp_vendor($current_vendor_id) && !current_u
                     <div class="serach-product-cat-wrapper">
                         <h2><?php _e('Search from our existing Product Catalog', 'dc-woocommerce-multi-vendor'); ?></h2>
                         <form class="search-pro-by-name-gtin">
-                            <input type="text" placeholder="<?php _e('Product name, UPC, ISBN ...', 'dc-woocommerce-multi-vendor'); ?>" class="form-control inline-input search-product-name-gtin-keyword" required>
+                            <input type="text" placeholder="<?php esc_attr_e('Product name, UPC, ISBN ...', 'dc-woocommerce-multi-vendor'); ?>" class="form-control inline-input search-product-name-gtin-keyword" required>
                             <button type="button" class="btn btn-default search-product-name-gtin-btn"><?php echo strtoupper(__('Search', 'dc-woocommerce-multi-vendor')); ?></button> 
                         </form>
                         <?php 

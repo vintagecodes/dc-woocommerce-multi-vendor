@@ -29,13 +29,13 @@ $withdrawal_list_table_headers = apply_filters('wcmp_datatable_vendor_withdrawal
 <?php if($get_vendor_thresold) : ?>
 <div class="col-md-12">
     <blockquote>
-        <span><?php _e('Your Threshold value for withdrawals is :', 'dc-woocommerce-multi-vendor'); ?> <?php echo wc_price($get_vendor_thresold); ?></span>
+        <span><?php esc_html_e('Your Threshold value for withdrawals is :', 'dc-woocommerce-multi-vendor'); ?> <?php echo esc_html(wc_price($get_vendor_thresold)); ?></span>
     </blockquote>
 </div>
 <?php endif; ?>
 <div class="col-md-12">
     <div class="panel panel-default">
-        <h3 class="panel-heading"><?php _e('Withdrawal Orders', 'dc-woocommerce-multi-vendor'); ?></h3>
+        <h3 class="panel-heading"><?php esc_html_e('Withdrawal Orders', 'dc-woocommerce-multi-vendor'); ?></h3>
         <div class="panel-body">
             <form method="post" name="get_paid_form">
                 <table id="vendor_withdrawal" class="table table-striped table-bordered" width="100%">
@@ -80,7 +80,7 @@ $withdrawal_list_table_headers = apply_filters('wcmp_datatable_vendor_withdrawal
             <?php $vendor_payment_mode = get_user_meta($vendor->id, '_vendor_payment_mode', true);
             if ($vendor_payment_mode == 'paypal_masspay' && wp_next_scheduled('masspay_cron_start')) { ?>
             <div class="wcmp_admin_massege">
-                <div class="wcmp_mixed_msg"><?php _e('Your next scheduled payment date is on:', 'dc-woocommerce-multi-vendor'); ?>	<span><?php echo date('d/m/Y g:i:s A', wp_next_scheduled('masspay_cron_start')); ?></span> </div>
+                <div class="wcmp_mixed_msg"><?php esc_html_e('Your next scheduled payment date is on:', 'dc-woocommerce-multi-vendor'); ?>	<span><?php echo date('d/m/Y g:i:s A', wp_next_scheduled('masspay_cron_start')); ?></span> </div>
             </div>
         <?php } ?> 
         </div>

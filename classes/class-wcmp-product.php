@@ -284,7 +284,7 @@ class WCMp_Product {
         $screen = get_current_screen();
         // disable product title from being edit
         if (isset($_GET['post'])) {
-            $current_post_id = $_GET['post'];
+            $current_post_id = intval( $_GET['post'] );
             if (get_post_type($current_post_id) == 'product') {
                 $product = wc_get_product($current_post_id);
                 $is_spmv_pro = get_post_meta($current_post_id, '_wcmp_spmv_product', true);
@@ -380,7 +380,7 @@ class WCMp_Product {
     function check_sku_is_unique($post_id) {
         global $WCMp;
         if (isset($_POST) && !empty($_POST)) {
-            $sku = isset($_POST['_sku']) ? $_POST['_sku'] : '';
+            $sku = isset( $_POST['_sku'] ) ? wc_clean( wp_unslash( $_POST['_sku'] ) ) : null;
             $post = get_post($post_id);
             if ($post->post_type == 'product' && !empty($sku)) {
                 $args = array(
@@ -418,7 +418,7 @@ class WCMp_Product {
         if (is_user_wcmp_vendor($current_user_id)) {
             add_filter('manage_product_posts_columns', array($this, 'remove_featured_star'), 15);
             if (isset($_GET['post'])) {
-                $current_post_id = $_GET['post'];
+                $current_post_id = intval( $_GET['post'] );
                 if (get_post_type($current_post_id) == 'product') {
 
                     if (in_array(get_post_status($current_post_id), array('draft', 'publish', 'pending'))) {
@@ -475,7 +475,7 @@ class WCMp_Product {
         if (!is_user_wcmp_vendor(get_current_vendor_id())) {
             if ('product' == $typenow) {
                 if ($typenow == $post_type) {
-                    $selected = isset($_GET[$taxonomy]) ? $_GET[$taxonomy] : '';
+                    $selected = isset($_GET[$taxonomy]) ? wc_clean( wp_unslash( $_GET[$taxonomy] ) ) : '';
                     $info_taxonomy = get_taxonomy($taxonomy);
                     wp_dropdown_categories(array(
                         'show_option_all' => __("Show All {$info_taxonomy->label}"),
@@ -506,7 +506,7 @@ class WCMp_Product {
 
             if (isset($_REQUEST['choose_vendor_bulk']) && !empty($_REQUEST['choose_vendor_bulk'])) {
                 if (is_numeric($_REQUEST['choose_vendor_bulk'])) {
-                    $vendor_term = $_REQUEST['choose_vendor_bulk'];
+                    $vendor_term = wc_clean($_REQUEST['choose_vendor_bulk']);
 
                     $term = get_term($vendor_term, $WCMp->taxonomy->taxonomy_name);
                     wp_delete_object_term_relationships($product_id, $WCMp->taxonomy->taxonomy_name);
@@ -538,8 +538,8 @@ class WCMp_Product {
             <label>
                 <span class="title"><?php esc_html_e('Vendor', 'dc-woocommerce-multi-vendor'); ?></span>
                 <span class="input-text-wrap vendor_bulk">
-                    <select name="choose_vendor_bulk" id="choose_vendor_ajax_bulk" class="ajax_chosen_select_vendor" data-placeholder="<?php _e('Search for vendor', 'dc-woocommerce-multi-vendor') ?>" style="width:300px;" >
-                        <option value="0"><?php _e("Choose a vendor", 'dc-woocommerce-multi-vendor') ?></option>
+                    <select name="choose_vendor_bulk" id="choose_vendor_ajax_bulk" class="ajax_chosen_select_vendor" data-placeholder="<?php esc_attr_e('Search for vendor', 'dc-woocommerce-multi-vendor') ?>" style="width:300px;" >
+                        <option value="0"><?php esc_html_e("Choose a vendor", 'dc-woocommerce-multi-vendor') ?></option>
                     </select>
                 </span>
             </span>
@@ -721,7 +721,7 @@ class WCMp_Product {
         }
         $html .= '<tr valign="top"><td scope="row"><label id="vendor-label" for="' . esc_attr('vendor') . '">' . __("Vendor", 'dc-woocommerce-multi-vendor') . '</label></td><td>';
         if (!$current_user_is_vendor) {
-            $html .= '<select name="' . esc_attr('choose_vendor') . '" id="' . esc_attr('choose_vendor_ajax') . '" class="ajax_chosen_select_vendor" data-placeholder="' . __("Search for vendor", 'dc-woocommerce-multi-vendor') . '" style="width:300px;" >' . $option . '</select>';
+            $html .= '<select name="' . esc_attr('choose_vendor') . '" id="' . esc_attr('choose_vendor_ajax') . '" class="ajax_chosen_select_vendor" data-placeholder="' . esc_attr_e("Search for vendor", 'dc-woocommerce-multi-vendor') . '" style="width:300px;" >' . $option . '</select>';
             $html .= '<p class="description">' . 'choose vendor' . '</p>';
         } else {
             $html .= '<label id="vendor-label" for="' . esc_attr('vendor') . '">' . $vendor->page_title . '</label>';
@@ -836,7 +836,7 @@ class WCMp_Product {
              <div class="add_note">
                  <p>
                      <label for="add_order_note"><?php esc_html_e( 'Add note', 'woocommerce' ); ?> <?php echo wc_help_tip( __( 'Add a note for your reference, or add a customer note (the user will be notified).', 'woocommerce' ) ); ?></label>
-                     <textarea placeholder="<?php _e('Enter text ...', 'dc-woocommerce-multi-vendor'); ?>" class="form-control" name="product_comment_text"></textarea>
+                     <textarea placeholder="<?php esc_attr_e('Enter text ...', 'dc-woocommerce-multi-vendor'); ?>" class="form-control" name="product_comment_text"></textarea>
                  </p>
                  <p>
                      <input class="add_note button wcmp-add-order-note" type="submit" name="wcmp_submit_product_comment" value="<?php _e('Submit', 'dc-woocommerce-multi-vendor'); ?>">
@@ -909,13 +909,13 @@ class WCMp_Product {
         $post = get_post($post_id);
         if ($post->post_type == 'product') {
             if (isset($_POST['_wcmp_cancallation_policy'])) {
-                update_post_meta($post_id, '_wcmp_cancallation_policy', $_POST['_wcmp_cancallation_policy']);
+                update_post_meta($post_id, '_wcmp_cancallation_policy', wc_clean(wp_unslash($_POST['_wcmp_cancallation_policy'])));
             }
             if (isset($_POST['_wcmp_refund_policy'])) {
-                update_post_meta($post_id, '_wcmp_refund_policy', $_POST['_wcmp_refund_policy']);
+                update_post_meta($post_id, '_wcmp_refund_policy', wc_clean(wp_unslash($_POST['_wcmp_refund_policy'])));
             }
             if (isset($_POST['_wcmp_shipping_policy'])) {
-                update_post_meta($post_id, '_wcmp_shipping_policy', $_POST['_wcmp_shipping_policy']);
+                update_post_meta($post_id, '_wcmp_shipping_policy', wc_clean(wp_unslash($_POST['_wcmp_shipping_policy'])));
             }
         }
     }
@@ -946,19 +946,19 @@ class WCMp_Product {
             if( !empty($products) ) {
                 foreach( $products as $product ) {
                     if (isset($_POST['commision'])) {
-                        update_post_meta($product, '_commission_per_product', $_POST['commision']);
+                        update_post_meta($product, '_commission_per_product', floatval(sanitize_text_field( $_POST['commision'])));
                     }
 
                     if (isset($_POST['commission_percentage'])) {
-                        update_post_meta($product, '_commission_percentage_per_product', $_POST['commission_percentage']);
+                        update_post_meta($product, '_commission_percentage_per_product', floatval(sanitize_text_field($_POST['commission_percentage'])));
                     }
 
                     if (isset($_POST['fixed_with_percentage_qty'])) {
-                        update_post_meta($product, '_commission_fixed_with_percentage_qty', $_POST['fixed_with_percentage_qty']);
+                        update_post_meta($product, '_commission_fixed_with_percentage_qty', floatval(sanitize_text_field($_POST['fixed_with_percentage_qty'])));
                     }
 
                     if (isset($_POST['fixed_with_percentage'])) {
-                        update_post_meta($product, '_commission_fixed_with_percentage', $_POST['fixed_with_percentage']);
+                        update_post_meta($product, '_commission_fixed_with_percentage', floatval(sanitize_text_field($_POST['fixed_with_percentage'])));
                     }
 
                     if (isset($_POST['choose_vendor']) && !empty($_POST['choose_vendor'])) {
@@ -971,7 +971,7 @@ class WCMp_Product {
 
                         }
 
-                        $vendor = get_wcmp_vendor_by_term($_POST['choose_vendor']);
+                        $vendor = get_wcmp_vendor_by_term(absint($_POST['choose_vendor']));
                         if (!wp_is_post_revision($product)) {
                             // unhook this function so it doesn't loop infinitely
                             remove_action('save_post', array($this, 'process_vendor_data'));
@@ -1006,28 +1006,28 @@ class WCMp_Product {
             if (isset($_POST['variable_post_id']) && !empty($_POST['variable_post_id'])) {
                 foreach ($_POST['variable_post_id'] as $post_key => $value) {
                     if (isset($_POST['variable_product_vendors_commission'][$post_key])) {
-                        $commission = $_POST['variable_product_vendors_commission'][$post_key];
+                        $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission'][$post_key]));
                         update_post_meta($value, '_product_vendors_commission', $commission);
                     }
 
                     if (isset($_POST['variable_product_vendors_commission_percentage'][$post_key])) {
-                        $commission = $_POST['variable_product_vendors_commission_percentage'][$post_key];
+                        $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_percentage'][$post_key]));
                         update_post_meta($value, '_product_vendors_commission_percentage', $commission);
                     }
 
                     if (isset($_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key])) {
-                        $commission = $_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key];
+                        $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key]));
                         update_post_meta($value, '_product_vendors_commission_fixed_per_trans', $commission);
                     }
 
                     if (isset($_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key])) {
-                        $commission = $_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key];
+                        $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key]));
                         update_post_meta($value, '_product_vendors_commission_fixed_per_qty', $commission);
                     }
 
                     if (isset($_POST['dc_variable_shipping_class'][$post_key])) {
                         $_POST['dc_variable_shipping_class'][$post_key] = !empty($_POST['dc_variable_shipping_class'][$post_key]) ? (int) $_POST['dc_variable_shipping_class'][$post_key] : '';
-                        $array = wp_set_object_terms($value, $_POST['dc_variable_shipping_class'][$post_key], 'product_shipping_class');
+                        $array = wp_set_object_terms($value, floatval(sanitize_text_field($_POST['dc_variable_shipping_class'][$post_key])), 'product_shipping_class');
                         unset($_POST['dc_variable_shipping_class'][$post_key]);
                     }
                 }
@@ -1051,31 +1051,31 @@ class WCMp_Product {
         if (isset($_POST['variable_post_id']) && !empty($_POST['variable_post_id'])) {
             foreach ($_POST['variable_post_id'] as $post_key => $value) {
                 if (isset($_POST['variable_product_vendors_commission'][$post_key])) {
-                    $commission = $_POST['variable_product_vendors_commission'][$post_key];
+                    $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission'][$post_key]));
                     update_post_meta($value, '_product_vendors_commission', $commission);
                     unset($_POST['variable_product_vendors_commission'][$post_key]);
                 }
 
                 if (isset($_POST['variable_product_vendors_commission_percentage'][$post_key])) {
-                    $commission = $_POST['variable_product_vendors_commission_percentage'][$post_key];
+                    $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_percentage'][$post_key]));
                     update_post_meta($value, '_product_vendors_commission_percentage', $commission);
                     unset($_POST['variable_product_vendors_commission_percentage'][$post_key]);
                 }
 
                 if (isset($_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key])) {
-                    $commission = $_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key];
+                    $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key]));
                     update_post_meta($value, '_product_vendors_commission_fixed_per_trans', $commission);
                     unset($_POST['variable_product_vendors_commission_fixed_per_trans'][$post_key]);
                 }
 
                 if (isset($_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key])) {
-                    $commission = $_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key];
+                    $commission = floatval(sanitize_text_field($_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key]));
                     update_post_meta($value, '_product_vendors_commission_fixed_per_qty', $commission);
                     unset($_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key]);
                 }
                 if (isset($_POST['dc_variable_shipping_class'][$post_key])) {
                     $_POST['dc_variable_shipping_class'][$post_key] = !empty($_POST['dc_variable_shipping_class'][$post_key]) ? (int) $_POST['dc_variable_shipping_class'][$post_key] : '';
-                    $array = wp_set_object_terms($value, $_POST['dc_variable_shipping_class'][$post_key], 'product_shipping_class');
+                    $array = wp_set_object_terms($value, floatval(sanitize_text_field($_POST['dc_variable_shipping_class'][$post_key])), 'product_shipping_class');
                     unset($_POST['dc_variable_shipping_class'][$post_key]);
                 }
             }
@@ -1328,30 +1328,30 @@ class WCMp_Product {
             $show_in_popup = apply_filters('wcmp_show_report_abuse_form_popup', true, $product)
             ?>
             <div class="wcmp-report-abouse-wrapper">
-                <a href="javascript:void(0);" id="report_abuse"><?php echo $report_abuse_text; ?></a>
+                <a href="javascript:void(0);" id="report_abuse"><?php echo esc_html($report_abuse_text); ?></a>
                 <div id="report_abuse_form"  class="<?php echo ( $show_in_popup ) ? 'report-abouse-modal' : ''; ?>" tabindex="-1" style="display: none;">
                     <div class="<?php echo ( $show_in_popup ) ? 'modal-content' : 'toggle-content'; ?>">
                         <div class="modal-header">
                             <button type="button" class="close">&times;</button>
-                            <h2 class="wcmp-abuse-report-title1"><?php _e('Report an abuse for product ', 'dc-woocommerce-multi-vendor') . ' ' . the_title(); ?> </h2>
+                            <h2 class="wcmp-abuse-report-title1"><?php esc_html_e('Report an abuse for product ', 'dc-woocommerce-multi-vendor') . ' ' . the_title(); ?> </h2>
                         </div>
                         <div class="modal-body">
                             <p class="field-row">
-                                <input type="text" class="report_abuse_name" id="report_abuse_name" name="report_abuse[name]" value="" style="width: 100%;" placeholder="<?php _e('Name', 'dc-woocommerce-multi-vendor'); ?>" required="">
+                                <input type="text" class="report_abuse_name" id="report_abuse_name" name="report_abuse[name]" value="" style="width: 100%;" placeholder="<?php esc_attr_e('Name', 'dc-woocommerce-multi-vendor'); ?>" required="">
                                 <span class="wcmp-report-abuse-error"></span>
                             </p>
                             <p class="field-row">
-                                <input type="email" class="report_abuse_email" id="report_abuse_email" name="report_abuse[email]" value="" style="width: 100%;" placeholder="<?php _e('Email', 'dc-woocommerce-multi-vendor'); ?>" required="">
+                                <input type="email" class="report_abuse_email" id="report_abuse_email" name="report_abuse[email]" value="" style="width: 100%;" placeholder="<?php esc_attr_e('Email', 'dc-woocommerce-multi-vendor'); ?>" required="">
                                 <span class="wcmp-report-abuse-error"></span>
                             </p>
                             <p class="field-row">
-                                <textarea name="report_abuse[message]" class="report_abuse_msg" id="report_abuse_msg" rows="5" style="width: 100%;" placeholder="<?php _e('Leave a message explaining the reasons for your abuse report', 'dc-woocommerce-multi-vendor'); ?>" required=""></textarea>
+                                <textarea name="report_abuse[message]" class="report_abuse_msg" id="report_abuse_msg" rows="5" style="width: 100%;" placeholder="<?php esc_attr_e('Leave a message explaining the reasons for your abuse report', 'dc-woocommerce-multi-vendor'); ?>" required=""></textarea>
                                 <span class="wcmp-report-abuse-error"></span>
                             </p>
                         </div> 
                         <div class="modal-footer">
                             <input type="hidden" class="report_abuse_product_id" value="<?php echo $product->get_id(); ?>">
-                            <button type="button" class="btn btn-primary submit-report-abuse" name="report_abuse[submit]"><?php _e('Report', 'dc-woocommerce-multi-vendor'); ?></button>
+                            <button type="button" class="btn btn-primary submit-report-abuse" name="report_abuse[submit]"><?php esc_html_e('Report', 'dc-woocommerce-multi-vendor'); ?></button>
                         </div>
                     </div>
                 </div>
@@ -1463,8 +1463,8 @@ class WCMp_Product {
     function wcmp_delete_product_action() {
         $products_url = wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_products_endpoint', 'vendor', 'general', 'products'));
         $delete_product_redirect_url = apply_filters('wcmp_vendor_redirect_after_delete_product_action', $products_url);
-        $wpnonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : '';
-        $product_id = isset($_REQUEST['product_id']) ? (int) $_REQUEST['product_id'] : 0;
+        $wpnonce = isset($_REQUEST['_wpnonce']) ? wc_clean($_REQUEST['_wpnonce']) : '';
+        $product_id = isset($_REQUEST['product_id']) ? absint($_REQUEST['product_id']) : 0;
         $vendor = get_wcmp_product_vendors($product_id);
         $current_user_ids = apply_filters( 'wcmp_product_current_id' , array( get_current_user_id() ) , $vendor );
         if ($wpnonce && wp_verify_nonce($wpnonce, 'wcmp_delete_product') && $product_id && in_array($vendor->id, $current_user_ids )) {
@@ -1599,16 +1599,16 @@ class WCMp_Product {
      */
     public function save_product_cat_commission_fields($term_id, $tt_id = '', $taxonomy = '') {
         if (isset($_POST['commision']) && 'product_cat' === $taxonomy) {
-            update_term_meta($term_id, 'commision', esc_attr($_POST['commision']));
+            update_term_meta($term_id, 'commision', floatval(sanitize_text_field($_POST['commision'])));
         }
         if (isset($_POST['commission_percentage']) && 'product_cat' === $taxonomy) {
-            update_term_meta($term_id, 'commission_percentage', absint($_POST['commission_percentage']));
+            update_term_meta($term_id, 'commission_percentage', floatval(sanitize_text_field($_POST['commission_percentage'])));
         }
         if (isset($_POST['fixed_with_percentage']) && 'product_cat' === $taxonomy) {
-            update_term_meta($term_id, 'fixed_with_percentage', esc_attr($_POST['fixed_with_percentage']));
+            update_term_meta($term_id, 'fixed_with_percentage', floatval(sanitize_text_field($_POST['fixed_with_percentage'])));
         }
         if (isset($_POST['fixed_with_percentage_qty']) && 'product_cat' === $taxonomy) {
-            update_term_meta($term_id, 'fixed_with_percentage_qty', absint($_POST['fixed_with_percentage_qty']));
+            update_term_meta($term_id, 'fixed_with_percentage_qty', floatval(sanitize_text_field($_POST['fixed_with_percentage_qty'])));
         }
     }
     

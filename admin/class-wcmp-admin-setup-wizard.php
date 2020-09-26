@@ -191,9 +191,9 @@ class WCMp_Admin_Setup_Wizard {
             <body class="wcmp-setup wp-core-ui">
                 <h1 id="wcmp-logo"><a href="http://wc-marketplace.com/"><img src="<?php echo trailingslashit(plugins_url('dc-woocommerce-multi-vendor')); ?>assets/images/wc-marketplace.png" alt="WC Marketplace" /></a></h1>
                 <div class="wcmp-install-woocommerce">
-                    <p><?php _e('WC Marketplace requires WooCommerce plugin to be active!', 'dc-woocommerce-multi-vendor'); ?></p>
+                    <p><?php esc_html_e('WC Marketplace requires WooCommerce plugin to be active!', 'dc-woocommerce-multi-vendor'); ?></p>
                     <form method="post" action="" name="wcmp_install_woocommerce">
-                        <?php submit_button(__('Install WooCommerce', 'primary', 'wcmp_install_woocommerce')); ?>
+                        <?php submit_button(esc_html_e('Install WooCommerce', 'primary', 'wcmp_install_woocommerce')); ?>
         <?php wp_nonce_field('wcmp-install-woocommerce'); ?>
                     </form>
                 </div>
@@ -375,7 +375,7 @@ class WCMp_Admin_Setup_Wizard {
                 </style>
             </head>
             <body class="wc-setup wp-core-ui">
-                <h1 id="wc-logo"><a href="http://wc-marketplace.com/"><img src="<?php echo $WCMp->plugin_url; ?>assets/images/wc-marketplace.png" alt="WC Marketplace" /></a></h1>
+                <h1 id="wc-logo"><a href="http://wc-marketplace.com/"><img src="<?php echo esc_url($WCMp->plugin_url); ?>assets/images/wc-marketplace.png" alt="WC Marketplace" /></a></h1>
                 <?php
             }
 
@@ -415,7 +415,7 @@ class WCMp_Admin_Setup_Wizard {
     public function wcmp_setup_introduction() {
         ?>
         <h1><?php esc_html_e('Welcome to the WC Marketplace family!', 'dc-woocommerce-multi-vendor'); ?></h1>
-        <p><?php _e('Thank you for choosing WC Marketplace! This quick setup wizard will help you configure the basic settings and you will have your marketplace ready in no time. <strong>It’s completely optional and shouldn’t take longer than five minutes.</strong>', 'dc-woocommerce-multi-vendor'); ?></p>
+        <p><?php esc_html_e('Thank you for choosing WC Marketplace! This quick setup wizard will help you configure the basic settings and you will have your marketplace ready in no time. <strong>It’s completely optional and shouldn’t take longer than five minutes.</strong>', 'dc-woocommerce-multi-vendor'); ?></p>
         <p><?php esc_html_e("If you don't want to go through the wizard right now, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!", 'dc-woocommerce-multi-vendor'); ?></p>
         <p class="wc-setup-actions step">
             <a href="<?php echo esc_url($this->get_next_step_link()); ?>" class="button-primary button button-large button-next"><?php esc_html_e("Let's go!", 'dc-woocommerce-multi-vendor'); ?></a>
@@ -439,8 +439,8 @@ class WCMp_Admin_Setup_Wizard {
                         $permalinks = get_option('dc_vendors_permalinks');
                         $vendor_slug = empty($permalinks['vendor_shop_base']) ? _x('', 'slug', 'dc-woocommerce-multi-vendor') : $permalinks['vendor_shop_base'];
                         ?>
-                        <input type="text" id="vendor_store_url" name="vendor_store_url" placeholder="vendor" value="<?php echo $vendor_slug; ?>" />
-                        <p class="description"><?php _e('Define vendor store URL (' . site_url() . '/[this-text]/[seller-name])', 'dc-woocommerce-multi-vendor') ?></p>
+                        <input type="text" id="vendor_store_url" name="vendor_store_url" placeholder="<?php esc_attr_e('vendor', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo esc_attr( $vendor_slug ); ?>" />
+                        <p class="description"><?php esc_html_e('Define vendor store URL (' . site_url() . '/[this-text]/[seller-name])', 'dc-woocommerce-multi-vendor') ?></p>
                     </td>
                 </tr>
                 <tr>
@@ -500,7 +500,7 @@ class WCMp_Admin_Setup_Wizard {
                         <?php
                         $default_commission = isset($payment_settings['default_commission']) ? $payment_settings['default_commission'] : '';
                         ?>
-                        <input type="text" id="default_commission" name="default_commission" placeholder="" value="<?php echo $default_commission; ?>" />
+                        <input type="text" id="default_commission" name="default_commission" placeholder="" value="<?php echo esc_attr($default_commission); ?>" />
                     </td>
                 </tr>
 
@@ -510,7 +510,7 @@ class WCMp_Admin_Setup_Wizard {
                         <?php
                         $default_percentage = isset($payment_settings['default_percentage']) ? $payment_settings['default_percentage'] : '';
                         ?>
-                        <input type="text" id="default_percentage" name="default_percentage" placeholder="" value="<?php echo $default_percentage; ?>" />
+                        <input type="text" id="default_percentage" name="default_percentage" placeholder="" value="<?php echo esc_attr($default_percentage); ?>" />
                     </td>
                 </tr>
 
@@ -520,7 +520,7 @@ class WCMp_Admin_Setup_Wizard {
                         <?php
                         $fixed_with_percentage = isset($payment_settings['fixed_with_percentage']) ? $payment_settings['fixed_with_percentage'] : '';
                         ?>
-                        <input type="text" id="fixed_with_percentage" name="fixed_with_percentage" placeholder="" value="<?php echo $fixed_with_percentage; ?>" />
+                        <input type="text" id="fixed_with_percentage" name="fixed_with_percentage" placeholder="" value="<?php echo esc_attr($fixed_with_percentage); ?>" />
                     </td>
                 </tr>
 
@@ -530,7 +530,7 @@ class WCMp_Admin_Setup_Wizard {
                         <?php
                         $fixed_with_percentage_qty = isset($payment_settings['fixed_with_percentage_qty']) ? $payment_settings['fixed_with_percentage_qty'] : '';
                         ?>
-                        <input type="text" id="fixed_with_percentage_qty" name="fixed_with_percentage_qty" placeholder="" value="<?php echo $fixed_with_percentage_qty; ?>" />
+                        <input type="text" id="fixed_with_percentage_qty" name="fixed_with_percentage_qty" placeholder="" value="<?php echo esc_attr($fixed_with_percentage_qty); ?>" />
                     </td>
                 </tr>
 

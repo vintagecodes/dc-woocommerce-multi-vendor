@@ -174,7 +174,7 @@ class WCMp_Admin {
     function wcmp_taxonomy_slug_input() {
         $permalinks = get_option('dc_vendors_permalinks');
         ?>
-        <input name="dc_product_vendor_taxonomy_slug" type="text" class="regular-text code" value="<?php if (isset($permalinks['vendor_shop_base'])) echo esc_attr($permalinks['vendor_shop_base']); ?>" placeholder="<?php echo _x('vendor', 'slug', 'dc-woocommerce-multi-vendor') ?>" />
+        <input name="dc_product_vendor_taxonomy_slug" type="text" class="regular-text code" value="<?php if (isset($permalinks['vendor_shop_base'])) echo esc_attr($permalinks['vendor_shop_base']); ?>" placeholder="<?php esc_attr_e('vendor', 'slug', 'dc-woocommerce-multi-vendor') ?>" />
         <?php
     }
 
@@ -582,7 +582,7 @@ class WCMp_Admin {
             update_post_meta($commission_id, '_paid_status', 'unpaid');
 
             // add commission id with associated vendor order
-            update_post_meta($order->get_id(), '_commission_id', $commission_id);
+            update_post_meta($order->get_id(), '_commission_id', absint($commission_id));
             // Mark commissions as processed
             update_post_meta($order->get_id(), '_commissions_processed', 'yes');
         }
@@ -607,9 +607,9 @@ class WCMp_Admin {
     public function wcmp_vendor_shipping_admin_capability($current_id){
         if( !is_user_wcmp_vendor($current_id) ){
             if( isset($_POST['vendor_id'] )){
-                $current_id = $_POST['vendor_id'];
+                $current_id = isset($_POST['vendor_id']) ? absint($_POST['vendor_id']) : 0;
             } else {
-                $current_id = $_GET['ID'];
+                $current_id = isset($_GET['ID']) ? absint($_GET['ID']) : 0;
             }
         } 
         return $current_id;

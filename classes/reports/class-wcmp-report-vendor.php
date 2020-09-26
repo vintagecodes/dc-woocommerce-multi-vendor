@@ -38,7 +38,7 @@ class WCMp_Report_Vendor extends WC_Admin_Report {
         $this->calculate_current_range($current_range);
 
         if (isset($_POST['vendor'])) {
-            $vendor_id = $_POST['vendor'];
+            $vendor_id = absint($_POST['vendor']);
             $vendor = get_wcmp_vendor_by_term($vendor_id);
             if ($vendor)
                 $products = $vendor->get_products_ids();

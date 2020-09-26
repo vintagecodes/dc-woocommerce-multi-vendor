@@ -23,11 +23,11 @@ global $WCMp;
             <input type="hidden" id="wcmp_vlist_center_lng" name="wcmp_vlist_center_lng" value=""/>
             <div class="wcmp-store-map-filter">
                 <div class="wcmp-inp-wrap">
-                    <input type="text" name="locationText" id="locationText" placeholder="<?php _e('Enter Address', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($request['locationText']) ? $request['locationText'] : ''; ?>">
+                    <input type="text" name="locationText" id="locationText" placeholder="<?php esc_attr_e('Enter Address', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($request['locationText']) ? $request['locationText'] : ''; ?>">
                 </div>
                 <div class="wcmp-inp-wrap">
                     <select name="radiusSelect" id="radiusSelect">
-                        <option value=""><?php _e('Within', 'dc-woocommerce-multi-vendor'); ?></option>
+                        <option value=""><?php esc_attr_e('Within', 'dc-woocommerce-multi-vendor'); ?></option>
                         <?php if($radius) :
                         $selected_radius = isset($request['radiusSelect']) ? $request['radiusSelect'] : '';
                         foreach ($radius as $value) {
@@ -116,7 +116,7 @@ global $WCMp;
                     <select name="vendor_state" id="vendor_state" class="state_select vendors_sort_shipping_fields form-control regular-select" rel="vendor_state">
                         <option value=""><?php esc_html_e( 'Select a state&hellip;', 'dc-woocommerce-multi-vendor' ); ?></option>
                     </select>
-                    <input class="vendors_sort_shipping_fields" type="text" placeholder="<?php _e('ZIP code', 'dc-woocommerce-multi-vendor'); ?>" name="vendor_postcode_list" value="<?php echo isset($request['vendor_postcode_list']) ? $request['vendor_postcode_list'] : ''; ?>">
+                    <input class="vendors_sort_shipping_fields" type="text" placeholder="<?php esc_attr_e('ZIP code', 'dc-woocommerce-multi-vendor'); ?>" name="vendor_postcode_list" value="<?php echo isset($request['vendor_postcode_list']) ? $request['vendor_postcode_list'] : ''; ?>">
                     <!-- Sort by Category -->
                     <select name="vendor_sort_category" id="vendor_sort_category" class="select"><?php echo $options_html; ?></select>
                     <?php do_action( 'wcmp_vendor_list_vendor_sort_extra_attributes', $request ); ?>
@@ -146,7 +146,7 @@ global $WCMp;
                         </div>
                         <div class="wcmp-store-info">
                             <div class="wcmp-store-picture">
-                                <img class="vendor_img" src="<?php echo $image; ?>" id="vendor_image_display">
+                                <img class="vendor_img" src="<?php echo esc_url($image); ?>" id="vendor_image_display">
                             </div>
                             <?php
                                 $rating_info = wcmp_get_vendor_review_info($vendor->term_id);
@@ -161,14 +161,14 @@ global $WCMp;
                             <li>
                                 <i class="wcmp-font ico-store-icon"></i>
                                 <?php $button_text = apply_filters('wcmp_vendor_lists_single_button_text', $vendor->page_title); ?>
-                                <a href="<?php echo $vendor->get_permalink(); ?>" class="store-name"><?php echo $button_text; ?></a>
+                                <a href="<?php echo esc_url($vendor->get_permalink()); ?>" class="store-name"><?php echo esc_html($button_text); ?></a>
                                 <?php do_action('wcmp_vendor_lists_single_after_button', $vendor->term_id, $vendor->id); ?>
                                 <?php do_action('wcmp_vendor_lists_vendor_after_title', $vendor); ?>
                             </li>
                             <?php if($vendor->get_formatted_address()) : ?>
                             <li>
                                 <i class="wcmp-font ico-location-icon2"></i>
-                                <p><?php echo $vendor->get_formatted_address(); ?></p>
+                                <p><?php echo esc_html($vendor->get_formatted_address()); ?></p>
                             </li>
                             <?php endif; ?>
                         </ul>

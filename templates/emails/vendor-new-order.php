@@ -16,7 +16,7 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
 $text_align = is_rtl() ? 'right' : 'left';
 ?>
 
-<p><?php printf(__('A new order was received and marked as %s from %s. Their order is as follows:', 'dc-woocommerce-multi-vendor'), $order->get_status( 'edit' ), $order->get_billing_first_name() . ' ' . $order->get_billing_last_name()); ?></p>
+<p><?php printf(esc_html__('A new order was received and marked as %s from %s. Their order is as follows:', 'dc-woocommerce-multi-vendor'), $order->get_status( 'edit' ), $order->get_billing_first_name() . ' ' . $order->get_billing_last_name()); ?></p>
 
 <?php do_action('woocommerce_email_before_order_table', $order, true, false); ?>
 <table cellspacing="0" cellpadding="6" style="width: 100%; border: 1px solid #eee;" border="1" bordercolor="#eee">
@@ -81,7 +81,7 @@ if (apply_filters('show_cust_order_calulations_field', true, $vendor->id)) {
             <td style="text-align:<?php echo $text_align; ?>; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; border:0; padding:0;" valign="top" width="50%">
                 <h2><?php _e( 'Billing Address', 'dc-woocommerce-multi-vendor' ); ?></h2>
                 <address class="address">
-                    <?php echo ( $address = $order->get_formatted_billing_address() ) ? $address : __( 'N/A', 'woocommerce' ); ?>
+                    <?php echo ( $address = $order->get_formatted_billing_address() ) ? $address : esc_html__( 'N/A', 'woocommerce' ); ?>
                 </address>
             </td>
             <?php } ?>

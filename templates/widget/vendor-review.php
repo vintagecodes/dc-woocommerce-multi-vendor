@@ -23,19 +23,19 @@ if($comments){
 		$verified = wcmp_review_is_from_verified_owner( $comment, $vendor->term_id );
 		if ( $rating && get_option( 'woocommerce_enable_review_rating' ) === 'yes'){?>
 			<div class="comment-text">
-				<a href="<?php echo $vendor->permalink.'#li-comment-'.$comment->comment_ID?>">
+				<a href="<?php echo esc_url($vendor->permalink).'#li-comment-'.$comment->comment_ID ?>">
 					<div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating" class="star-rating" title="<?php echo sprintf( __( 'Rated %d out of 5', 'dc-woocommerce-multi-vendor' ), $rating ) ?>">
-						<span style="width:<?php echo ( $rating / 5 ) * 100; ?>%"><strong itemprop="ratingValue"><?php echo $rating; ?></strong> <?php _e( 'out of 5', 'dc-woocommerce-multi-vendor' ); ?></span>
+						<span style="width:<?php echo ( $rating / 5 ) * 100; ?>%"><strong itemprop="ratingValue"><?php echo esc_html($rating); ?></strong> <?php esc_html_e( 'out of 5', 'dc-woocommerce-multi-vendor' ); ?></span>
 					</div>
 				</a>
 				<?php if ( $comment->comment_approved != '0' ) {?>
 					<p class="meta">
-						<strong itemprop="author"><?php comment_author($comment->comment_ID); ?></strong> <?php
+						<strong itemprop="author"><?php esc_html(comment_author($comment->comment_ID)); ?></strong> <?php
 						if ( get_option( 'woocommerce_review_rating_verification_label' ) === 'yes' )
 							if ( $verified )
-								echo '<em class="verified">(' . apply_filters('wcmp_widget_varified_buyer_text_filter',__( 'verified buyer', 'dc-woocommerce-multi-vendor' )) . ')</em> ';
+								echo '<em class="verified">(' . apply_filters('wcmp_widget_varified_buyer_text_filter',esc_html_e( 'verified buyer', 'dc-woocommerce-multi-vendor' )) . ')</em> ';
 
-						?>&ndash; <time itemprop="datePublished" datetime="<?php echo get_comment_date( 'c',$comment->comment_ID ); ?>"><?php echo get_comment_date( wc_date_format(), $comment->comment_ID ); ?></time>
+						?>&ndash; <time itemprop="datePublished" datetime="<?php echo get_comment_date( 'c',$comment->comment_ID ); ?>"><?php echo esc_html(get_comment_date( wc_date_format(), $comment->comment_ID )); ?></time>
 					</p>
 				<?php } ?>
 				<div itemprop="description" class="description"><?php 
@@ -46,7 +46,7 @@ if($comments){
 		<?php
 		}
 	}
-}else{
+} else {
  		echo apply_filters('wcmp_widget_empty_reviews_text_filter',__( 'No Reviews..', 'dc-woocommerce-multi-vendor' ));
  	}
  ?>

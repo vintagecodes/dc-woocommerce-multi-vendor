@@ -46,7 +46,7 @@ class WCMp_Report_Banking_overview extends WC_Admin_Report {
 
         $table = __( 'Please Select a vendor first', 'dc-woocommerce-multi-vendor' );
         if (isset($_POST['banking_overview_vendor'])) {
-            $vendor_id = $_POST['banking_overview_vendor'];
+            $vendor_id = absint($_POST['banking_overview_vendor']);
         }
 
         if ($vendor_id && $vendor) {

@@ -39,28 +39,28 @@ do_action('before_wcmp_vendor_pending_shipping');
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title"><?php _e('Shipment Tracking Details', 'dc-woocommerce-multi-vendor'); ?></h4>
+                    <h4 class="modal-title"><?php esc_html_e('Shipment Tracking Details', 'dc-woocommerce-multi-vendor'); ?></h4>
                 </div>
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="tracking_url"><?php _e('Enter Tracking Url', 'dc-woocommerce-multi-vendor'); ?> *</label>
+                        <label for="tracking_url"><?php esc_html_e('Enter Tracking Url', 'dc-woocommerce-multi-vendor'); ?> *</label>
                         <input type="url" class="form-control" id="email" name="tracking_url" required="">
                     </div>
                     <div class="form-group">
-                        <label for="tracking_id"><?php _e('Enter Tracking ID', 'dc-woocommerce-multi-vendor'); ?> *</label>
+                        <label for="tracking_id"><?php esc_html_e('Enter Tracking ID', 'dc-woocommerce-multi-vendor'); ?> *</label>
                         <input type="text" class="form-control" id="pwd" name="tracking_id" required="">
                     </div>
                 </div>
                 <input type="hidden" name="order_id" id="wcmp-marke-ship-order-id" />
                 <?php if (isset($_POST['wcmp_start_date_order'])) : ?>
-                    <input type="hidden" name="wcmp_start_date_order" value="<?php echo $_POST['wcmp_start_date_order']; ?>" />
+                    <input type="hidden" name="wcmp_start_date_order" value="<?php echo isset($_POST['wcmp_start_date_order']) ? $_POST['wcmp_start_date_order'] : date('Y-m-01'); ?>" />
                 <?php endif; ?>
                 <?php if (isset($_POST['wcmp_end_date_order'])) : ?>
-                    <input type="hidden" name="wcmp_end_date_order" value="<?php echo $_POST['wcmp_end_date_order']; ?>" />
+                    <input type="hidden" name="wcmp_end_date_order" value="<?php echo isset($_POST['wcmp_end_date_order']) ? $_POST['wcmp_end_date_order'] : date('Y-m-d'); ?>" />
                 <?php endif; ?>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" name="wcmp-submit-mark-as-ship"><?php _e('Submit', 'dc-woocommerce-multi-vendor'); ?></button>
+                    <button type="submit" class="btn btn-primary" name="wcmp-submit-mark-as-ship"><?php esc_html_e('Submit', 'dc-woocommerce-multi-vendor'); ?></button>
                 </div>
             </div>
         </form>
@@ -95,7 +95,7 @@ jQuery(document).ready(function($) {
             url : '<?php echo add_query_arg( 'action', 'wcmp_widget_vendor_pending_shipping', $WCMp->ajax_url() ); ?>', 
             type: "post",
             error: function(xhr, status, error) {
-                $("#widget_vendor_pending_shipping tbody").append('<tr class="odd"><td valign="top" colspan="<?php if(is_array($default_headers)) count($default_headers); ?>" class="dataTables_empty" style="text-align:center;">'+error+' - <a href="javascript:window.location.reload();"><?php _e('Reload', 'dc-woocommerce-multi-vendor'); ?></a></td></tr>');
+                $("#widget_vendor_pending_shipping tbody").append('<tr class="odd"><td valign="top" colspan="<?php if(is_array($default_headers)) count($default_headers); ?>" class="dataTables_empty" style="text-align:center;">'+error+' - <a href="javascript:window.location.reload();"><?php esc_html_e('Reload', 'dc-woocommerce-multi-vendor'); ?></a></td></tr>');
                 $("#widget_vendor_pending_shipping").css("display","none");
             }
         },

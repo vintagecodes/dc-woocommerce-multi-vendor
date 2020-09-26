@@ -266,9 +266,9 @@ class DC_Widget_Quick_Info_Widget extends WP_Widget {
                     return false;
                 }
             }elseif( isset( $_POST['recaptcha_type'] ) && $_POST['recaptcha_type'] == 'v3' ) {
-                $recaptcha_secret = isset( $_POST['recaptchav3_secretkey'] ) ? $_POST['recaptchav3_secretkey'] : '';
+                $recaptcha_secret = isset( $_POST['recaptchav3_secretkey'] ) ? wc_clean($_POST['recaptchav3_secretkey']) : '';
                 $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
-                $recaptcha_response = isset( $_POST['recaptchav3_response']) ? $_POST['recaptchav3_response'] : '';
+                $recaptcha_response = isset( $_POST['recaptchav3_response']) ? wc_clean($_POST['recaptchav3_response']) : '';
     
                 $recaptcha = file_get_contents( $recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response );
                 $recaptcha = json_decode( $recaptcha );

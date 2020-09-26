@@ -132,7 +132,7 @@ global $WCMp;
                         <span class="img_tip" data-desc="<?php esc_attr_e( 'Leave blank for unlimited re-downloads.', 'woocommerce' ) ?>"></span>
                     </label>
                     <div class="col-md-6 col-sm-9">
-                        <input class="form-control" type="text" id="_download_limit" placeholder="<?php _e( 'Unlimited', 'woocommerce' ); ?>" name="_download_limit" value="<?php echo -1 === $product_object->get_download_limit( 'edit' ) ? '' : $product_object->get_download_limit( 'edit' ); ?>" />
+                        <input class="form-control" type="text" id="_download_limit" placeholder="<?php esc_attr_e( 'Unlimited', 'woocommerce' ); ?>" name="_download_limit" value="<?php echo -1 === $product_object->get_download_limit( 'edit' ) ? '' : $product_object->get_download_limit( 'edit' ); ?>" />
                     </div>
                 </div> 
                 <div class="form-group">
@@ -141,7 +141,7 @@ global $WCMp;
                         <span class="img_tip" data-desc="<?php esc_attr_e( 'Enter the number of days before a download link expires, or leave blank.', 'woocommerce' ) ?>"></span> 
                     </label>
                     <div class="col-md-6 col-sm-9">
-                        <input class="form-control" type="text" placeholder="<?php _e( 'Never', 'woocommerce' ); ?>" id="_download_expiry" name="_download_expiry" value="<?php echo -1 === $product_object->get_download_expiry( 'edit' ) ? '' : $product_object->get_download_expiry( 'edit' ); ?>" />
+                        <input class="form-control" type="text" placeholder="<?php esc_attr_e( 'Never', 'woocommerce' ); ?>" id="_download_expiry" name="_download_expiry" value="<?php echo -1 === $product_object->get_download_expiry( 'edit' ) ? '' : $product_object->get_download_expiry( 'edit' ); ?>" />
                     </div>
                 </div> 
                 <?php do_action( 'wcmp_afm_product_options_downloads', $post->ID, $product_object, $post ); ?>

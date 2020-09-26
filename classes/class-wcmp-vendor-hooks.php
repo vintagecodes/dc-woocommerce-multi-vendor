@@ -423,14 +423,14 @@ class WCMp_Vendor_Hooks {
     public function wcmp_vendor_dashboard_vendor_report_endpoint() {
         global $WCMp;
         if ( isset( $_POST['wcmp_stat_start_dt'] ) ) {
-            $start_date = $_POST['wcmp_stat_start_dt'];
+            $start_date = wc_clean( wp_unslash( $_POST['wcmp_stat_start_dt'] ) );
         } else {
             // hard-coded '01' for first day     
             $start_date = date( 'Y-m-01' );
         }
 
         if ( isset( $_POST['wcmp_stat_end_dt'] ) ) {
-            $end_date = $_POST['wcmp_stat_end_dt'];
+            $end_date = wc_clean( wp_unslash( $_POST['wcmp_stat_end_dt'] ) );
         } else {
             // hard-coded '01' for first day
             $end_date = date( 'Y-m-d' );
@@ -583,9 +583,9 @@ class WCMp_Vendor_Hooks {
         $vendor = get_current_vendor();
         $suffix       = defined( 'WCMP_SCRIPT_DEBUG' ) && WCMP_SCRIPT_DEBUG ? '' : '.min';
         if ( isset( $_POST['wcmp-submit-mark-as-ship'] ) ) {
-            $order_id = $_POST['order_id'];
-            $tracking_id = $_POST['tracking_id'];
-            $tracking_url = $_POST['tracking_url'];
+           $order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
+            $tracking_id = isset( $_POST['tracking_id'] ) ? wc_clean( wp_unslash( $_POST['tracking_id'] ) ) : 0;
+            $tracking_url = isset( $_POST['tracking_url'] ) ? esc_url( $_POST['tracking_url'] ) : '';
             $vendor->set_order_shipped( $order_id, $tracking_id, $tracking_url );
         }
         $vendor_order = $wp->query_vars[get_wcmp_vendor_settings( 'wcmp_vendor_orders_endpoint', 'vendor', 'general', 'vendor-orders' )];
@@ -649,13 +649,13 @@ class WCMp_Vendor_Hooks {
             $WCMp->library->load_dataTable_lib();
 
             if ( ! empty( $_POST['wcmp_start_date_order'] ) ) {
-                $start_date = $_POST['wcmp_start_date_order'];
+                $start_date = wc_clean( wp_unslash( $_POST['wcmp_start_date_order'] ) );
             } else {
                 $start_date = date( 'Y-m-01' );
             }
 
             if ( ! empty( $_POST['wcmp_end_date_order'] ) ) {
-                $end_date = $_POST['wcmp_end_date_order'];
+                $end_date = wc_clean( wp_unslash( $_POST['wcmp_end_date_order'] ) );
             } else {
                 $end_date = date( 'Y-m-d' );
             }
@@ -934,7 +934,7 @@ class WCMp_Vendor_Hooks {
         if ( $_SERVER['REQUEST_METHOD'] == 'POST' && is_user_wcmp_rejected_vendor($user->ID) && $WCMp->endpoints->get_current_endpoint() == 'rejected-vendor-reapply') {
         	if(isset($_POST['reapply_vendor_application']) && isset($_POST['wcmp_vendor_fields'])) {
         		if (isset($_FILES['wcmp_vendor_fields'])) {
-					$attacment_files = $_FILES['wcmp_vendor_fields'];
+					$attacment_files = array_filter($_FILES['wcmp_vendor_fields']);
 					$files = array();
 					$count = 0;
 					if (!empty($attacment_files) && is_array($attacment_files)) {
@@ -976,32 +976,32 @@ class WCMp_Vendor_Hooks {
 						}
 					}
 				}
-                        /**
-                         * Action hook to modify vendor re submit application before save.
-                         *
-                         * @since 3.4.5
-                         */
-                        do_action( 'wcmp_before_reapply_vendor_application_save', $_POST, get_current_vendor( $user->ID ) );
-        		update_user_meta( $user->ID, 'wcmp_vendor_fields', $_POST['wcmp_vendor_fields']);
+                /**
+                 * Action hook to modify vendor re submit application before save.
+                 *
+                 * @since 3.4.5
+                 */
+                do_action( 'wcmp_before_reapply_vendor_application_save', $_POST, get_current_vendor( $user->ID ) );
+        		update_user_meta( $user->ID, 'wcmp_vendor_fields', array_filter( array_map( 'wc_clean', (array) $_POST['wcmp_vendor_fields'] ) ) );
         		$user->remove_cap( 'dc_rejected_vendor' );
         		$user->add_cap( 'dc_pending_vendor' );
-        		/**
-                         * Action hook to modify vendor re submit application after save.
-                         *
-                         * @since 3.4.5
-                         */
-                        do_action( 'wcmp_after_reapply_vendor_application_save', $_POST, get_current_vendor( $user->ID ) );
+		        /**
+                 * Action hook to modify vendor re submit application after save.
+                 *
+                 * @since 3.4.5
+                 */
+                do_action( 'wcmp_after_reapply_vendor_application_save', $_POST, get_current_vendor( $user->ID ) );
         		$wcmp_vendor_rejection_notes = unserialize( get_user_meta( $user->ID, 'wcmp_vendor_rejection_notes', true ) );
 				$wcmp_vendor_rejection_notes[time()] = array(
 						'note_by' => $user->ID,
 						'note' => __( 'Re applied to become a vendor', 'dc-woocommerce-multi-vendor' ));
 				update_user_meta( $user->ID, 'wcmp_vendor_rejection_notes', serialize( $wcmp_vendor_rejection_notes ) );
-                                /**
-                         * Action hook to modify vendor re submit application after note save.
-                         *
-                         * @since 3.4.5
-                         */
-                        do_action( 'wcmp_after_reapply_vendor_application_saved_notes', $_POST, get_current_vendor( $user->ID ) );
+                /**
+                * Action hook to modify vendor re submit application after note save.
+                *
+                * @since 3.4.5
+                */
+                do_action( 'wcmp_after_reapply_vendor_application_saved_notes', $_POST, get_current_vendor( $user->ID ) );
         	}
     	}
     }

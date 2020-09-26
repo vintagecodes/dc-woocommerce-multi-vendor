@@ -169,8 +169,8 @@ class WCMp_Coupon {
         function wcmp_delete_coupon_action(){
             $coupons_url = wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_coupons_endpoint', 'vendor', 'general', 'coupons'));
             $delete_coupon_redirect_url = apply_filters('wcmp_vendor_redirect_after_delete_coupon_action', $coupons_url);
-            $wpnonce = isset( $_REQUEST['_wpnonce'] ) ? $_REQUEST['_wpnonce'] : '';
-            $coupon_id = isset( $_REQUEST['coupon_id'] ) ? (int) $_REQUEST['coupon_id'] : 0;
+            $wpnonce = isset( $_REQUEST['_wpnonce'] ) ? wc_clean($_REQUEST['_wpnonce']) : '';
+            $coupon_id = isset( $_REQUEST['coupon_id'] ) ? absint($_REQUEST['coupon_id']) : 0;
             $coupon = get_post($coupon_id);
             $current_user_ids = apply_filters( 'wcmp_coupon_current_id' , array( get_current_user_id() ) , $coupon );
             if($coupon && is_user_wcmp_vendor(apply_filters( 'wcmp_coupon_vendor', $coupon->post_author ))){
