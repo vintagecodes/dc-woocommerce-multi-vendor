@@ -42,7 +42,7 @@ Class WCMp_Admin_Dashboard {
         add_filter( 'wcmp_vendor_submit_product', array( &$this, 'wcmp_vendor_dashboard_add_product_url' ), 10 );
 
         // Submit comment
-        add_action( 'before_wcmp_vendor_dashboard', array( &$this, 'submit_comment' ) );
+        $this->submit_comment();
 
         // Init export functions
         $this->export_csv();

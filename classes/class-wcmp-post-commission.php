@@ -1353,8 +1353,11 @@ class WCMp_Commission {
         }
         $is_updated = false;
         $prev_commission_amount = get_post_meta($post_id, '_commission_amount', true);
+        $prev_commission_total = get_post_meta( $post_id, '_commission_total', true );
         if (isset($_POST['_commission_amount'])) {
-            $is_updated = update_post_meta($post_id, '_commission_amount', floatval(sanitize_text_field($_POST['_commission_amount'])));
+            $_commission_total =  ($prev_commission_total - $prev_commission_amount) + floatval($_POST['_commission_amount']);
+            update_post_meta($post_id, '_commission_amount', floatval($_POST['_commission_amount']));
+            $is_updated = update_post_meta($post_id, '_commission_total', $_commission_total);
         }
         
         $order_id = get_post_meta($post_id, '_commission_order_id', true);
