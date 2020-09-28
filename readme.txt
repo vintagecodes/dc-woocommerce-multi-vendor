@@ -190,7 +190,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Changelog ==
 
-= 3.5.9 - 2020-09-28 =
+= 3.5.9 - 2020-09-29 =
 Fix - Data sanitize, escape and validate issue.
 Fix - Hide Tracking Order When Vendor Shipping Disable #519
 Fix - Commission Total also Reflects when Commission Amount Edited #515
