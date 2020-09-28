@@ -191,45 +191,45 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 == Changelog ==
 
 = 3.5.9 - 2020-09-29 =
-Fix - Data sanitize, escape and validate issue.
-Fix - Hide Tracking Order When Vendor Shipping Disable #519
-Fix - Commission Total also Reflects when Commission Amount Edited #515
-Fix - Postcode in vendor shipping not displaying properly #505
-Fix - Suborder create issue when update parent from backend #514
-Fix - Suborder also added in woocommerce reports money specd section #507
-Fix - Suborder doesn't copy the coupon from parent order #355
-Fix - Product note is not working #518
+* Fix - Data sanitize, escape and validate issue.
+* Fix - Hide Tracking Order When Vendor Shipping Disable #519
+* Fix - Commission Total also Reflects when Commission Amount Edited #515
+* Fix - Postcode in vendor shipping not displaying properly #505
+* Fix - Suborder create issue when update parent from backend #514
+* Fix - Suborder also added in woocommerce reports money specd section #507
+* Fix - Suborder doesn't copy the coupon from parent order #355
+* Fix - Product note is not working #518
 * Updated - Language file.
 
 = 3.5.8 - 2020-09-15 =
-Added - Filter in Banking Overriew Section #49
-Added - Added additional hooks for membership
-Fix - Email template override issue #493
-Fix -  Security issues with nonce value #497
-Fix - Category Restriction issue for coupon validation #494
-Fix -  Vendor List category search issue in the second page #457
-Fix - Vendor ID Parameter for WCMp shortcode not working #476
-Fix -  Vendor can't edit shipping method of Location Not covered zone #431
-Fix -  Main order and sub order syunc issue when adding a product mnaully in a order #472 
+* Added - Filter in Banking Overriew Section #49
+* Added - Added additional hooks for membership
+* Fix - Email template override issue #493
+* Fix -  Security issues with nonce value #497
+* Fix - Category Restriction issue for coupon validation #494
+* Fix -  Vendor List category search issue in the second page #457
+* Fix - Vendor ID Parameter for WCMp shortcode not working #476
+* Fix -  Vendor can't edit shipping method of Location Not covered zone #431
+* Fix -  Main order and sub order syunc issue when adding a product mnaully in a order #472 
 * Updated - Language file.
 
 = 3.5.7 - 2020-08-26 =
-Added - Keep displaying Vendor's review message to customer #480
-Added - Email when vendor is reviewed #438
-Added - Added additional hooks #478
-Fix – Security issues with nonce value
-Fix – WCMp Vendor's pin code wise shipping #462
-Fix – Keep display vendor review messages #459
-Fix – Individual Vendor Announcement trigger #439
-Fix – Vendor all product bulk action hook fixed #466
+* Added - Keep displaying Vendor's review message to customer #480
+* Added - Email when vendor is reviewed #438
+* Added - Added additional hooks #478
+* Fix – Security issues with nonce value
+* Fix – WCMp Vendor's pin code wise shipping #462
+* Fix – Keep display vendor review messages #459
+* Fix – Individual Vendor Announcement trigger #439
+* Fix – Vendor all product bulk action hook fixed #466
 * Updated - Language file.
 
 = 3.5.6 - 2020-08-19 =
-Added - Disply Product's weight unit in vendor add product page #456
-Fix – Bootstrap css isue in console area #470
-Fix – Admin can assign vendor with the product after WordPress update 5.5 #462
-Fix – WCMp Report per product's search issue #465
-Fix – Removed extra email send to customer when shipping Note is added #463
+* Added - Disply Product's weight unit in vendor add product page #456
+* Fix – Bootstrap css isue in console area #470
+* Fix – Admin can assign vendor with the product after WordPress update 5.5 #462
+* Fix – WCMp Report per product's search issue #465
+* Fix – Removed extra email send to customer when shipping Note is added #463
 * Updated - Language file.
 
 = 3.5.5 - 2020-08-13 =
