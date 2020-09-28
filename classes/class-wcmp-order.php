@@ -77,6 +77,8 @@ class WCMp_Order {
             add_action( 'woocommerce_order_status_changed', array($this, 'wcmp_vendor_order_status_changed_actions'), 99, 3 );
             add_action( 'woocommerce_rest_shop_order_object_query', array($this, 'wcmp_exclude_suborders_from_rest_api_call'), 99, 2 );
             add_filter( "woocommerce_rest_shop_order_object_query", array($this, 'wcmp_suborder_hide' ), 99 , 2 );
+            // customer list report section
+            add_filter( "woocommerce_customer_get_total_spent_query", array($this, 'woocommerce_customer_exclude_suborder_query' ), 10 , 2 );
         }
     }
 
@@ -1617,6 +1619,22 @@ class WCMp_Order {
         }
         $args['post__not_in'] = array( $suborders );
         return $args;
+    }
+
+    public function woocommerce_customer_exclude_suborder_query( $query, $customer ) {
+        global $wpdb;
+        $statuses = array_map( 'esc_sql', wc_get_is_paid_statuses() );
+        $query = "SELECT SUM(meta2.meta_value)
+        FROM $wpdb->posts as posts
+        LEFT JOIN {$wpdb->postmeta} AS meta ON posts.ID = meta.post_id
+        LEFT JOIN {$wpdb->postmeta} AS meta2 ON posts.ID = meta2.post_id
+        WHERE   meta.meta_key       = '_customer_user'
+        AND     meta.meta_value     = '" . esc_sql( $customer->get_id() ) . "'
+        AND     posts.post_type     = 'shop_order'
+        AND     posts.post_parent   = 0
+        AND     posts.post_status   IN ( 'wc-" . implode( "','wc-", $statuses ) . "' )
+        AND     meta2.meta_key      = '_order_total'";
+        return $query;
     }
 
     public function get_vendor_parent_order_item_id( $item_id ) {
