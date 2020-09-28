@@ -336,14 +336,8 @@ class WCMp_Order {
             }
         }
         
-        $suborders = get_wcmp_suborders( $order_id, false, false);
-        if (!empty($suborders)) {
-            foreach ($suborders as $key => $value) {
-                $commission_id = get_post_meta( $value, '_commission_id', true );
-                wp_delete_post( $commission_id, true );
-                wp_delete_post( $value, true );
-            }
-        }
+        $has_sub_order = get_post_meta($order_id, 'has_wcmp_sub_order', true) ? true : false;
+        if($has_sub_order) return;
         $this->wcmp_create_orders($order_id, array(), $order, true);
     }
     
@@ -365,38 +359,51 @@ class WCMp_Order {
     }
 
     public function woocommerce_ajax_order_items_added( $added_items, $order ) {
-        if (wp_get_post_parent_id($order->get_id())) {
-            foreach ( $added_items as $item_id => $item_data ) {
-                $parent_order = wc_get_order( wp_get_post_parent_id( $order->get_id() ) );
-                $item = new WC_Order_Item_Product();
-                $product = wc_get_product( $item_data->get_product_id() );
+        foreach ( $added_items as $item_id => $item_data ) {
+            $parent_order = wc_get_order( wp_get_post_parent_id( $order->get_id() ) );
+            $suborder_id = false;
+            $suborders = get_wcmp_suborders($order->get_id());
+            if (!empty($suborders)) {
+                foreach ($suborders as $key_order => $value_order) {
+                    $vendor_of_order = get_post_meta( $value_order->get_id(), '_vendor_id', true );
+                    if ($vendor_of_order == get_wcmp_product_vendors($item_data->get_product_id())->id) {
+                        $suborder_id = $value_order->get_id();
+                    }
+                }
+            }
+            $item = new WC_Order_Item_Product();
+            $product = wc_get_product( $item_data->get_product_id() );
+            $item->set_props(
+                array(
+                    'quantity'     => $item_data->get_quantity(),
+                    'variation'    => $item_data->get_variation_id(),
+                    'subtotal'     => $item_data->get_subtotal(),
+                    'total'        => $item_data->get_total(),
+                    'subtotal_tax' => $item_data->get_subtotal_tax(),
+                    'total_tax'    => $item_data->get_total_tax(),
+                    'taxes'        => $item_data->get_taxes(),
+                    )
+                );
+            if ( $product ) {
                 $item->set_props(
                     array(
-                        'quantity'     => $item_data->get_quantity(),
-                        'variation'    => $item_data->get_variation_id(),
-                        'subtotal'     => $item_data->get_subtotal(),
-                        'total'        => $item_data->get_total(),
-                        'subtotal_tax' => $item_data->get_subtotal_tax(),
-                        'total_tax'    => $item_data->get_total_tax(),
-                        'taxes'        => $item_data->get_taxes(),
+                        'name'         => $product->get_name(),
+                        'tax_class'    => $product->get_tax_class(),
+                        'product_id'   => $product->is_type( 'variation' ) ? $product->get_parent_id() : $product->get_id(),
+                        'variation_id' => $product->is_type( 'variation' ) ? $product->get_id() : 0,
                         )
                     );
-                if ( $product ) {
-                    $item->set_props(
-                        array(
-                            'name'         => $product->get_name(),
-                            'tax_class'    => $product->get_tax_class(),
-                            'product_id'   => $product->is_type( 'variation' ) ? $product->get_parent_id() : $product->get_id(),
-                            'variation_id' => $product->is_type( 'variation' ) ? $product->get_id() : 0,
-                            )
-                        );
-                }
-
-                $item->set_backorder_meta();
-
+            }
+            $item->set_backorder_meta();
+            if ($parent_order) {
                 $parent_order->add_item( $item );
                 $parent_order->save();
                 $parent_order->calculate_totals();
+            } elseif ($suborders && $suborder_id) {
+                $suborder_object = wc_get_order( $suborder_id );
+                $suborder_object->add_item( $item );
+                $suborder_object->save();
+                $suborder_object->calculate_totals();
             }
         }
     }
