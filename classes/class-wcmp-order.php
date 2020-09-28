@@ -707,10 +707,19 @@ class WCMp_Order {
      * @param WCMp Order $args  Arguments.
      */
     public static function create_wcmp_order_coupon_lines( $order, $cart, $args ) {
+        // Find cart products
+        $cart_product_ids = array();
+        if ( $order && $order->get_items() ) :
+            foreach ( $order->get_items() as $item_id => $item_values ) {
+                $cart_product_ids[] = $item_values->get_product_id();
+            }
+        endif;
         if( $cart && $cart->get_coupons() ) :
             foreach ( $cart->get_coupons() as $code => $coupon ) {
-                if( !in_array( $coupon->get_discount_type(), apply_filters( 'wcmp_order_available_coupon_types', array( 'fixed_product', 'percent' ), $order, $cart ) ) ) continue;
-                if( absint( $args['vendor_id'] ) !== absint( get_post_field( 'post_author', $coupon->get_id() ) ) ) continue;
+                if( !in_array( $coupon->get_discount_type(), apply_filters( 'wcmp_order_available_coupon_types', array( 'fixed_product', 'percent', 'fixed_cart' ), $order, $cart ) ) ) continue;
+                $coupon_products = explode(",", get_post_meta( $coupon->get_id(), 'product_ids', true ) );
+                $match_coupon_product = array_intersect($cart_product_ids, $coupon_products);
+                if (!$match_coupon_product) continue;                
                 $item = new WC_Order_Item_Coupon();
                 $item->set_props(
                     array(
