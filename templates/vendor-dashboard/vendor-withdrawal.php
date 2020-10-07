@@ -29,7 +29,7 @@ $withdrawal_list_table_headers = apply_filters('wcmp_datatable_vendor_withdrawal
 <?php if($get_vendor_thresold) : ?>
 <div class="col-md-12">
     <blockquote>
-        <span><?php esc_html_e('Your Threshold value for withdrawals is :', 'dc-woocommerce-multi-vendor'); ?> <?php echo esc_html(wc_price($get_vendor_thresold)); ?></span>
+        <span><?php esc_html_e('Your Threshold value for withdrawals is :', 'dc-woocommerce-multi-vendor'); ?> <?php echo wc_price($get_vendor_thresold); ?></span>
     </blockquote>
 </div>
 <?php endif; ?>
