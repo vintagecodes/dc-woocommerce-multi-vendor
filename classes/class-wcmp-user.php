@@ -45,7 +45,7 @@ class WCMp_User {
         add_filter('woocommerce_login_redirect', array($this, 'wcmp_vendor_login'), 10, 2);
         add_filter('login_redirect', array($this, 'wp_wcmp_vendor_login'), 10, 3);
         // set cookie
-        $this->set_wcmp_user_cookies();
+        add_action('template_redirect', array(&$this, 'set_wcmp_user_cookies'), 99);
         //User Avatar override
         add_filter( 'get_avatar', array( &$this, 'wcmp_user_avatar_override' ), 10, 6 );
     
