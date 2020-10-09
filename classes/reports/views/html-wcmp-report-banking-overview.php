@@ -122,7 +122,7 @@ $vendor = isset($vendor) ? $vendor : '';
 							<?php
 							foreach($banking_datas as $key => $data) {
 								if( in_array($key, $headers) )
-									echo "<td class='total_row'>".esc_html($data)."</td>";
+									echo "<td class='total_row'>". $data ."</td>";
 							}
 							?>
 						</tr>
