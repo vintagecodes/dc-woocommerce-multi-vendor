@@ -1806,6 +1806,7 @@ class WCMp_Commission {
                 if ($post_type == $this->post_type) {
                     $wp_query->set('orderby', 'ID');
                     $wp_query->set('order', 'DESC');
+                    $wp_query->set('post__not_in', wcmp_get_failed_order_commission());
                 }
             }
         }
