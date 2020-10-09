@@ -4313,13 +4313,13 @@ class WCMp_Ajax {
             $data_store = $WCMp->ledger->load_ledger_data_store();
             $vendor_all_ledgers = $data_store->get_ledger( array( 'vendor_id' => $vendor->id ), '', $requestData );
             $initial_balance = $ending_balance = $total_credit = $total_debit = 0;
+            $vendor_ledgers = apply_filters( 'wcmp_vendor_banking_ledger_lists', array_slice( $vendor_all_ledgers, $requestData['start'], $requestData['length'] ), $vendor, $requestData );
             // get initial balance
             $inital_data = end( $vendor_ledgers );
             $initial_balance = ( $inital_data->balance && $inital_data->balance != '' ) ? $inital_data->balance : 0;
             //get ending balance
             $ending_data = reset( $vendor_ledgers );
             $ending_balance = ( $ending_data->balance && $ending_data->balance != '' ) ? $ending_data->balance : 0;
-            $vendor_ledgers = apply_filters( 'wcmp_vendor_banking_ledger_lists', array_slice( $vendor_all_ledgers, $requestData['start'], $requestData['length'] ), $vendor, $requestData );
             $data = array();
             if ( $vendor_ledgers ) {
                 foreach ($vendor_ledgers as $ledger ) {
