@@ -196,6 +196,10 @@ class WCMp_Taxonomy {
             'upc'   => __( 'UPC', 'dc-woocommerce-multi-vendor' ),
             'ean'   => __( 'EAN', 'dc-woocommerce-multi-vendor' ),
             'isbn'  => __( 'ISBN', 'dc-woocommerce-multi-vendor' ),
+            'issn'  => __( 'ISSN', 'dc-woocommerce-multi-vendor' ),
+            'ismn'  => __( 'ISMN', 'dc-woocommerce-multi-vendor' ),
+            'jan'   => __( 'JAN', 'dc-woocommerce-multi-vendor' ),
+            'itf-14'=> __( 'ITF-14', 'dc-woocommerce-multi-vendor' ),
             'mpuin' => apply_filters( 'wcmp_gtin_default_marketplace_unique_item_number_label', __( 'MPUIN', 'dc-woocommerce-multi-vendor' )),
             
         ));
