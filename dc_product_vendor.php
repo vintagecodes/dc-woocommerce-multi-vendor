@@ -4,7 +4,7 @@
  * Plugin URI: https://wc-marketplace.com/
  * Description: A Free Extension That Transforms Your WooCommerce Site into a Marketplace.
  * Author: WC Marketplace
- * Version: 3.5.9
+ * Version: 3.5.10
  * Author URI: https://wc-marketplace.com/
  * Requires at least: 4.4
  * Tested up to: 5.5.1

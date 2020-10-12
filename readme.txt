@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.5.1
 Requires PHP: 5.6
-Stable tag: 3.5.9
+Stable tag: 3.5.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,16 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.5.10 - 2020-10-13 =
+* Enhancement - WCMp commissions hide for failed order #521
+* Enhancement - Added support for complete gtin list #417
+* Fix - Visitor's data save issue in visitor map #528
+* Fix - Vendor's Withdrawal page Threshold amount issue #529
+* Fix - Announcement month not translating at vendor end #527
+* Fix - Admin's Banking Overview data disply issue #532
+* Fix - Vendor's Banking Balance data issue #531
+* Updated - Language file.
 
 = 3.5.9 - 2020-09-29 =
 * Fix - Data sanitize, escape and validate issue.
