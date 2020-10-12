@@ -190,7 +190,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Changelog ==
 
-= 3.5.10 - 2020-10-12 =
+= 3.5.10 - 2020-10-13 =
 * Enhancement - WCMp commissions hide for failed order #521
 * Enhancement - Added support for complete gtin list #417
 * Fix - Visitor's data save issue in visitor map #528
