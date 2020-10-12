@@ -19,7 +19,7 @@ foreach( $posts_array as $post_element) {
 
 	<div <?php if($tab2_counter >= 6) {?> class="wcmp_hide_message2" <?php }?> >
 		<div class="msg_date_box"><span><?php echo @date('d',strtotime($post_element->post_date)); ?></span><br>
-			<?php echo @date('M',strtotime($post_element->post_date)); ?></div>
+			<?php echo @date_i18n('M',strtotime($post_element->post_date)); ?></div>
 		<div class="msg_title_box"><span class="title"><?php echo $post_element->post_title; ?></span><br>
 			<span class="mormaltext"> <?php echo $short_content = substr(stripslashes(strip_tags($post_element->post_content)),0,105); if(strlen(stripslashes(strip_tags($post_element->post_content))) > 105) {echo '...'; } ?></span> </div>
 		<div class="msg_arrow_box"><a href="#" class="msg_stat_click"><i class="wcmp-font ico-downarrow-2-icon"></i></a>
