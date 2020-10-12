@@ -4255,3 +4255,20 @@ if (!function_exists('get_wcmp_more_spmv_products')) {
         return apply_filters( 'wcmp_more_spmv_products_data', $more_products, $product_id );
     }
 }
+
+/**
+ * Get failed order commission ID
+ *
+ * @return commission ID
+ */
+
+function wcmp_get_failed_order_commission() {
+    $failed_orders = wcmp_get_orders( array('post_status' => 'wc-failed'), 'ids', true );
+    $commission_id = array();
+    if (!empty($failed_orders)) {
+        foreach ($failed_orders as $order_id) {
+            $commission_id[] = wcmp_get_order_commission_id($order_id);
+        }
+    }
+    return $commission_id;
+}
