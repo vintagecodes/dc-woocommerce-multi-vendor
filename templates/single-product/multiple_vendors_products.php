@@ -21,7 +21,7 @@ global $WCMp, $post, $wpdb;
 if (count($more_product_array) > 0) {
     $i = 0;
     ?>
-    <div class="ajax_loader_class_msg"><img src="<?php echo esc_url($WCMp->plugin_url ?>assets/images/ajax-loader.gif) " alt="ajax-loader" /></div>
+    <div class="ajax_loader_class_msg"><img src="<?php echo $WCMp->plugin_url ?>assets/images/ajax-loader.gif" alt="ajax-loader" /></div>
     <div class="container">		
         <div class="row rowhead">
             <div class="rowsub "><?php echo esc_html_e('Vendor', 'dc-woocommerce-multi-vendor'); ?></div>
