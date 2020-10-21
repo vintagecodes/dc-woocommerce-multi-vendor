@@ -17,7 +17,7 @@ $vendor = get_wcmp_vendor_by_term($vendor_id);
 
 <?php do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
-<p><?php esc_htmlesc_html__( 'Some of the items you had ordered have been shipped. The items that have been shipped are as follows:',  'dc-woocommerce-multi-vendor' ); ?></p>
+<p><?php esc_html__( 'Some of the items you had ordered have been shipped. The items that have been shipped are as follows:',  'dc-woocommerce-multi-vendor' ); ?></p>
 
 <?php do_action( 'woocommerce_email_before_order_table', $order, true ); ?>
 
