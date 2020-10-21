@@ -104,6 +104,7 @@ class WCMp_Commission {
     public function meta_box_setup() {
         add_meta_box('wcmp-commission-data', __('Commission Details', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_meta_box_content'), $this->post_type, 'normal', 'high');
         add_meta_box('wcmp-commission-note', __('Commission notes', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_meta_box_commission_notes'), $this->post_type, 'side', 'low');
+        remove_meta_box('commentsdiv', 'dc_commission', 'normal');
         if (!is_wcmp_version_less_3_4_0())
             add_meta_box('woocommerce-order-items', __('Commission Order Details', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_commission_order_content'), $this->post_type, 'normal', 'high');
     }
