@@ -91,11 +91,12 @@ class WCMp_Notices {
   		if (  $this->post_type != $post->post_type ) {
         	return;
     	}
+    	$notify_vendors = isset($_POST['show_announcement_vendors']) ? array_filter($_POST['show_announcement_vendors']) : get_wcmp_vendors( array(), 'ids' );
     	if(isset($_POST['_wcmp_vendor_notices_url'])) {
     		update_post_meta($post_id, '_wcmp_vendor_notices_url', esc_url($_POST['_wcmp_vendor_notices_url']));
 		}
-		if(isset($_POST['show_announcement_vendors'])) {
-			update_post_meta($post_id, '_wcmp_vendor_notices_vendors', array_filter($_POST['show_announcement_vendors']));
+		if($notify_vendors) {
+			update_post_meta($post_id, '_wcmp_vendor_notices_vendors', $notify_vendors);
 		} 
 	}
 

@@ -1115,14 +1115,17 @@ class WCMp_Vendor {
             foreach ($posts_array as $post) {
                 // deleted by vendor
                 if (!in_array($post->ID, $dismiss_notices_ids_array)) {
-                    $announcements['all'][$post->ID] = $post;
-                    // readed by vendor
-                    if (in_array($post->ID, $readed_notices_ids_array)) {
-                        $post->is_read = true;
-                        $announcements['read'][$post->ID] = $post;
-                    } else {
-                        $post->is_read = false;
-                        $announcements['unread'][$post->ID] = $post;
+                    $notify_vendors = !empty(get_post_meta( $post->ID, '_wcmp_vendor_notices_vendors', true )) ? get_post_meta( $post->ID, '_wcmp_vendor_notices_vendors', true ) : get_wcmp_vendors( array(), 'ids' );
+                    if($notify_vendors && in_array($vendor_id, $notify_vendors)) {
+                        $announcements['all'][$post->ID] = $post;
+                        // readed by vendor
+                        if (in_array($post->ID, $readed_notices_ids_array)) {
+                            $post->is_read = true;
+                            $announcements['read'][$post->ID] = $post;
+                        } else {
+                            $post->is_read = false;
+                            $announcements['unread'][$post->ID] = $post;
+                        }
                     }
                 } else {
                     $post->is_read = false;
