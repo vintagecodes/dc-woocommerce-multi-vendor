@@ -1027,7 +1027,7 @@ class WCMp_Product {
 
                     if (isset($_POST['dc_variable_shipping_class'][$post_key])) {
                         $_POST['dc_variable_shipping_class'][$post_key] = !empty($_POST['dc_variable_shipping_class'][$post_key]) ? (int) $_POST['dc_variable_shipping_class'][$post_key] : '';
-                        $array = wp_set_object_terms($value, floatval(sanitize_text_field($_POST['dc_variable_shipping_class'][$post_key])), 'product_shipping_class');
+                        $array = wp_set_object_terms($value, absint($_POST['dc_variable_shipping_class'][$post_key]), 'product_shipping_class');
                         unset($_POST['dc_variable_shipping_class'][$post_key]);
                     }
                 }
@@ -1075,7 +1075,7 @@ class WCMp_Product {
                 }
                 if (isset($_POST['dc_variable_shipping_class'][$post_key])) {
                     $_POST['dc_variable_shipping_class'][$post_key] = !empty($_POST['dc_variable_shipping_class'][$post_key]) ? (int) $_POST['dc_variable_shipping_class'][$post_key] : '';
-                    $array = wp_set_object_terms($value, floatval(sanitize_text_field($_POST['dc_variable_shipping_class'][$post_key])), 'product_shipping_class');
+                    $array = wp_set_object_terms($value, absint($_POST['dc_variable_shipping_class'][$post_key]), 'product_shipping_class');
                     unset($_POST['dc_variable_shipping_class'][$post_key]);
                 }
             }
