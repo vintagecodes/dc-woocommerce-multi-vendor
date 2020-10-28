@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: WC Marketplace 3.4.11\n"
 "Report-Msgid-Bugs-To: https://github.com/dualcube/dc-woocommerce-multi-"
 "vendor/issues\n"
-"POT-Creation-Date: 2020-10-12 12:04+0000\n"
+"POT-Creation-Date: 2020-10-28 04:45+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -629,7 +629,7 @@ msgstr ""
 #: admin/class-wcmp-settings-general-customer_support_details.php:34
 #: admin/class-wcmp-settings-vendor-registration.php:44
 #: admin/class-wcmp-settings-vendors.php:34
-#: classes/class-wcmp-post-commission.php:361
+#: classes/class-wcmp-post-commission.php:362
 #: classes/class-wcmp-product.php:1344
 #: templates/vendor-dashboard/profile.php:37
 #: templates/vendor-dashboard/vendor-policy.php:75
@@ -1137,9 +1137,9 @@ msgid ""
 msgstr ""
 
 #: admin/class-wcmp-settings-payment.php:60
-#: classes/class-wcmp-post-commission.php:405
-#: classes/class-wcmp-post-commission.php:738
+#: classes/class-wcmp-post-commission.php:406
 #: classes/class-wcmp-post-commission.php:739
+#: classes/class-wcmp-post-commission.php:740
 #: classes/class-wcmp-vendor-dashboard.php:288
 msgid "Tax"
 msgstr ""
@@ -1149,8 +1149,8 @@ msgid "Transfer the tax collected (per product) to the vendor. "
 msgstr ""
 
 #: admin/class-wcmp-settings-payment.php:61 classes/class-wcmp-ajax.php:3189
-#: classes/class-wcmp-post-commission.php:394
-#: classes/class-wcmp-post-commission.php:920
+#: classes/class-wcmp-post-commission.php:395
+#: classes/class-wcmp-post-commission.php:921
 #: classes/class-wcmp-vendor-dashboard.php:289
 #: classes/class-wcmp-vendor-dashboard.php:519
 #: classes/class-wcmp-vendor-dashboard.php:519
@@ -1207,7 +1207,7 @@ msgstr ""
 #: admin/class-wcmp-settings-reports.php:41
 #: admin/class-wcmp-settings-vendors.php:20
 #: admin/class-wcmp-settings-vendors.php:321 admin/class-wcmp-settings.php:279
-#: classes/class-wcmp-admin.php:70 classes/class-wcmp-post-commission.php:1460
+#: classes/class-wcmp-admin.php:70 classes/class-wcmp-post-commission.php:1461
 #: classes/class-wcmp-product.php:539 classes/class-wcmp-product.php:695
 #: classes/class-wcmp-product.php:722 classes/class-wcmp-product.php:1221
 #: classes/class-wcmp-taxonomy.php:44 classes/class-wcmp-taxonomy.php:45
@@ -1290,7 +1290,7 @@ msgid "Overview"
 msgstr ""
 
 #: admin/class-wcmp-settings-reports.php:47 admin/class-wcmp-settings.php:331
-#: classes/class-wcmp-ajax.php:1720 classes/class-wcmp-post-commission.php:1459
+#: classes/class-wcmp-ajax.php:1720 classes/class-wcmp-post-commission.php:1460
 #: classes/class-wcmp-vendor-dashboard.php:1583
 #: classes/class-wcmp-vendor-hooks.php:526
 #: includes/wcmp-core-functions.php:2035 templates/emails/new-product.php:17
@@ -1326,7 +1326,7 @@ msgstr ""
 #: admin/class-wcmp-settings-vendors.php:743 classes/class-wcmp-ajax.php:1903
 #: classes/class-wcmp-ajax.php:2114 classes/class-wcmp-ajax.php:2661
 #: classes/class-wcmp-ajax.php:3358 classes/class-wcmp-ajax.php:3358
-#: classes/class-wcmp-post-commission.php:378
+#: classes/class-wcmp-post-commission.php:379
 #: classes/class-wcmp-vendor-dashboard.php:721
 #: classes/class-wcmp-vendor-dashboard.php:721
 #: classes/class-wcmp-vendor-dashboard.php:862
@@ -1420,7 +1420,7 @@ msgid "Commission"
 msgstr ""
 
 #: admin/class-wcmp-settings-to_do_list.php:264 classes/class-wcmp-admin.php:71
-#: classes/class-wcmp-post-commission.php:1461
+#: classes/class-wcmp-post-commission.php:1462
 #: classes/class-wcmp-post-transaction.php:176
 #: classes/class-wcmp-post-transaction.php:244
 msgid "Amount"
@@ -1866,7 +1866,7 @@ msgid "Products"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:37 classes/class-wcmp-ajax.php:1725
-#: classes/class-wcmp-post-commission.php:1463
+#: classes/class-wcmp-post-commission.php:1464
 #: classes/class-wcmp-post-transaction.php:244
 #: classes/class-wcmp-vendor-hooks.php:447
 #: classes/class-wcmp-vendor-hooks.php:531
@@ -1926,7 +1926,7 @@ msgstr ""
 #: admin/class-wcmp-settings-vendors.php:326
 #: admin/class-wcmp-settings-vendors.php:797
 #: classes/class-wcmp-post-commission.php:61
-#: classes/class-wcmp-post-notices.php:125
+#: classes/class-wcmp-post-notices.php:126
 #: classes/class-wcmp-post-transaction.php:37
 #: classes/class-wcmp-post-university.php:32
 msgid "Add New"
@@ -2351,7 +2351,7 @@ msgid "Withdrawable balance"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:971
-#: classes/class-wcmp-post-commission.php:365
+#: classes/class-wcmp-post-commission.php:366
 msgid "Payment mode"
 msgstr ""
 
@@ -2426,8 +2426,8 @@ msgid "Get Addons!"
 msgstr ""
 
 #: admin/class-wcmp-settings.php:83 admin/class-wcmp-settings.php:84
-#: classes/class-wcmp-post-commission.php:1232
 #: classes/class-wcmp-post-commission.php:1233
+#: classes/class-wcmp-post-commission.php:1234
 msgid "WCMp"
 msgstr ""
 
@@ -2520,7 +2520,7 @@ msgid "Official Extensions"
 msgstr ""
 
 #: admin/class-wcmp-settings.php:278 admin/class-wcmp-settings.php:289
-#: classes/class-wcmp-post-commission.php:328
+#: classes/class-wcmp-post-commission.php:329
 #: templates/vendor-dashboard/shop-front.php:53
 #: templates/vendor-dashboard/shop-front.php:111
 msgid "General"
@@ -3150,7 +3150,7 @@ msgstr ""
 
 #. 1: ID who refunded
 #: classes/class-wcmp-ajax.php:1866 classes/class-wcmp-ajax.php:2111
-#: classes/class-wcmp-post-commission.php:1071
+#: classes/class-wcmp-post-commission.php:1072
 #, php-format
 msgid "ID: %d"
 msgstr ""
@@ -3499,7 +3499,7 @@ msgid "0.00"
 msgstr ""
 
 #: classes/class-wcmp-ajax.php:3607 classes/class-wcmp-ajax.php:3636
-#: classes/class-wcmp-post-commission.php:731
+#: classes/class-wcmp-post-commission.php:732
 #: classes/class-wcmp-shipping-gateway.php:116
 #: classes/class-wcmp-shipping-gateway.php:197
 msgid "Cost"
@@ -3530,7 +3530,7 @@ msgid "Cost of Shipping Class:"
 msgstr ""
 
 #: classes/class-wcmp-ajax.php:3671 classes/class-wcmp-email.php:94
-#: classes/class-wcmp-post-commission.php:927
+#: classes/class-wcmp-post-commission.php:928
 #: classes/class-wcmp-shipping-gateway.php:157
 msgid "N/A"
 msgstr ""
@@ -3577,13 +3577,13 @@ msgid "Refunded %s from commission"
 msgstr ""
 
 #: classes/class-wcmp-calculate-commission.php:448
-#: classes/class-wcmp-post-commission.php:123
+#: classes/class-wcmp-post-commission.php:124
 #, php-format
 msgid "Commission - %s"
 msgstr ""
 
 #: classes/class-wcmp-calculate-commission.php:448
-#: classes/class-wcmp-order.php:455 classes/class-wcmp-post-commission.php:123
+#: classes/class-wcmp-order.php:455 classes/class-wcmp-post-commission.php:124
 msgctxt "Commission date parsed by strftime"
 msgid "%B %e, %Y @ %I:%M %p"
 msgstr ""
@@ -3902,7 +3902,7 @@ msgid "Commission"
 msgstr ""
 
 #: classes/class-wcmp-post-commission.php:62
-#: classes/class-wcmp-post-notices.php:126
+#: classes/class-wcmp-post-notices.php:127
 #: classes/class-wcmp-post-transaction.php:38
 #: classes/class-wcmp-post-university.php:33
 #, php-format
@@ -3910,7 +3910,7 @@ msgid "Add New %s"
 msgstr ""
 
 #: classes/class-wcmp-post-commission.php:63
-#: classes/class-wcmp-post-notices.php:127
+#: classes/class-wcmp-post-notices.php:128
 #: classes/class-wcmp-post-transaction.php:39
 #: classes/class-wcmp-post-university.php:34
 #, php-format
@@ -3918,7 +3918,7 @@ msgid "Edit %s"
 msgstr ""
 
 #: classes/class-wcmp-post-commission.php:64
-#: classes/class-wcmp-post-notices.php:128
+#: classes/class-wcmp-post-notices.php:129
 #: classes/class-wcmp-post-transaction.php:40
 #: classes/class-wcmp-post-university.php:35
 #, php-format
@@ -3926,7 +3926,7 @@ msgid "New %s"
 msgstr ""
 
 #: classes/class-wcmp-post-commission.php:65
-#: classes/class-wcmp-post-notices.php:129
+#: classes/class-wcmp-post-notices.php:130
 #: classes/class-wcmp-post-transaction.php:41
 #: classes/class-wcmp-post-university.php:36
 #, php-format
@@ -3943,7 +3943,7 @@ msgid "Commissions"
 msgstr ""
 
 #: classes/class-wcmp-post-commission.php:66
-#: classes/class-wcmp-post-notices.php:130
+#: classes/class-wcmp-post-notices.php:131
 #: classes/class-wcmp-post-transaction.php:42
 #: classes/class-wcmp-post-university.php:37
 #, php-format
@@ -3951,14 +3951,14 @@ msgid "View %s"
 msgstr ""
 
 #: classes/class-wcmp-post-commission.php:67
-#: classes/class-wcmp-post-notices.php:131
+#: classes/class-wcmp-post-notices.php:132
 #: classes/class-wcmp-post-transaction.php:43
 #: classes/class-wcmp-post-university.php:38
 msgid "Search %a"
 msgstr ""
 
 #: classes/class-wcmp-post-commission.php:68
-#: classes/class-wcmp-post-notices.php:132
+#: classes/class-wcmp-post-notices.php:133
 #: classes/class-wcmp-post-transaction.php:44
 #: classes/class-wcmp-post-university.php:39
 #, php-format
@@ -3966,7 +3966,7 @@ msgid "No %s found"
 msgstr ""
 
 #: classes/class-wcmp-post-commission.php:69
-#: classes/class-wcmp-post-notices.php:133
+#: classes/class-wcmp-post-notices.php:134
 #: classes/class-wcmp-post-university.php:40
 #, php-format
 msgid "No %s found in trash"
@@ -3980,211 +3980,211 @@ msgstr ""
 msgid "Commission notes"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:108
+#: classes/class-wcmp-post-commission.php:109
 msgid "Commission Order Details"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:147
+#: classes/class-wcmp-post-commission.php:148
 #, php-format
 msgid "Commission for order <a href=\"%s\">(ID : %s)</a> is created."
 msgstr ""
 
 #. 1: commission type 2: commission id
-#: classes/class-wcmp-post-commission.php:287
+#: classes/class-wcmp-post-commission.php:288
 #, php-format
 msgid "%1$s #%2$s details"
 msgstr ""
 
 #. %s: associated vendor
-#: classes/class-wcmp-post-commission.php:301
+#: classes/class-wcmp-post-commission.php:302
 #, php-format
 msgid "Associated vendor %s"
 msgstr ""
 
 #. %s: Commission status
-#: classes/class-wcmp-post-commission.php:318
+#: classes/class-wcmp-post-commission.php:319
 #, php-format
 msgid "Commission status: %s"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:330
+#: classes/class-wcmp-post-commission.php:331
 msgid "Associated order"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:334
+#: classes/class-wcmp-post-commission.php:335
 msgid "Order status"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:339
+#: classes/class-wcmp-post-commission.php:340
 msgid "Commission Status:"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:353
+#: classes/class-wcmp-post-commission.php:354
 msgid "Vendor details"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:374
+#: classes/class-wcmp-post-commission.php:375
 msgid "Commission data"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:377
+#: classes/class-wcmp-post-commission.php:378
 msgid "Commission amount"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:729
+#: classes/class-wcmp-post-commission.php:730
 msgid "Item"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:732
+#: classes/class-wcmp-post-commission.php:733
 msgid "Qty"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:733
+#: classes/class-wcmp-post-commission.php:734
 #: templates/vendor-dashboard/vendor-withdrawal.php:26
 msgid "Total"
 msgstr ""
 
 #. %1$s: tax item name %2$s: tax class name
-#: classes/class-wcmp-post-commission.php:741
+#: classes/class-wcmp-post-commission.php:742
 #, php-format
 msgid "%1$s (%2$s)"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:772
+#: classes/class-wcmp-post-commission.php:773
 msgid "SKU:"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:776
+#: classes/class-wcmp-post-commission.php:777
 msgid "Variation ID:"
 msgstr ""
 
 #. %s: variation id
-#: classes/class-wcmp-post-commission.php:781
+#: classes/class-wcmp-post-commission.php:782
 #, php-format
 msgid "%s (No longer exists)"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:924
+#: classes/class-wcmp-post-commission.php:925
 msgid "Shipping name"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:926
+#: classes/class-wcmp-post-commission.php:927
 msgid "Shipping method"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:942
-#: classes/class-wcmp-post-commission.php:944
+#: classes/class-wcmp-post-commission.php:943
+#: classes/class-wcmp-post-commission.php:945
 msgid "Other"
 msgstr ""
 
 #. 1: refund id 2: refund date 3: username
-#: classes/class-wcmp-post-commission.php:1065
+#: classes/class-wcmp-post-commission.php:1066
 #, php-format
 msgid "Refund #%1$s - %2$s by %3$s"
 msgstr ""
 
 #. 1: refund id 2: refund date
-#: classes/class-wcmp-post-commission.php:1078
+#: classes/class-wcmp-post-commission.php:1079
 #, php-format
 msgid "Refund #%1$s - %2$s"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1114
+#: classes/class-wcmp-post-commission.php:1115
 msgid "Commission calculated including coupon."
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1117
+#: classes/class-wcmp-post-commission.php:1118
 msgid "Commission total calcutated including shipping charges."
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1120
+#: classes/class-wcmp-post-commission.php:1121
 msgid "Commission total calcutated including tax charges."
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1129
+#: classes/class-wcmp-post-commission.php:1130
 #: templates/vendor-dashboard/vendor-orders/views/html-order-items.php:157
 msgid "Commission:"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1139
+#: classes/class-wcmp-post-commission.php:1140
 msgid "Shipping:"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1178
+#: classes/class-wcmp-post-commission.php:1179
 msgid "**Total"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1196
+#: classes/class-wcmp-post-commission.php:1197
 #: includes/wcmp-core-functions.php:4091
 msgid "Refunded"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1281
+#: classes/class-wcmp-post-commission.php:1282
 msgid "Order ID:"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1282
-#: classes/class-wcmp-post-commission.php:1306
+#: classes/class-wcmp-post-commission.php:1283
+#: classes/class-wcmp-post-commission.php:1307
 msgid ")."
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1289
+#: classes/class-wcmp-post-commission.php:1290
 msgid "Product:"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1290
+#: classes/class-wcmp-post-commission.php:1291
 msgid "The product purchased that generated this commission."
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1297
+#: classes/class-wcmp-post-commission.php:1298
 msgid "Vendor:"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1298
+#: classes/class-wcmp-post-commission.php:1299
 msgid "The vendor who receives this commission."
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1305
+#: classes/class-wcmp-post-commission.php:1306
 msgid "Amount:"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1314
+#: classes/class-wcmp-post-commission.php:1315
 msgid "The total value of this commission."
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1318
+#: classes/class-wcmp-post-commission.php:1319
 msgid "Shipping Amount:"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1319
+#: classes/class-wcmp-post-commission.php:1320
 msgid "The total value of shipping."
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1326
+#: classes/class-wcmp-post-commission.php:1327
 msgid "Tax Amount:"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1327
+#: classes/class-wcmp-post-commission.php:1328
 msgid "The total value of this tax."
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1369
+#: classes/class-wcmp-post-commission.php:1370
 msgid "Please make order refundable first."
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1393
+#: classes/class-wcmp-post-commission.php:1394
 msgid "Mark as Paid"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1395
+#: classes/class-wcmp-post-commission.php:1396
 msgid "Mark as Reverse"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1397
+#: classes/class-wcmp-post-commission.php:1398
 msgid "Reversed"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1429
+#: classes/class-wcmp-post-commission.php:1430
 #: classes/class-wcmp-vendor-dashboard.php:105
 #: classes/gateways/class-wcmp-gateway-bank-transfer.php:41
 #: classes/gateways/class-wcmp-gateway-paypal-masspay.php:61
@@ -4193,11 +4193,11 @@ msgstr ""
 msgid "Invalid payment method"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1432
+#: classes/class-wcmp-post-commission.php:1433
 msgid "Please set payment method for this commission vendor"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1458
+#: classes/class-wcmp-post-commission.php:1459
 #: classes/class-wcmp-vendor-dashboard.php:1582
 #: templates/emails/customer-order-refund-request.php:25
 #: templates/vendor-dashboard/vendor-orders.php:19
@@ -4205,23 +4205,23 @@ msgstr ""
 msgid "Order ID"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1462
+#: classes/class-wcmp-post-commission.php:1463
 msgid "Net Earning"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1595
+#: classes/class-wcmp-post-commission.php:1596
 msgid "Mark paid"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1596
+#: classes/class-wcmp-post-commission.php:1597
 msgid "Export"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1760
+#: classes/class-wcmp-post-commission.php:1761
 msgid "Show Commission Status"
 msgstr ""
 
-#: classes/class-wcmp-post-commission.php:1769
+#: classes/class-wcmp-post-commission.php:1770
 msgid "Show All Vendors"
 msgstr ""
 
@@ -4245,25 +4245,24 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: classes/class-wcmp-post-notices.php:106
+#: classes/class-wcmp-post-notices.php:107
 msgid "Your"
 msgstr ""
 
-#: classes/class-wcmp-post-notices.php:106
+#: classes/class-wcmp-post-notices.php:107
 msgid "All vendors and their"
 msgstr ""
 
-#: classes/class-wcmp-post-notices.php:123
+#: classes/class-wcmp-post-notices.php:124
 msgctxt "post type general name"
 msgid "Announcements"
 msgstr ""
 
-#: classes/class-wcmp-post-notices.php:124
+#: classes/class-wcmp-post-notices.php:125
 msgctxt "post type singular name"
 msgid "Announcements"
 msgstr ""
 
-#: classes/class-wcmp-post-notices.php:126
 #: classes/class-wcmp-post-notices.php:127
 #: classes/class-wcmp-post-notices.php:128
 #: classes/class-wcmp-post-notices.php:129
@@ -4271,8 +4270,9 @@ msgstr ""
 #: classes/class-wcmp-post-notices.php:131
 #: classes/class-wcmp-post-notices.php:132
 #: classes/class-wcmp-post-notices.php:133
-#: classes/class-wcmp-post-notices.php:135
+#: classes/class-wcmp-post-notices.php:134
 #: classes/class-wcmp-post-notices.php:136
+#: classes/class-wcmp-post-notices.php:137
 msgid "Announcements"
 msgstr ""
 
@@ -4366,7 +4366,7 @@ msgstr ""
 msgid "SKU must be unique"
 msgstr ""
 
-#: classes/class-wcmp-product.php:541 classes/class-wcmp-product.php:724
+#: classes/class-wcmp-product.php:541
 msgid "Search for vendor"
 msgstr ""
 
@@ -5213,7 +5213,7 @@ msgstr ""
 msgid "Tracking Id : "
 msgstr ""
 
-#: classes/class-wcmp-vendor-details.php:1249
+#: classes/class-wcmp-vendor-details.php:1252
 msgid "Shipping cost:"
 msgstr ""
 
@@ -7242,6 +7242,13 @@ msgstr ""
 msgid "Product Name : %s"
 msgstr ""
 
+#: templates/emails/vendor-notify-shipped.php:20
+#: templates/emails/plain/vendor-notify-shipped.php:15
+msgid ""
+"Some of the items you had ordered have been shipped. The items that have "
+"been shipped are as follows:"
+msgstr ""
+
 #: templates/emails/vendor-notify-shipped.php:24
 #, php-format
 msgid "Order: %s"
@@ -8135,12 +8142,6 @@ msgstr ""
 #: templates/emails/plain/vendor-new-question.php:23
 #, php-format
 msgid "Product name : %s"
-msgstr ""
-
-#: templates/emails/plain/vendor-notify-shipped.php:15
-msgid ""
-"Some of the items you had ordered have been shipped. The items that have "
-"been shipped are as follows:"
 msgstr ""
 
 #: templates/emails/plain/vendor-orders-stats-report.php:24
