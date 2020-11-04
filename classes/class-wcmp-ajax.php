@@ -1249,7 +1249,9 @@ class WCMp_Ajax {
                     <div class="bar1">&nbsp;</div>
                     <span class="">' . __("Gross Sales", 'dc-woocommerce-multi-vendor') . '</span>
                     <div class="bar2">&nbsp;</div>
-                    <span class="">' . __("My Earnings", 'dc-woocommerce-multi-vendor') . '</span>
+                    <span class="">' . __('Admin Earnings', 'dc-woocommerce-multi-vendor') . '</span>
+                    <div class="bar3">&nbsp;</div>
+                    <span class="">' . __('Vendor Earnings', 'dc-woocommerce-multi-vendor') . '</span>
                 </div>
                 <table class="bar_chart">
                     <thead>
