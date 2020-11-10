@@ -375,7 +375,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
                                                             update_user_meta($user_id, '_' . $key, $state_name);
                                                             update_user_meta($user_id, '_' . $key . '_code', $state_code);
                                                         } else if(substr($key, 0, strlen("vendor_")) === "vendor_") {
-								update_user_meta($user_id, "_" . $key, wc_clean( wp_unslash( $value ) ) );
+								update_user_meta($user_id, "_" . $key, wp_unslash( $value ) );
 							}
 						} else {
 							if(substr($key, 0, strlen("vendor_")) === "vendor_") {
