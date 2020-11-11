@@ -3,9 +3,9 @@ Contributors: wcmp, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh8961
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.5.1
+Tested up to: 5.5.3
 Requires PHP: 5.6
-Stable tag: 3.5.11
+Stable tag: 3.5.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,15 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.5.12 - 2020-11-11 =
+* Fix - Vendor could withdraw commission for pending/draft order #564
+* Fix - Vendor store description editor format is not working #566
+* Fix - Woocommerce per product shipping compatiblity with vendor shippings. #575
+* Fix - Vendor announcement email string support #570
+* Fix - Issue on vendor sales in the WCMp reports section(admin end) #568
+* Fix - Showing html tag on admin new vendor account email and vendor new account email
+* Updated - Language file.
 
 = 3.5.11 - 2020-10-28 =
 * Fix - Removed add new commission option. #557
