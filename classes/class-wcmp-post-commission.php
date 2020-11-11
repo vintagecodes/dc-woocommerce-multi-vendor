@@ -1806,7 +1806,7 @@ class WCMp_Commission {
                 if ($post_type == $this->post_type) {
                     $wp_query->set('orderby', 'ID');
                     $wp_query->set('order', 'DESC');
-                    $wp_query->set('post__not_in', wcmp_get_failed_order_commission());
+                    $wp_query->set('post__not_in', wcmp_failed_draft_pending_order_commission());
                 }
             }
         }
@@ -1870,7 +1870,7 @@ class WCMp_Commission {
                     $order_id = wcmp_get_commission_order_id( $commission_id );
                     $order = wc_get_order( $order_id );
                     if( $order ) {
-                        if ( is_commission_requested_for_withdrawals( $commission_id ) || in_array( $order->get_status('edit'), array( 'on-hold', 'pending', 'failed', 'refunded', 'cancelled' ) ) ) {
+                        if ( is_commission_requested_for_withdrawals( $commission_id ) || in_array( $order->get_status('edit'), array( 'on-hold', 'pending', 'failed', 'refunded', 'cancelled', 'draft' ) ) ) {
                             continue; // calculate only available withdrawable balance
                         }
                     }
