@@ -56,7 +56,7 @@ if(isset($more_product_array) && is_array($more_product_array) && count($more_pr
 				?>
 			</div>
 			<div class="rowsub">
-                <?php echo esc_html($_product->get_price_html()); ?>
+                <?php echo $_product->get_price_html(); ?>
 			</div>
 			<div class="rowsub">
 				<?php 
