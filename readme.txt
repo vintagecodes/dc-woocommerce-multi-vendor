@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.5.3
 Requires PHP: 5.6
-Stable tag: 3.5.12
+Stable tag: 3.5.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,12 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+
+= 3.5.13 - 2020-11-16 =
+* Fix - Commissions are not displayed at the admin end. #581
+* Fix - HTML break on single product page more offers section #580
+* Fix - Vendor review mail showing HTML tags. #579
 
 = 3.5.12 - 2020-11-11 =
 * Fix - Vendor could withdraw commission for pending/draft order #564
