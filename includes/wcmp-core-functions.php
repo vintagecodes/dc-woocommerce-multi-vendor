@@ -4257,20 +4257,17 @@ if (!function_exists('get_wcmp_more_spmv_products')) {
 }
 
 /**
- * Get failed, pending and draft order commission ID
+ * Get failed and pending order commission ID
  *
  * @return commission ID
  */
 
-function wcmp_failed_draft_pending_order_commission() {
+function wcmp_failed_pending_order_commission() {
     // find failed and pending order
     $failed_and_pending_orders = wcmp_get_orders( array('post_status' => array( 'wc-failed', 'wc-pending' )), 'ids', true );
-    // find draft order
-    $draft_orders = wcmp_get_orders( array('post_status' => 'wc-draft'), 'ids', true );
-    $failed_draft_pending = array_merge( $failed_and_pending_orders, $draft_orders );
     $commission_id = array();
-    if (!empty($failed_draft_pending)) {
-        foreach ($failed_draft_pending as $order_id) {
+    if (!empty($failed_and_pending_orders)) {
+        foreach ($failed_and_pending_orders as $order_id) {
             $commission_id[] = wcmp_get_order_commission_id($order_id);
         }
     }
