@@ -319,11 +319,11 @@ class WCMp_Transaction {
                 }
                 $transaction_details[$transaction->ID]['post_status'] = $transaction->post_status;
                 $transaction_details[$transaction->ID]['vendor_id'] = $transaction->post_author;
-                $transaction_details[$transaction->ID]['commission'] = get_post_meta($transaction->ID, 'amount', true) + get_post_meta($transaction->ID, 'transfer_charge', true);
+                $transaction_details[$transaction->ID]['commission'] = floatval(get_post_meta($transaction->ID, 'amount', true)) + floatval(get_post_meta($transaction->ID, 'transfer_charge', true));
                 $transaction_details[$transaction->ID]['amount'] = get_post_meta($transaction->ID, 'amount', true);
                 $transaction_details[$transaction->ID]['transfer_charge'] = get_post_meta($transaction->ID, 'transfer_charge', true);
                 $transaction_details[$transaction->ID]['commission_details'] = get_post_meta($transaction->ID, 'commission_detail', true);
-                $transaction_details[$transaction->ID]['total_amount'] = get_post_meta($transaction->ID, 'amount', true) - get_post_meta($transaction->ID, 'transfer_charge', true) - get_post_meta($transaction->ID, 'gateway_charge', true);
+                $transaction_details[$transaction->ID]['total_amount'] = floatval(get_post_meta($transaction->ID, 'amount', true)) - floatval(get_post_meta($transaction->ID, 'transfer_charge', true)) - floatval(get_post_meta($transaction->ID, 'gateway_charge', true));
                 $transaction_details[$transaction->ID]['id'] = $transaction->ID;
                 $mode = get_post_meta($transaction->ID, 'transaction_mode', true);
                 if ($mode == 'paypal_masspay') {
