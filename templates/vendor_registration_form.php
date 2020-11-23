@@ -105,7 +105,8 @@ if (!empty($wcmp_vendor_registration_form_data) && is_array($wcmp_vendor_registr
                             if (!empty($value['options']) && is_array($value['options'])) {
                                 foreach ($value['options'] as $option_key => $option_value) {
                                     ?>
-                                    <p> <input type="checkbox" <?php if($option_value['selected']){ echo 'checked="checked"'; } ?> name="wcmp_vendor_fields[<?php echo $key; ?>][value][]" class="wcmp-regs-multi-check" value="<?php echo $option_value['value']; ?>" <?php echo $option_value['label']; ?></p>
+                                    <p> <input type="checkbox" <?php if($option_value['selected']){ echo 'checked="checked"'; } ?> name="wcmp_vendor_fields[<?php echo $key; ?>][value]" class="wcmp-regs-multi-check" value="<?php echo $option_value['value']; ?>" <?php if($value['required']){ echo 'required="required"'; }?>> <?php echo $option_value['label']; ?>
+                                    </p>
                                     
                                     <?php
                                 }
