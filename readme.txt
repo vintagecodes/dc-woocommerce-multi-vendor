@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.5.3
 Requires PHP: 5.6
-Stable tag: 3.5.13
+Stable tag: 3.5.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -190,6 +190,11 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Changelog ==
 
+= 3.5.14 - 2020-11-25 =
+* Fix - WCMp Shipping not working. #592
+* Fix - Vendor registration checkbox bug. #589
+* Fix - HTML tags display error at frontend. #588
+* Fix - Commission withdraw error. #397
 
 = 3.5.13 - 2020-11-16 =
 * Fix - Commissions are not displayed at the admin end. #581
