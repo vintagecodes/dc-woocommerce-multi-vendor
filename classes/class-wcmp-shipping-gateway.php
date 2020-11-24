@@ -19,7 +19,7 @@ class WCMp_Shipping_Gateway {
         
         add_action('woocommerce_shipping_init', array(&$this, 'load_shipping_methods'));
         add_filter('woocommerce_shipping_methods', array(&$this, 'add_shipping_methods'));
-        add_filter( 'woocommerce_cart_shipping_packages', array(&$this, 'add_vendor_id_to_package'), 99);
+        add_filter( 'woocommerce_cart_shipping_packages', array(&$this, 'add_vendor_id_to_package'), 10);
         
         // Load vendor shipping methods configure fields
         add_action('wcmp_vendor_shipping_free_shipping_configure_form_fields', array($this, 'free_shipping_configure_form_fields'), 10, 2);
