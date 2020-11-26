@@ -190,7 +190,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Changelog ==
 
-= 3.5.14 - 2020-11-25 =
+= 3.5.14 - 2020-11-26 =
 * Fix - WCMp Shipping not working. #592
 * Fix - Vendor registration checkbox bug. #589
 * Fix - HTML tags display error at frontend. #588
