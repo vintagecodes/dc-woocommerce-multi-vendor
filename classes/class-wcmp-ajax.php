@@ -4347,6 +4347,9 @@ class WCMp_Ajax {
                     }elseif( $ledger->ref_status == 'cancelled' ){
                         $status = '<i class="'. $ledger->ref_status .' wcmp-font ico-processing-status-icon" title="'. ucfirst($ledger->ref_status).'"></i>';
                     }
+                    // Update commission status
+                    if($ledger->ref_type == 'commission' && get_post_meta($ledger->ref_id, '_paid_status', true) == 'paid') 
+                        $status = '<i class="'. get_post_meta($ledger->ref_id, '_paid_status', true).' wcmp-font ico-completed-status-icon" title="'. ucfirst(get_post_meta($ledger->ref_id, '_paid_status', true)).'"></i>';
                     $row = array();
                     $row ['status'] = $status;
                     $row ['date'] = wcmp_date($ledger->created);
