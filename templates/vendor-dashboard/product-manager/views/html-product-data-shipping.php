@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
     <div class="row-padding"> 
         <?php if ( wc_product_weight_enabled() ) : ?> 
             <div class="form-group">
-                <label class="control-label col-sm-3 col-md-3" for="_weight"><?php _e( 'Weight (kg)', 'woocommerce' ); ?></label>
+                <label class="control-label col-sm-3 col-md-3" for="_weight"><?php echo __( 'Weight', 'woocommerce' ) . ' (' . get_option( 'woocommerce_weight_unit' ) . ')' ?></label>
                 <div class="col-md-6 col-sm-9">
                     <input class="form-control" type="text" id="_weight" name="_weight" value="<?php echo $product_object->get_weight( 'edit' ); ?>" placeholder="<?php echo wc_format_localized_decimal( 0 ); ?>" />
                 </div>
