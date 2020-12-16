@@ -191,8 +191,8 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 == Changelog ==
 
 = 3.5.15 - 2020-12-16 =
-* Added - Compatibility of WordPress 5.5 added
-* Fix - Conflict of WCMp advance shipping plugin.
+* Added - Compatibility of WordPress 5.6 added
+* Fix - Conflict with WCMp advance shipping plugin.
 * Fix - Translation issue on edit product page. #605
 * Fix - Table rate shipping screen loading issue. #598
 * Fix - Commission status not updating in banking overview. #586
