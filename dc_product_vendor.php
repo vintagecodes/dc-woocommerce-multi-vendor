@@ -7,9 +7,9 @@
  * Version: 3.5.14
  * Author URI: https://wc-marketplace.com/
  * Requires at least: 4.4
- * Tested up to: 5.5.3
+ * Tested up to: 5.6
  * WC requires at least: 3.0
- * WC tested up to: 4.7.0
+ * WC tested up to: 4.8.0
  *
  * Text Domain: dc-woocommerce-multi-vendor
  * Domain Path: /languages/
