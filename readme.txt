@@ -3,9 +3,9 @@ Contributors: wcmp, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh8961
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.5.3
+Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 3.5.14
+Stable tag: 3.5.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,14 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.5.15 - 2020-12-16 =
+* Added - Compatibility of WordPress 5.5 added
+* Fix - Conflict of WCMp advance shipping plugin.
+* Fix - Translation issue on edit product page. #605
+* Fix - Table rate shipping screen loading issue. #598
+* Fix - Commission status not updating in banking overview. #586
+* Fix - Error display at the time of withdrawing through PayPal.
 
 = 3.5.14 - 2020-11-26 =
 * Fix - WCMp Shipping not working. #592
