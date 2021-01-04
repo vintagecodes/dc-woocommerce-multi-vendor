@@ -37,14 +37,12 @@ $template_class = apply_filters('can_vendor_edit_shop_template', false) && get_u
             $vendor_fb_profile = get_user_meta($vendor_id, '_vendor_fb_profile', true);
             $vendor_twitter_profile = get_user_meta($vendor_id, '_vendor_twitter_profile', true);
             $vendor_linkdin_profile = get_user_meta($vendor_id, '_vendor_linkdin_profile', true);
-            $vendor_google_plus_profile = get_user_meta($vendor_id, '_vendor_google_plus_profile', true);
             $vendor_youtube = get_user_meta($vendor_id, '_vendor_youtube', true);
             $vendor_instagram = get_user_meta($vendor_id, '_vendor_instagram', true);
             ?>
             <?php if ($vendor_fb_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_fb_profile); ?>"><i class="wcmp-font ico-facebook-icon"></i></a><?php } ?>
             <?php if ($vendor_twitter_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_twitter_profile); ?>"><i class="wcmp-font ico-twitter-icon"></i></a><?php } ?>
             <?php if ($vendor_linkdin_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_linkdin_profile); ?>"><i class="wcmp-font ico-linkedin-icon"></i></a><?php } ?>
-            <?php if ($vendor_google_plus_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_google_plus_profile); ?>"><i class="wcmp-font ico-google-plus-icon"></i></a><?php } ?>
             <?php if ($vendor_youtube) { ?> <a target="_blank" href="<?php echo esc_url($vendor_youtube); ?>"><i class="wcmp-font ico-youtube-icon"></i></a><?php } ?>
             <?php if ($vendor_instagram) { ?> <a target="_blank" href="<?php echo esc_url($vendor_instagram); ?>"><i class="wcmp-font ico-instagram-icon"></i></a><?php } ?>
             <?php do_action( 'wcmp_vendor_store_header_social_link', $vendor_id ); ?>
