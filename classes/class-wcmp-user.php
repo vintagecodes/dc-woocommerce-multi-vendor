@@ -903,9 +903,9 @@ class WCMp_User {
                             $errors->add('vendor_slug_exists', __('Slug already exists', 'dc-woocommerce-multi-vendor'));
                         }
                     } elseif ($fieldkey == 'vendor_description') {
-                        update_user_meta($user_id, '_' . $fieldkey, wc_clean(wp_unslash($_POST[$fieldkey])));
+                        update_user_meta($user_id, '_' . $fieldkey, wp_kses_post($_POST[$fieldkey]));
                     } else {
-                        update_user_meta($user_id, '_' . $fieldkey, wc_clean(wp_unslash($_POST[$fieldkey])));
+                        update_user_meta($user_id, '_' . $fieldkey, wp_kses_post($_POST[$fieldkey]));
                     }
                 } else if (isset($_POST['vendor_commission']) && $fieldkey == 'vendor_commission') {
                     update_user_meta($user_id, '_vendor_commission', absint( $_POST[$fieldkey] ));
