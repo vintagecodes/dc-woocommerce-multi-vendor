@@ -3560,7 +3560,7 @@ class WCMp_Ajax {
         $method_id = isset($_POST['methodId']) ? wc_clean($_POST['methodId']) : '';
         $instance_id = isset($_POST['instanceId']) ? wc_clean($_POST['instanceId']) : '';
         $vendor_id = isset($_POST['vendor_id']) ? absint($_POST['vendor_id']) : get_current_user_id();
-        if ($zone_id) {
+        
             if( !class_exists( 'WCMP_Shipping_Zone' ) ) {
                 $WCMp->load_vendor_shipping();
             }
@@ -3693,7 +3693,7 @@ class WCMp_Ajax {
                 $config_settings[$vendor_shipping_method['id']] = $settings_html;
             $html_settings = isset($config_settings[$method_id]) ? $config_settings[$method_id] : '';
             wp_send_json($html_settings);
-        }
+
     }
     
     public function wcmp_vendor_configure_shipping_method(){
