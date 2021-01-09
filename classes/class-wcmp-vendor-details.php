@@ -384,7 +384,7 @@ class WCMp_Vendor {
             WHERE
                 1 = 1 AND(
                     {$wpdb->prefix}term_taxonomy.term_id IN( $this->term_id )
-                ) AND {$wpdb->prefix}posts.post_author IN( $this->id ) AND {$wpdb->prefix}posts.post_type = 'product' $where
+                ) AND {$wpdb->prefix}posts.post_author IN( $this->id ) AND {$wpdb->prefix}posts.post_type = 'product' OR {$wpdb->prefix}posts.post_type = 'product_variation' $where
             GROUP BY
                 $groupby
             ORDER BY
