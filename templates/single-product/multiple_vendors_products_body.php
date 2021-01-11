@@ -49,7 +49,7 @@ if(isset($more_product_array) && is_array($more_product_array) && count($more_pr
 				</div>
 				<?php 
 				if(isset($more_product['rating_data']) && is_array($more_product['rating_data']) && isset($more_product['rating_data']['avg_rating']) && $more_product['rating_data']['avg_rating']!=0 && $more_product['rating_data']['avg_rating']!=''){ 
-					echo esc_html(wc_get_rating_html( $more_product['rating_data']['avg_rating'] ));	
+					echo wp_kses_post(wc_get_rating_html( $more_product['rating_data']['avg_rating'] ));	
 				}else {
 					echo "<div class='star-rating'></div>";
 				}
