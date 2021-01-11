@@ -359,7 +359,7 @@ app.controller('postbox_content',['$scope', '$http', 'vendor_registration_servic
         //console.log(data);
         var config = {
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
         };
         $http.post(vendor_registration_param.ajax_url,data,config).success(function (data, status, headers, config){
