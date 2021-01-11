@@ -192,7 +192,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 = 3.5.16 - 2021-01-12 =
 * Fix - SPVM more offer CSS break #613
-* Fix - Html code does not save at vendor description fields #615.
+* Fix - HTML code does not save at vendor description fields #615.
 * Fix - Remove unused Google plus from storefront #616
 * Fix - Vendor registration issue for WordPress server. #617
 * Fix - Location not covered zone showing zero #619
