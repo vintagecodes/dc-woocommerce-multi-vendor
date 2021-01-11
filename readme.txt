@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 3.5.15
+Stable tag: 3.5.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,15 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.5.16 - 2021-01-12 =
+* Fix - SPVM more offer CSS break #613
+* Fix - Html code does not save at vendor description fields #615.
+* Fix - Remove unused Google plus from storefront #616
+* Fix - Vendor registration issue for WordPress server. #617
+* Fix - Location not covered zone showing zero #619
+* Fix - Two filters not working at the same time for the commission post type #623.
+* Fix - Variable products not showing to select the coupon in vendor dashboard #626.
 
 = 3.5.15 - 2020-12-16 =
 * Added - Compatibility of WordPress 5.6.
