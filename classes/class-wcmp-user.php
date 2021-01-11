@@ -446,12 +446,6 @@ class WCMp_User {
                 'value' => $vendor->twitter_profile,
                 'class' => "user-profile-fields regular-text"
             ), // Text
-            "vendor_google_plus_profile" => array(
-                'label' => __('Google+ Profile', 'dc-woocommerce-multi-vendor'),
-                'type' => 'text',
-                'value' => $vendor->google_plus_profile,
-                'class' => "user-profile-fields regular-text"
-            ), // Text
             "vendor_linkdin_profile" => array(
                 'label' => __('LinkedIn Profile', 'dc-woocommerce-multi-vendor'),
                 'type' => 'text',

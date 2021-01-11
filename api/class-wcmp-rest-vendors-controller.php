@@ -448,7 +448,6 @@ class WCMp_REST_API_Vendors_Controller extends WC_REST_Controller {
 			'_vendor_phone' => isset($request['address']['phone']) ? absint( $request['address']['phone'] ) : '',
 			'_vendor_fb_profile' => isset($request['social']['facebook']) ? esc_url( $request['social']['facebook'] ) : '',
 			'_vendor_twitter_profile' => isset($request['social']['twitter']) ? esc_url( $request['social']['twitter'] ) : '',
-			'_vendor_google_plus_profile' => isset($request['social']['google_plus']) ? esc_url( $request['social']['google_plus'] ) : '',
 			'_vendor_linkdin_profile' => isset($request['social']['linkdin']) ? esc_url( $request['social']['linkdin'] ) : '',
 			'_vendor_youtube' => isset($request['social']['youtube']) ? esc_url( $request['social']['youtube'] ) : '',
 			'_vendor_instagram' => isset($request['social']['instagram']) ? esc_url( $request['social']['instagram'] ) : '',

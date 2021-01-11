@@ -394,13 +394,6 @@ $_wp_editor_settings = apply_filters('wcmp_vendor_storefront_wp_editor_settings'
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-sm-3 col-md-3 google-plus"><?php _e('Google Plus', 'dc-woocommerce-multi-vendor'); ?></label>
-                        <div class="col-md-6 col-sm-9">
-                            <input class="form-control" type="url"   name="vendor_google_plus_profile" value="<?php echo isset($vendor_google_plus_profile['value']) ? $vendor_google_plus_profile['value'] : ''; ?>">
-                        </div>  
-                    </div>
-
-                    <div class="form-group">
                         <label class="control-label col-sm-3 col-md-3 youtube"><?php _e('YouTube', 'dc-woocommerce-multi-vendor'); ?></label>
                         <div class="col-md-6 col-sm-9">
                             <input class="form-control" type="url"   name="vendor_youtube" value="<?php echo isset($vendor_youtube['value']) ? $vendor_youtube['value'] : ''; ?>">
