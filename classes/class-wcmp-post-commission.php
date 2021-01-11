@@ -1795,6 +1795,22 @@ class WCMp_Commission {
             $vars['meta_key'] = '_commission_vendor';
             $vars['meta_value'] = wc_clean($_GET['commission_vendor']);
         }
+        // Filter by both fileds
+        if ($typenow == $this->post_type && isset($_GET['commission_vendor']) && !empty($_GET['commission_vendor']) && isset($_GET['commission_status']) && !empty($_GET['commission_status'])) {
+
+            $vars['meta_query'] = array(
+                array(
+                    'key' => '_commission_vendor',
+                    'value' => wc_clean($_GET['commission_vendor']),
+                    'compare' => '='
+                ),
+                array(
+                    'key' => '_paid_status',
+                    'value' => wc_clean($_GET['commission_status']),
+                    'compare' => '='
+                )
+            );
+        }
         return $vars;
     }
 
