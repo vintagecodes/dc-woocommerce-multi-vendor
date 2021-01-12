@@ -120,6 +120,8 @@ class WCMp_Cron_Job {
                 if ($vendor_obj->user_data->user_email) {
                     $order_data = array();
                     $vendor = get_wcmp_vendor($vendor_obj->id);
+                    $is_block = get_user_meta($vendor->id, '_vendor_turn_off', true);
+                    if($is_block) continue;
                     $email = WC()->mailer()->emails['WC_Email_Vendor_Orders_Stats_Report'];
                     $vendor_weekly_stats = $vendor->get_vendor_orders_reports_of('vendor_stats', array('vendor_id' => $vendor->id));
                     $transaction_details = $WCMp->transaction->get_transactions($vendor->term_id, date('Y-m-d', strtotime('-7 days')), date('Y-m-d'));
@@ -196,6 +198,8 @@ class WCMp_Cron_Job {
                 if ($vendor_obj->user_data->user_email) {
                     $order_data = array();
                     $vendor = get_wcmp_vendor($vendor_obj->id);
+                    $is_block = get_user_meta($vendor->id, '_vendor_turn_off', true);
+                    if($is_block) continue;
                     $email = WC()->mailer()->emails['WC_Email_Vendor_Orders_Stats_Report'];
                     $vendor_monthly_stats = $vendor->get_vendor_orders_reports_of('vendor_stats', array('vendor_id' => $vendor->id, 'start_date' => date('Y-m-d H:i:s', strtotime('-30 days'))));
                     $transaction_details = $WCMp->transaction->get_transactions($vendor->term_id, date('Y-m-d', strtotime('-30 days')), date('Y-m-d'));

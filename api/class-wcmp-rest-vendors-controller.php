@@ -204,6 +204,8 @@ class WCMp_REST_API_Vendors_Controller extends WC_REST_Controller {
         if (!empty($user_query->results)) {
             foreach ( $user_query->results as $vendor_id) {
             	$vendor = get_wcmp_vendor($vendor_id);
+            	$is_block = get_user_meta($vendor->id, '_vendor_turn_off', true);
+                if($is_block) continue;
 				$vendor_data    = $this->prepare_item_for_response( $vendor, $request );
 				$object[] = $this->prepare_response_for_collection( $vendor_data );
 			}
