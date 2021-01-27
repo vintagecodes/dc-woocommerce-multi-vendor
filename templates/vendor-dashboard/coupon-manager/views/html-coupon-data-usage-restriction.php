@@ -71,7 +71,7 @@ $vendor = apply_filters( 'wcmp_vendor_select_product_for_add_coupon' , get_wcmp_
                 <div class="col-md-6 col-sm-9 coupon-products-wrap">
                     <select id="products" class="form-control wc-enhanced-select" multiple="multiple" name="product_ids[]" data-placeholder="<?php esc_attr_e( 'Any products', 'dc-woocommerce-multi-vendor' ); ?>">
                         <?php
-                        $clause['where'] = " AND ".$wpdb->prefix."posts.post_status = 'publish' AND ".$wpdb->prefix."posts.post_status = 'publish' OR {$wpdb->prefix}posts.post_type = 'product_variation' AND ".$wpdb->prefix."posts.post_author = ". $vendor->id;
+                        $clause['where'] = " AND ".$wpdb->prefix."posts.post_status = 'publish' OR {$wpdb->prefix}posts.post_type = 'product_variation' AND ".$wpdb->prefix."posts.post_author = ". $vendor->id;
                         $vendor_product_ids = wp_list_pluck( $vendor->get_products_ids($clause), 'ID' );
                         $product_ids = $coupon->get_product_ids( 'edit' );
                         foreach ( $vendor_product_ids as $product_id ) {
