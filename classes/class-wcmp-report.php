@@ -449,7 +449,7 @@ class WCMp_Report {
                         $total_coupon_discount_value += $order->get_total_discount();
                         $total_earnings += $vendor_order->get_commission_total('edit');
                         $total_vendor_earnings += $vendor_order->get_commission('edit');
-                        $total_purchased_products += count($order->get_items('line_item'));
+                        $total_purchased_products += $order->get_item_count();
                     endif;
 
                     //coupons count
