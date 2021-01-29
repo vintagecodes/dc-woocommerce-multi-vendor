@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 3.5.16
+Stable tag: 3.5.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,14 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.5.17 - 2021-01-29 =
+* Fix - Incorrect product count for Vendors on admin and vendor end #635.
+* Fix - Display all product variations in the coupon #634.
+* Fix - Count of purchased products in vendor dashboard report overview is incorrect. #631.
+* Fix - Weekly report emails are still sent to suspended vendors #629.
+* Fix - Woocommerece report not showing refund amount when WCMp is installed #625.
+* Fix - Fatal error from the commission in plugin activation time #639.
 
 = 3.5.16 - 2021-01-12 =
 * Fix - SPVM more offer CSS break #613
