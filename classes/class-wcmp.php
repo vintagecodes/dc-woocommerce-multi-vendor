@@ -212,6 +212,9 @@ final class WCMp {
     // Initializing Packages
     function init_packages() {
         include_once ($this->plugin_path . "/packages/Packages.php" );
+        // Migration
+        include_once ($this->plugin_path . "/classes/migration/class-wcmp-migration.php" );
+        $this->multivendor_migration = new WCMp_Migrator();
     }
 
     /**
