@@ -996,6 +996,11 @@ class WCMp_Vendor_Hooks {
 						'note_by' => $user->ID,
 						'note' => __( 'Re applied to become a vendor', 'dc-woocommerce-multi-vendor' ));
 				update_user_meta( $user->ID, 'wcmp_vendor_rejection_notes', serialize( $wcmp_vendor_rejection_notes ) );
+                // send mail to admin when rejected vendor reapply
+                if (apply_filters( 'wcmp_send_mail_to_admin_when_vendor_reapply', true )) {
+                    $email_admin = WC()->mailer()->emails['WC_Email_Admin_New_Vendor_Account'];
+                    $email_admin->trigger($user->ID);
+                }
                 /**
                 * Action hook to modify vendor re submit application after note save.
                 *
