@@ -96,6 +96,8 @@ final class WCMp {
         }else{
             $this->load_vendor_shipping();
         }
+        // Disable woocommerce admin from vendor backend
+        add_filter( 'woocommerce_admin_disabled', array( &$this, 'wcmp_remove_woocommerce_admin_from_vendor' ) );
     }
     
     public function exclude_order_comments($clauses) {
@@ -419,6 +421,12 @@ final class WCMp {
         $this->load_class( 'shipping-gateway' );
         $this->shipping_gateway = new WCMp_Shipping_Gateway();
         WCMp_Shipping_Gateway::load_class( 'shipping-zone', 'helpers' );
+    }
+
+    public function wcmp_remove_woocommerce_admin_from_vendor() {
+        if (is_user_wcmp_vendor(get_current_user_id())) {
+            return true;
+        }
     }
     
     /**
