@@ -26,9 +26,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_filter('woocommerce_rest_product_object_query', 'enable_vendor_on_list_product_query', 10, 2);
 
 function enable_vendor_on_list_product_query($args, $request) {
-	$args['author'] = isset($request['vendor']) ? $request['vendor'] ; '';
-	$args['author__in'] = isset($request['include_vendor']) ? $request['include_vendor'] ; '';
-	$args['author__not_in'] = isset($request['exclude_vendor']) ? $request['exclude_vendor'] ; '';
+	$args['author'] = isset($request['vendor']) ? $request['vendor'] : '';
+	$args['author__in'] = isset($request['include_vendor']) ? $request['include_vendor'] : '';
+	$args['author__not_in'] = isset($request['exclude_vendor']) ? $request['exclude_vendor'] : '';
 	return $args;
 }
 
