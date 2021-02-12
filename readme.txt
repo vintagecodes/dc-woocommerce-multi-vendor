@@ -3,9 +3,9 @@ Contributors: wcmp, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh8961
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.6
+Tested up to: 5.6.1
 Requires PHP: 5.6
-Stable tag: 3.5.17
+Stable tag: 3.5.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,17 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.5.18 - 2021-02-12 =
+* Added - Admin mail for rejecting vendor reapply registration #650.
+* Added - Compatibility of Woocommerce 5.0.0.
+* Fix - Woocommerece report showing 2x times the total order #644.
+* Fix - Parsing Error with PHP 8.0 #645.
+* Fix - File Upload Error Message #646.
+* Fix - Clicking on the "return to business" link on stripe account lands to page with 0 #648.
+* Fix - Nonce checking issue.
+* Fix - Stripe Library updated.
+* Dev - Added `wcmp_send_mail_to_admin_when_vendor_reapply` filter.
 
 = 3.5.17 - 2021-01-29 =
 * Fix - Incorrect product count for Vendors on admin and vendor end #635.
