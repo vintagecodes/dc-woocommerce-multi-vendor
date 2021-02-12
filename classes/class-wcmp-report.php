@@ -18,9 +18,38 @@ class WCMp_Report {
         }
         // filter admin woocommerce reports by excluding sub-orders
         add_filter('woocommerce_admin_report_data', array($this, 'woocommerce_admin_report_data'));
+        add_filter('woocommerce_reports_get_order_report_data_args', array($this, 'woocommerce_reports_get_order_report_data_args'), 99);
+    }
+    
+    public function woocommerce_reports_get_order_report_data_args( $args ) {
+        if( is_user_wcmp_vendor( get_current_user_id() ) ) return $args;
+        if ( isset($args['parent_order_status']) && in_array('refunded', $args['parent_order_status'])  ) {
+        	return $args;
+        } elseif (isset($args['group_by']) && $args['group_by'] == 'refund_id') {
+        	return $args;
+        } else {
+        	if( isset( $args['where'] ) ) {
+        		$args['where'][] = array(
+        			'key'      => 'posts.post_parent',
+        			'value'    => 0,
+        			'operator' => '=',
+        		);
+        	} else {
+        		$args['where'] = array( array(
+        			'key'      => 'posts.post_parent',
+        			'value'    => 0,
+        			'operator' => '=',
+        		) );
+        	}
+        	return $args;
+        }
+        return $args;
     }
     
     public function woocommerce_admin_report_data( $report_data ) {
+    	include_once( WC()->plugin_path() . '/includes/admin/reports/class-wc-admin-report.php' );
+    	$report_range = new WC_Admin_Report();
+    	$report_range->calculate_current_range( $_GET['range'] );
     	// Find parent pertial refund
     	$child_orders_for_partial = array();
     	if (is_array($report_data->partial_refunds) && !empty($report_data->partial_refunds)) {
@@ -41,23 +70,8 @@ class WCMp_Report {
     			}
     		}
     	}
-    	// Find parent full refund
-    	$child_orders_for_full = array();
-    	if (is_array($report_data->full_refunds) && !empty($report_data->full_refunds)) {
-    		foreach ($report_data->full_refunds as $refund_key => $refund_value) {
-    			$refund = new WC_Order_Refund( $refund_value->refund_id );
-    			if ( is_object( $refund ) && !wp_get_post_parent_id($refund->get_parent_id())) {
-    				$child_orders_for_full[] = $refund_value;
-    			}
-    		}
-    	}
-
     	$report_data->partial_refunds = $child_orders_for_partial;
-
-    	$report_data->full_refunds = $child_orders_for_full;
-
-    	$report_data->refunded_orders = array_merge( $child_orders_for_partial, $child_orders_for_full );
-
+    	$report_data->refunded_orders = array_merge( $child_orders_for_partial, $report_data->full_refunds );
     	$report_data->refund_lines  = $child_orders_refund_lines;   
 		/**
 		* Total up refunds. Note: when an order is fully refunded, a refund line will be added.
@@ -66,20 +80,18 @@ class WCMp_Report {
 		$report_data->total_shipping_refunded     = 0;
 		$report_data->total_shipping_tax_refunded = 0;
 		$report_data->total_refunds               = 0;
-
+		
 		foreach ( $report_data->refunded_orders as $key => $value ) {
-
 			$report_data->total_tax_refunded          += floatval( $value->total_tax < 0 ? $value->total_tax * -1 : $value->total_tax );
 			$report_data->total_refunds               += floatval( $value->total_refund );
 			$report_data->total_shipping_tax_refunded += floatval( $value->total_shipping_tax < 0 ? $value->total_shipping_tax * -1 : $value->total_shipping_tax );
 			$report_data->total_shipping_refunded     += floatval( $value->total_shipping < 0 ? $value->total_shipping * -1 : $value->total_shipping );
 
-		// Only applies to parial.
+			// Only applies to parial.
 			if ( isset( $value->order_item_count ) ) {
 				$report_data->refunded_order_items += floatval( $value->order_item_count < 0 ? $value->order_item_count * -1 : $value->order_item_count );
 			}
 		}
-
 		// Totals from all orders - including those refunded. Subtract refunded amounts.
 		$report_data->total_tax          = wc_format_decimal( array_sum( wp_list_pluck( $report_data->orders, 'total_tax' ) ) - $report_data->total_tax_refunded, 2 );
 		$report_data->total_shipping     = wc_format_decimal( array_sum( wp_list_pluck( $report_data->orders, 'total_shipping' ) ) - $report_data->total_shipping_refunded, 2 );
@@ -88,6 +100,11 @@ class WCMp_Report {
 		// Total the refunds and sales amounts. Sales subract refunds. Note - total_sales also includes shipping costs.
 		$report_data->total_sales = wc_format_decimal( array_sum( wp_list_pluck( $report_data->orders, 'total_sales' ) ) - $report_data->total_refunds, 2 );
 		$report_data->net_sales   = wc_format_decimal( $report_data->total_sales - $report_data->total_shipping - max( 0, $report_data->total_tax ) - max( 0, $report_data->total_shipping_tax ), 2 );
+		// Calculate average based on net.
+		$report_data->average_sales       = wc_format_decimal( $report_data->net_sales / ( $report_range->chart_interval + 1 ), 2 );
+		$report_data->average_total_sales = wc_format_decimal( $report_data->total_sales / ( $report_range->chart_interval + 1 ), 2 );
+		// Total orders and discounts also includes those which have been refunded at some point.
+		$report_data->total_refunded_orders = absint( count( $report_data->full_refunds ) );
 
 		return $report_data;
 	}
