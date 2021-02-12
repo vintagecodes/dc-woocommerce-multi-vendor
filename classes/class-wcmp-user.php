@@ -182,7 +182,7 @@ class WCMp_User {
                 }
 
                 if ($validation_errors->get_error_code()) {
-                    WC()->session->set('wc_notices', array('error' => array($validation_errors->get_error_message())));
+                    WC()->session->set('wc_notices', array('error' => array(array('notice' => $validation_errors->get_error_message()))));
                     return;
                 }
 
