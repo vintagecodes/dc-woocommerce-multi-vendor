@@ -192,6 +192,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 = 3.5.18 - 2021-02-12 =
 * Added - Admin mail for rejecting vendor reapply registration #650.
+* Added - Compatibility of Woocommerce 5.0.0.
 * Fix - Woocommerece report showing 2x times the total order #644.
 * Fix - Parsing Error with PHP 8.0 #645.
 * Fix - File Upload Error Message #646.
