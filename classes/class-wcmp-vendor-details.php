@@ -383,14 +383,15 @@ class WCMp_Vendor {
             )
             WHERE
                 1 = 1 AND(
-                    {$wpdb->prefix}term_taxonomy.term_id IN( $this->term_id )
-                ) AND {$wpdb->prefix}posts.post_author IN( $this->id ) AND {$wpdb->prefix}posts.post_type = 'product' $where
+                    {$wpdb->prefix}term_taxonomy.term_id IN( %s )
+                ) AND {$wpdb->prefix}posts.post_author IN( %s ) AND {$wpdb->prefix}posts.post_type = %s $where
             GROUP BY
                 $groupby
             ORDER BY
                 $orderby $limits";
 
-        return apply_filters( 'wcmp_get_products_ids', $wpdb->get_results( $sql ), $clauses, $this->id );
+        return apply_filters( 'wcmp_get_products_ids', $wpdb->get_results( $wpdb->prepare( $sql, $this->term_id, $this->id, 'product' ) ), $clauses, $this->id );
+
     }
 
     /**

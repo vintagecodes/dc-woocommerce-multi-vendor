@@ -219,9 +219,9 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 	
 	function usort_reorder( $a, $b ) {
 		// If no sort, default to title
-		$orderby = ( !empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : 'name';
+		$orderby = ( !empty( $_GET['orderby'] ) ) ? wc_clean($_GET['orderby']) : 'name';
 		// If no order, default to asc
-		$order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'asc';
+		$order = ( ! empty($_GET['order'] ) ) ? wc_clean($_GET['order']) : 'asc';
 		// Determine sort order
 		$result = strcmp( $a[$orderby], $b[$orderby] );
 		// Send final sort direction to usort
@@ -230,7 +230,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 	
 	public function process_bulk_action() {
 		if ( 'delete' === $this->current_action() ) {
-		 	$delete_url = self_admin_url('users.php?action=delete&users[]=' . implode( '&users[]=', $_GET['ID'] ));
+		 	$delete_url = self_admin_url('users.php?action=delete&users[]=' . implode( '&users[]=', absint($_GET['ID']) ));
     		$delete_url = str_replace( '&amp;', '&', wp_nonce_url( $delete_url, 'bulk-users' ) );
 			wp_safe_redirect ($delete_url);
 			exit();
@@ -282,7 +282,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 		}
 		
 		$views = array();
-		$current = ( !empty( $_GET['role'] ) ? $_GET['role'] : 'all');
+		$current = ( !empty( $_GET['role'] ) ? wc_clean($_GET['role']) : 'all');
 		
 		//All link
 		$class = ($current == 'all' ? ' class="current"' :'');
@@ -450,9 +450,9 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 						);
 				$store_tab_options = array();
 								
-				if( is_user_wcmp_vendor($_GET['ID']) ) {
+				if( is_user_wcmp_vendor(absint($_GET['ID'])) ) {
 					$is_approved_vendor = true;
-					$vendor_obj = get_wcmp_vendor($_GET['ID']);
+					$vendor_obj = get_wcmp_vendor(absint($_GET['ID']));
 					
 					$current_offset = get_user_meta($vendor_obj->id, 'gmt_offset', true);
 					$tzstring = get_user_meta($vendor_obj->id, 'timezone_string', true);
@@ -637,7 +637,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 							if($is_approved_vendor) echo '<h2>' . __('Vendor Application Archive', 'dc-woocommerce-multi-vendor') . '</h2>';
 							else echo '<h2>' . __('Vendor Application Data', 'dc-woocommerce-multi-vendor') . '</h2>';
 							
-							$vendor_application_data = get_user_meta($_GET['ID'], 'wcmp_vendor_fields', true);
+							$vendor_application_data = get_user_meta(absint($_GET['ID']), 'wcmp_vendor_fields', true);
 							if (!empty($vendor_application_data) && is_array($vendor_application_data)) {
 								foreach ($vendor_application_data as $key => $value) {
                                                                     if ($value['type'] == 'recaptcha') continue;
@@ -681,7 +681,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 								echo '<div class="wcmp-no-form-data">' . __('No Vendor Application archive data!!', 'dc-woocommerce-multi-vendor') . '</div>';
 							}
 							
-							$wcmp_vendor_rejection_notes = unserialize( get_user_meta( $_GET['ID'], 'wcmp_vendor_rejection_notes', true ) );
+							$wcmp_vendor_rejection_notes = unserialize( get_user_meta( absint($_GET['ID']), 'wcmp_vendor_rejection_notes', true ) );
 							
 							if(is_array($wcmp_vendor_rejection_notes) && count($wcmp_vendor_rejection_notes) > 0) {
 								echo '<h2>' . __('Notes', 'dc-woocommerce-multi-vendor') . '</h2>';
@@ -725,7 +725,6 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 															$vendor_shipping_methods_titles[] = "<li class='wcmp-shipping-zone-method wc-shipping-zone-method $class_name'>" . $shipping_method['title'] . "</li>";
 														}
 														endif;
-														//$vendor_shipping_methods_titles = array_column($vendor_shipping_methods, 'title');
 														$vendor_shipping_methods_titles = implode('', $vendor_shipping_methods_titles);
 
 														if (empty($vendor_shipping_methods)) {

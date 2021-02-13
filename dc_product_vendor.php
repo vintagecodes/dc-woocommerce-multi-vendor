@@ -26,9 +26,6 @@ if (!defined('ABSPATH')) {
 if (!defined('WCMp_PLUGIN_TOKEN')) {
     exit;
 }
-if (!defined('WCMp_TEXT_DOMAIN')) {
-    exit;
-}
 
 /* Check whether another multi vendor plugin exist */
 register_activation_hook(__FILE__, 'wcmp_check_if_another_vendor_plugin_exits');

@@ -533,7 +533,7 @@ if (!function_exists('get_wcmp_vendor_orders')) {
         }
         if (!empty($args)) {
             foreach ($args as $key => $arg) {
-                if (!$wpdb->get_var("SHOW COLUMNS FROM `{$wpdb->prefix}wcmp_vendor_orders` LIKE '{$key}';")) {
+                if (!$wpdb->get_var( $wpdb->prepare( "SHOW COLUMNS FROM `{$wpdb->prefix}wcmp_vendor_orders` LIKE %s", $key  ))) {
                     unset($args[$key]);
                 }
             }
@@ -545,7 +545,7 @@ if (!function_exists('get_wcmp_vendor_orders')) {
             ));
             $query = apply_filters('get_wcmp_vendor_orders_query_where', $query);
         }
-        return $wpdb->get_results("SELECT * FROM {$wpdb->prefix}wcmp_vendor_orders {$query}");
+        return $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_vendor_orders %s", $query));
     }
 
 }
@@ -735,7 +735,7 @@ if (!function_exists('wcmp_paid_commission_status')) {
         global $wpdb;
         update_post_meta($commission_id, '_paid_status', 'paid', 'unpaid');
         update_post_meta($commission_id, '_paid_date', time());
-        $wpdb->query("UPDATE `{$wpdb->prefix}wcmp_vendor_orders` SET commission_status = 'paid', commission_paid_date = now() WHERE commission_id = {$commission_id}");
+        $wpdb->query( $wpdb->prepare( "UPDATE `{$wpdb->prefix}wcmp_vendor_orders` SET commission_status = 'paid', commission_paid_date = now() WHERE commission_id = %d", $commission_id ) );
     }
 
 }
@@ -1409,7 +1409,7 @@ if (!function_exists('do_wcmp_data_migrate')) {
                 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
                 foreach ($create_tables_query as $table => $create_table_query) {
                     if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) {
-                        $wpdb->query($create_table_query);
+                        $wpdb->query(esc_sql($create_table_query));
                     }
                 }
                 if (get_wcmp_vendor_settings('sold_by_catalog', 'frontend') && get_wcmp_vendor_settings('sold_by_catalog', 'frontend') == 'Enable') {
@@ -1429,7 +1429,7 @@ if (!function_exists('do_wcmp_data_migrate')) {
                 if ($wpdb->has_cap('collation')) {
                     $collate = $wpdb->get_charset_collate();
                 }
-                $create_table_query = "CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "wcmp_cust_answers` (
+                $create_table_query = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wcmp_cust_answers` (
 		`ans_ID` bigint(20) NOT NULL AUTO_INCREMENT,
 		`ques_ID` BIGINT UNSIGNED NOT NULL DEFAULT '0',
                 `ans_details` text NOT NULL,
@@ -1439,7 +1439,7 @@ if (!function_exists('do_wcmp_data_migrate')) {
 		PRIMARY KEY (`ans_ID`),
                 CONSTRAINT ques_id UNIQUE (ques_ID)
 		) $collate;";
-                $wpdb->query($create_table_query);
+                $wpdb->query($wpdb->prepare("%s", $create_table_query));
             }
             if (version_compare($previous_plugin_version, '3.0.5', '<=')) {
                 $max_index_length = 191;
@@ -1702,8 +1702,8 @@ if (!function_exists('do_wcmp_commission_data_migrate')) {
                 }
             }
             foreach ($update_data as $update) {
-                if ($wpdb->get_var("SELECT ID FROM `{$wpdb->prefix}wcmp_vendor_orders` WHERE order_id = '{$update['order_id']}' AND commission_id = '{$update['commission_id']}' AND vendor_id = '{$update['vendor_id']}' AND product_id = '{$update['product_id']}'")) {
-                    $wpdb->query("UPDATE `{$wpdb->prefix}wcmp_vendor_orders` SET shipping_status = '{$update['shipping_status']}', commission_amount = '{$update['commission_amount']}', shipping = '{$update['shipping']}', tax = '{$update['tax']}', commission_status = '{$update['commission_status']}', quantity = '{$update['quantity']}', variation_id = '{$update['variation_id']}', shipping_tax_amount = '{$update['shipping_tax_amount']}', line_item_type = '{$update['line_item_type']}' WHERE order_id = '{$update['order_id']}' AND commission_id = '{$update['commission_id']}' AND vendor_id = '{$update['vendor_id']}' AND product_id = '{$update['product_id']}'");
+                if ($wpdb->get_var( $wpdb->prepare("SELECT ID FROM `{$wpdb->prefix}wcmp_vendor_orders` WHERE order_id = %d AND commission_id = %d AND vendor_id = %d AND product_id = %d", $update['order_id'], $update['commission_id'], $update['vendor_id'], $update['product_id'] ))) {
+                    $wpdb->query($wpdb->prepare("UPDATE `{$wpdb->prefix}wcmp_vendor_orders` SET shipping_status = %d, commission_amount = %d, shipping = %d, tax = %d, commission_status = %d, quantity = %d, variation_id = %d, shipping_tax_amount = %d, line_item_type = %d WHERE order_id = %d AND commission_id = %d AND vendor_id = %d AND product_id = %d", $update['shipping_status'], $update['commission_amount'], $update['shipping'], $update['tax'], $update['commission_status'], $update['quantity'], $update['variation_id'], $update['shipping_tax_amount'], $update['line_item_type'], $update['order_id'], $update['commission_id'], $update['vendor_id'], $update['product_id'] ));
                 } else {
                     $wpdb->query(
                             $wpdb->prepare(
@@ -2328,7 +2328,7 @@ if (!function_exists('wcmp_get_visitor_stats')) {
         global $wpdb;
         if ($vendor_id) {
             $results = $wpdb->get_results(
-                    $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_visitors_stats WHERE {$query_where}vendor_id=%d {$query_filter}", $vendor_id)
+                    $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_visitors_stats WHERE %s vendor_id=%d %s", $query_where, $vendor_id, $query_filter)
             );
             return $results;
         } else {

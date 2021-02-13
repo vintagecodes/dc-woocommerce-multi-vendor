@@ -1494,7 +1494,7 @@ class WCMp_Order {
 
     public function wcmp_handler_cust_requested_refund() {
         global $wp;
-        $nonce_value = wc_get_var( $_REQUEST['cust-request-refund-nonce'], wc_get_var( $_REQUEST['_wpnonce'], '' ) ); // @codingStandardsIgnoreLine.
+        $nonce_value = isset($_REQUEST['cust-request-refund-nonce']) ? wc_get_var( $_REQUEST['cust-request-refund-nonce'], wc_get_var( $_REQUEST['_wpnonce'], '' ) ) : ''; // @codingStandardsIgnoreLine.
 
 		if ( ! wp_verify_nonce( $nonce_value, 'customer_request_refund' ) ) {
 			return;
@@ -1588,7 +1588,7 @@ class WCMp_Order {
             if( in_array( $_POST['refund_order_customer'], array( 'refund_reject', 'refund_accept' ) ) ) {
 
                 $refund_details = array(
-                    'admin_reason' => isset( $_POST['refund_admin_reason_text'] ) ? $_POST['refund_admin_reason_text'] : '',
+                    'admin_reason' => isset( $_POST['refund_admin_reason_text'] ) ? wc_clean($_POST['refund_admin_reason_text']) : '',
                     );
                 
                 $order_status = '';
@@ -1611,7 +1611,7 @@ class WCMp_Order {
                 wp_update_comment(array('comment_ID' => $comment_id_parent, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
 
                 $mail = WC()->mailer()->emails['WC_Email_Customer_Refund_Request'];
-                $mail->trigger( $_POST['_billing_email'], $post_id, $refund_details, 'customer' );
+                $mail->trigger( sanitize_email($_POST['_billing_email']), $post_id, $refund_details, 'customer' );
             }
         }
     }

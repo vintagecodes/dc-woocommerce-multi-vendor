@@ -46,7 +46,7 @@ class WCMp_Admin {
     public function actions_handler(){
         // Export pending bank transfers request in admin end
         if ( ! empty( $_POST ) && isset( $_REQUEST[ 'wcmp_admin_bank_transfer_export_nonce' ] ) && wp_verify_nonce( $_REQUEST[ 'wcmp_admin_bank_transfer_export_nonce' ], 'wcmp_todo_pending_bank_transfer_export' ) ) {
-            $transactions_ids = isset( $_POST['transactions_ids'] ) ? json_decode( $_POST['transactions_ids'] ) : array();
+            $transactions_ids = isset( $_POST['transactions_ids'] ) ? json_decode( wc_clean($_POST['transactions_ids'] ) ) : array();
             if( !$transactions_ids ) return false;
             // Set filename
             $date = date('Y-m-d H:i:s');

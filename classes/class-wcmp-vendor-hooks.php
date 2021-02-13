@@ -335,13 +335,9 @@ class WCMp_Vendor_Hooks {
         $frontend_script_path = $WCMp->plugin_url . 'assets/frontend/js/';
         $frontend_script_path = str_replace( array( 'http:', 'https:' ), '', $frontend_script_path );
         $suffix = defined( 'WCMP_SCRIPT_DEBUG' ) && WCMP_SCRIPT_DEBUG ? '' : '.min';
-        //wp_enqueue_style('font-vendor_announcements', '//fonts.googleapis.com/css?family=Lato:400,100,100italic,300,300italic,400italic,700,700italic,900,900italic', array(), $WCMp->version);
-        //wp_enqueue_style('ui_vendor_announcements', '//code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css', array(), $WCMp->version);
         wp_enqueue_script( 'jquery-ui-accordion' );
         wp_enqueue_script( 'wcmp_new_vandor_announcements_js', $frontend_script_path . 'wcmp_vendor_announcements' . $suffix . '.js', array( 'jquery' ), $WCMp->version, true );
         $WCMp->localize_script( 'wcmp_new_vandor_announcements_js' );
-        //wp_enqueue_script('jquery');
-        //wp_enqueue_script('wcmp_new_vandor_announcements_js_lib_ui', '//code.jquery.com/ui/1.10.4/jquery-ui.js', array('jquery'), $WCMp->version, true);
         $vendor = get_wcmp_vendor( get_current_vendor_id() );
         $WCMp->template->get_template( 'vendor-dashboard/vendor-announcements.php', array( 'vendor_announcements' => $vendor->get_announcements() ) );
     }
@@ -780,11 +776,12 @@ class WCMp_Vendor_Hooks {
         global $WCMp;
         $vendor = get_wcmp_vendor( get_current_vendor_id() );
         if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+            $post_data = isset($_POST) ? wp_unslash($_POST) : false;
             switch ( $WCMp->endpoints->get_current_endpoint() ) {
                 case 'storefront':
                 case 'vendor-policies':
                 case 'vendor-billing':
-                    $error = $WCMp->vendor_dashboard->save_store_settings( $vendor->id, $_POST );
+                    $error = $WCMp->vendor_dashboard->save_store_settings( $vendor->id, $post_data );
                     if ( empty( $error ) ) {
                         wc_add_notice( __( 'All Options Saved', 'dc-woocommerce-multi-vendor' ), 'success' );
                     } else {
@@ -792,13 +789,13 @@ class WCMp_Vendor_Hooks {
                     }
                     break;
                 case 'vendor-shipping':
-                    $WCMp->vendor_dashboard->save_vendor_shipping( $vendor->id, $_POST );
+                    $WCMp->vendor_dashboard->save_vendor_shipping( $vendor->id, $post_data );
                     break;
                 case 'profile':
-                    $WCMp->vendor_dashboard->save_vendor_profile( $vendor->id, $_POST );
+                    $WCMp->vendor_dashboard->save_vendor_profile( $vendor->id, $post_data );
                     break;
                 case 'vendor-orders':
-                    $WCMp->vendor_dashboard->save_handler_vendor_orders( $_POST );
+                    $WCMp->vendor_dashboard->save_handler_vendor_orders( $post_data );
                     break;
                 default :
                     break;

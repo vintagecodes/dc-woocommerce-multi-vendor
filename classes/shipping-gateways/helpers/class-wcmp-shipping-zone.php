@@ -97,7 +97,7 @@ class WCMP_Shipping_Zone {
     public static function get_shipping_methods( $zone_id, $vendor_id ) {
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}wcmp_shipping_zone_methods WHERE `zone_id`={$zone_id} AND `vendor_id`={$vendor_id}";
+        $sql = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wcmp_shipping_zone_methods WHERE `zone_id`=%d AND `vendor_id`=%d",$zone_id, $vendor_id );
         $results = $wpdb->get_results( $sql );
         $vendor_shipping_methods = wcmp_get_shipping_methods();
         $method = array();
@@ -179,7 +179,7 @@ class WCMP_Shipping_Zone {
             $vendor_id  = apply_filters( 'wcmp_current_vendor_id', get_current_user_id() );
         }
 
-        $sql = "SELECT * FROM {$table_name} WHERE zone_id=$zone_id AND vendor_id=$vendor_id";
+        $sql = $wpdb->prepare("SELECT * FROM {$table_name} WHERE zone_id=%s AND vendor_id=%d", $zone_id, $vendor_id);
 
         $results = $wpdb->get_results( $sql );
 

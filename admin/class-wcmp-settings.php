@@ -344,7 +344,7 @@ class WCMp_Settings {
     }
 
     public function wcmp_settings_tabs() {
-        $current = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ? $_GET['tab'] : 'general';
+        $current = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ? wc_clean($_GET['tab']) : 'general';
         $sublinks = array();
         foreach ( $this->tabs as $tab_id => $tab ) {
             if ( $current != $tab_id || ! $this->is_wcmp_tab_has_subtab( $tab_id ) ) {

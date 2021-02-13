@@ -220,7 +220,7 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
                 'vendors'   => $vendors,
                 'vendor_total' => $vendors_total,
                 'radius' => $radius,
-                'request' => $_REQUEST,
+                'request' => isset($_REQUEST) ? wc_clean($_REQUEST) : '',
             ));
             $WCMp->template->get_template('shortcode/vendor_lists.php', $data);
         }
