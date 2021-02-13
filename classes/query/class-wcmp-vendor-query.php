@@ -282,10 +282,10 @@ class WCMp_Vendor_Query {
 		$multiplier = ( strtoupper( $unit ) === 'K' ) ? 1.609344 : 1;
 		$search_results = $wpdb->get_results(
 			// phpcs:disable
-			"SELECT DISTINCT users.ID, ((ACOS(SIN($lat * PI() / 180) * SIN(latitude.meta_value * PI() / 180) + COS($lat * PI() / 180) * COS(latitude.meta_value * PI() / 180) * COS(($lon - longitude.meta_value) * PI() / 180)) * 180 / PI()) * 60 * 1.1515 * $multiplier) AS distance FROM {$wpdb->users} users 
+			$wpdb->prepare( "SELECT DISTINCT users.ID, ((ACOS(SIN(%d * PI() / 180) * SIN(latitude.meta_value * PI() / 180) + COS(%d * PI() / 180) * COS(latitude.meta_value * PI() / 180) * COS((%d - longitude.meta_value) * PI() / 180)) * 180 / PI()) * 60 * 1.1515 * %d) AS distance FROM {$wpdb->users} users 
 			INNER JOIN {$wpdb->usermeta} latitude on latitude.user_id = users.ID and latitude.meta_key = '_store_lat' 
 			INNER JOIN {$wpdb->usermeta} longitude on longitude.user_id = users.ID and longitude.meta_key = '_store_lng' 
-			HAVING distance <= $distance "
+			HAVING distance <= $distance ", $lat, $lat, $lon, $multiplier)
 		);
 		
 		if( $search_results ) {

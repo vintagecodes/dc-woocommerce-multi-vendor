@@ -371,8 +371,8 @@ class WCMp_Vendor {
         $groupby  = isset( $clauses['groupby'] ) ? $clauses['groupby'] : '';
         $orderby  = isset( $clauses['orderby'] ) ? $clauses['orderby'] : '';
         $limits   = isset( $clauses['limits'] ) ? $clauses['limits'] : '';
-        $sql = "SELECT
-                $fields
+        $sql = $wpdb->prepare("SELECT
+                %s
             FROM
                 {$wpdb->prefix}posts
             LEFT JOIN {$wpdb->prefix}term_relationships ON(
@@ -388,7 +388,7 @@ class WCMp_Vendor {
             GROUP BY
                 $groupby
             ORDER BY
-                $orderby $limits";
+                %s %s", $fields, $orderby, $limits );
 
         return apply_filters( 'wcmp_get_products_ids', $wpdb->get_results( $sql ), $clauses, $this->id );
     }

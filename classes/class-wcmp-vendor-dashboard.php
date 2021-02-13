@@ -77,7 +77,7 @@ Class WCMp_Admin_Dashboard {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_POST['vendor_get_paid'])) {
                 $vendor = get_wcmp_vendor(get_current_vendor_id());
-                $commissions = isset($_POST['commissions']) ? array_filter($_POST['commissions']) : array();
+                $commissions = isset($_POST['commissions']) ? array_filter(wc_clean($_POST['commissions'])) : array();
                 if (!empty($commissions)) {
                     $payment_method = get_user_meta($vendor->id, '_vendor_payment_mode', true);
                     if ($payment_method) {
@@ -1044,7 +1044,7 @@ Class WCMp_Admin_Dashboard {
 
     public function is_order_shipped($order_id, $vendor) {
         global $WCMp, $wpdb;
-        $shipping_status = $wpdb->get_results("SELECT DISTINCT shipping_status from `{$wpdb->prefix}wcmp_vendor_orders` where vendor_id = " . $vendor->id . " AND order_id = " . $order_id, ARRAY_A);
+        $shipping_status = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT shipping_status from `{$wpdb->prefix}wcmp_vendor_orders` where vendor_id = %d AND order_id = %d", $vendor->id, $order_id ), ARRAY_A);
         $shipping_status = $shipping_status[0]['shipping_status'];
         if ($shipping_status == 0)
             return false;
@@ -1635,7 +1635,7 @@ Class WCMp_Admin_Dashboard {
             $total_amount = 0;
             $transaction_display_array = array();
             $vendor = get_wcmp_vendor(get_current_vendor_id());
-            $requestData = $_REQUEST;
+            $requestData = isset($_REQUEST) ? wc_clean($_REQUEST) : '';
             $vendor = apply_filters('wcmp_transaction_vendor', $vendor);
             $start_date = isset($requestData['from_date']) ? $requestData['from_date'] : date('01-m-Y');
             $end_date = isset($requestData['to_date']) ? $requestData['to_date'] : date('t-m-Y');
@@ -1924,7 +1924,7 @@ Class WCMp_Admin_Dashboard {
                         $error_msg = sprintf( __( 'The stock has not been updated because the value has changed since editing. Product %1$d has %2$d units in stock.', 'woocommerce' ), $product->get_id(), $product->get_stock_quantity( 'edit' ) );
                         $errors[] = $error_msg;
                     } else {
-                        $stock = wc_stock_amount( $_POST['_stock'] );
+                        $stock = wc_stock_amount( wc_clean($_POST['_stock']) );
                     }
                 }
                 // Group Products
@@ -2113,8 +2113,8 @@ Class WCMp_Admin_Dashboard {
         $post_id = wp_update_post( $post_data, true );
 
         if ( $post_id && ! is_wp_error( $post_id ) ) {
-            $product_categories = isset( $_POST['product_categories'] ) ? (array) $_POST['product_categories'] : array();
-            $exclude_product_categories = isset( $_POST['exclude_product_categories'] ) ? (array) $_POST['exclude_product_categories'] : array();
+            $product_categories = isset( $_POST['product_categories'] ) ? array_filter(wc_clean( $_POST['product_categories'] ) ) : array();
+            $exclude_product_categories = isset( $_POST['exclude_product_categories'] ) ? array_filter(wc_clean( $_POST['exclude_product_categories'] ) ) : array();
 
             $errors = array();
             $coupon = new WC_Coupon( $post_id );

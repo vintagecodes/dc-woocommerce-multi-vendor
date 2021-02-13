@@ -561,10 +561,10 @@ class WCMp_Frontend {
         global $wpdb;
         $postcode  = wc_normalize_postcode( wc_clean( $package['destination']['postcode'] ) );
         if( !$postcode ) return $criteria;
-        $search_results = $wpdb->get_results(
+        $search_results = $wpdb->get_results($wpdb->prepare(
             "SELECT vendor_id,zone_id
-            FROM {$wpdb->prefix}wcmp_shipping_zone_locations where location_code = '$postcode'"
-            );
+            FROM {$wpdb->prefix}wcmp_shipping_zone_locations where location_code = %s", $postcode
+            ));
         $match_rates = array();
         if ( !empty( $search_results ) ) {
             foreach ($search_results as $key => $value) {

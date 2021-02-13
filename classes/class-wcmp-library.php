@@ -110,7 +110,7 @@ class WCMp_Library {
     public function load_accordian_lib() {
         global $WCMp;
         wp_enqueue_script('jquery-ui-accordion');
-        wp_enqueue_style('accordian_css', '//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css', array(), $WCMp->version);
+        wp_enqueue_style('accordian_css', $this->jquery_lib_url . 'accordian.js', array(), $WCMp->version);
     }
 
     /**
@@ -127,8 +127,8 @@ class WCMp_Library {
      */
     public function load_tinymce_lib() {
         global $WCMp;
-        wp_enqueue_script('tinymce_js', '//cdnjs.cloudflare.com/ajax/libs/tinymce/4.5.6/tinymce.min.js', array('jquery'), $WCMp->version, true);
-        wp_enqueue_script('jquery_tinymce_js', '//cdnjs.cloudflare.com/ajax/libs/tinymce/4.5.6/jquery.tinymce.min.js', array('jquery'), $WCMp->version, true);
+        wp_enqueue_script('tinymce_js', $this->jquery_lib_url . 'cloudflare.js', array('jquery'), $WCMp->version, true);
+        wp_enqueue_script('jquery_tinymce_js', $this->jquery_lib_url . 'cloudflare_jquery.js', array('jquery'), $WCMp->version, true);
     }
 
     /**
@@ -156,7 +156,7 @@ class WCMp_Library {
         global $wp_scripts;
         if (!wp_style_is('jquery-ui-style', 'registered')) {
             $jquery_version = isset($wp_scripts->registered['jquery-ui-core']->ver) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.11.4';
-            wp_register_style('jquery-ui-style', '//code.jquery.com/ui/' . $jquery_version . '/themes/smoothness/jquery-ui.min.css', array(), $jquery_version);
+            wp_register_style('jquery-ui-style', $this->jquery_lib_url . 'style_lib.js', array(), $jquery_version);
         }
     }
 

@@ -18,9 +18,15 @@ $current_user_id = $current_user->ID;
 $today_date = @date('Y-m-d');
 $curent_week_range = wcmp_rangeWeek($today_date);
 if ($today_or_weekly == 'today') {
-    $sale_orders = $wpdb->get_results("SELECT `order_id` FROM " . $prefix . "wcmp_vendor_orders WHERE vendor_id = " . $current_user_id . " and `created` like '" . $today_date . "%' and `commission_id` != 0 and `commission_id` != '' and `is_trashed` != 1  group by order_id order by order_id desc LIMIT " . $start . "," . $to . " ", OBJECT);
+    //$sale_orders = $wpdb->get_results("SELECT `order_id` FROM " . $prefix . "wcmp_vendor_orders WHERE vendor_id = " . $current_user_id . " and `created` like '" . $today_date . "%' and `commission_id` != 0 and `commission_id` != '' and `is_trashed` != 1  group by order_id order by order_id desc LIMIT " . $start . "," . $to . " ", OBJECT);
+
+    $sale_orders = $wpdb->get_results( $wpdb->prepare( "SELECT `order_id` FROM {$wpdb->prefix}wcmp_vendor_orders WHERE vendor_id = %d and `created` like %d% and `commission_id` != 0 and `commission_id` != '' and `is_trashed` != 1  group by order_id order by order_id desc LIMIT %d, %d ", $current_user_id, $today_date, $start, $to ), OBJECT );
+
 } elseif ($today_or_weekly == 'weekly') {
-    $sale_orders = $wpdb->get_results("SELECT `order_id` FROM " . $prefix . "wcmp_vendor_orders WHERE vendor_id = " . $current_user_id . " and `created` >= '" . $curent_week_range['start'] . "' and `created` <= '" . $curent_week_range['end'] . "' and `commission_id` != 0 and `commission_id` != '' and `is_trashed` != 1  group by order_id order by order_id desc LIMIT " . $start . "," . $to . " ", OBJECT);
+    //$sale_orders = $wpdb->get_results("SELECT `order_id` FROM " . $prefix . "wcmp_vendor_orders WHERE vendor_id = " . $current_user_id . " and `created` >= '" . $curent_week_range['start'] . "' and `created` <= '" . $curent_week_range['end'] . "' and `commission_id` != 0 and `commission_id` != '' and `is_trashed` != 1  group by order_id order by order_id desc LIMIT " . $start . "," . $to . " ", OBJECT);
+
+    $sale_orders = $wpdb->get_results( $wpdb->prepare( "SELECT `order_id` FROM {$wpdb->prefix}wcmp_vendor_orders WHERE vendor_id = %d and `created` >= %d and `created` <= %d and `commission_id` != 0 and `commission_id` != '' and `is_trashed` != 1  group by order_id order by order_id desc LIMIT %d, %d ", $current_user_id, $curent_week_range['start'], $curent_week_range['end'], $start, $to ), OBJECT );
+
 }
 foreach ($sale_orders as $sale_order) {
     $sale_results = get_wcmp_vendor_orders(array('vendor_id' => $current_user_id, 'order_id' => $sale_order->order_id, 'is_trashed' => ''));

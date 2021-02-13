@@ -89,8 +89,7 @@ class WCMp_Product_QNA {
      */
     public function get_Question( $ques_ID ) {
         global $wpdb;
-        $get_ques_sql = "SELECT * FROM {$this->question_table} WHERE ques_ID = %d ";
-        return $wpdb->get_row( $wpdb->prepare( $get_ques_sql, $ques_ID ) );
+        return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$this->question_table} WHERE ques_ID = %d ", $ques_ID ) );
     }
 
     public function get_Pending_Questions( $product_ID ) {
@@ -247,7 +246,7 @@ class WCMp_Product_QNA {
         if($args['where']){
             $get_qna_sql .= $args['where'];
         } 
-        $product_QNAs = $wpdb->get_results( $wpdb->prepare( $get_qna_sql, $product_ID ) );
+        $product_QNAs = $wpdb->get_results( $wpdb->prepare( "%s %s", $get_qna_sql, $product_ID ) );
         if($args['sortby'] == 'vote' && $product_QNAs){
             $votes = array();
             foreach ($product_QNAs as $key => $qna) { 
