@@ -17,7 +17,6 @@ final class WCMp {
     public $plugin_path;
     public $version;
     public $token;
-    public $text_domain;
     public $library;
     public $shortcode;
     public $admin;
@@ -58,7 +57,6 @@ final class WCMp {
         $this->plugin_url = trailingslashit(plugins_url('', $plugin = $file));
         $this->plugin_path = trailingslashit(dirname($file));
         $this->token = WCMp_PLUGIN_TOKEN;
-        $this->text_domain = WCMp_TEXT_DOMAIN;
         $this->version = WCMp_PLUGIN_VERSION;
 
         // Intialize WCMp Widgets
@@ -476,19 +474,19 @@ final class WCMp {
     function add_wcmp_corn_schedule($schedules) {
         $schedules['weekly'] = array(
             'interval' => 604800,
-            'display' => __('Every 7 Days', $this->text_domain)
+            'display' => __('Every 7 Days', 'dc-woocommerce-multi-vendor')
         );
         $schedules['monthly'] = array(
             'interval' => 2592000,
-            'display' => __('Every 1 Month', $this->text_domain)
+            'display' => __('Every 1 Month', 'dc-woocommerce-multi-vendor')
         );
         $schedules['fortnightly'] = array(
             'interval' => 1296000,
-            'display' => __('Every 15 Days', $this->text_domain)
+            'display' => __('Every 15 Days', 'dc-woocommerce-multi-vendor')
         );
         $schedules['every_5minute'] = array(
                 'interval' => 5*60, // in seconds
-                'display'  => __( 'Every 5 minute', $this->text_domain )
+                'display'  => __( 'Every 5 minute', 'dc-woocommerce-multi-vendor' )
         );
         
         return $schedules;
