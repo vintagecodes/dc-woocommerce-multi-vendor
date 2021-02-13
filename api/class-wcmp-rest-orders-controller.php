@@ -44,7 +44,7 @@ function enable_vendor_on_list_shop_order_query($args, $request) {
 		$order_ids = $wpdb->get_col( $wpdb->prepare( "
 			SELECT order_id
 			FROM {$wpdb->prefix}woocommerce_order_items
-			WHERE order_item_id IN ( SELECT order_item_id FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_vendor_id' AND meta_value IN ( %d ) )
+			WHERE order_item_id IN ( SELECT order_item_id FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_vendor_id' AND meta_value IN ( %s ) )
 			AND order_item_type = 'line_item'
 		 ", $prepare_values, $vendor_list_prepared ) );
 		

@@ -88,7 +88,7 @@ class WCMp_Settings_General_Tools {
                     break;
 
                 case 'reset_table_visitors_stats':
-                    $delete = $wpdb->query( $wpdb->prepare( apply_filters( 'wcmp_tools_action_reset_table_visitors_stats_query', "TRUNCATE {$wpdb->prefix}wcmp_visitors_stats" ) ) );
+                    $delete = $wpdb->query("TRUNCATE {$wpdb->prefix}wcmp_visitors_stats");
                     if ( $delete ){
                         $message = __( 'WCMp visitors stats successfully deleted', 'dc-woocommerce-multi-vendor' );
                     } else {
