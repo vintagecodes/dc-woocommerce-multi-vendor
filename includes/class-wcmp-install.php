@@ -302,7 +302,7 @@ class WCMp_Install {
                 ) $collate;";
 
         foreach ($create_tables_query as $create_table_query) {
-            $wpdb->query(esc_sql($create_table_query));
+            $wpdb->query($create_table_query);
         }
         update_option('wcmp_table_created', true);
     }
