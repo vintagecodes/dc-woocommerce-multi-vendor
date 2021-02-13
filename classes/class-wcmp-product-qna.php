@@ -245,8 +245,8 @@ class WCMp_Product_QNA {
         }
         if($args['where']){
             $get_qna_sql .= $args['where'];
-        } 
-        $product_QNAs = $wpdb->get_results( $wpdb->prepare( "%s %s", $get_qna_sql, $product_ID ) );
+        }
+        $product_QNAs = $wpdb->get_results( $wpdb->prepare( $get_qna_sql, $product_ID ) );
         if($args['sortby'] == 'vote' && $product_QNAs){
             $votes = array();
             foreach ($product_QNAs as $key => $qna) { 
