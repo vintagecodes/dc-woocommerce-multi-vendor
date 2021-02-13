@@ -1409,7 +1409,7 @@ if (!function_exists('do_wcmp_data_migrate')) {
                 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
                 foreach ($create_tables_query as $table => $create_table_query) {
                     if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) {
-                        $wpdb->query(esc_sql($create_table_query));
+                        $wpdb->query($create_table_query);
                     }
                 }
                 if (get_wcmp_vendor_settings('sold_by_catalog', 'frontend') && get_wcmp_vendor_settings('sold_by_catalog', 'frontend') == 'Enable') {
