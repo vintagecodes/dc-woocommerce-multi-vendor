@@ -75,7 +75,7 @@ class WCMp_Ledger_Data_Store {
         $where_sql = apply_filters('wcmp_data_store_ledger_get_ledger_where_sql', $where_sql, $args, $where, $requestData );
         $order_sql = apply_filters('wcmp_data_store_ledger_get_ledger_order_sql', 'ORDER BY created DESC', $args, $where, $requestData );
         $sql = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wcmp_vendor_ledger WHERE %s %s", $where_sql, $order_sql);
-        $get_ledger_sql = $wpdb->get_results( $get_ledger_sql );
+        $get_ledger_sql = $wpdb->get_results( $sql );
         return apply_filters('wcmp_data_store_ledger_get_ledger_sql_query', $get_ledger_sql, $args, $where, $requestData );
     }
 	
