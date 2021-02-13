@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 global $WCMp;
 $review = isset( $review ) ? $review : '';
-$rating = isset( $rating ) ? absint($rating) : '';
+$rating = isset( $rating ) ? absint($rating) : 0;
 echo $email_heading . "\n"; 
 echo "****************************************\n\n";
 echo __( "Hi,",  'dc-woocommerce-multi-vendor' ); 

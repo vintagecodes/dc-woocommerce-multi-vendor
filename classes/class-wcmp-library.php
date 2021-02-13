@@ -110,7 +110,7 @@ class WCMp_Library {
     public function load_accordian_lib() {
         global $WCMp;
         wp_enqueue_script('jquery-ui-accordion');
-        wp_enqueue_style('accordian_css', $this->jquery_lib_url . 'accordian.js', array(), $WCMp->version);
+        wp_enqueue_style('accordian_css', $this->jquery_lib_url . 'accordian.css', array(), $WCMp->version);
     }
 
     /**
@@ -156,7 +156,7 @@ class WCMp_Library {
         global $wp_scripts;
         if (!wp_style_is('jquery-ui-style', 'registered')) {
             $jquery_version = isset($wp_scripts->registered['jquery-ui-core']->ver) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.11.4';
-            wp_register_style('jquery-ui-style', $this->jquery_lib_url . 'style_lib.js', array(), $jquery_version);
+            wp_register_style('jquery-ui-style', $this->jquery_lib_url . 'style_lib.css', array(), $jquery_version);
         }
     }
 

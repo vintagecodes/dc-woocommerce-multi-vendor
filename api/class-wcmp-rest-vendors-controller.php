@@ -447,7 +447,7 @@ class WCMp_REST_API_Vendors_Controller extends WC_REST_Controller {
 			'_vendor_state' => isset($request['address']['state']) ? wc_clean( wp_unslash( $request['address']['state'] ) ) : '',
 			'_vendor_country' => isset($request['address']['country']) ? wc_clean( wp_unslash( $request['address']['country'] ) ) : '',
 			'_vendor_postcode' => isset($request['address']['postcode']) ? wc_clean( wp_unslash( $request['address']['postcode'] ) ) : '',
-			'_vendor_phone' => isset($request['address']['phone']) ? absint( $request['address']['phone'] ) : '',
+			'_vendor_phone' => isset($request['address']['phone']) ? absint( $request['address']['phone'] ) : 0,
 			'_vendor_fb_profile' => isset($request['social']['facebook']) ? esc_url( $request['social']['facebook'] ) : '',
 			'_vendor_twitter_profile' => isset($request['social']['twitter']) ? esc_url( $request['social']['twitter'] ) : '',
 			'_vendor_linkdin_profile' => isset($request['social']['linkdin']) ? esc_url( $request['social']['linkdin'] ) : '',
@@ -624,7 +624,7 @@ class WCMp_REST_API_Vendors_Controller extends WC_REST_Controller {
 		}
 
 		$userdata = array(
-			'ID' => isset( $request['id'] ) ? absint($request['id']) : '',
+			'ID' => isset( $request['id'] ) ? absint($request['id']) : 0,
 			'user_email' => isset( $request['email'] ) ? sanitize_email($request['email']) : '',
 			'user_url' => isset( $request['url'] ) ? wc_clean($request['url']) : '',
 			'user_pass' => isset( $request['password'] ) ? wc_clean($request['password']) : '',
