@@ -28,14 +28,10 @@ $transactions_list_table_headers = apply_filters('wcmp_datatable_vendor_transact
         <div class="panel-body">
             <div id="vendor_transactions_date_filter" class="form-inline datatable-date-filder">
                 <div class="form-group">
-                    <span class="date-inp-wrap">
-                        <input id="wcmp_from_date" class="form-control" name="from_date" class="pickdate gap1" placeholder="From" value ="<?php echo date('Y-m-01'); ?>"/>
-                    </span>
+                    <input type="date" id="wcmp_from_date" class="form-control" name="from_date" class="pickdate gap1" placeholder="From" value ="<?php echo date('Y-m-01'); ?>"/>
                 </div>
                 <div class="form-group">
-                    <span class="date-inp-wrap">
-                        <input id="wcmp_to_date" class="form-control" name="to_date" class="pickdate" placeholder="To" value ="<?php echo   date('Y-m-d'); ?>"/>
-                    </span>
+                    <input type="date" id="wcmp_to_date" class="form-control" name="to_date" class="pickdate" placeholder="To" value ="<?php echo   date('Y-m-d'); ?>"/>
                 </div>
                 <button type="button" name="order_export_submit" id="do_filter"  class="btn btn-default" ><?php _e('Show', 'dc-woocommerce-multi-vendor') ?></button>
             </div>  
