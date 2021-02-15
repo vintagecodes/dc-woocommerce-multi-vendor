@@ -74,18 +74,7 @@ $transactions_list_table_headers = apply_filters('wcmp_datatable_vendor_transact
 </div>
 <script>
 jQuery(document).ready(function($) {
-    $( "#wcmp_from_date" ).datepicker({ 
-        dateFormat: 'yy-mm-dd',
-        onClose: function (selectedDate) {
-            $("#wcmp_to_date").datepicker("option", "minDate", selectedDate);
-        }
-    });
-    $( "#wcmp_to_date" ).datepicker({ 
-        dateFormat: 'yy-mm-dd',
-        onClose: function (selectedDate) {
-            $("#wcmp_from_date").datepicker("option", "maxDate", selectedDate);
-        }
-    });
+
     var vendor_transactions;
     var columns = [];
     <?php if($transactions_list_table_headers) {
