@@ -28,15 +28,11 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
         <div class="panel-body">
             <form name="wcmp_vendor_dashboard_orders" method="POST" class="form-inline">
                 <div class="form-group">
-                    <span class="date-inp-wrap">
-                        <input type="text" name="wcmp_start_date_order" class="pickdate gap1 wcmp_start_date_order form-control" placeholder="<?php esc_attr_e('from', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($_POST['wcmp_start_date_order']) ? $_POST['wcmp_start_date_order'] : date('Y-m-01'); ?>" />
-                    </span> 
+                    <input type="date" name="wcmp_start_date_order" class="pickdate gap1 wcmp_start_date_order form-control" placeholder="<?php esc_attr_e('from', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($_POST['wcmp_start_date_order']) ? $_POST['wcmp_start_date_order'] : date('Y-m-01'); ?>" />
                     <!-- <span class="between">&dash;</span> -->
                 </div>
                 <div class="form-group">
-                    <span class="date-inp-wrap">
-                        <input type="text" name="wcmp_end_date_order" class="pickdate wcmp_end_date_order form-control" placeholder="<?php esc_attr_e('to', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($_POST['wcmp_end_date_order']) ? $_POST['wcmp_end_date_order'] : date('Y-m-d'); ?>" />
-                    </span>
+                    <input type="date" name="wcmp_end_date_order" class="pickdate wcmp_end_date_order form-control" placeholder="<?php esc_attr_e('to', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($_POST['wcmp_end_date_order']) ? $_POST['wcmp_end_date_order'] : date('Y-m-d'); ?>" />
                 </div>
                 <button class="wcmp_black_btn btn btn-default" type="submit" name="wcmp_order_submit"><?php esc_html_e('Show', 'dc-woocommerce-multi-vendor'); ?></button>
             </form>

@@ -35,7 +35,7 @@ $subtotal = 0;
 ?>
 <div id="wcmp-order-details" class="col-md-12">
     <div class="panel panel-default panel-pading pannel-outer-heading mt-0 order-detail-top-panel">
-        <div class="panel-heading clearfix">
+        <div class="panel-heading d-flex clearfix">
             <h3 class="pull-left">
                 <?php 
                 /* translators: 1: order type 2: order number */
@@ -45,7 +45,7 @@ $subtotal = 0;
                 ); ?>
                 <input type="hidden" id="order_ID" value="<?php echo $order->get_id(); ?>" />
             </h3>
-            <div class="change-status pull-left">
+            <div class="change-status d-flex">
                 <div class="order-status-text pull-left <?php echo 'wc-' . $order->get_status( 'edit' ); ?>">
                     <i class="wcmp-font ico-pendingpayment-status-icon"></i>
                     <span class="order_status_lbl"><?php echo esc_html( wc_get_order_status_name( $order->get_status() ) ); ?></span>
@@ -58,7 +58,7 @@ $subtotal = 0;
                             <?php
                             $statuses = apply_filters( 'wcmp_vendor_order_statuses', wc_get_order_statuses(), $order );
                             foreach ( $statuses as $status => $status_name ) {
-                                    echo '<li><a href="javascript:void(0);" data-status="' . esc_attr( $status ) . '" ' . selected( $status, 'wc-' . $order->get_status( 'edit' ), false ) . '>' . esc_html( $status_name ) . '</a></li>';
+                                    echo '<li class="dropdown-item"><a href="javascript:void(0);" data-status="' . esc_attr( $status ) . '" ' . selected( $status, 'wc-' . $order->get_status( 'edit' ), false ) . '>' . esc_html( $status_name ) . '</a></li>';
                             }
                             ?>
                     </ul>   

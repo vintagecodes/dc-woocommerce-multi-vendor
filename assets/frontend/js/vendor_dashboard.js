@@ -19,31 +19,6 @@ jQuery( document ).ready( function ( $ ) {
 
     } );
 
-
-    $( ".wcmp_stat_start_dt" ).datepicker( {
-        dateFormat: 'yy-mm-dd',
-        onClose: function ( selectedDate ) {
-            $( ".wcmp_stat_end_dt" ).datepicker( "option", "minDate", selectedDate );
-        }
-    } );
-    $( ".wcmp_stat_end_dt" ).datepicker( {
-        dateFormat: 'yy-mm-dd',
-        onClose: function ( selectedDate ) {
-            $( ".wcmp_stat_start_dt" ).datepicker( "option", "maxDate", selectedDate );
-        }
-    } );
-    $( ".wcmp_start_date_order" ).datepicker( {
-        dateFormat: 'yy-mm-dd',
-        onClose: function ( selectedDate ) {
-            $( ".wcmp_end_date_order" ).datepicker( "option", "minDate", selectedDate );
-        }
-    } );
-    $( ".wcmp_end_date_order" ).datepicker( {
-        dateFormat: 'yy-mm-dd',
-        onClose: function ( selectedDate ) {
-            $( ".wcmp_start_date_order" ).datepicker( "option", "maxDate", selectedDate );
-        }
-    } );
     $( ".wcmp_tab" ).tabs();
 
     var sideslider = $( '[data-toggle=collapse-side]' );
