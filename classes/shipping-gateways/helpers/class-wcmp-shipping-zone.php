@@ -60,11 +60,11 @@ class WCMP_Shipping_Zone {
         }
 
         $result = $wpdb->insert(
-            $table_name,
+            esc_sql($table_name),
             array(
-                'method_id' => $data['method_id'],
-                'zone_id'   => $data['zone_id'],
-                'vendor_id' => apply_filters( 'wcmp_current_vendor_id', get_current_user_id() )
+                'method_id' => esc_sql($data['method_id']),
+                'zone_id'   => esc_sql($data['zone_id']),
+                'vendor_id' => apply_filters( 'wcmp_current_vendor_id', esc_sql(get_current_user_id()) )
             ),
             array(
                 '%s',
@@ -97,8 +97,7 @@ class WCMP_Shipping_Zone {
     public static function get_shipping_methods( $zone_id, $vendor_id ) {
         global $wpdb;
 
-        $sql = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wcmp_shipping_zone_methods WHERE `zone_id`=%d AND `vendor_id`=%d",$zone_id, $vendor_id );
-        $results = $wpdb->get_results( $sql );
+        $results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wcmp_shipping_zone_methods WHERE `zone_id`=%d AND `vendor_id`=%d",$zone_id, $vendor_id ) );
         $vendor_shipping_methods = wcmp_get_shipping_methods();
         $method = array();
 
@@ -151,14 +150,14 @@ class WCMP_Shipping_Zone {
         global $wpdb;
         $table_name = "{$wpdb->prefix}wcmp_shipping_zone_methods";
         $updated    = $wpdb->update( 
-            $table_name, 
+            esc_sql($table_name), 
             array( 
-                'is_enabled' => $data['checked']  
+                'is_enabled' => esc_sql($data['checked'])  
             ), 
             array( 
-                'instance_id' => $data['instance_id' ], 
-                'zone_id' => $data['zone_id'], 
-                'vendor_id' => apply_filters( 'wcmp_current_vendor_id', get_current_user_id() ) 
+                'instance_id' => esc_sql($data['instance_id' ]), 
+                'zone_id' => esc_sql($data['zone_id']), 
+                'vendor_id' => apply_filters( 'wcmp_current_vendor_id', esc_sql(get_current_user_id()) ) 
             ), 
             array( '%d' ) 
         );
@@ -173,15 +172,11 @@ class WCMP_Shipping_Zone {
     public static function get_locations( $zone_id, $vendor_id = null ) {
         global $wpdb;
 
-        $table_name = "{$wpdb->prefix}wcmp_shipping_zone_locations";
-
         if ( ! $vendor_id ) {
             $vendor_id  = apply_filters( 'wcmp_current_vendor_id', get_current_user_id() );
         }
 
-        $sql = $wpdb->prepare("SELECT * FROM {$table_name} WHERE zone_id=%s AND vendor_id=%d", $zone_id, $vendor_id);
-
-        $results = $wpdb->get_results( $sql );
+        $results = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_shipping_zone_locations WHERE zone_id=%s AND vendor_id=%d", $zone_id, $vendor_id) );
 
         $locations = array();
 
@@ -218,7 +213,7 @@ class WCMP_Shipping_Zone {
 
             $wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE zone_id=%d AND vendor_id=%d", $zone_id, $vendor_id ) );
 
-            if ( $wpdb->query( $wpdb->prepare( "$query ", $values ) ) ) {
+            if ( $wpdb->query( $wpdb->prepare( esc_sql($query), $values ) ) ) {
                 return true;
             }
         } else {

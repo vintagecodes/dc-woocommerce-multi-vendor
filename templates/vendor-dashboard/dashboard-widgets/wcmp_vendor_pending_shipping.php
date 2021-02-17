@@ -54,10 +54,10 @@ do_action('before_wcmp_vendor_pending_shipping');
                 </div>
                 <input type="hidden" name="order_id" id="wcmp-marke-ship-order-id" />
                 <?php if (isset($_POST['wcmp_start_date_order'])) : ?>
-                    <input type="hidden" name="wcmp_start_date_order" value="<?php echo isset($_POST['wcmp_start_date_order']) ? $_POST['wcmp_start_date_order'] : date('Y-m-01'); ?>" />
+                    <input type="hidden" name="wcmp_start_date_order" value="<?php echo isset($_POST['wcmp_start_date_order']) ? wc_clean($_POST['wcmp_start_date_order']) : date('Y-m-01'); ?>" />
                 <?php endif; ?>
                 <?php if (isset($_POST['wcmp_end_date_order'])) : ?>
-                    <input type="hidden" name="wcmp_end_date_order" value="<?php echo isset($_POST['wcmp_end_date_order']) ? $_POST['wcmp_end_date_order'] : date('Y-m-d'); ?>" />
+                    <input type="hidden" name="wcmp_end_date_order" value="<?php echo isset($_POST['wcmp_end_date_order']) ? wc_clean($_POST['wcmp_end_date_order']) : date('Y-m-d'); ?>" />
                 <?php endif; ?>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" name="wcmp-submit-mark-as-ship"><?php esc_html_e('Submit', 'dc-woocommerce-multi-vendor'); ?></button>

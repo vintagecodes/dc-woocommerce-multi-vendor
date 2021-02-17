@@ -1074,7 +1074,7 @@ class WCMp_Product {
                     unset($_POST['variable_product_vendors_commission_fixed_per_qty'][$post_key]);
                 }
                 if (isset($_POST['dc_variable_shipping_class'][$post_key])) {
-                    $_POST['dc_variable_shipping_class'][$post_key] = !empty($_POST['dc_variable_shipping_class'][$post_key]) ? (int) $_POST['dc_variable_shipping_class'][$post_key] : '';
+                    $_POST['dc_variable_shipping_class'][$post_key] = !empty($_POST['dc_variable_shipping_class'][$post_key]) ? absint($_POST['dc_variable_shipping_class'][$post_key]) : '';
                     $array = wp_set_object_terms($value, absint($_POST['dc_variable_shipping_class'][$post_key]), 'product_shipping_class');
                     unset($_POST['dc_variable_shipping_class'][$post_key]);
                 }

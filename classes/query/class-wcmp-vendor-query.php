@@ -285,7 +285,7 @@ class WCMp_Vendor_Query {
 			$wpdb->prepare( "SELECT DISTINCT users.ID, ((ACOS(SIN(%d * PI() / 180) * SIN(latitude.meta_value * PI() / 180) + COS(%d * PI() / 180) * COS(latitude.meta_value * PI() / 180) * COS((%d - longitude.meta_value) * PI() / 180)) * 180 / PI()) * 60 * 1.1515 * %d) AS distance FROM {$wpdb->users} users 
 			INNER JOIN {$wpdb->usermeta} latitude on latitude.user_id = users.ID and latitude.meta_key = '_store_lat' 
 			INNER JOIN {$wpdb->usermeta} longitude on longitude.user_id = users.ID and longitude.meta_key = '_store_lng' 
-			HAVING distance <= $distance ", $lat, $lat, $lon, $multiplier)
+			HAVING distance <= %f ", $lat, $lat, $lon, $multiplier, $distance)
 		);
 		
 		if( $search_results ) {
@@ -316,10 +316,12 @@ class WCMp_Vendor_Query {
 		$where[] = "is_enabled = 1";
 		$where_sql = implode( " AND ", $where );
 		$search_results = $wpdb->get_results(
+			$wpdb->prepare(
 			// phpcs:disable
 			"SELECT vendor_id 
 			FROM {$wpdb->prefix}wcmp_shipping_zone_methods
-			WHERE $where_sql"
+			WHERE %s", $where_sql
+			)
 		);
 		
 		if( $search_results ) {
@@ -350,10 +352,12 @@ class WCMp_Vendor_Query {
 		
 		$where_sql = implode( " AND ", $where );
 		$search_results = $wpdb->get_results(
+			$wpdb->prepare(
 			// phpcs:disable
 			"SELECT vendor_id 
 			FROM {$wpdb->prefix}wcmp_shipping_zone_locations
-			WHERE $where_sql"
+			WHERE %s", $where_sql
+			)
 		);
 		
 		if( $search_results ) {
@@ -414,13 +418,15 @@ class WCMp_Vendor_Query {
 		$category_id = isset( $this->query_vars['sort_category'] ) ? $this->query_vars['sort_category'] : 0;
 		
 		$search_results = $wpdb->get_results(
+			$wpdb->prepare(
 			// phpcs:disable
 			"SELECT posts.post_author 
 			FROM {$wpdb->posts} posts
 			LEFT JOIN {$wpdb->prefix}term_relationships t_rel ON (posts.ID = t_rel.object_id)
 			LEFT JOIN {$wpdb->prefix}term_taxonomy t_tax ON (t_rel.term_taxonomy_id = t_tax.term_taxonomy_id)
-			WHERE t_tax.term_id IN ( $category_id) 
-			AND posts.post_author IN ($vendor_ids)"
+			WHERE t_tax.term_id IN ( %s) 
+			AND posts.post_author IN ( %s )", $category_id, $vendor_ids
+			)
 		);
 		if( $search_results ) {
 			$vendors = array_unique( wp_list_pluck( $search_results, 'post_author' ) );

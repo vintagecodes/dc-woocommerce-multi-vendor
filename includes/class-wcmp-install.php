@@ -302,7 +302,7 @@ class WCMp_Install {
                 ) $collate;";
 
         foreach ($create_tables_query as $create_table_query) {
-            $wpdb->query($create_table_query);
+            $wpdb->query(str_replace( 'rn', '', wc_clean(wp_unslash(esc_sql($create_table_query)))));
         }
         update_option('wcmp_table_created', true);
     }
@@ -326,17 +326,17 @@ class WCMp_Install {
             $vendor_query = new WP_Query($args_multi_vendor);
             foreach ($vendor_query->get_posts() as $product_post_id) {
                 $product_post = get_post($product_post_id);
-                $results = $wpdb->get_results($wpdb->prepare("select * from {$wpdb->prefix}wcmp_products_map where product_title = %s "), $product_post->post_title);
+                $results = $wpdb->get_results($wpdb->prepare("select * from {$wpdb->prefix}wcmp_products_map where product_title = %s ",$product_post->post_title));
                 if (is_array($results) && (count($results) > 0)) {
                     $id_of_similar = $results[0]->ID;
                     $product_ids = $results[0]->product_ids;
                     $product_ids_arr = explode(',', $product_ids);
                     if (is_array($product_ids_arr) && !in_array($product_post->ID, $product_ids_arr)) {
                         $product_ids = $product_ids . ',' . $product_post->ID;
-                        $wpdb->query($wpdb->prepare("update {$wpdb->prefix}wcmp_products_map set product_ids = %d where ID = %d", $product_ids, $id_of_similar));
+                        $wpdb->query($wpdb->prepare("update {$wpdb->prefix}wcmp_products_map set product_ids = %s where ID = %d", $product_ids, $id_of_similar));
                     }
                 } else {
-                    $wpdb->query($wpdb->prepare("insert into {$wpdb->prefix}wcmp_products_map set product_title=%d, product_ids = %d ",$product_post->post_title, $product_post->ID ));
+                    $wpdb->query($wpdb->prepare("insert into {$wpdb->prefix}wcmp_products_map set product_title=%s, product_ids = %d ", $product_post->post_title, $product_post->ID ));
                 }
             }
             update_option('is_wcmp_product_sync_with_multivendor', 1);

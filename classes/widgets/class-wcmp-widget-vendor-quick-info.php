@@ -238,16 +238,16 @@ class DC_Widget_Quick_Info_Widget extends WP_Widget {
         if ($this->check_form()) {
 
             /* === Sanitize Form Value === */
-            $vendor = get_wcmp_vendor($_POST['quick_info']['vendor_id']);
+            $vendor = get_wcmp_vendor(absint($_POST['quick_info']['vendor_id']));
             
             $mail = WC()->mailer()->emails['WC_Email_Vendor_Contact_Widget'];
-            $result = $mail->trigger( $vendor, $_POST['quick_info'] );
+            $result = $mail->trigger( $vendor, wc_clean($_POST['quick_info']) );
             if( $result ){
                 wc_add_notice(__('Email sent successfully.', 'dc-woocommerce-multi-vendor'), 'success');
             }else{
                 wc_add_notice(__('Unable to send email. Please try again.', 'dc-woocommerce-multi-vendor'), 'error');
             }
-            wp_redirect($_POST['_wp_http_referer']);
+            wp_redirect(wc_clean($_POST['_wp_http_referer']));
             exit;
         }
     }

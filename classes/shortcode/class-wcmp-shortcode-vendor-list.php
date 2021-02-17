@@ -71,8 +71,11 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
                         $country_code = $request['vendor_country'];
                         $search_zone = $wpdb->get_results(
                             // phpcs:disable
+                            $wpdb->prepare(
+
                             "SELECT zone_id 
-                            FROM {$wpdb->prefix}woocommerce_shipping_zone_locations where location_code = '$country_code'"
+                            FROM {$wpdb->prefix}woocommerce_shipping_zone_locations where location_code = %s", $country_code
+                            )
                         );
                         $zone_id = $search_zone[0]->zone_id;
                         $get_vendor = true;

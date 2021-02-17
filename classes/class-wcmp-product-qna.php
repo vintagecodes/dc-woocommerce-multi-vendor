@@ -113,12 +113,7 @@ class WCMp_Product_QNA {
      */
     public function get_Questions( $product_ID, $where = '' ) {
         global $wpdb;
-        $get_ques_sql = "SELECT * FROM {$this->question_table} WHERE product_ID = %d ";
-        if($where){
-            $get_ques_sql .= $where;
-        }   
-        
-        return $wpdb->get_results( $wpdb->prepare( $get_ques_sql, $product_ID ) );
+        return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$this->question_table} WHERE product_ID = %d ". esc_sql($where) ."" , $product_ID ) );
     }
     
     /**
@@ -201,8 +196,7 @@ class WCMp_Product_QNA {
      */
     public function get_Answer( $ans_ID ) {
         global $wpdb;
-        $get_ans_sql = "SELECT * FROM {$this->answer_table} WHERE ans_ID = %d ";
-        return $wpdb->get_row( $wpdb->prepare( $get_ans_sql, $ans_ID ) );
+        return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$this->answer_table} WHERE ans_ID = %d ", $ans_ID ) );
     }
 
     /**
@@ -216,12 +210,12 @@ class WCMp_Product_QNA {
         global $wpdb;
         $get_ans_sql = "SELECT * FROM {$this->answer_table}";
         if($ques_ID && $ques_ID != 0){
-            $get_ans_sql .=  " WHERE ques_ID = {$ques_ID} ";
+            $get_ans_sql .=  " WHERE ques_ID = '" . esc_sql( $ques_ID ) . "' ";
         } 
         if($where){
             $get_ans_sql .= $where;
-        }   
-        return $wpdb->get_results( $get_ans_sql );
+        }
+        return $wpdb->get_results( esc_sql($get_ans_sql) );
     }
     
     /**
@@ -241,12 +235,12 @@ class WCMp_Product_QNA {
         $args = wp_parse_args($args, $default);
         $get_qna_sql = "SELECT * FROM {$this->question_table} AS question INNER JOIN {$this->answer_table} AS answer ON question.ques_ID = answer.ques_ID WHERE product_ID = %d ";
         if($args['sortby'] == 'date'){
-            $get_qna_sql .= "ORDER BY question.ques_created {$args['sort']} ";
+            $get_qna_sql .= "ORDER BY question.ques_created ". esc_sql($args['sort']) ." ";
         }
         if($args['where']){
             $get_qna_sql .= $args['where'];
         }
-        $product_QNAs = $wpdb->get_results( $wpdb->prepare( $get_qna_sql, $product_ID ) );
+        $product_QNAs = $wpdb->get_results( $wpdb->prepare( esc_sql($get_qna_sql), $product_ID ) );
         if($args['sortby'] == 'vote' && $product_QNAs){
             $votes = array();
             foreach ($product_QNAs as $key => $qna) { 

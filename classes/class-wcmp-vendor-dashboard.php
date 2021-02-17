@@ -1255,7 +1255,7 @@ Class WCMp_Admin_Dashboard {
             $pass_cur = !empty( $_POST['vendor_profile_data']['password_current'] ) ? sanitize_text_field( wp_unslash($_POST['vendor_profile_data']['password_current']) ) : '';
             $pass1 = !empty( $_POST['vendor_profile_data']['password_1'] ) ? sanitize_text_field( wp_unslash($_POST['vendor_profile_data']['password_1']) ) : '';
             $pass2 = !empty( $_POST['vendor_profile_data']['password_2'] ) ? sanitize_text_field( wp_unslash($_POST['vendor_profile_data']['password_2']) ) : '';
-            $email = !empty( $_POST['vendor_profile_data']['user_email'] ) ? $_POST['vendor_profile_data']['user_email'] : '';
+            $email = !empty( $_POST['vendor_profile_data']['user_email'] ) ? sanitize_email($_POST['vendor_profile_data']['user_email']) : '';
             $save_pass = true;
             
             if ( $email ) {
@@ -1654,7 +1654,8 @@ Class WCMp_Admin_Dashboard {
 
                 $total_amount = $total_amount + $details['total_amount'];
             }
-            $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_vendor_transaction_details.php', apply_filters( 'wcmp_widget_vendor_transaction_details_data', array('total_amount' => $unpaid_commission_total['total'], 'transaction_display_array' => $transaction_display_array), $vendor, $requestData ) );
+            $total_amounts = isset($unpaid_commission_total['total']) ? $unpaid_commission_total['total'] : 0;
+            $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_vendor_transaction_details.php', apply_filters( 'wcmp_widget_vendor_transaction_details_data', array('total_amount' => $total_amounts, 'transaction_display_array' => $transaction_display_array), $vendor, $requestData ) );
         }
 
         public function wcmp_vendor_products_cust_qna() {
@@ -1933,9 +1934,9 @@ Class WCMp_Admin_Dashboard {
                 // file paths will be stored in an array keyed off md5(file path)
                 $downloads = array();
                 if ( isset( $_POST['_downloadable'] ) && isset( $_POST['_wc_file_urls'] ) ) {
-                    $file_urls = $_POST['_wc_file_urls'];
-                    $file_names = isset( $_POST['_wc_file_names'] ) ? $_POST['_wc_file_names'] : array();
-                    $file_hashes = isset( $_POST['_wc_file_hashes'] ) ? $_POST['_wc_file_hashes'] : array();
+                    $file_urls = isset($_POST['_wc_file_urls']) ? esc_url($_POST['_wc_file_urls']) : '';
+                    $file_names = isset( $_POST['_wc_file_names'] ) ? wc_clean($_POST['_wc_file_names']) : array();
+                    $file_hashes = isset( $_POST['_wc_file_hashes'] ) ? wc_clean($_POST['_wc_file_hashes']) : array();
 
                     $file_url_size = sizeof( $file_urls );
                     for ( $i = 0; $i < $file_url_size; $i ++ ) {

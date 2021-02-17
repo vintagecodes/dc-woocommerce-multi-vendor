@@ -28,11 +28,11 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
         <div class="panel-body">
             <form name="wcmp_vendor_dashboard_orders" method="POST" class="form-inline">
                 <div class="form-group">
-                    <input type="date" name="wcmp_start_date_order" class="pickdate gap1 wcmp_start_date_order form-control" placeholder="<?php esc_attr_e('from', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($_POST['wcmp_start_date_order']) ? $_POST['wcmp_start_date_order'] : date('Y-m-01'); ?>" />
+                    <input type="date" name="wcmp_start_date_order" class="pickdate gap1 wcmp_start_date_order form-control" placeholder="<?php esc_attr_e('from', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($_POST['wcmp_start_date_order']) ? wc_clean($_POST['wcmp_start_date_order']) : date('Y-m-01'); ?>" />
                     <!-- <span class="between">&dash;</span> -->
                 </div>
                 <div class="form-group">
-                    <input type="date" name="wcmp_end_date_order" class="pickdate wcmp_end_date_order form-control" placeholder="<?php esc_attr_e('to', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($_POST['wcmp_end_date_order']) ? $_POST['wcmp_end_date_order'] : date('Y-m-d'); ?>" />
+                    <input type="date" name="wcmp_end_date_order" class="pickdate wcmp_end_date_order form-control" placeholder="<?php esc_attr_e('to', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($_POST['wcmp_end_date_order']) ? wc_clean($_POST['wcmp_end_date_order']) : date('Y-m-d'); ?>" />
                 </div>
                 <button class="wcmp_black_btn btn btn-default" type="submit" name="wcmp_order_submit"><?php esc_html_e('Show', 'dc-woocommerce-multi-vendor'); ?></button>
             </form>
@@ -89,10 +89,10 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
             </div>
             <?php endif; ?>
             <?php if (isset($_POST['wcmp_start_date_order'])) : ?>
-                <input type="hidden" name="wcmp_start_date_order" value="<?php echo isset($_POST['wcmp_start_date_order']) ? $_POST['wcmp_start_date_order'] : date('Y-m-d'); ?>" />
+                <input type="hidden" name="wcmp_start_date_order" value="<?php echo isset($_POST['wcmp_start_date_order']) ? wc_clean($_POST['wcmp_start_date_order']) : date('Y-m-d'); ?>" />
             <?php endif; ?>
             <?php if (isset($_POST['wcmp_end_date_order'])) : ?>
-                <input type="hidden" name="wcmp_end_date_order" value="<?php echo isset($_POST['wcmp_end_date_order']) ? $_POST['wcmp_end_date_order'] : date('Y-m-d'); ?>" />
+                <input type="hidden" name="wcmp_end_date_order" value="<?php echo isset($_POST['wcmp_end_date_order']) ? wc_clean($_POST['wcmp_end_date_order']) : date('Y-m-d'); ?>" />
             <?php endif; ?>    
             </form>
         </div>
@@ -121,10 +121,10 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
                     </div>
                     <input type="hidden" name="order_id" id="wcmp-marke-ship-order-id" />
                     <?php if (isset($_POST['wcmp_start_date_order'])) : ?>
-                        <input type="hidden" name="wcmp_start_date_order" value="<?php echo $_POST['wcmp_start_date_order']; ?>" />
+                        <input type="hidden" name="wcmp_start_date_order" value="<?php echo wc_clean($_POST['wcmp_start_date_order']); ?>" />
                     <?php endif; ?>
                     <?php if (isset($_POST['wcmp_end_date_order'])) : ?>
-                        <input type="hidden" name="wcmp_end_date_order" value="<?php echo $_POST['wcmp_end_date_order']; ?>" />
+                        <input type="hidden" name="wcmp_end_date_order" value="<?php echo wc_clean($_POST['wcmp_end_date_order']); ?>" />
                     <?php endif; ?>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" name="wcmp-submit-mark-as-ship"><?php esc_html_e('Submit', 'dc-woocommerce-multi-vendor'); ?></button>
