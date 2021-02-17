@@ -85,11 +85,11 @@ $site_logo = get_wcmp_vendor_settings('wcmp_dashboard_site_logo', 'vendor', 'das
                 <ul class="nav top-user-nav">
                     <li class="dropdown login-user">
 
-                        <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" class="d-block dropdown-toggle" data-toggle="dropdown">
+                        <a href="#" class="d-block dropdown-toggle" data-toggle="dropdown">
                             <i class="wcmp-font ico-user-icon"></i>
                             <span><i class="wcmp-font ico-down-arrow-icon"></i></span>
                         </a>
-                        <ul class="dropdown-menu dropdown-user dropdown-menu-right collapse" id="collapseExample">
+                        <ul class="dropdown-menu dropdown-user dropdown-menu-right">
                             <li class="sidebar-logo text-center">
                                 <div class="vendor-profile-pic-holder">
                                     <img src="<?php echo $vendor_logo; ?>" alt="vendor logo">

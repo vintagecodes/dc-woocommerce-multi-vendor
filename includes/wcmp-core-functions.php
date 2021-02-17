@@ -1288,9 +1288,6 @@ if (!function_exists('do_wcmp_data_migrate')) {
                         $wpdb->query("ALTER TABLE {$wpdb->prefix}wcmp_vendor_orders ADD `commission_paid_date` timestamp NULL;");
                     }
                 }
-//                if (!get_wcmp_vendor_settings('enable_vendor_tab', 'frontend')) {
-//                    update_wcmp_vendor_settings('enable_vendor_tab', 'Enable', 'frontend');
-//                }
             }
             if ($previous_plugin_version <= '2.7.3') {
                 if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}wcmp_vendor_orders';")) {
@@ -1410,7 +1407,7 @@ if (!function_exists('do_wcmp_data_migrate')) {
                 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
                 foreach ($create_tables_query as $table => $create_table_query) {
                     if ($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) {
-                        $wpdb->query($create_table_query);
+                        $wpdb->query(str_replace( 'rn', '', wc_clean(wp_unslash(esc_sql($create_table_query)))));
                     }
                 }
                 if (get_wcmp_vendor_settings('sold_by_catalog', 'frontend') && get_wcmp_vendor_settings('sold_by_catalog', 'frontend') == 'Enable') {
@@ -2329,7 +2326,7 @@ if (!function_exists('wcmp_get_visitor_stats')) {
         global $wpdb;
         if ($vendor_id) {
             $results = $wpdb->get_results(
-                    $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_visitors_stats WHERE %s vendor_id=%d %s", $query_where, $vendor_id, $query_filter)
+                $wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_visitors_stats WHERE " . wp_unslash(esc_sql($query_where)) . " vendor_id=%d ". wp_unslash(esc_sql($query_filter)) . " ", $vendor_id ) 
             );
             return $results;
         } else {
@@ -3091,7 +3088,7 @@ if (!function_exists('wcmp_spmv_products_map')) {
                 $wpdb->insert($table, $data);
                 if (!isset($data['product_map_id'])) {
                     $inserted_id = $wpdb->insert_id;
-                    $wpdb->update($table, array('product_map_id' => $inserted_id), array('product_id' => $data['product_id']));
+                    $wpdb->update(esc_sql($table), array('product_map_id' => $inserted_id), array('product_id' => $data['product_id']));
                     return $inserted_id;
                 } else {
                     return $data['product_map_id'];

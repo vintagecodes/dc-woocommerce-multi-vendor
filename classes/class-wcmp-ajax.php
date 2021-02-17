@@ -702,7 +702,7 @@ class WCMp_Ajax {
         $current_page = isset($_POST['current_page']) ? wc_clean($_POST['current_page']) : '';
         $next_page = isset($_POST['next_page']) ? wc_clean($_POST['next_page']) : '';
         $total_page = isset($_POST['total_page']) ? wc_clean($_POST['total_page']): '';
-        $perpagedata = isset($_POST['perpagedata']) ? $_POST['perpagedata'] : '';
+        $perpagedata = isset($_POST['perpagedata']) ? wc_clean($_POST['perpagedata']) : '';
         if ($next_page <= $total_page) {
             if ($next_page > 1) {
                 $start = ($next_page - 1) * $perpagedata;
@@ -722,7 +722,7 @@ class WCMp_Ajax {
         $current_page = isset($_POST['current_page']) ? wc_clean($_POST['current_page']) : '';
         $next_page = isset($_POST['next_page']) ? wc_clean($_POST['next_page']) : '';
         $total_page = isset($_POST['total_page']) ? wc_clean($_POST['total_page']): '';
-        $perpagedata = isset($_POST['perpagedata']) ? $_POST['perpagedata'] : '';
+        $perpagedata = isset($_POST['perpagedata']) ? wc_clean($_POST['perpagedata']) : '';
         if ($next_page <= $total_page) {
             if ($next_page > 1) {
                 $start = ($next_page - 1) * $perpagedata;
@@ -751,7 +751,6 @@ class WCMp_Ajax {
                 die('Invalid request');
             $order_data = array();
             $commission_id = get_post_meta( $order_id, '_commission_id', true );
-            //$customer_orders = $wpdb->get_results("SELECT DISTINCT commission_id from `{$wpdb->prefix}wcmp_vendor_orders` where vendor_id = " . $vendor->id . " AND order_id = " . $order_id, ARRAY_A);
             if (!empty($commission_id)) {
                 //$commission_id = $customer_orders[0]['commission_id'];
                 $order_data[$commission_id] = $order_id;
@@ -1529,7 +1528,7 @@ class WCMp_Ajax {
         if ($check) {
             $vendor = get_wcmp_product_vendors($product_id);
             $mail = WC()->mailer()->emails['WC_Email_Send_Report_Abuse'];
-            $result = $mail->trigger( $vendor, $_POST );
+            $result = $mail->trigger( $vendor, wc_clean($_POST) );
         }
         die();
     }
@@ -2228,7 +2227,7 @@ class WCMp_Ajax {
 
         if ($handler == 'submit') {
             $qna_form_data = array();
-            parse_str($_POST['customer_qna_data'], $qna_form_data);
+            parse_str(wc_clean($_POST['customer_qna_data']), $qna_form_data);
             $wpnonce = isset($qna_form_data['cust_qna_nonce']) ? $qna_form_data['cust_qna_nonce'] : '';
             $product_id = isset($qna_form_data['product_ID']) ? (int) $qna_form_data['product_ID'] : 0;
             $cust_id = isset($qna_form_data['cust_ID']) ? (int) $qna_form_data['cust_ID'] : 0;
@@ -2715,7 +2714,7 @@ class WCMp_Ajax {
             if(!empty($_POST['question_type']) && !empty($_POST['data_action'])){
                 $q_type = isset($_POST['question_type']) ? wc_clean($_POST['question_type']) : '';
                 $action = isset($_POST['data_action']) ? wc_clean($_POST['data_action']) : '';
-                $vendor = get_wcmp_product_vendors($_POST['product']);
+                $vendor = get_wcmp_product_vendors(absint($_POST['product']));
                 if($action == 'rejected'){
                     $WCMp->product_qna->deleteQuestion( $question_id );
                     delete_transient('wcmp_customer_qna_for_vendor_' . $vendor->id);
@@ -3868,7 +3867,6 @@ class WCMp_Ajax {
                     if ($product && $product_map_id) {
                         $results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}wcmp_products_map WHERE product_map_id=%d", $product_map_id));
                         $product_ids = wp_list_pluck($results, 'product_id');
-                        //$first_inserted_map_pro_key = array_search(min(wp_list_pluck($results, 'ID')), wp_list_pluck($results, 'ID'));
                         if($product_ids){
                             $include[] = min($product_ids);
                         }
@@ -4030,8 +4028,8 @@ class WCMp_Ajax {
         $line_item_qtys = json_decode(sanitize_text_field(wp_unslash($_POST['line_item_qtys'])), true);
         $line_item_totals = json_decode(sanitize_text_field(wp_unslash($_POST['line_item_totals'])), true);
         $line_item_tax_totals = json_decode(sanitize_text_field(wp_unslash($_POST['line_item_tax_totals'])), true);
-        $api_refund = 'true' === $_POST['api_refund'];
-        $restock_refunded_items = 'true' === $_POST['restock_refunded_items'];
+        $api_refund = 'true' === wc_clean($_POST['api_refund']);
+        $restock_refunded_items = 'true' === wc_clean($_POST['restock_refunded_items']);
         $refund = false;
         $response_data = array();
 

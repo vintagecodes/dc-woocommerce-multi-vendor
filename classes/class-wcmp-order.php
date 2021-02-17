@@ -1124,8 +1124,7 @@ class WCMp_Order {
         }
 
         foreach (wc_get_order_types('order-count') as $type) {
-            $query = "SELECT COUNT( * ) FROM {$wpdb->posts} WHERE post_type = %s AND post_status = %s AND post_parent = 0";
-            $count += $wpdb->get_var($wpdb->prepare($query, $type, $status));
+            $count += $wpdb->get_var($wpdb->prepare("SELECT COUNT( * ) FROM {$wpdb->posts} WHERE post_type = %s AND post_status = %s AND post_parent = 0", $type, $status));
         }
 
         wp_cache_set($cache_key, $count, 'counts');

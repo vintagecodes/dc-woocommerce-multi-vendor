@@ -435,7 +435,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 				} else {
 					$display_name_option = array();
 				}
-				$vendor_profile_image = get_user_meta($_GET['ID'], '_vendor_profile_image', true);
+				$vendor_profile_image = get_user_meta(absint($_GET['ID']), '_vendor_profile_image', true);
         	
 				$personal_tab_options =  array(
 							"user_login" => array('label' => __('Username (required)', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'user_login', 'label_for' => 'user_login', 'name' => 'user_login', 'desc' => __('Usernames cannot be changed.', 'dc-woocommerce-multi-vendor'), 'value' => isset($user->user_login)? $user->user_login : '', 'attributes' => array('readonly' => true)),
@@ -807,7 +807,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 			<div id="nds-wp-list-table-demo">			
 				<div id="nds-post-body">		
 					<form action="" method="get">
-					<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />					
+					<input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']) ?>" />					
 					<?php
 						$this->prepare_items();
 						$this->views();

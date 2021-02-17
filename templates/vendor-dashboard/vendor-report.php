@@ -18,10 +18,10 @@ global $WCMp;
                 <div class="panel-heading d-flex">
                     <h3><?php esc_html_e('Select Date Range :', 'dc-woocommerce-multi-vendor'); ?></h3> 
                     <div class="form-group">
-                        <input type="date" name="wcmp_stat_start_dt" value="<?php echo isset($_POST['wcmp_stat_start_dt']) ? $_POST['wcmp_stat_start_dt'] : date('Y-m-01'); ?>" class="pickdate gap1 wcmp_stat_start_dt form-control">
+                        <input type="date" name="wcmp_stat_start_dt" value="<?php echo isset($_POST['wcmp_stat_start_dt']) ? wc_clean($_POST['wcmp_stat_start_dt']) : date('Y-m-01'); ?>" class="pickdate gap1 wcmp_stat_start_dt form-control">
                     </div>
                     <div class="form-group">
-                        <input type="date" name="wcmp_stat_end_dt" value="<?php echo isset($_POST['wcmp_stat_end_dt']) ? $_POST['wcmp_stat_end_dt'] : date('Y-m-d'); ?>" class="pickdate wcmp_stat_end_dt form-control">
+                        <input type="date" name="wcmp_stat_end_dt" value="<?php echo isset($_POST['wcmp_stat_end_dt']) ? wc_clean($_POST['wcmp_stat_end_dt']) : date('Y-m-d'); ?>" class="pickdate wcmp_stat_end_dt form-control">
                     </div>
                     <div class="form-group">
                         <button name="submit_button" type="submit" value="Show" class="wcmp_black_btn btn btn-default"><?php esc_html_e('Show', 'dc-woocommerce-multi-vendor'); ?></button>

@@ -165,12 +165,12 @@ class WCMp_Library {
     }
 
     public function load_bootstrap_style_lib() {
-        wp_register_style('wcmp-bootstrap-style', $this->bootstrap_lib_url . 'css/bootstrap.min.css', array(), '5.0.0');
+        wp_register_style('wcmp-bootstrap-style', $this->bootstrap_lib_url . 'css/bootstrap.min.css', array(), '4.6.0');
         wp_enqueue_style('wcmp-bootstrap-style');
     }
 
     public function load_bootstrap_script_lib() {
-        wp_register_script('wcmp-bootstrap-script', $this->bootstrap_lib_url . 'js/bootstrap.min.js', array('jquery', 'wcmp-popper-js'), '5.0.0');
+        wp_register_script('wcmp-bootstrap-script', $this->bootstrap_lib_url . 'js/bootstrap.min.js', array('jquery', 'wcmp-popper-js'), '4.6.0');
         wp_register_script('wcmp-popper-js', $this->popper_lib_url . 'popper.min.js', array('jquery'), '1.12.9');
         if (!defined('WCMP_UNLOAD_BOOTSTRAP_LIB')) {
             wp_enqueue_script('wcmp-bootstrap-script');

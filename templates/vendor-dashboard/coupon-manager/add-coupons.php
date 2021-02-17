@@ -78,13 +78,13 @@ $title = in_array( $post_status, array( "publish", "draft" ) ) ? $post->post_tit
                                     <ul class="nav nav-tabs" role="tablist" id="coupon_data_tabs">
                                         <?php $first_tab = true; ?>
                                         <?php foreach ( $self->get_coupon_data_tabs() as $key => $tab ) : ?>
-                                            <li role="presentation" class="nav-item <?php esc_attr_e( $key ); ?>_options <?php esc_attr_e( $key ); ?>_tab <?php echo esc_attr( isset( $tab['class'] ) ? implode( ' ', (array) $tab['class'] ) : ''  ); ?> <?php
+                                            <li role="presentation" class="<?php esc_attr_e( $key ); ?>_options <?php esc_attr_e( $key ); ?>_tab <?php echo esc_attr( isset( $tab['class'] ) ? implode( ' ', (array) $tab['class'] ) : ''  ); ?> <?php
                                             if ( $first_tab ) {
                                                 $first_tab = false;
                                                 echo 'active';
                                             }
                                             ?>">
-                                                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#<?php esc_attr_e( $tab['target'] ); ?>" type="button" role="tab" aria-controls="profile" aria-selected="false"><span><?php echo esc_html( $tab['label'] ); ?></span></a>
+                                                <a class="nav-link" href="#<?php esc_attr_e( $tab['target'] ); ?>" aria-controls="<?php echo $tab['target']; ?>" role="tab" data-toggle="tab"><span><?php echo esc_html( $tab['label'] ); ?></span></a>
 
                                             </li>
                                         <?php endforeach; ?>
