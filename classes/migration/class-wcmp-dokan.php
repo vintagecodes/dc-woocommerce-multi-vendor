@@ -159,7 +159,8 @@ class WCMp_Dokan {
 
 	public function wcmp_paid_commission_from_previous_marketplace() {
 		global $wpdb;
-		$dokan_vendor_paid_user_list = $wpdb->get_results("SELECT user_id FROM `{$wpdb->prefix}dokan_withdraw` WHERE status = '1'" );
+		$status_true = 1;
+		$dokan_vendor_paid_user_list = $wpdb->get_results($wpdb->prepare("SELECT user_id FROM `{$wpdb->prefix}dokan_withdraw` WHERE status = %d", $status_true ));
 		if ($dokan_vendor_paid_user_list) {
 			foreach ($dokan_vendor_paid_user_list as $key_user => $value_user) {
 

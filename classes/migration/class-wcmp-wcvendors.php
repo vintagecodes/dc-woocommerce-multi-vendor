@@ -180,7 +180,8 @@ class WCMp_WCVendors {
 
 	public function wcmp_paid_commission_from_previous_marketplace() {
 		global $wpdb;
-		$wcvendors_vendor_paid_order_list = $wpdb->get_results("SELECT order_id FROM `{$wpdb->prefix}pv_commission` WHERE status = 'paid'" );
+		$paid_status = 'paid';
+		$wcvendors_vendor_paid_order_list = $wpdb->get_results($wpdb->prepare("SELECT order_id FROM `{$wpdb->prefix}pv_commission` WHERE status = %s", $paid_status ));
 		if ($wcvendors_vendor_paid_order_list) {
 			foreach ($wcvendors_vendor_paid_order_list as $key_commission => $value_commission) {
 				if ( wp_get_post_parent_id( $value_commission->order_id ) == 0 ) {

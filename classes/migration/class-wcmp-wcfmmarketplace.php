@@ -107,7 +107,7 @@ class WCMp_WCfmMarketplace {
 		global $wpdb, $WCMp;
 		$wcfm_get_vendors = $this->get_marketplace_vendor();
 		if( empty( $wcfm_get_vendors ) ) {
-			$wcfm_vendor_order_id_list = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}wcfm_marketplace_orders`");
+			$wcfm_vendor_order_id_list = $wpdb->get_results(esc_sql("SELECT * FROM `{$wpdb->prefix}wcfm_marketplace_orders`"));
 			if ($wcfm_vendor_order_id_list) {
 				foreach ($wcfm_vendor_order_id_list as $wcfm_order) {
 					$order_id = $wcfm_order->order_id;
@@ -151,7 +151,8 @@ class WCMp_WCfmMarketplace {
 
 	public function wcmp_paid_commission_from_previous_marketplace() {
 		global $wpdb;
-		$wcfm_vendor_paid_order_list = $wpdb->get_results("SELECT order_id FROM `{$wpdb->prefix}wcfm_marketplace_orders` WHERE withdraw_status = 'completed'" );
+		$withdrawl_status = 'completed';
+		$wcfm_vendor_paid_order_list = $wpdb->get_results($wpdb->prepare("SELECT order_id FROM `{$wpdb->prefix}wcfm_marketplace_orders` WHERE withdraw_status = %s", $withdrawl_status ));
 		if ($wcfm_vendor_paid_order_list) {
 			foreach ($wcfm_vendor_paid_order_list as $key_commission => $value_commission) {
 				if ( wp_get_post_parent_id( $value_commission->order_id ) == 0 ) {
