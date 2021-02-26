@@ -137,7 +137,7 @@ class WCMp_User {
             if (isset($_POST['wcmp_vendor_fields']) && isset($_POST['pending_vendor']) && isset($_POST['vendor_apply'])) {
                 $customer_id = $user->ID;
                 $validation_errors = new WP_Error();
-                $wcmp_vendor_registration_form_data = get_option('wcmp_vendor_registration_form_data');
+                $wcmp_vendor_registration_form_data = wcmp_get_option('wcmp_vendor_registration_form_data');
                 if(isset($_POST['g-recaptchatype']) && $_POST['g-recaptchatype'] == 'v2'){
                     if (isset($_POST['g-recaptcha-response']) && empty($_POST['g-recaptcha-response'])) {
                         $validation_errors->add('recaptcha is not validate', __('Please Verify  Recaptcha', 'dc-woocommerce-multi-vendor'));

@@ -89,7 +89,57 @@ jQuery( document ).ready( function ( $ ) {
     // category scroller
     $(".wcmp-product-cat-level, .wcmpCustomScroller").mCustomScrollbar();
 
-
+    // Wpml duplicate product js
+    if( $( '#wcmp_product_translations' ).length > 0 ) {
+        var data = {
+            action   : 'wcmp_product_translations',
+            proid    : $('#wcmp_product_translations').data('product_id'),
+        }   
+        jQuery.ajax({
+            type:       'POST',
+            url: wcmp_advance_product_params.ajax_url,
+            data: data,
+            success:    function(response) {
+                jQuery('#wcmp_product_translations').html(response);
+                init_wcmp_product_new_translation();
+            }
+        });
+    }
+    
+    function init_wcmp_product_new_translation() {
+        $('.wcmp_product_new_translation').click(function(e) {
+            e.preventDefault();
+            jQuery('.add-product-wrapper').block({
+                message: null,
+                overlayCSS: {
+                    background: '#fff',
+                    opacity: 0.6
+                }
+            });
+            var data = {
+                action        : 'wcmp_product_new_translation',
+                proid         : $(this).data('proid'),
+                trid          : $(this).data('trid'),
+                source_lang   : $(this).data('source_lang'),
+                lang          : $(this).data('lang')
+            }   
+            $.ajax({
+                type:       'POST',
+                url: wcmp_advance_product_params.ajax_url,
+                data: data,
+                success:    function(response) {
+                    if(response) {
+                        $response_json = $.parseJSON(response);
+                        if($response_json.status) {
+                            if( $response_json.redirect ) window.location = $response_json.redirect;    
+                        }
+                        jQuery('.add-product-wrapper').unblock();
+                    }
+                }
+            });
+            return false;
+        });
+    }
 
 } );
 

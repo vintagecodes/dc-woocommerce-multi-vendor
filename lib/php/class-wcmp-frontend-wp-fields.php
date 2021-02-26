@@ -750,11 +750,9 @@ if (!class_exists('WCMp_Frontend_WP_Fields')) {
         }
 
         public function string_wpml($input) {
-            if (function_exists('icl_register_string')) {
-                icl_register_string('Dualcube', '' . $input . '', '' . $input . '');
-            }
+            do_action( 'wpml_register_single_string', 'WCMp', $input, $input );
             if (function_exists('icl_t')) {
-                return icl_t('Dualcube', '' . $input . '', '' . $input . '');
+                return icl_t('WCMp', '' . $input . '', '' . $input . '');
             } else {
                 return $input;
             }

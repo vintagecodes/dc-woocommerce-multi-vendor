@@ -30,7 +30,7 @@ if(!is_user_wcmp_rejected_vendor(get_current_vendor_id())) {
 	return;
 }
 
-$wcmp_vendor_registration_form_data = get_option('wcmp_vendor_registration_form_data');
+$wcmp_vendor_registration_form_data = wcmp_get_option('wcmp_vendor_registration_form_data');
 $form_data = array();
 if(isset($wcmp_vendor_registration_form_data) && is_array($wcmp_vendor_registration_form_data)) {
 	$vendor_application_data = get_user_meta(get_current_user_id(), 'wcmp_vendor_fields', true);
