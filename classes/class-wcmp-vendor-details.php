@@ -1231,14 +1231,14 @@ class WCMp_Vendor {
                 }
                 $order_total_arr[] = $subtotal;
                 $total_rows['order_subtotal'] = array(
-                    'label' => __( 'Subtotal:', 'woocommerce' ),
+                    'label' => __( 'Subtotal:', 'dc-woocommerce-multi-vendor' ),
                     'value' => ($html_price) ? wc_price($subtotal) : $subtotal,
                 );
             }
             // shipping methods
             if ( $this->is_shipping_enable() && $vendor_shipping_method ) {
                 $total_rows['shipping'] = array(
-                    'label' => __( 'Shipping:', 'woocommerce' ),
+                    'label' => __( 'Shipping:', 'dc-woocommerce-multi-vendor' ),
                     'value' => $vendor_shipping_method->get_name(),
                 );
             }
@@ -1263,7 +1263,7 @@ class WCMp_Vendor {
             }else{
                 $order_total_arr[] = $shipping_tax_amount;
                 $total_rows['shipping_tax'] = array(
-                    'label' => __( 'Shipping:', 'woocommerce' ).' '.WC()->countries->tax_or_vat() . ':',
+                    'label' => __( 'Shipping:', 'dc-woocommerce-multi-vendor' ).' '.WC()->countries->tax_or_vat() . ':',
                     'value' => ($html_price) ? wc_price($shipping_tax_amount) : $shipping_tax_amount,
                 );
                 $order_total_arr[] = $tax_amount;
@@ -1274,12 +1274,12 @@ class WCMp_Vendor {
             }
             // payment methods
             $total_rows['payment_method'] = array(
-                'label' => __( 'Payment method:', 'woocommerce' ),
+                'label' => __( 'Payment method:', 'dc-woocommerce-multi-vendor' ),
                 'value' => $order->get_payment_method_title(),
             );
             // Order totals
             $total_rows['order_total'] = array(
-                'label' => __( 'Total:', 'woocommerce' ),
+                'label' => __( 'Total:', 'dc-woocommerce-multi-vendor' ),
                 'value' => ($html_price) ? wc_price(array_sum($order_total_arr)) : array_sum($order_total_arr),
             );
             

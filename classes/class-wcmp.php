@@ -547,7 +547,7 @@ final class WCMp {
                 $params = array(
                     'coupon_meta' => array( 
                         'coupon_code' => array(
-                            'generate_button_text' => esc_html__( 'Generate coupon code', 'woocommerce' ),
+                            'generate_button_text' => esc_html__( 'Generate coupon code', 'dc-woocommerce-multi-vendor' ),
                             'characters'           => apply_filters( 'wcmp_coupon_code_generator_characters', 'ABCDEFGHJKMNPQRSTUVWXYZ23456789' ),
                             'char_length'          => apply_filters( 'wcmp_coupon_code_generator_character_length', 8 ),
                             'prefix'               => apply_filters( 'wcmp_coupon_code_generator_prefix', '' ),

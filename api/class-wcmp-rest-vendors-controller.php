@@ -686,7 +686,7 @@ class WCMp_REST_API_Vendors_Controller extends WC_REST_Controller {
 		$deleted = wp_delete_user( $request['id'] ) ;
 		
 		if ( ! $deleted ) {
-			return new WP_Error( 'wcmp_rest_cannot_delete', __( 'The vendor cannot be deleted.' ), array( 'status' => 500 ) );
+			return new WP_Error( 'wcmp_rest_cannot_delete', __( 'The vendor cannot be deleted.', 'dc-woocommerce-multi-vendor' ), array( 'status' => 500 ) );
         }
  
 		$request->set_param( 'context', 'view' );

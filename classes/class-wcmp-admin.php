@@ -174,7 +174,7 @@ class WCMp_Admin {
     function wcmp_taxonomy_slug_input() {
         $permalinks = get_option('dc_vendors_permalinks');
         ?>
-        <input name="dc_product_vendor_taxonomy_slug" type="text" class="regular-text code" value="<?php if (isset($permalinks['vendor_shop_base'])) echo esc_attr($permalinks['vendor_shop_base']); ?>" placeholder="<?php esc_attr_e('vendor', 'slug', 'dc-woocommerce-multi-vendor') ?>" />
+        <input name="dc_product_vendor_taxonomy_slug" type="text" class="regular-text code" value="<?php if (isset($permalinks['vendor_shop_base'])) echo esc_attr($permalinks['vendor_shop_base']); ?>" placeholder="<?php esc_attr_e('vendor slug', 'dc-woocommerce-multi-vendor') ?>" />
         <?php
     }
 
@@ -305,11 +305,11 @@ class WCMp_Admin {
         if (isset($submenu['wcmp'])) {
             if (apply_filters('wcmp_submenu_show_necesarry_count', true) && current_user_can('manage_woocommerce') ) {
                 foreach ($submenu['wcmp'] as $key => $menu_item) {
-                    if (0 === strpos($menu_item[0], _x('Commissions', 'Admin menu name', 'wcmp'))) {
+                    if (0 === strpos($menu_item[0], _x('Commissions', 'Admin menu name', 'dc-woocommerce-multi-vendor'))) {
                         $order_count = isset( wcmp_count_commission()->unpaid ) ? wcmp_count_commission()->unpaid : 0;
                         $submenu['wcmp'][$key][0] .= ' <span class="awaiting-mod update-plugins count-' . $order_count . '"><span class="processing-count">' . number_format_i18n($order_count) . '</span></span>';
                     }
-                    if (0 === strpos($menu_item[0], _x('To-do List', 'Admin menu name', 'wcmp'))) {
+                    if (0 === strpos($menu_item[0], _x('To-do List', 'Admin menu name', 'dc-woocommerce-multi-vendor'))) {
                         $to_do_list_count = wcmp_count_to_do_list();
                         $submenu['wcmp'][$key][0] .= ' <span class="awaiting-mod update-plugins count-' . $to_do_list_count . '"><span class="processing-count">' . number_format_i18n($to_do_list_count) . '</span></span>';
                     }
@@ -418,17 +418,17 @@ class WCMp_Admin {
                 wp_register_script('wc-country-select', WC()->plugin_url() . '/assets/js/frontend/country-select' . $suffix . '.js', array('jquery'), WC_VERSION);
                 $params = array(
                         'countries'                 => wp_json_encode( array_merge( WC()->countries->get_allowed_country_states(), WC()->countries->get_shipping_country_states() ) ),
-                        'i18n_select_state_text'    => esc_attr__( 'Select an option&hellip;', 'woocommerce' ),
-                        'i18n_no_matches'           => _x( 'No matches found', 'enhanced select', 'woocommerce' ),
-                        'i18n_ajax_error'           => _x( 'Loading failed', 'enhanced select', 'woocommerce' ),
-                        'i18n_input_too_short_1'    => _x( 'Please enter 1 or more characters', 'enhanced select', 'woocommerce' ),
-                        'i18n_input_too_short_n'    => _x( 'Please enter %qty% or more characters', 'enhanced select', 'woocommerce' ),
-                        'i18n_input_too_long_1'     => _x( 'Please delete 1 character', 'enhanced select', 'woocommerce' ),
-                        'i18n_input_too_long_n'     => _x( 'Please delete %qty% characters', 'enhanced select', 'woocommerce' ),
-                        'i18n_selection_too_long_1' => _x( 'You can only select 1 item', 'enhanced select', 'woocommerce' ),
-                        'i18n_selection_too_long_n' => _x( 'You can only select %qty% items', 'enhanced select', 'woocommerce' ),
-                        'i18n_load_more'            => _x( 'Loading more results&hellip;', 'enhanced select', 'woocommerce' ),
-                        'i18n_searching'            => _x( 'Searching&hellip;', 'enhanced select', 'woocommerce' ),
+                        'i18n_select_state_text'    => esc_attr__( 'Select an option&hellip;', 'dc-woocommerce-multi-vendor' ),
+                        'i18n_no_matches'           => _x( 'No matches found', 'enhanced select', 'dc-woocommerce-multi-vendor' ),
+                        'i18n_ajax_error'           => _x( 'Loading failed', 'enhanced select', 'dc-woocommerce-multi-vendor' ),
+                        'i18n_input_too_short_1'    => _x( 'Please enter 1 or more characters', 'enhanced select', 'dc-woocommerce-multi-vendor' ),
+                        'i18n_input_too_short_n'    => _x( 'Please enter %qty% or more characters', 'enhanced select', 'dc-woocommerce-multi-vendor' ),
+                        'i18n_input_too_long_1'     => _x( 'Please delete 1 character', 'enhanced select', 'dc-woocommerce-multi-vendor' ),
+                        'i18n_input_too_long_n'     => _x( 'Please delete %qty% characters', 'enhanced select', 'dc-woocommerce-multi-vendor' ),
+                        'i18n_selection_too_long_1' => _x( 'You can only select 1 item', 'enhanced select', 'dc-woocommerce-multi-vendor' ),
+                        'i18n_selection_too_long_n' => _x( 'You can only select %qty% items', 'enhanced select', 'dc-woocommerce-multi-vendor' ),
+                        'i18n_load_more'            => _x( 'Loading more results&hellip;', 'enhanced select', 'dc-woocommerce-multi-vendor' ),
+                        'i18n_searching'            => _x( 'Searching&hellip;', 'enhanced select', 'dc-woocommerce-multi-vendor' ),
                 );
                 wp_localize_script( 'wc-country-select', 'wc_country_select_params', $params );
                 wp_enqueue_script( 'wc-country-select' );

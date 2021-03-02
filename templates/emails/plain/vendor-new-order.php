@@ -40,7 +40,7 @@ if(apply_filters('show_cust_order_calulations_field', true, $vendor->id)) {
 	}
 }
 if ( $order->get_customer_note() ) {
-    echo esc_html__( 'Note:', 'woocommerce' ) . "\t " . wp_kses_post( wptexturize( $order->get_customer_note() ) ) . "\n";
+    echo esc_html__( 'Note:', 'dc-woocommerce-multi-vendor' ) . "\t " . wp_kses_post( wptexturize( $order->get_customer_note() ) ) . "\n";
 }
 
 echo "\n****************************************************\n\n";

@@ -127,8 +127,8 @@ global $WCMp;
                         <input type="text" class="form-control" name="post_title" id="post_title" value="<?php echo $product_object->get_title( 'edit' ); ?>"<?php if ( $self->is_spmv() && apply_filters('wcmp_singleproductmultiseller_edit_product_title_disabled', true) ) echo ' readonly="readonly"'; ?>>
                         <input type="hidden" name="original_post_title" value="<?php echo $product_object->get_title( 'edit' ); ?>">
                         <input type="hidden" name="post_ID" value="<?php echo $self->get_the_id(); ?>">
-                        <input type="hidden" name="is_update" value="<?php esc_attr_e( $is_update ); ?>">
-                        <input type="hidden" name="original_post_status" value="<?php esc_attr_e( get_post_status( $post ) ); ?>">
+                        <input type="hidden" name="is_update" value="<?php esc_attr( $is_update ); ?>">
+                        <input type="hidden" name="original_post_status" value="<?php esc_attr( get_post_status( $post ) ); ?>">
                     </span> 
                 </p>
                 <?php if( $is_update ) : ?>
@@ -167,14 +167,14 @@ global $WCMp;
                 $current_featured   = wc_bool_to_string( $product_object->get_featured() );
                 $visibility_options = wc_get_product_visibility_options();
                 ?>
-                <p class="cat-visiblity"><?php esc_html_e( 'Catalog visibility:', 'woocommerce' ); ?> 
+                <p class="cat-visiblity"><?php esc_html_e( 'Catalog visibility:', 'dc-woocommerce-multi-vendor' ); ?> 
                     <strong id="catalog-visibility-display" class="primary-color">
                         <?php
 
                         echo isset( $visibility_options[ $current_visibility ] ) ? esc_html( $visibility_options[ $current_visibility ] ) : esc_html( $current_visibility );
 
                         if ( 'yes' === $current_featured ) {
-                                echo ', ' . esc_html__( 'Featured', 'woocommerce' );
+                                echo ', ' . esc_html__( 'Featured', 'dc-woocommerce-multi-vendor' );
                         }
                         ?>
                     </strong>
@@ -189,7 +189,7 @@ global $WCMp;
                             echo '<div class="form-group"><label><input type="radio" name="_visibility" id="_visibility_' . esc_attr( $name ) . '" value="' . esc_attr( $name ) . '" ' . checked( $current_visibility, $name, false ) . ' data-label="' . esc_attr( $label ) . '" /> <span for="_visibility_' . esc_attr( $name ) . '" class="selectit">' . esc_html( $label ) . '</span></label></div>';
                         }
                         if( apply_filters( 'wcmp_feature_product_is_enable', true ) ) {
-                            echo '<hr><div class="form-group"><label><input type="checkbox" name="_featured" class="mt-0" id="_featured" ' . checked( $current_featured, 'yes', false ) . ' data-label="' . __( 'Featured', 'woocommerce' ) . '" /> <span for="_featured">' . esc_html__( 'This is a featured product', 'woocommerce' ) . '</label></label></div>';
+                            echo '<hr><div class="form-group"><label><input type="checkbox" name="_featured" class="mt-0" id="_featured" ' . checked( $current_featured, 'yes', false ) . ' data-label="' . __( 'Featured', 'dc-woocommerce-multi-vendor' ) . '" /> <span for="_featured">' . esc_html__( 'This is a featured product', 'dc-woocommerce-multi-vendor' ) . '</label></label></div>';
                         }
                         ?>
                         <div class="form-group mt-15">

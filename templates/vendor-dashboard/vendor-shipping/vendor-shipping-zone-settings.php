@@ -42,37 +42,37 @@
 			<div class="form-group hide_if_zone_not_limited">
 			   	<label for="" class="control-label col-sm-3 col-md-3"><?php _e( 'Set your postcode', 'dc-woocommerce-multi-vendor' ); ?></label>
 			   	<div class="col-md-6 col-sm-9">
-			    	<input id="select_zone_postcodes" class="form-control" type="text" name="<?php echo 'wcmp_shipping_zone['. $zone_id .'][_select_zone_postcodes]'; ?>" value="<?php echo $postcodes; ?>" placeholder="<?php _e( 'Postcodes need to be comma separated', 'dc-woocommerce-multi-vendor' ); ?>">
+			    	<input id="select_zone_postcodes" class="form-control" type="text" name="<?php echo 'wcmp_shipping_zone['. $zone_id .'][_select_zone_postcodes]'; ?>" value="<?php echo $postcodes; ?>" placeholder="<?php esc_attr_e( 'Postcodes need to be comma separated', 'dc-woocommerce-multi-vendor' ); ?>">
 			   	</div>
 			</div>
 		<?php } ?>
 	</form>
 	<div class="wcmp-zone-method-wrapper form-group mt-10">
 		<label class="control-label col-sm-3 col-md-3 wcmp-zone-method-heading" for="_sku">
-			<?php _e( 'Shipping methods', 'dc-woocommerce-multi-vendor' ); ?>
-            <div class="form-text mt-10 small"><?php _e('Add your shipping method for appropiate zone', 'dc-woocommerce-multi-vendor'); ?></div>
+			<?php esc_html_e( 'Shipping methods', 'dc-woocommerce-multi-vendor' ); ?>
+            <div class="form-text mt-10 small"><?php esc_html_e('Add your shipping method for appropiate zone', 'dc-woocommerce-multi-vendor'); ?></div>
         </label> 
 		<div class="wcmp-zone-method-content col-md-9 col-sm-9">
 			<table class="table wcmp-table zone-method-table table-bordered">
 				<thead>
 					<tr>
-						<th class="title"><?php _e('Title', 'dc-woocommerce-multi-vendor'); ?></th>
-						<th class="enabled"><?php _e('Enabled', 'dc-woocommerce-multi-vendor'); ?></th> 
-						<th class="description"><?php _e('Description', 'dc-woocommerce-multi-vendor'); ?></th>
-						<th class="action"><?php _e('Action', 'dc-woocommerce-multi-vendor'); ?></th>
+						<th class="title"><?php esc_html_e('Title', 'dc-woocommerce-multi-vendor'); ?></th>
+						<th class="enabled"><?php esc_html_e('Enabled', 'dc-woocommerce-multi-vendor'); ?></th> 
+						<th class="description"><?php esc_html_e('Description', 'dc-woocommerce-multi-vendor'); ?></th>
+						<th class="action"><?php esc_html_e('Action', 'dc-woocommerce-multi-vendor'); ?></th>
 					</tr>
 				</thead> 
 				<tbody>
 					<?php 
 					if(empty($vendor_shipping_methods)) { ?> 
 						<tr>
-							<td colspan="4"><?php _e( 'You can add multiple shipping methods within this zone. Only customers within the zone will see them.', 'dc-woocommerce-multi-vendor' ); ?></td>
+							<td colspan="4"><?php esc_html_e( 'You can add multiple shipping methods within this zone. Only customers within the zone will see them.', 'dc-woocommerce-multi-vendor' ); ?></td>
 						</tr>
 						<?php 
 					} else { 
 						foreach ( $vendor_shipping_methods as $vendor_shipping_method ) { ?>
 							<tr>
-								<td><?php _e($vendor_shipping_method['title'], 'wcmp' ); ?>
+								<td><?php esc_html($vendor_shipping_method['title']); ?>
 									<div data-instance_id="<?php echo $vendor_shipping_method['instance_id']; ?>" data-method_id="<?php echo $vendor_shipping_method['id']; ?>" data-method-settings='<?php echo json_encode($vendor_shipping_method); ?>' class="row-actions edit_del_actions">
 									</div>
 								</td>

@@ -64,7 +64,7 @@ if ( WC()->payment_gateways() ) {
                 if ( $order->get_formatted_billing_address() ) {
                         echo '<p>' . wp_kses( $order->get_formatted_billing_address(), array( 'br' => array() ) ) . '</p>';
                 } else {
-                        echo '<p class="none_set"><strong>' . __( 'Address:', 'woocommerce' ) . '</strong> ' . __( 'No billing address set.', 'woocommerce' ) . '</p>';
+                        echo '<p class="none_set"><strong>' . __( 'Address:', 'dc-woocommerce-multi-vendor' ) . '</strong> ' . __( 'No billing address set.', 'dc-woocommerce-multi-vendor' ) . '</p>';
                 }
                 ?>
             </div>
@@ -79,7 +79,7 @@ if ( WC()->payment_gateways() ) {
                 if ( $order->get_formatted_shipping_address() ) {
                         echo '<p>' . wp_kses( $order->get_formatted_shipping_address(), array( 'br' => array() ) ) . '</p>';
                 } else {
-                        echo '<p class="none_set"><strong>' . __( 'Address:', 'woocommerce' ) . '</strong> ' . __( 'No shipping address set.', 'woocommerce' ) . '</p>';
+                        echo '<p class="none_set"><strong>' . __( 'Address:', 'dc-woocommerce-multi-vendor' ) . '</strong> ' . __( 'No shipping address set.', 'dc-woocommerce-multi-vendor' ) . '</p>';
                 }
                 ?>
             </div>
@@ -105,8 +105,8 @@ if ( WC()->payment_gateways() ) {
                     <div class="detail-contnt">
                         <p><?php echo $user->display_name; ?></p>
                         <?php $billing_fields = apply_filters( 'wcmp_vendor_dash_customer_details_data', array(
-                            'email' => array( 'label' => __( 'Email address', 'woocommerce' ) ),
-                            'phone' => array( 'label' => __( 'Phone', 'woocommerce' ) )
+                            'email' => array( 'label' => __( 'Email address', 'dc-woocommerce-multi-vendor' ) ),
+                            'phone' => array( 'label' => __( 'Phone', 'dc-woocommerce-multi-vendor' ) )
                         ) );
                         foreach ( $billing_fields as $key => $field ) {
                             if ( isset( $field['show'] ) && false === $field['show'] ) {
@@ -141,7 +141,7 @@ if ( WC()->payment_gateways() ) {
                 if( $order->get_customer_note() ) :
                 ?>
                 <hr>
-                <h3><?php echo __( 'Customer provided note:', 'woocommerce' ); ?></h3>
+                <h3><?php esc_html_e( 'Customer provided note:', 'dc-woocommerce-multi-vendor' ); ?></h3>
                 <div class="order_note">
                     <?php
                     $order_customer_note = $order->get_customer_note();

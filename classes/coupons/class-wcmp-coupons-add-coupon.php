@@ -81,7 +81,7 @@ class WCMp_Coupons_Add_Coupon {
         $current_vendor_id = get_current_user_id();
         $vendor = get_wcmp_vendor( $current_vendor_id );
         if ( $vendor ) {
-            $post_id = wp_insert_post( array( 'post_title' => __( 'Auto Draft' ), 'post_type' => $post_type, 'post_status' => 'auto-draft' ) );
+            $post_id = wp_insert_post( array( 'post_title' => __( 'Auto Draft', 'dc-woocommerce-multi-vendor' ), 'post_type' => $post_type, 'post_status' => 'auto-draft' ) );
             return get_post( $post_id );
         }
         return false;
@@ -102,19 +102,19 @@ class WCMp_Coupons_Add_Coupon {
     public function get_coupon_data_tabs() {
         $tabs = apply_filters( 'wcmp_afm_coupon_data_tabs', array(
             'general'           => array(
-                'label'    => __( 'General', 'woocommerce' ),
+                'label'    => __( 'General', 'dc-woocommerce-multi-vendor' ),
                 'target'   => 'general_coupon_data',
                 'class'    => array(),
                 'priority' => 10,
             ),
             'usage_restriction' => array(
-                'label'    => __( 'Usage restriction', 'woocommerce' ),
+                'label'    => __( 'Usage restriction', 'dc-woocommerce-multi-vendor' ),
                 'target'   => 'usage_restriction_coupon_data',
                 'class'    => array(),
                 'priority' => 20,
             ),
             'usage_limit'       => array(
-                'label'    => __( 'Usage limits', 'woocommerce' ),
+                'label'    => __( 'Usage limits', 'dc-woocommerce-multi-vendor' ),
                 'target'   => 'usage_limit_coupon_data',
                 'class'    => array(),
                 'priority' => 30,

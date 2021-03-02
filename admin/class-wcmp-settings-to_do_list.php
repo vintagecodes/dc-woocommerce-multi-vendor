@@ -251,7 +251,7 @@ class WCMp_Settings_To_Do_List {
                     echo '<input type="hidden" name="transactions_ids" value="'. wp_json_encode( $transactions_ids ) .'">';
                     do_action( 'wcmp_todo_pending_bank_transfer_exporter_form_fields' );
                     ?>
-                    <button class="button"><?php _e('Export', 'woocommerce'); ?></button>
+                    <button class="button"><?php esc_html_e('Export', 'dc-woocommerce-multi-vendor'); ?></button>
                 </form>
             </h3>
             <table class="form-table" id="to_do_list">

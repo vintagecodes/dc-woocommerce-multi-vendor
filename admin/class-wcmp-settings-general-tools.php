@@ -93,7 +93,7 @@ class WCMp_Settings_General_Tools {
                         $message = __( 'WCMp visitors stats successfully deleted', 'dc-woocommerce-multi-vendor' );
                     } else {
                         $ran     = false;
-                        $message = __( 'There was an error calling this tool. There is no callback present.', 'woocommerce' );
+                        $message = __( 'There was an error calling this tool. There is no callback present.', 'dc-woocommerce-multi-vendor' );
                     }
                     break;
                 case 'force_wcmp_orders_migration':
@@ -104,7 +104,7 @@ class WCMp_Settings_General_Tools {
                 default:
                     do_action( 'wcmp_settings_tools_action_default_case', $action, $_REQUEST );
                     $ran     = false;
-                    $message = __( 'There was an error calling this tool. There is no callback present.', 'woocommerce' );
+                    $message = __( 'There was an error calling this tool. There is no callback present.', 'dc-woocommerce-multi-vendor' );
                     break;
             }
             
