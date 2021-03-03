@@ -1518,7 +1518,7 @@ class WCMp_Order {
         );
         // update customer refunt request 
         update_post_meta( $order_id, '_customer_refund_order', 'refund_request' );
-        $comment_id = $order->add_order_note( __('Customer requested a refund '.$order_id.' .', 'dc-woocommerce-multi-vendor') );
+        $comment_id = $order->add_order_note( __('Customer requested a refund ', 'dc-woocommerce-multi-vendor') .$order_id.' .' );
         // user info
         $user_info = get_userdata(get_current_user_id());
         wp_update_comment(array('comment_ID' => $comment_id, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
@@ -1526,7 +1526,7 @@ class WCMp_Order {
         // parent order
         $parent_order_id = wp_get_post_parent_id($order->get_id());
         $parent_order = wc_get_order( $parent_order_id );
-        $comment_id_parent = $parent_order->add_order_note( __('Customer requested a refund for '.$order_id.'.', 'dc-woocommerce-multi-vendor') );
+        $comment_id_parent = $parent_order->add_order_note( __('Customer requested a refund for ', 'dc-woocommerce-multi-vendor') .$order_id.'.'  );
         wp_update_comment(array('comment_ID' => $comment_id_parent, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
 
         $mail = WC()->mailer()->emails['WC_Email_Customer_Refund_Request'];
@@ -1598,7 +1598,7 @@ class WCMp_Order {
                 }
                 // Comment note for suborder
                 $order = wc_get_order( $post_id );
-                $comment_id = $order->add_order_note( __('Site admin '.$order_status.' refund request for order #'.$post_id.' .', 'dc-woocommerce-multi-vendor') );
+                $comment_id = $order->add_order_note( __('Site admin ', 'dc-woocommerce-multi-vendor') . $order_status. __(' refund request for order #', 'dc-woocommerce-multi-vendor') .$post_id.' .' );
                 // user info
                 $user_info = get_userdata(get_current_user_id());
                 wp_update_comment(array('comment_ID' => $comment_id, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
@@ -1606,7 +1606,7 @@ class WCMp_Order {
                 // Comment note for parent order
                 $parent_order_id = wp_get_post_parent_id($post_id);
                 $parent_order = wc_get_order( $parent_order_id );
-                $comment_id_parent = $parent_order->add_order_note( __('Site admin '.$order_status.' refund request for order #'.$post_id.'.', 'dc-woocommerce-multi-vendor') );
+                $comment_id_parent = $parent_order->add_order_note( __('Site admin ', 'dc-woocommerce-multi-vendor') . $order_status. __(' refund request for order #', 'dc-woocommerce-multi-vendor') . $post_id .'.' );
                 wp_update_comment(array('comment_ID' => $comment_id_parent, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
 
                 $mail = WC()->mailer()->emails['WC_Email_Customer_Refund_Request'];
