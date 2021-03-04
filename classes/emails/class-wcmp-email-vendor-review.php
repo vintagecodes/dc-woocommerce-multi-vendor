@@ -49,7 +49,7 @@ if (!class_exists('WC_Email_Vendor_Review')) :
             if($vendor) {
                 $this->vendor = $vendor;
                 $this->find[] = '{vendor_name}';
-                $this->vendor_name = $vendor->page_title;
+                $this->vendor_name = $vendor->data->display_name;
                 $this->replace[] = $this->vendor_name;
 
                 $this->find[] = '{customer_name}';
@@ -60,11 +60,11 @@ if (!class_exists('WC_Email_Vendor_Review')) :
 
                 $this->find[] = '{rating}';
                 $this->rating = $rating;
-                $this->replace[] = $this->rating; 
+                $this->replace[] = $this->rating;
 
                 $this->recipient = get_option('admin_email');
                 if( apply_filters( 'wcmp_vendor_review_email_goes_to_vendor', true, $this->vendor ) )
-                $this->recipient .= ',' . sanitize_email( $vendor->user_data->user_email );
+                $this->recipient .= ',' . sanitize_email( $vendor->data->user_email );
             
                 if ( ! $this->is_enabled() || ! $this->get_recipient() ) {
                     return;
