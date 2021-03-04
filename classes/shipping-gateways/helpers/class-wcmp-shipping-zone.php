@@ -213,7 +213,7 @@ class WCMP_Shipping_Zone {
 
             $wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE zone_id=%d AND vendor_id=%d", $zone_id, $vendor_id ) );
 
-            if ( $wpdb->query( $wpdb->prepare( esc_sql($query), $values ) ) ) {
+            if ( $wpdb->query( $wpdb->prepare( wc_clean($query), $values ) ) ) {
                 return true;
             }
         } else {

@@ -352,12 +352,10 @@ class WCMp_Vendor_Query {
 		
 		$where_sql = implode( " AND ", $where );
 		$search_results = $wpdb->get_results(
-			$wpdb->prepare(
 			// phpcs:disable
 			"SELECT vendor_id 
 			FROM {$wpdb->prefix}wcmp_shipping_zone_locations
-			WHERE %s", $where_sql
-			)
+			WHERE " . wp_unslash(esc_sql( $where_sql ) ) . "",
 		);
 		
 		if( $search_results ) {
