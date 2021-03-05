@@ -29,8 +29,6 @@ if (!$order || !is_wcmp_vendor_order($order, apply_filters( 'wcmp_current_vendor
 $payment_gateway = wc_get_payment_gateway_by_order( $order );
 $vendor_order = wcmp_get_order($order_id);
 $vendor_shipping_method = get_wcmp_vendor_order_shipping_method($order->get_id(), $vendor->id);
-$vendor_items = get_wcmp_vendor_orders(array('order_id' => $order->get_id(), 'vendor_id' => $vendor->id));
-$vendor_order_amount = get_wcmp_vendor_order_amount(array('order_id' => $order->get_id(), 'vendor_id' => $vendor->id));
 $subtotal = 0;
 ?>
 <div id="wcmp-order-details" class="col-md-12">
