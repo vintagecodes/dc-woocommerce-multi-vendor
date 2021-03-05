@@ -25,7 +25,7 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
             <li><strong><?php _e( 'Product', 'dc-woocommerce-multi-vendor' ); ?>:</strong> <span class="text"><?php echo $product->get_title(); ?></span></li>
             <li><strong><?php _e( 'Vendor', 'dc-woocommerce-multi-vendor' ); ?>:</strong> <span class="text"><?php echo $vendor->page_title; ?></span></li>
         </ul>
-        <h2><?php _e( 'Customer details', 'woocommerce' ); ?></h2>
+        <h2><?php _e( 'Customer details', 'dc-woocommerce-multi-vendor' ); ?></h2>
         <ul>
             <li><strong><?php _e( 'Name', 'dc-woocommerce-multi-vendor' ); ?>:</strong> <span class="text"><?php echo $name; ?></span></li>
             <li><strong><?php _e( 'Message', 'dc-woocommerce-multi-vendor' ); ?>:</strong> <span class="text"><?php echo $message; ?></span></li>

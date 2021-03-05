@@ -39,11 +39,11 @@ global $WCMp;
                         <li class="list-group-item list-group-item-action flex-column align-items-start order-notes">
                             <p class="order-note"><span><?php echo wptexturize( wp_kses_post( $note->content ) ); ?></span></p>
                             <p>
-                                <abbr class="exact-date" title="<?php echo $note->date_created->date( 'y-m-d h:i:s' ); ?>"><?php printf( __( 'added on %1$s at %2$s', 'woocommerce' ), $note->date_created->date_i18n( wc_date_format() ), $note->date_created->date_i18n( wc_time_format() ) ); ?></abbr>
+                                <abbr class="exact-date" title="<?php echo $note->date_created->date( 'y-m-d h:i:s' ); ?>"><?php printf( __( 'added on %1$s at %2$s', 'dc-woocommerce-multi-vendor' ), $note->date_created->date_i18n( wc_date_format() ), $note->date_created->date_i18n( wc_time_format() ) ); ?></abbr>
                                 <?php
                                 if ( 'system' !== $note->added_by ) :
                                         /* translators: %s: note author */
-                                        printf( ' ' . __( 'by %s', 'woocommerce' ), $note->added_by );
+                                        printf( ' ' . __( 'by %s', 'dc-woocommerce-multi-vendor' ), $note->added_by );
                                 endif;
                                 ?>
                             </p>
@@ -51,21 +51,21 @@ global $WCMp;
                         <?php
                     }
                 }else{
-                    echo '<li class="list-group-item list-group-item-action flex-column align-items-start order-notes">' . __( 'There are no notes yet.', 'woocommerce' ) . '</li>';
+                    echo '<li class="list-group-item list-group-item-action flex-column align-items-start order-notes">' . __( 'There are no notes yet.', 'dc-woocommerce-multi-vendor' ) . '</li>';
                 }
                 ?>
                 <li class="list-group-item list-group-item-action flex-column align-items-start add_note">
                     <?php if (apply_filters('is_vendor_can_add_order_notes', true, $vendor->id)) : ?>
                     <form method="post" name="add_comment">
                     <?php wp_nonce_field('dc-vendor-add-order-comment', 'vendor_add_order_nonce'); ?> 
-                        <h3><?php _e( 'Add note', 'woocommerce' ); ?> <span class="img_tip" data-desc="<?php echo __( 'Add a note for your reference, or add a customer note (the user will be notified).', 'woocommerce' ); ?>"></span></h3>
+                        <h3><?php _e( 'Add note', 'dc-woocommerce-multi-vendor' ); ?> <span class="img_tip" data-desc="<?php echo __( 'Add a note for your reference, or add a customer note (the user will be notified).', 'dc-woocommerce-multi-vendor' ); ?>"></span></h3>
                         <div class="form-group">
-                            <textarea placeholder="<?php _e('Enter text ...', 'dc-woocommerce-multi-vendor'); ?>" required class="form-control" name="comment_text"></textarea>
+                            <textarea placeholder="<?php esc_attr_e('Enter text ...', 'dc-woocommerce-multi-vendor'); ?>" required class="form-control" name="comment_text"></textarea>
                         </div>
                         <input type="hidden" name="order_id" value="<?php echo $order->get_id(); ?>">
                         <select name="note_type" id="order_note_type" class="form-control inline-input">
-                                <option value=""><?php _e( 'Private note', 'woocommerce' ); ?></option>
-                                <option value="customer"><?php _e( 'Note to customer', 'woocommerce' ); ?></option>
+                                <option value=""><?php esc_html_e( 'Private note', 'dc-woocommerce-multi-vendor' ); ?></option>
+                                <option value="customer"><?php esc_html_e( 'Note to customer', 'dc-woocommerce-multi-vendor' ); ?></option>
                         </select>
                         <input class="btn btn-default wcmp-add-order-note" type="submit" name="wcmp_submit_comment" value="<?php _e('Submit', 'dc-woocommerce-multi-vendor'); ?>">
                     </form>  

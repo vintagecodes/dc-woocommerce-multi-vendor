@@ -31,15 +31,15 @@ $title = in_array( $post_status, array( "publish", "draft" ) ) ? $post->post_tit
                 <div class="col-md-8"> 
                     <div class="form-group-wrapper">
                         <div class="form-group">
-                            <label class="control-label col-md-12" for="post_title"><?php esc_html_e( 'Coupon code', 'woocommerce' ); ?></label>
+                            <label class="control-label col-md-12" for="post_title"><?php esc_html_e( 'Coupon code', 'dc-woocommerce-multi-vendor' ); ?></label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" name="post_title" id="post_title" value="<?php esc_attr_e( $title ); ?>">
-                                <input type="hidden" name="post_ID" value="<?php esc_attr_e( $self->get_the_id() ); ?>">
+                                <input type="text" class="form-control" name="post_title" id="post_title" value="<?php echo esc_attr( $title ); ?>">
+                                <input type="hidden" name="post_ID" value="<?php echo esc_attr( $self->get_the_id() ); ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-md-12" for="coupon_description"><?php esc_attr_e( 'Description (optional)', 'woocommerce' ); ?></label>
+                            <label class="control-label col-md-12" for="coupon_description"><?php esc_attr_e( 'Description (optional)', 'dc-woocommerce-multi-vendor' ); ?></label>
                             <div class="col-md-12">
                                 <?php
                                 $settings = array(
@@ -67,7 +67,7 @@ $title = in_array( $post_status, array( "publish", "draft" ) ) ? $post->post_tit
             <div class="col-md-12">
                 <div class="panel panel-default pannel-outer-heading">
                     <div class="panel-heading d-flex">
-                        <h3 class="pull-left"><?php esc_html_e( 'Coupon data', 'woocommerce' ); ?></h3>
+                        <h3 class="pull-left"><?php esc_html_e( 'Coupon data', 'dc-woocommerce-multi-vendor' ); ?></h3>
                     </div>
                     <div class="panel-body panel-content-padding form-group-wrapper">
                         <div id="woocommerce-coupon-data" class="add-coupon-info-holder">   
@@ -78,13 +78,13 @@ $title = in_array( $post_status, array( "publish", "draft" ) ) ? $post->post_tit
                                     <ul class="nav nav-tabs" role="tablist" id="coupon_data_tabs">
                                         <?php $first_tab = true; ?>
                                         <?php foreach ( $self->get_coupon_data_tabs() as $key => $tab ) : ?>
-                                            <li role="presentation" class="<?php esc_attr_e( $key ); ?>_options <?php esc_attr_e( $key ); ?>_tab <?php echo esc_attr( isset( $tab['class'] ) ? implode( ' ', (array) $tab['class'] ) : ''  ); ?> <?php
+                                            <li role="presentation" class="<?php echo esc_attr( $key ); ?>_options <?php echo esc_attr( $key ); ?>_tab <?php echo esc_attr( isset( $tab['class'] ) ? implode( ' ', (array) $tab['class'] ) : ''  ); ?> <?php
                                             if ( $first_tab ) {
                                                 $first_tab = false;
                                                 echo 'active';
                                             }
                                             ?>">
-                                                <a class="nav-link" href="#<?php esc_attr_e( $tab['target'] ); ?>" aria-controls="<?php echo $tab['target']; ?>" role="tab" data-toggle="tab"><span><?php echo esc_html( $tab['label'] ); ?></span></a>
+                                                <a class="nav-link" href="#<?php echo esc_attr( $tab['target'] ); ?>" aria-controls="<?php echo $tab['target']; ?>" role="tab" data-toggle="tab"><span><?php echo esc_html( $tab['label'] ); ?></span></a>
 
                                             </li>
                                         <?php endforeach; ?>
@@ -122,9 +122,9 @@ $title = in_array( $post_status, array( "publish", "draft" ) ) ? $post->post_tit
                 }
             }
             ?>
-            <input type="submit" class="btn btn-default" name="submit-data" value="<?php esc_attr_e( $primary_action ); ?>" id="wcmp_afm_coupon_submit" />
+            <input type="submit" class="btn btn-default" name="submit-data" value="<?php echo esc_attr( $primary_action ); ?>" id="wcmp_afm_coupon_submit" />
             <input type="submit" class="btn btn-default" name="draft-data" value="<?php esc_attr_e( 'Draft', 'dc-woocommerce-multi-vendor' ); ?>" id="wcmp_afm_coupon_draft" />
-            <input type="hidden" name="status" value="<?php esc_attr_e( $post_status ); ?>">
+            <input type="hidden" name="status" value="<?php echo esc_attr( $post_status ); ?>">
             <?php wp_nonce_field( 'wcmp-afm-coupon', 'wcmp_afm_coupon_nonce' ); ?>
         </div>
         <?php do_action( 'wcmp_afm_add_coupon_form_end' ); ?>

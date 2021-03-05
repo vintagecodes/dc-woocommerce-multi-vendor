@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
                 <div class="add-variation-wrapper">
                     <select name="attribute_taxonomy" class="attribute_taxonomy form-control inline-select">
                         <?php if ( apply_filters( 'vendor_can_add_custom_attribute', true ) ) : ?>
-                            <option value=""><?php esc_html_e( 'Custom product attribute', 'woocommerce' ); ?></option>
+                            <option value=""><?php esc_html_e( 'Custom product attribute', 'dc-woocommerce-multi-vendor' ); ?></option>
                         <?php endif; ?>
                         <?php
                         // Array of defined attribute taxonomies
@@ -33,13 +33,13 @@ defined( 'ABSPATH' ) || exit;
                         }
                         ?>
                     </select>
-                    <button type="button" class="btn btn-default add_attribute"><?php esc_html_e( 'Add', 'woocommerce' ); ?></button>
+                    <button type="button" class="btn btn-default add_attribute"><?php esc_html_e( 'Add', 'dc-woocommerce-multi-vendor' ); ?></button>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="toolbar pull-right">
                     <span class="expand-close">
-                        <a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'woocommerce' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'woocommerce' ); ?></a>
+                        <a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'dc-woocommerce-multi-vendor' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'dc-woocommerce-multi-vendor' ); ?></a>
                     </span>
                 </div>
             </div>
@@ -68,10 +68,10 @@ defined( 'ABSPATH' ) || exit;
             </div>
         </div> 
         <div class="button-group">
-            <button type="button" class="btn btn-default save_attributes button-primary"><?php esc_html_e( 'Save attributes', 'woocommerce' ); ?></button>
+            <button type="button" class="btn btn-default save_attributes button-primary"><?php esc_html_e( 'Save attributes', 'dc-woocommerce-multi-vendor' ); ?></button>
             <div class="toolbar pull-right">
                 <span class="expand-close">
-                    <a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'woocommerce' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'woocommerce' ); ?></a>
+                    <a href="#" class="expand_all"><?php esc_html_e( 'Expand', 'dc-woocommerce-multi-vendor' ); ?></a> / <a href="#" class="close_all"><?php esc_html_e( 'Close', 'dc-woocommerce-multi-vendor' ); ?></a>
                 </span>
             </div>
         </div>

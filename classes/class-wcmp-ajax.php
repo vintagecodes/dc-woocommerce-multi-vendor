@@ -1890,7 +1890,7 @@ class WCMp_Ajax {
                                 </div>
                                 <div class="wcmp-product-dismiss-modal modal-body order-notes">     
                                     <p class="order-note"><span>'.wptexturize( wp_kses_post( $dismiss_comment->comment_content ) ).'</span></p>
-                                    <p>'.__($dismiss_comment->comment_author).' - '.__( date_i18n(wc_date_format() . ' ' . wc_time_format(), strtotime($dismiss_comment->comment_date) ) ).'</p>
+                                    <p>'. $dismiss_comment->comment_author .' - '. date_i18n(wc_date_format() . ' ' . wc_time_format(), strtotime($dismiss_comment->comment_date) ) .'</p>
                                 </div>
                             </div>
                         </div>
@@ -3328,7 +3328,7 @@ class WCMp_Ajax {
                             <tfoot>
                                 <tr>
                                     <td colspan="4">
-                                        <button type="submit" class="button wcmp-shipping-zone-show-method wc-shipping-zone-add-method" value="<?php esc_attr_e('Add shipping method', 'woocommerce'); ?>"><?php esc_html_e('Add shipping method', 'woocommerce'); ?></button>
+                                        <button type="submit" class="button wcmp-shipping-zone-show-method wc-shipping-zone-add-method" value="<?php esc_attr_e('Add shipping method', 'dc-woocommerce-multi-vendor'); ?>"><?php esc_html_e('Add shipping method', 'dc-woocommerce-multi-vendor'); ?></button>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -3342,7 +3342,7 @@ class WCMp_Ajax {
                                     foreach ($vendor_shipping_methods as $vendor_shipping_method) {
                                         ?>
                                         <tr class="wcmp-shipping-zone-method">
-                                            <td><?php _e($vendor_shipping_method['title'], 'wcmp'); ?>
+                                            <td><?php esc_html_e($vendor_shipping_method['title'], 'dc-woocommerce-multi-vendor'); ?>
                                                 <div data-instance_id="<?php echo $vendor_shipping_method['instance_id']; ?>" data-method_id="<?php echo $vendor_shipping_method['id']; ?>" data-method-settings='<?php echo json_encode($vendor_shipping_method); ?>' class="row-actions edit_del_actions">
                                                 </div>
                                             </td>
@@ -4044,11 +4044,11 @@ class WCMp_Ajax {
             $max_refund = wc_format_decimal($order->get_total() - $order->get_total_refunded(), wc_get_price_decimals());
 
             if (!$refund_amount || $max_refund < $refund_amount || 0 > $refund_amount) {
-                throw new exception(__('Invalid refund amount', 'woocommerce'));
+                throw new exception(__('Invalid refund amount', 'dc-woocommerce-multi-vendor'));
             }
 
             if ($refunded_amount !== wc_format_decimal($order->get_total_refunded(), wc_get_price_decimals())) {
-                throw new exception(__('Error processing refund. Please try again.', 'woocommerce'));
+                throw new exception(__('Error processing refund. Please try again.', 'dc-woocommerce-multi-vendor'));
             }
 
             // Prepare line items which we are refunding.
@@ -4281,7 +4281,7 @@ class WCMp_Ajax {
                                         if ( $file->get_name() ) {
                                                 $file_count = $file->get_name();
                                         } else {
-                                                $file_count = sprintf( __( 'File %d', 'woocommerce' ), $file_counter );
+                                                $file_count = sprintf( __( 'File %d', 'dc-woocommerce-multi-vendor' ), $file_counter );
                                         }
                                         include $WCMp->plugin_path . 'templates/vendor-dashboard/vendor-orders/views/html-order-download-permission.php';
                                 }

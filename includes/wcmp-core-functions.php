@@ -699,7 +699,7 @@ if (!function_exists('wcmp_check_if_another_vendor_plugin_exits')) {
         foreach ($vendor_arr as $plugin) {
             if (is_plugin_active($plugin)) {
                 deactivate_plugins('dc-woocommerce-multi-vendor/dc_product_vendor.php');
-                exit(__('Another Multivendor Plugin is allready Activated Please deactivate first to install this plugin', 'WCMp'));
+                exit(__('Another Multivendor Plugin is allready Activated Please deactivate first to install this plugin', 'dc-woocommerce-multi-vendor'));
             }
         }
     }
@@ -3420,7 +3420,7 @@ if (!function_exists('wcmp_list_categories')) {
             'search' => '',
             'show_count' => false,
             'taxonomy' => 'product_cat',
-            'show_option_none' => __('No categories', ''),
+            'show_option_none' => __('No categories', 'dc-woocommerce-multi-vendor'),
             'style' => 'list',
             'selected' => '',
             'list_class' => '',
@@ -3736,7 +3736,7 @@ if ( ! function_exists( 'wcmp_default_product_types' ) ) {
 
     function wcmp_default_product_types() {
         return array(
-            'simple'   => __( 'Simple product', 'woocommerce' ),
+            'simple'   => __( 'Simple product', 'dc-woocommerce-multi-vendor' ),
         );
     }
 

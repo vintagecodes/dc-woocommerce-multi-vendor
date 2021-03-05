@@ -692,7 +692,7 @@ Class WCMp_Admin_Dashboard {
                                         <tfoot>
                                             <tr>
                                                 <td colspan="4">
-                                                    <button type="submit" class="button wcmp-shipping-zone-show-method wc-shipping-zone-add-method" value="<?php esc_attr_e('Add shipping method', 'woocommerce'); ?>"><?php esc_html_e('Add shipping method', 'woocommerce'); ?></button>
+                                                    <button type="submit" class="button wcmp-shipping-zone-show-method wc-shipping-zone-add-method" value="<?php esc_attr_e('Add shipping method', 'dc-woocommerce-multi-vendor'); ?>"><?php esc_html_e('Add shipping method', 'dc-woocommerce-multi-vendor'); ?></button>
                                                 </td>
                                             </tr>
                                         </tfoot>
@@ -706,7 +706,7 @@ Class WCMp_Admin_Dashboard {
                                                 foreach ($vendor_shipping_methods as $vendor_shipping_method) {
                                                     ?>
                                                     <tr class="wcmp-shipping-zone-method">
-                                                        <td><?php _e($vendor_shipping_method['title'], 'wcmp'); ?>
+                                                        <td><?php echo esc_html($vendor_shipping_method['title']); ?>
                                                             <div data-instance_id="<?php echo $vendor_shipping_method['instance_id']; ?>" data-method_id="<?php echo $vendor_shipping_method['id']; ?>" data-method-settings='<?php echo json_encode($vendor_shipping_method); ?>' class="row-actions edit_del_actions">
                                                             </div>
                                                         </td>
@@ -1262,10 +1262,10 @@ Class WCMp_Admin_Dashboard {
                 $account_email = sanitize_email( $email );
                 if ( ! is_email( $account_email ) ) {
                     $has_error = true;
-                    wc_add_notice( __( 'Please provide a valid email address.', 'woocommerce' ), 'error' );
+                    wc_add_notice( __( 'Please provide a valid email address.', 'dc-woocommerce-multi-vendor' ), 'error' );
                 } elseif ( email_exists( $account_email ) && $account_email !== $current_user->user_email ) {
                     $has_error = true;
-                    wc_add_notice( __( 'This email address is already registered.', 'woocommerce' ), 'error' );
+                    wc_add_notice( __( 'This email address is already registered.', 'dc-woocommerce-multi-vendor' ), 'error' );
                 }
                 $userdata['user_email'] = $account_email;
             }
@@ -1800,7 +1800,7 @@ Class WCMp_Admin_Dashboard {
             $product = wc_get_product( $product_id );
 
             if ( ! $product->get_id() || ! $post_object || 'product' !== $post_object->post_type ) {
-                wp_die( __( 'Invalid product.', 'woocommerce' ) );
+                wp_die( __( 'Invalid product.', 'dc-woocommerce-multi-vendor' ) );
             }
 
             if ( ! $product->get_date_created( 'edit' ) ) {
@@ -1922,7 +1922,7 @@ Class WCMp_Admin_Dashboard {
                 // Handle stock changes.
                 if ( isset( $_POST['_stock'] ) ) {
                     if ( isset( $_POST['_original_stock'] ) && wc_stock_amount( $product->get_stock_quantity( 'edit' ) ) !== wc_stock_amount( $_POST['_original_stock'] ) ) {
-                        $error_msg = sprintf( __( 'The stock has not been updated because the value has changed since editing. Product %1$d has %2$d units in stock.', 'woocommerce' ), $product->get_id(), $product->get_stock_quantity( 'edit' ) );
+                        $error_msg = sprintf( __( 'The stock has not been updated because the value has changed since editing. Product %1$d has %2$d units in stock.', 'dc-woocommerce-multi-vendor' ), $product->get_id(), $product->get_stock_quantity( 'edit' ) );
                         $errors[] = $error_msg;
                     } else {
                         $stock = wc_stock_amount( wc_clean($_POST['_stock']) );
@@ -2073,7 +2073,7 @@ Class WCMp_Admin_Dashboard {
 
         if ( $id_from_code ) {
             if ( is_current_vendor_coupon( $id_from_code ) ) {
-                wc_add_notice( __( 'Coupon code already exists - customers will use the latest coupon with this code.', 'woocommerce' ), 'error' );
+                wc_add_notice( __( 'Coupon code already exists - customers will use the latest coupon with this code.', 'dc-woocommerce-multi-vendor' ), 'error' );
             } else {
                 wc_add_notice( __( 'Coupon code already exists - provide a different coupon code.', 'dc-woocommerce-multi-vendor' ), 'error' );
                 return;
@@ -2277,12 +2277,12 @@ Class WCMp_Admin_Dashboard {
                 'handler' => array( $this, 'wcmp_setup_store_setup_save' ),
             ),
             'payment'     => array(
-                'name'    => __( 'Payment', 'woocommerce' ),
+                'name'    => __( 'Payment', 'dc-woocommerce-multi-vendor' ),
                 'view'    => array( $this, 'vendor_payment_setup' ),
                 'handler' => array( $this, 'wcmp_setup_payment_save' ),
             ),
             'next_steps'  => array(
-                'name'    => __( 'Ready!', 'woocommerce' ),
+                'name'    => __( 'Ready!', 'dc-woocommerce-multi-vendor' ),
                 'view'    => array( $this, 'wcmp_store_setup_ready' ),
                 'handler' => '',
             ),
@@ -2440,39 +2440,39 @@ Class WCMp_Admin_Dashboard {
         <!--h1><?php esc_html_e('Store Setup', 'dc-woocommerce-multi-vendor'); ?></h1-->
         <form method="post" class="store-address-info">
             <?php wp_nonce_field( 'wcmp-vendor-setup' ); ?>
-            <p class="store-setup"><?php esc_html_e( 'The following wizard will help you configure your store and get you started quickly.', 'woocommerce' ); ?></p>
+            <p class="store-setup"><?php esc_html_e( 'The following wizard will help you configure your store and get you started quickly.', 'dc-woocommerce-multi-vendor' ); ?></p>
             
             <div class="store-address-container">
                 
                 <label class="location-prompt" for="store_name"><?php esc_html_e('Store Name', 'dc-woocommerce-multi-vendor'); ?></label>
                 <input type="text" id="store_name" class="location-input" name="store_name" value="<?php echo esc_attr( $store_name ); ?>"  placeholder="<?php esc_attr_e('Enter your Store Name here', 'dc-woocommerce-multi-vendor'); ?>" />
                 
-                <label for="store_country" class="location-prompt"><?php esc_html_e( 'Where is your store based?', 'woocommerce' ); ?></label>
-                <select id="store_country" name="store_country" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'woocommerce' ); ?>" class="location-input wc-enhanced-select dropdown">
+                <label for="store_country" class="location-prompt"><?php esc_html_e( 'Where is your store based?', 'dc-woocommerce-multi-vendor' ); ?></label>
+                <select id="store_country" name="store_country" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'dc-woocommerce-multi-vendor' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'dc-woocommerce-multi-vendor' ); ?>" class="location-input wc-enhanced-select dropdown">
                 <?php foreach ( WC()->countries->get_countries() as $code => $label ) : ?>
                     <option <?php selected( $code, $country ); ?> value="<?php echo esc_attr( $code ); ?>"><?php echo esc_html( $label ); ?></option>
                 <?php endforeach; ?>
                 </select>
 
-                <label class="location-prompt" for="store_address_1"><?php esc_html_e( 'Address', 'woocommerce' ); ?></label>
+                <label class="location-prompt" for="store_address_1"><?php esc_html_e( 'Address', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <input type="text" id="store_address_1" class="location-input" name="store_address_1" value="<?php echo esc_attr( $address ); ?>" />
 
-                <label class="location-prompt" for="store_address_2"><?php esc_html_e( 'Address line 2', 'woocommerce' ); ?></label>
+                <label class="location-prompt" for="store_address_2"><?php esc_html_e( 'Address line 2', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <input type="text" id="store_address_2" class="location-input" name="store_address_2" value="<?php echo esc_attr( $address_2 ); ?>" />
 
                 <div class="city-and-postcode">
                     <div>
-                        <label class="location-prompt" for="store_city"><?php esc_html_e( 'City', 'woocommerce' ); ?></label>
+                        <label class="location-prompt" for="store_city"><?php esc_html_e( 'City', 'dc-woocommerce-multi-vendor' ); ?></label>
                         <input type="text" id="store_city" class="location-input" name="store_city" value="<?php echo esc_attr( $city ); ?>" />
                     </div>
                     <div class="store-state-container hidden">
                         <label for="store_state" class="location-prompt">
-                                <?php esc_html_e( 'State', 'woocommerce' ); ?>
+                                <?php esc_html_e( 'State', 'dc-woocommerce-multi-vendor' ); ?>
                         </label>
-                        <select id="store_state" name="store_state" data-placeholder="<?php esc_attr_e( 'Choose a state&hellip;', 'woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'State', 'woocommerce' ); ?>" class="location-input wc-enhanced-select dropdown"></select>
+                        <select id="store_state" name="store_state" data-placeholder="<?php esc_attr_e( 'Choose a state&hellip;', 'dc-woocommerce-multi-vendor' ); ?>" aria-label="<?php esc_attr_e( 'State', 'dc-woocommerce-multi-vendor' ); ?>" class="location-input wc-enhanced-select dropdown"></select>
                     </div>
                     <div>
-                        <label class="location-prompt" for="store_postcode"><?php esc_html_e( 'Postcode / ZIP', 'woocommerce' ); ?></label>
+                        <label class="location-prompt" for="store_postcode"><?php esc_html_e( 'Postcode / ZIP', 'dc-woocommerce-multi-vendor' ); ?></label>
                         <input type="text" id="store_postcode" class="location-input" name="store_postcode" value="<?php echo esc_attr( $postcode ); ?>" />
                     </div>
                 </div>
@@ -2616,31 +2616,31 @@ Class WCMp_Admin_Dashboard {
      */
     public function wcmp_store_setup_ready() { 
         ?>
-        <h1><?php esc_html_e( "You're ready to start selling!", 'woocommerce' ); ?></h1>
+        <h1><?php esc_html_e( "You're ready to start selling!", 'dc-woocommerce-multi-vendor' ); ?></h1>
 
         <ul class="wc-wizard-next-steps">
             <li class="wc-wizard-next-step-item">
                 <div class="wc-wizard-next-step-description">
-                    <p class="next-step-heading"><?php esc_html_e( 'Next step', 'woocommerce' ); ?></p>
-                    <h3 class="next-step-description"><?php esc_html_e( 'Create some products', 'woocommerce' ); ?></h3>
-                    <p class="next-step-extra-info"><?php esc_html_e( "You're ready to add products to your store.", 'woocommerce' ); ?></p>
+                    <p class="next-step-heading"><?php esc_html_e( 'Next step', 'dc-woocommerce-multi-vendor' ); ?></p>
+                    <h3 class="next-step-description"><?php esc_html_e( 'Create some products', 'dc-woocommerce-multi-vendor' ); ?></h3>
+                    <p class="next-step-extra-info"><?php esc_html_e( "You're ready to add products to your store.", 'dc-woocommerce-multi-vendor' ); ?></p>
                 </div>
                 <div class="wc-wizard-next-step-action">
                     <p class="wc-setup-actions step">
                         <a class="button button-primary button-large" href="<?php echo apply_filters( 'wcmp_vendor_setup_wizard_ready_add_product_url', wcmp_get_vendor_dashboard_endpoint_url( get_wcmp_vendor_settings( 'wcmp_add_product_endpoint', 'vendor', 'general', 'add-product' ) ) ); ?>">
-                            <?php esc_html_e( 'Create a product', 'woocommerce' ); ?>
+                            <?php esc_html_e( 'Create a product', 'dc-woocommerce-multi-vendor' ); ?>
                         </a>
                     </p>
                 </div>
             </li>
             <li class="wc-wizard-additional-steps">
                 <div class="wc-wizard-next-step-description">
-                    <p class="next-step-heading"><?php esc_html_e( 'You can also:', 'woocommerce' ); ?></p>
+                    <p class="next-step-heading"><?php esc_html_e( 'You can also:', 'dc-woocommerce-multi-vendor' ); ?></p>
                 </div>
                 <div class="wc-wizard-next-step-action">
                     <p class="wc-setup-actions step">
                         <a class="button button-large" href="<?php echo wcmp_get_vendor_dashboard_endpoint_url( 'dashboard' ); ?>">
-                            <?php esc_html_e( 'Visit Dashboard', 'woocommerce' ); ?>
+                            <?php esc_html_e( 'Visit Dashboard', 'dc-woocommerce-multi-vendor' ); ?>
                         </a>
                         <a class="button button-large" href="<?php echo wcmp_get_vendor_dashboard_endpoint_url( get_wcmp_vendor_settings( 'wcmp_vendor_billing_endpoint', 'vendor', 'general', 'vendor-billing' ) ); ?>">
                             <?php esc_html_e( 'Payment Configure', 'dc-woocommerce-multi-vendor' ); ?>
@@ -2677,7 +2677,7 @@ Class WCMp_Admin_Dashboard {
                         }
                         // Comment note for suborder
                         $order = wc_get_order( $vendor_order_id );
-                        $comment_id = $order->add_order_note( __('Vendor '.$order_status.' refund request for order #'.$vendor_order_id.' .', 'dc-woocommerce-multi-vendor') );
+                        $comment_id = $order->add_order_note( __('Vendor ', 'dc-woocommerce-multi-vendor') .$order_status. __(' refund request for order #', 'dc-woocommerce-multi-vendor') .$vendor_order_id.' .' );
                         // user info
                         $user_info = get_userdata(get_current_user_id());
                         wp_update_comment(array('comment_ID' => $comment_id, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
@@ -2685,7 +2685,7 @@ Class WCMp_Admin_Dashboard {
                         // Comment note for parent order
                         $parent_order_id = wp_get_post_parent_id($vendor_order_id);
                         $parent_order = wc_get_order( $parent_order_id );
-                        $comment_id_parent = $parent_order->add_order_note( __('Vendor '.$order_status.' refund request for order #'.$vendor_order_id.'.', 'dc-woocommerce-multi-vendor') );
+                        $comment_id_parent = $parent_order->add_order_note( __('Vendor ' , 'dc-woocommerce-multi-vendor') . $order_status . __(' refund request for order #' , 'dc-woocommerce-multi-vendor') . $vendor_order_id .'.' );
                         wp_update_comment(array('comment_ID' => $comment_id_parent, 'comment_author' => $user_info->user_name, 'comment_author_email' => $user_info->user_email));
 
                         $mail = WC()->mailer()->emails['WC_Email_Customer_Refund_Request'];

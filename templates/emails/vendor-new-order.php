@@ -53,7 +53,7 @@ if (apply_filters('show_cust_order_calulations_field', true, $vendor->id)) {
         if ( $order->get_customer_note() ) {
             ?>
             <tr>
-                <th class="td" scope="row" colspan="2" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Note:', 'woocommerce' ); ?></th>
+                <th class="td" scope="row" colspan="2" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Note:', 'dc-woocommerce-multi-vendor' ); ?></th>
                 <td class="td" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php echo wp_kses_post( nl2br( wptexturize( $order->get_customer_note() ) ) ); ?></td>
             </tr>
             <?php
@@ -81,7 +81,7 @@ if (apply_filters('show_cust_order_calulations_field', true, $vendor->id)) {
             <td style="text-align:<?php echo $text_align; ?>; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; border:0; padding:0;" valign="top" width="50%">
                 <h2><?php _e( 'Billing Address', 'dc-woocommerce-multi-vendor' ); ?></h2>
                 <address class="address">
-                    <?php echo ( $address = $order->get_formatted_billing_address() ) ? $address : esc_html__( 'N/A', 'woocommerce' ); ?>
+                    <?php echo ( $address = $order->get_formatted_billing_address() ) ? $address : esc_html__( 'N/A', 'dc-woocommerce-multi-vendor' ); ?>
                 </address>
             </td>
             <?php } ?>

@@ -193,7 +193,7 @@ class WCMp_Admin_Setup_Wizard {
                 <div class="wcmp-install-woocommerce">
                     <p><?php esc_html_e('WC Marketplace requires WooCommerce plugin to be active!', 'dc-woocommerce-multi-vendor'); ?></p>
                     <form method="post" action="" name="wcmp_install_woocommerce">
-                        <?php submit_button(esc_html_e('Install WooCommerce', 'primary', 'wcmp_install_woocommerce')); ?>
+                        <?php submit_button(__('Install WooCommerce', 'dc-woocommerce-multi-vendor'), 'primary', 'wcmp_install_woocommerce'); ?>
         <?php wp_nonce_field('wcmp-install-woocommerce'); ?>
                     </form>
                 </div>

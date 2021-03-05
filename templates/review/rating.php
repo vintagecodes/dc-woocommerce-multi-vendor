@@ -33,18 +33,18 @@ if( $rating_type == 'product-rating' ) {
 ?> 
 <div style="clear:both; width:100%;"></div> 
 <?php if ($count > 0) { ?>
-    <span class="wcmp_total_rating_number"><?php echo __(sprintf(' %s ', $rating)); ?></span>
+    <span class="wcmp_total_rating_number"><?php echo sprintf(' %s ', $rating); ?></span>
 <?php } ?>
 <a href="#<?php echo ($rating_type != 'product-rating' ) ? 'reviews' : ''; ?>">
 <?php if ($count > 0) { ?>	
         <span itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating" class="star-rating" title="<?php echo sprintf(__('Rated %s out of 5', 'dc-woocommerce-multi-vendor'), $rating) ?>">
             <span style="width:<?php echo ( round($rating_val_array['avg_rating']) / 5 ) * 100; ?>%"><strong itemprop="ratingValue"><?php echo $rating; ?></strong> <?php _e('out of 5', 'dc-woocommerce-multi-vendor'); ?></span>
         </span>
-        <?php echo __(sprintf(' %s %s', $count, $review_text)); ?>
+        <?php echo sprintf(' %s %s', $count, $review_text); ?>
 
     <?php
 } else {
     ?>
-        <?php echo __(' No Review Yet ', 'dc-woocommerce-multi-vendor'); ?>
+        <?php esc_html_e(' No Review Yet ', 'dc-woocommerce-multi-vendor'); ?>
     <?php } ?>
 </a>

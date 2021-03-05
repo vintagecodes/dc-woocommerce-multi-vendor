@@ -4,11 +4,11 @@ if (!defined('ABSPATH'))
     exit;
 
 /**
- * @class 		WCMp Transaction Class
+ * @class       WCMp Transaction Class
  *
- * @version		2.2.0
- * @package		WCMp
- * @author 		WC Marketplace
+ * @version     2.2.0
+ * @package     WCMp
+ * @author      WC Marketplace
  */
 class WCMp_Transaction {
 
@@ -77,29 +77,29 @@ class WCMp_Transaction {
      */
     private function register_post_status() {
         register_post_status('wcmp_processing', array(
-            'label' => _x('Processing', $this->post_type),
+            'label' => _x('Processing', $this->post_type, 'dc-woocommerce-multi-vendor'),
             'public' => true,
             'exclude_from_search' => false,
             'show_in_admin_all_list' => true,
             'show_in_admin_status_list' => true,
-            'label_count' => _n_noop('Processing <span class="count">(%s)</span>', 'Processing <span class="count">(%s)</span>'),
+            'label_count' => _n_noop('Processing <span class="count">(%s)</span>', 'Processing <span class="count">(%s)</span>', 'dc-woocommerce-multi-vendor'),
         ));
 
         register_post_status('wcmp_completed', array(
-            'label' => _x('Completed', $this->post_type),
+            'label' => _x('Completed', $this->post_type, 'dc-woocommerce-multi-vendor'),
             'public' => true,
             'exclude_from_search' => false,
             'show_in_admin_all_list' => true,
             'show_in_admin_status_list' => true,
-            'label_count' => _n_noop('Completed <span class="count">(%s)</span>', 'Completed <span class="count">(%s)</span>'),
+            'label_count' => _n_noop('Completed <span class="count">(%s)</span>', 'Completed <span class="count">(%s)</span>', 'dc-woocommerce-multi-vendor'),
         ));
         register_post_status('wcmp_canceled', array(
-            'label' => _x('Canceled', $this->post_type),
+            'label' => _x('Canceled', $this->post_type, 'dc-woocommerce-multi-vendor'),
             'public' => true,
             'exclude_from_search' => false,
             'show_in_admin_all_list' => true,
             'show_in_admin_status_list' => true,
-            'label_count' => _n_noop('Canceled <span class="count">(%s)</span>', 'Canceled <span class="count">(%s)</span>'),
+            'label_count' => _n_noop('Canceled <span class="count">(%s)</span>', 'Canceled <span class="count">(%s)</span>', 'dc-woocommerce-multi-vendor'),
         ));
     }
 

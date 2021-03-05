@@ -33,7 +33,7 @@ global $WCMp;
             <div class="right-primary-info"> 
                 <div class="form-group-wrapper">
                     <div class="form-group product-short-description">
-                        <label class="control-label col-md-12 pt-0" for="product_short_description"><?php esc_html_e( 'Product short description', 'woocommerce' ); ?></label>
+                        <label class="control-label col-md-12 pt-0" for="product_short_description"><?php esc_html_e( 'Product short description', 'dc-woocommerce-multi-vendor' ); ?></label>
                         <div class="col-md-12">
                             <?php
                             $settings = array(
@@ -55,7 +55,7 @@ global $WCMp;
                     </div>
                     
                     <div class="form-group product-description">
-                        <label class="control-label col-md-12" for="product_description"><?php esc_attr_e( 'Product description', 'woocommerce' ); ?></label>
+                        <label class="control-label col-md-12" for="product_description"><?php esc_attr_e( 'Product description', 'dc-woocommerce-multi-vendor' ); ?></label>
                         <div class="col-md-12">
                             <?php
                             $settings = array(
@@ -80,7 +80,7 @@ global $WCMp;
             <div class="left-primary-info">
                 <div class="product-gallery-wrapper">
                     <div class="featured-img upload_image"><?php $featured_img = $product_object->get_image_id( 'edit' ) ? $product_object->get_image_id( 'edit' ) : ''; ?>
-                        <a href="#" class="upload_image_button tips <?php echo $featured_img ? 'remove' : ''; ?>" <?php echo current_user_can( 'upload_files' ) ? '' : 'data-nocaps="true" '; ?>data-title="<?php esc_attr_e( 'Product image', 'woocommerce' ); ?>" data-button="<?php esc_attr_e( 'Set product image', 'woocommerce' ); ?>" rel="<?php echo esc_attr( $post->ID ); ?>">
+                        <a href="#" class="upload_image_button tips <?php echo $featured_img ? 'remove' : ''; ?>" <?php echo current_user_can( 'upload_files' ) ? '' : 'data-nocaps="true" '; ?>data-title="<?php esc_attr_e( 'Product image', 'dc-woocommerce-multi-vendor' ); ?>" data-button="<?php esc_attr_e( 'Set product image', 'dc-woocommerce-multi-vendor' ); ?>" rel="<?php echo esc_attr( $post->ID ); ?>">
                             <div class="upload-placeholder pos-middle">
                                 <i class="wcmp-font ico-image-icon"></i>
                                 <p><?php _e( 'Click to upload Image', 'dc-woocommerce-multi-vendor' );?></p>
@@ -119,7 +119,7 @@ global $WCMp;
                                     echo '<li class="image" data-attachment_id="' . esc_attr( $attachment_id ) . '">
                                             ' . $attachment . '
                                             <ul class="actions">
-                                                <li><a href="#" class="delete tips" data-tip="' . esc_attr__( 'Delete image', 'woocommerce' ) . '">' . __( 'Delete', 'woocommerce' ) . '</a></li>
+                                                <li><a href="#" class="delete tips" data-tip="' . esc_attr__( 'Delete image', 'dc-woocommerce-multi-vendor' ) . '">' . __( 'Delete', 'dc-woocommerce-multi-vendor' ) . '</a></li>
                                             </ul>
                                         </li>';
 
@@ -134,9 +134,9 @@ global $WCMp;
                             }
                             ?>    
                         </ul>
-                        <input type="hidden" id="product_image_gallery" name="product_image_gallery" value="<?php esc_attr_e( $product_image_gallery ); ?>" />
+                        <input type="hidden" id="product_image_gallery" name="product_image_gallery" value="<?php echo esc_attr( $product_image_gallery ); ?>" />
                         <p class="add_product_images">
-                            <a href="#" <?php echo current_user_can( 'upload_files' ) ? '' : 'data-nocaps="true" '; ?>data-choose="<?php esc_attr_e( 'Add images to product gallery', 'woocommerce' ); ?>" data-update="<?php esc_attr_e( 'Add to gallery', 'woocommerce' ); ?>" data-delete="<?php esc_attr_e( 'Delete image', 'woocommerce' ); ?>" data-text="<?php esc_attr_e( 'Delete', 'woocommerce' ); ?>"><?php _e( 'Add product gallery images', 'woocommerce' ); ?></a>
+                            <a href="#" <?php echo current_user_can( 'upload_files' ) ? '' : 'data-nocaps="true" '; ?>data-choose="<?php esc_attr_e( 'Add images to product gallery', 'dc-woocommerce-multi-vendor' ); ?>" data-update="<?php esc_attr_e( 'Add to gallery', 'dc-woocommerce-multi-vendor' ); ?>" data-delete="<?php esc_attr_e( 'Delete image', 'dc-woocommerce-multi-vendor' ); ?>" data-text="<?php esc_attr_e( 'Delete', 'dc-woocommerce-multi-vendor' ); ?>"><?php _e( 'Add product gallery images', 'dc-woocommerce-multi-vendor' ); ?></a>
                         </p>
                     </div>
                 </div>
@@ -148,10 +148,10 @@ global $WCMp;
 
                     <div class="add-product-info-header row-padding">
                         <div class="select-group">
-                            <label for="product-type"><?php esc_html_e( 'Product Type', 'woocommerce' ); ?></label>
+                            <label for="product-type"><?php esc_html_e( 'Product Type', 'dc-woocommerce-multi-vendor' ); ?></label>
                             <select class="form-control inline-select" id="product-type" name="product-type">
                                 <?php foreach ( wcmp_get_product_types() as $value => $label ) : ?>
-                                    <option value="<?php esc_attr_e( $value ); ?>" <?php echo selected( $product_object->get_type(), $value, false ); ?>><?php echo esc_html( $label ); ?></option>
+                                    <option value="<?php echo esc_attr( $value ); ?>" <?php echo selected( $product_object->get_type(), $value, false ); ?>><?php echo esc_html( $label ); ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -178,7 +178,7 @@ global $WCMp;
                                         $selected_value = 'yes' === ( isset( $option['default'] ) ? $option['default'] : 'no' );
                                     }
                                     ?>
-                                    <label for="<?php esc_attr_e( $option['id'] ); ?>" class="<?php esc_attr_e( $option['wrapper_class'] ); ?> tips" data-tip="<?php echo esc_attr( $option['description'] ); ?>"><input type="checkbox" name="<?php echo esc_attr( $option['id'] ); ?>" id="<?php echo esc_attr( $option['id'] ); ?>" <?php echo checked( $selected_value, true, false ); ?> /> <?php echo esc_html( $option['label'] ); ?></label>
+                                    <label for="<?php echo esc_attr( $option['id'] ); ?>" class="<?php echo esc_attr( $option['wrapper_class'] ); ?> tips" data-tip="<?php echo esc_attr( $option['description'] ); ?>"><input type="checkbox" name="<?php echo esc_attr( $option['id'] ); ?>" id="<?php echo esc_attr( $option['id'] ); ?>" <?php echo checked( $selected_value, true, false ); ?> /> <?php echo esc_html( $option['label'] ); ?></label>
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -192,8 +192,8 @@ global $WCMp;
                             <ul class="nav nav-tabs" role="tablist" id="product_data_tabs">
                                 <?php foreach ( $self->get_product_data_tabs() as $key => $tab ) : ?>
                                     <?php if ( apply_filters( 'wcmp_afm_product_data_tabs_filter', ( ! isset( $tab['p_type'] ) || array_key_exists( $tab['p_type'], wcmp_get_product_types() ) && $WCMp->vendor_caps->vendor_can( $tab['p_type'] ) ), $key, $tab ) ) : ?>
-                                        <li role="presentation" class="nav-item <?php esc_attr_e( $key ); ?>_options <?php esc_attr_e( $key ); ?>_tab <?php echo esc_attr( isset( $tab['class'] ) ? implode( ' ', (array) $tab['class'] ) : ''  ); ?>">
-                                            <a class="nav-link" href="#<?php esc_attr_e( $tab['target'] ); ?>" aria-controls="<?php echo $tab['target']; ?>" role="tab" data-toggle="tab"><span><?php echo esc_html( $tab['label'] ); ?></span></a>
+                                        <li role="presentation" class="nav-item <?php echo esc_attr( $key ); ?>_options <?php echo esc_attr( $key ); ?>_tab <?php echo esc_attr( isset( $tab['class'] ) ? implode( ' ', (array) $tab['class'] ) : ''  ); ?>">
+                                            <a class="nav-link" href="#<?php echo esc_attr( $tab['target'] ); ?>" aria-controls="<?php echo $tab['target']; ?>" role="tab" data-toggle="tab"><span><?php echo esc_html( $tab['label'] ); ?></span></a>
                                         </li>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
@@ -266,7 +266,7 @@ global $WCMp;
                                     ?>
                                     <li class="list-group-item list-group-item-action flex-column align-items-start order-notes">
                                         <p class="order-note"><span><?php echo wptexturize( wp_kses_post( $note->comment_content ) ); ?></span></p>
-                                        <p><?php echo esc_html_e($note->comment_author); ?><?php echo $Seller; ?> - <?php echo esc_html_e( date_i18n(wc_date_format() . ' ' . wc_time_format(), strtotime($note->comment_date) ) ); ?></p>
+                                        <p><?php echo esc_html($note->comment_author); ?><?php echo $Seller; ?> - <?php echo esc_html( date_i18n(wc_date_format() . ' ' . wc_time_format(), strtotime($note->comment_date) ) ); ?></p>
                                     </li>
                                     <?php
                                 }
@@ -286,7 +286,7 @@ global $WCMp;
                 <?php if ( $product_categories ) : ?>
                     <div class="panel panel-default pannel-outer-heading">
                         <div class="panel-heading d-flex">
-                            <h3 class="pull-left"><?php esc_html_e( 'Product categories', 'woocommerce' ); ?></h3>
+                            <h3 class="pull-left"><?php esc_html_e( 'Product categories', 'dc-woocommerce-multi-vendor' ); ?></h3>
                         </div>
                         <div class="panel-body panel-content-padding form-group-wrapper"> 
                             <?php
@@ -300,7 +300,7 @@ global $WCMp;
                 <?php if ( $product_tags ) : ?>
                     <div class="panel panel-default pannel-outer-heading">
                         <div class="panel-heading d-flex">
-                            <h3 class="pull-left"><?php esc_html_e( 'Product tags', 'woocommerce' ); ?></h3>
+                            <h3 class="pull-left"><?php esc_html_e( 'Product tags', 'dc-woocommerce-multi-vendor' ); ?></h3>
                         </div>
                         <div class="panel-body panel-content-padding form-group-wrapper">
                             <div class="form-group">
@@ -352,9 +352,9 @@ global $WCMp;
                     }
                 }
                 ?>
-                <input type="submit" class="btn btn-default" name="submit-data" value="<?php esc_attr_e( $primary_action ); ?>" id="wcmp_afm_product_submit" />
+                <input type="submit" class="btn btn-default" name="submit-data" value="<?php echo esc_attr( $primary_action ); ?>" id="wcmp_afm_product_submit" />
                 <input type="submit" class="btn btn-default" name="draft-data" value="<?php esc_attr_e( 'Draft', 'dc-woocommerce-multi-vendor' ); ?>" id="wcmp_afm_product_draft" />
-                <input type="hidden" name="status" value="<?php esc_attr_e( get_post_status( $post ) ); ?>">
+                <input type="hidden" name="status" value="<?php echo esc_attr( get_post_status( $post ) ); ?>">
                 <?php wp_nonce_field( 'wcmp-product', 'wcmp_product_nonce' ); ?>
             </div>
         <?php endif; ?>
