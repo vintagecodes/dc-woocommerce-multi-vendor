@@ -2165,10 +2165,7 @@ body .media-frame select, body .wp-admin .media-frame select {
   top: 0;
   height: 64px;
   box-shadow: 1px 3px 4px rgba(0, 0, 0, 0.1); }
-  /* @media screen and (max-width: 768px) {
-    .top-navbar {
-      height: 56px; }
-     } */
+  
   .top-navbar .navbar {
     height: 100%; }
 
@@ -2177,8 +2174,17 @@ body .media-frame select, body .wp-admin .media-frame select {
   top: 64px; }
   @media screen and (max-width: 768px) {
     .navbar-static-top {
-      top: 56px; } }
-
+      top: 56px;
+      z-index: 99;
+    }
+    .top-order-note td {
+      padding: 2px 0 12px;
+    }
+    .vorder-info-top-left table tbody tr {
+      display: flex;
+      flex-direction: column;
+    } 
+  }
 body.admin-bar .top-navbar {
   top: 32px; }
 body.admin-bar .current-endpoint-title-wrapper, body.admin-bar .navbar-static-top {
