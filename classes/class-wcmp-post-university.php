@@ -35,7 +35,7 @@ class WCMp_University {
 			'new_item' => sprintf( __( 'New %s' , 'dc-woocommerce-multi-vendor' ), __( 'Knowledgebase' , 'dc-woocommerce-multi-vendor') ),
 			'all_items' => sprintf( __( 'All %s' , 'dc-woocommerce-multi-vendor' ), __( 'Knowledgebase' , 'dc-woocommerce-multi-vendor' ) ),
 			'view_item' => sprintf( __( 'View %s' , 'dc-woocommerce-multi-vendor' ), __( 'Knowledgebase' , 'dc-woocommerce-multi-vendor' ) ),
-			'search_items' => sprintf( __( 'Search %a' , 'dc-woocommerce-multi-vendor' ), __( 'Knowledgebase' , 'dc-woocommerce-multi-vendor' ) ),
+			'search_items' => sprintf( __( 'Search %s' , 'dc-woocommerce-multi-vendor' ), __( 'Knowledgebase' , 'dc-woocommerce-multi-vendor' ) ),
 			'not_found' =>  sprintf( __( 'No %s found' , 'dc-woocommerce-multi-vendor' ), __( 'Knowledgebase' , 'dc-woocommerce-multi-vendor' ) ),
 			'not_found_in_trash' => sprintf( __( 'No %s found in trash' , 'dc-woocommerce-multi-vendor' ), __( 'Knowledgebase' , 'dc-woocommerce-multi-vendor' ) ),
 			'parent_item_colon' => '',
