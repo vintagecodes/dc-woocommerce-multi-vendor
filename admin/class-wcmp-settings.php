@@ -474,7 +474,7 @@ class WCMp_Settings {
                         wp_enqueue_script( 'wcmp_angular', $WCMp->plugin_url . 'assets/admin/js/angular.min.js', array(), $WCMp->version );
                         wp_enqueue_script( 'wcmp_angular-ui', $WCMp->plugin_url . 'assets/admin/js/sortable.js', array( 'wcmp_angular' ), $WCMp->version );
                         wp_enqueue_script( 'wcmp_vendor_registration', $WCMp->plugin_url . 'assets/admin/js/vendor_registration_app.js', array( 'wcmp_angular', 'wcmp_angular-ui' ), $WCMp->version );
-                        $wcmp_vendor_registration_form_data = get_option( 'wcmp_vendor_registration_form_data' );
+                        $wcmp_vendor_registration_form_data = wcmp_get_option( 'wcmp_vendor_registration_form_data' );
                         wp_localize_script( 'wcmp_vendor_registration', 'vendor_registration_param', array( 'partials' => $WCMp->plugin_url . 'assets/admin/partials/', 'ajax_url' => admin_url( 'admin-ajax.php' ), 'lang' => array('need_country_dependancy' => __('Please add country field first.', 'dc-woocommerce-multi-vendor')), 'form_data' => $wcmp_vendor_registration_form_data ) );
                     } else {
                         submit_button();

@@ -161,7 +161,7 @@ class WCMp_Vendor {
             $value = $this->get_permalink();
         } else {
             // Get values or default if not set
-            $value = get_user_meta($this->id, '_vendor_' . $key, true);
+            $value = wcmp_get_user_meta($this->id, '_vendor_' . $key, true);
         }
 
         return $value;

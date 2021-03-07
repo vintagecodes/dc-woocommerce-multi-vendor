@@ -41,6 +41,12 @@ class WCMp_Frontend {
             add_action('template_redirect', array(&$this, 'wcmp_store_visitors_stats'), 99);
 
         add_filter('woocommerce_get_zone_criteria', array(&$this, 'wcmp_shipping_zone_same_region_criteria'), 10, 3);
+        // WPML work
+        if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ) {
+            add_filter( 'icl_ls_languages', array( &$this, 'wcmp_store_page_wpml_language_switcher' ), 999 );
+            add_action( 'wcmp_product_manager_right_panel_after', array( &$this, 'wpml_wcmp_product_manager_translations' ), 200 );
+            add_action( 'wcmp_dashboard_header_right_vendor_dropdown', array( &$this, 'wpml_language_switcher_option_on_dropdown' ) );
+        }
     }
 
     /**
@@ -130,7 +136,7 @@ class WCMp_Frontend {
      * @return void
      */
     function wcmp_validate_extra_register_fields($username, $email, $validation_errors) {
-        $wcmp_vendor_registration_form_data = get_option('wcmp_vendor_registration_form_data');
+        $wcmp_vendor_registration_form_data = wcmp_get_option('wcmp_vendor_registration_form_data');
         if(isset($_POST['g-recaptchatype']) && $_POST['g-recaptchatype'] == 'v2'){
             if (isset($_POST['g-recaptcha-response']) && empty($_POST['g-recaptcha-response'])) {
                 $validation_errors->add('recaptcha is not validate', __('Please Verify  Recaptcha', 'dc-woocommerce-multi-vendor'));
@@ -183,7 +189,7 @@ class WCMp_Frontend {
      */
     function wcmp_vendor_register_form_callback() {
         global $WCMp;
-        $wcmp_vendor_registration_form_data = get_option('wcmp_vendor_registration_form_data');
+        $wcmp_vendor_registration_form_data = wcmp_get_option('wcmp_vendor_registration_form_data');
         $WCMp->template->get_template('vendor_registration_form.php', array('wcmp_vendor_registration_form_data' => $wcmp_vendor_registration_form_data));
     }
 
@@ -577,6 +583,90 @@ class WCMp_Frontend {
             }
         }
         return $criteria;
+    }
+
+    function wpml_wcmp_product_manager_translations($product_id) {
+        global $sitepress;
+        if( !$product_id ) return;
+        $active_languages = $this->get_filtered_active_lanugages();
+        if ( count( $active_languages ) <= 1 ) {
+            return;
+        }
+        $current_language = $sitepress->get_current_language();
+        unset( $active_languages[ $current_language ] );
+
+        if ( count( $active_languages ) > 0 ) {
+            $translation_html = '';
+            ?>
+            <div id="product_images_container" class="custom-panel">
+                <div style="max-width: 214px; margin: 0 auto;">
+                    <h3><p class="product_translations"><strong><?php _e( 'Translations', 'dc-woocommerce-multi-vendor' ); ?></strong></p></h3>
+                    <label class="screen-reader-text" for="product_translations"><?php _e( 'Translations', 'dc-woocommerce-multi-vendor' ); ?></label>
+                    
+                    <table style="margin-top:0px;">
+                        <tbody id="wcmp_product_translations" data-product_id="<?php echo $product_id; ?>">
+                            <?php echo $translation_html; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php
+        }
+    }
+
+    /**
+     * Get list of active languages.
+     *
+     * @return array
+     */
+    public function get_filtered_active_lanugages() {
+        global $sitepress; 
+        $active_languages = $sitepress->get_active_languages();
+        return apply_filters( 'wpml_active_languages_access', $active_languages, array( 'action' => 'edit' ) );
+    }
+
+    /**
+     * Store Page WPML Language Switcher Compatibility
+     */
+    function wcmp_store_page_wpml_language_switcher( $languages ) {
+        global $WCMp, $sitepress;
+        $default_lang = $sitepress->get_default_language();
+        if (  is_tax($WCMp->taxonomy->taxonomy_name) ) {
+            if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ) {
+                $vendor_id = get_queried_object()->term_id;
+                $vendor = get_wcmp_vendor_by_term($vendor_id);
+                $formated_languages = array();
+                $default_lang = $sitepress->get_default_language();
+                $permalinks = get_option('dc_vendors_permalinks');
+                $vendor_permalink = is_array($permalinks) && isset($permalinks['vendor_shop_base']) && !empty($permalinks['vendor_shop_base']) ? $permalinks['vendor_shop_base'] : 'vendor';
+                if( !empty( $languages ) ) {
+                    $is_wpml_configured = apply_filters( 'wpml_setting', 0, 'language_negotiation_type' );
+                    foreach( $languages as $lang => $language ) {
+                        if( $default_lang  && ( $default_lang  == $language['language_code'] ) ) {
+                            $language['url'] = site_url() .'/'. $vendor_permalink .'/'. $vendor->page_title;
+                        } else {
+                            if ($is_wpml_configured == 3) {
+                                $language['url'] = site_url() .'/'. $vendor_permalink .'/'. $vendor->page_title . '/' . '?lang='. $language['language_code'];
+                            } else {
+                                $language['url'] = site_url() .'/'. $language['language_code'] .'/'. $vendor_permalink .'/'. $vendor->page_title;
+                            }
+                        }
+                        $formated_languages[$lang] = $language;
+                    }
+                    $languages = $formated_languages;
+                }
+            }
+        }
+        return $languages;
+    }
+
+    public function wpml_language_switcher_option_on_dropdown() {
+        global $WCMp;
+        if ( $WCMp->endpoints->get_current_endpoint() != 'edit-product' ) {
+            ?><div style="height: 100px; overflow: scroll;">
+                <?php do_action( 'wpml_footer_language_selector'); ?>
+            </div><?php 
+        }
     }
 
 }

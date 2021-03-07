@@ -315,8 +315,10 @@ if (!function_exists('is_vendor_dashboard')) {
      */
     function is_vendor_dashboard() {
         $is_vendor_dashboard = false;
-        if (wcmp_vendor_dashboard_page_id()) {
-            $is_vendor_dashboard = is_page(wcmp_vendor_dashboard_page_id());
+        if ( function_exists('icl_object_id') ) {
+            return is_page( icl_object_id( wcmp_vendor_dashboard_page_id(), 'page', true ) );
+        } else {
+            return is_page(wcmp_vendor_dashboard_page_id());
         }
         return apply_filters('is_wcmp_vendor_dashboard', $is_vendor_dashboard);
     }
@@ -329,16 +331,42 @@ if (!function_exists('wcmp_vendor_dashboard_page_id')) {
      * Get vendor dashboard page id
      * @return int
      */
-    function wcmp_vendor_dashboard_page_id() {
+    function wcmp_vendor_dashboard_page_id($language_code = '', $url = false) {
         if (get_wcmp_vendor_settings('wcmp_vendor', 'vendor', 'general')) {
-            if (function_exists('icl_object_id')) {
-                return icl_object_id((int) get_wcmp_vendor_settings('wcmp_vendor', 'vendor', 'general'), 'page', false, ICL_LANGUAGE_CODE);
+            if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ) {
+                if( !$language_code ) {
+                    global $sitepress;
+                    $language_code = $sitepress->get_current_language();
+                }
+                if( $language_code ) {
+                    if( defined('DOING_AJAX') ) {
+                        do_action( 'wpml_switch_language', $language_code );
+                    }
+                    if ($url) {
+                        $wcmp_page =  get_permalink(icl_object_id( get_wcmp_vendor_settings('wcmp_vendor', 'vendor', 'general'), 'page', true, $language_code ));
+                        $wcmp_page = apply_filters( 'wpml_permalink', $wcmp_page, $language_code );
+                    } else {
+                        $wcmp_page =  icl_object_id( get_wcmp_vendor_settings('wcmp_vendor', 'vendor', 'general'), 'page', true, $language_code );
+                        $wcmp_page = apply_filters( 'wpml_permalink', $wcmp_page, $language_code );
+                    }
+                    return $wcmp_page;
+                } else {
+                    if ($url) {
+                        return  get_permalink(icl_object_id( get_wcmp_vendor_settings('wcmp_vendor', 'vendor', 'general'), 'page', true ));
+                    } else {
+                        return  icl_object_id( get_wcmp_vendor_settings('wcmp_vendor', 'vendor', 'general'), 'page', true );
+                    }
+                }
+            } else {
+                if ($url) {
+                    return get_permalink( (int) get_wcmp_vendor_settings('wcmp_vendor', 'vendor', 'general') );
+                } else {
+                    return (int) get_wcmp_vendor_settings('wcmp_vendor', 'vendor', 'general');
+                }
             }
-            return (int) get_wcmp_vendor_settings('wcmp_vendor', 'vendor', 'general');
         }
         return false;
     }
-
 }
 
 if (!function_exists('is_page_vendor_registration')) {
@@ -845,10 +873,9 @@ if (!function_exists('wcmp_get_vendor_dashboard_nav_item_css_class')) {
 }
 
 if (!function_exists('wcmp_get_vendor_dashboard_endpoint_url')) {
-
-    function wcmp_get_vendor_dashboard_endpoint_url($endpoint, $value = '', $withvalue = false) {
+    function wcmp_get_vendor_dashboard_endpoint_url($endpoint, $value = '', $withvalue = false, $lang_code = '') {
         global $wp;
-        $permalink = get_permalink(wcmp_vendor_dashboard_page_id());
+        $permalink =  wcmp_vendor_dashboard_page_id($lang_code, true);
         if (empty($value)) {
             $value = isset($wp->query_vars[$endpoint]) && !empty($wp->query_vars[$endpoint]) && $withvalue ? $wp->query_vars[$endpoint] : '';
         }
@@ -862,19 +889,20 @@ if (!function_exists('wcmp_get_vendor_dashboard_endpoint_url')) {
             if ($endpoint == 'dashboard') {
                 $url = trailingslashit($permalink) . $query_string;
             } else {
+                $endpoint = defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ? apply_filters( 'wpml_translate_single_string', $endpoint, 'WCMp', $endpoint, $lang_code ) : $endpoint;
                 $url = trailingslashit($permalink) . $endpoint . '/' . $value . $query_string;
             }
         } else {
             if ($endpoint == 'dashboard') {
                 $url = $permalink;
             } else {
+                $endpoint = defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ? apply_filters( 'wpml_translate_single_string', $endpoint, 'WCMp', $endpoint, $lang_code ) : $endpoint;
                 $url = add_query_arg($endpoint, $value, $permalink);
             }
         }
 
         return apply_filters('wcmp_get_vendor_dashboard_endpoint_url', $url, $endpoint, $value, $permalink);
     }
-
 }
 
 if (!function_exists('is_wcmp_endpoint_url')) {
@@ -4270,4 +4298,56 @@ function wcmp_failed_pending_order_commission() {
         }
     }
     return $commission_id;
+}
+
+function wcmp_get_option( $key, $default_val = '', $lang_code = '' ) {
+    $option_val = get_option( $key, $default_val );
+    
+    // WPML Support
+    if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ) {
+        global $sitepress;
+        if( !$lang_code ) {
+            $current_language = $sitepress->get_current_language();
+        } else {
+            $current_language = $lang_code;
+        }
+        $option_val = get_option( $key . '_' . $current_language, $option_val );
+    }
+    
+    return $option_val;
+}
+
+function wcmp_update_option( $key, $option_val ) {
+    // WPML Support
+    if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ) {
+        global $sitepress;
+        $current_language = $sitepress->get_current_language();
+        update_option( $key . '_' . $current_language, $option_val );
+    } else {
+        update_option( $key, $option_val );
+    }
+}
+
+function wcmp_get_user_meta( $user_id, $key, $is_single = true ) {
+    $meta_val = get_user_meta( $user_id, $key, $is_single );
+    // WPML Support
+    if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ) {
+        global $sitepress;
+        $current_language = $sitepress->get_current_language();
+        $option_val_wpml = get_user_meta( $user_id, $key . '_' . $current_language, $is_single );
+        if( $option_val_wpml ) $meta_val = $option_val_wpml;
+    }
+    
+    return $meta_val;
+}
+
+function wcmp_update_user_meta( $user_id, $key, $meta_val ) {
+    // WPML Support
+    if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ) {
+        global $sitepress;
+        $current_language = $sitepress->get_current_language();
+        update_user_meta( $user_id, $key . '_' . $current_language, $meta_val );
+    } else {
+        update_user_meta( $user_id, $key, $meta_val );
+    }
 }

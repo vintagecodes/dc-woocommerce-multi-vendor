@@ -139,6 +139,7 @@ global $WCMp;
                             <a href="#" <?php echo current_user_can( 'upload_files' ) ? '' : 'data-nocaps="true" '; ?>data-choose="<?php esc_attr_e( 'Add images to product gallery', 'dc-woocommerce-multi-vendor' ); ?>" data-update="<?php esc_attr_e( 'Add to gallery', 'dc-woocommerce-multi-vendor' ); ?>" data-delete="<?php esc_attr_e( 'Delete image', 'dc-woocommerce-multi-vendor' ); ?>" data-text="<?php esc_attr_e( 'Delete', 'dc-woocommerce-multi-vendor' ); ?>"><?php _e( 'Add product gallery images', 'dc-woocommerce-multi-vendor' ); ?></a>
                         </p>
                     </div>
+                    <?php do_action('wcmp_product_manager_right_panel_after', $post->ID); ?>
                 </div>
             </div> 
         </div>

@@ -138,6 +138,11 @@ class WCMp_Ajax {
         
         // ledger book
         add_action('wp_ajax_wcmp_vendor_banking_ledger_list', array($this, 'wcmp_vendor_banking_ledger_list'));
+
+        if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ) {
+            add_action( 'wp_ajax_wcmp_product_translations', array( &$this, 'wpml_wcmp_product_translations' ) );
+            add_action( 'wp_ajax_wcmp_product_new_translation', array( &$this, 'wpml_wcmp_product_new_translation' ) );
+        }
     }
 
     /**
@@ -341,7 +346,7 @@ class WCMp_Ajax {
             }
         }
 
-        update_option('wcmp_vendor_registration_form_data', $form_data);
+        wcmp_update_option('wcmp_vendor_registration_form_data', $form_data);
         die;
     }
 
@@ -4373,6 +4378,161 @@ class WCMp_Ajax {
             wp_send_json($json_data);
             die;
         }
+    }
+
+    /**
+     * Get Translations table content for Product manager
+     *
+     * @return string
+     */
+    function wpml_wcmp_product_translations() {
+        global $sitepress, $wpml_post_translations, $_POST, $WCMp;
+        
+        $translation_html = '';
+        if( isset( $_POST['proid'] ) && !empty( $_POST['proid'] ) ) {
+            $product_id = $_POST['proid'];
+            if( $product_id ) {
+                $active_languages = $WCMp->frontend->get_filtered_active_lanugages();
+                if ( count( $active_languages ) <= 1 ) {
+                    return;
+                }
+                $current_language = $sitepress->get_current_language();
+                unset( $active_languages[ $current_language ] );
+        
+                if ( count( $active_languages ) > 0 ) {
+                    foreach ( $active_languages as $language_data ) {
+                        $translated_id = $wpml_post_translations->element_id_in( $product_id, $language_data['code'] );
+                        $trid = $wpml_post_translations->get_element_trid ( $product_id );
+                        $translation_edit_url = '';
+                        if( $translated_id ) {
+                            $translate_text = sprintf( __ ( 'Edit the %s translation', 'sitepress' ), $language_data['display_name'] );
+                            $product_url = wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $translated_id, '', $language_data['code']);
+                            $translation_edit_url = '<a href="' . $product_url . '" title="' . $translate_text . '"><img style="padding:1px;margin:2px;" border="0" src="' . ICL_PLUGIN_URL . '/res/img/edit_translation.png" alt="' . $translate_text . '" width="16" height="16" /></a>';
+                        } else {
+                            $translate_text = sprintf( __ ( 'Add translation to %s', 'sitepress' ), $language_data['display_name'] );
+                            $translation_edit_url = '<a href="#" class="wcmp_product_new_translation" data-trid="' . $trid . '" data-source_lang="' . $current_language . '" data-proid="' . $product_id . '" data-lang="' . $language_data['code'] . '" title="' . $translate_text . '"><img style="padding:1px;margin:2px;" border="0" src="' . ICL_PLUGIN_URL . '/res/img/add_translation.png" alt="' . $translate_text . '" width="16" height="16" /></a>';
+                        }
+                        
+                        $translation_html .= '<tr><td><img src="' . $sitepress->get_flag_url( $language_data['code'] ). '" width="18" height="12" alt="' . $language_data['display_name'] . '" title="' . $language_data['display_name'] . '" style="margin:2px" /></td>';
+                        $translation_html .= '<td>' . $translation_edit_url . '</td></tr>';
+                    }
+                }
+            }
+        }
+        
+        echo $translation_html;
+        die;
+    }
+
+    function wpml_wcmp_product_new_translation() {
+        global $sitepress, $wpml_post_translations, $_POST, $wpdb;
+        if( isset( $_POST['proid'] ) && !empty( $_POST['proid'] ) ) {
+            $product_id = absint($_POST['proid']);
+            if( $product_id ) {
+                if( isset( $_POST['lang'] ) && !empty( $_POST['lang'] ) ) {
+                    $lang_code = $_POST['lang'];
+                    if( $lang_code ) {
+                        $product = wc_get_product( $product_id );
+                        if ( false === $product ) {
+                            /* translators: %s: product id */
+                            echo '{"status": false, "message": "' . sprintf( __( 'Product creation failed, could not find original product: %s', 'woocommerce' ), $product_id ) . '" }';
+                        }
+
+                        if( !class_exists( 'WC_Admin_Duplicate_Product' ) ) {
+                            include( WC_ABSPATH . 'includes/admin/class-wc-admin-duplicate-product.php' );
+                        }
+                        $WC_Admin_Duplicate_Product = new WC_Admin_Duplicate_Product();
+                        $duplicate = $WC_Admin_Duplicate_Product->product_duplicate( $product );
+
+                        $vendor_id = get_wcmp_product_vendors( $product_id ); 
+                        if( !$vendor_id ) {
+                            $vendor_id = apply_filters( 'wcmp_current_vendor_id', get_current_user_id() );
+                        }
+
+                        // Update translated post to sete title/content empty
+                        $my_post = apply_filters( 'wcmp_translated_product_content_before_save', array(
+                            'ID'           => $duplicate->get_id(),
+                            'post_title'   => get_the_title( $product_id ) . ' (' . $lang_code . ' copy)',
+                            'post_author'  => $vendor_id->id,
+                            'post_content' => '',
+                            'post_excerpt' => '',
+                        ), $product_id );
+                        wp_update_post( $my_post );
+
+                        $source_lang = $_POST['source_lang'];
+                        $dest_lang   = $_POST['lang'];
+                        $trid        = $_POST['trid'];
+
+                        // Connect Translations
+                        $original_element_language = $sitepress->get_default_language();
+                        $trid_elements             = $sitepress->get_element_translations( $trid, 'post_product' );
+                        if($trid_elements) {
+                            foreach ( $trid_elements as $trid_element ) {
+                                if ( $trid_element->original ) {
+                                    $original_element_language = $trid_element->language_code;
+                                    break;
+                                }
+                            }
+                        }
+                        $wpdb->update(
+                            $wpdb->prefix . 'icl_translations',
+                            array( 'source_language_code' => $original_element_language, 'trid' => $trid ),
+                            array( 'element_id' => $duplicate->get_id(), 'element_type' => 'post_product' ),
+                            array( '%s', '%d', '%s' ),
+                            array( '%d', '%s' )
+                        );
+
+                        do_action(
+                            'wpml_translation_update',
+                            array(
+                                'type' => 'update',
+                                'trid' => $trid,
+                                'element_id' => $duplicate->get_id(),
+                                'element_type' => 'post_product',
+                                'context' => 'post'
+                            )
+                        );
+
+                        // Product Custom Taxonomies - 6.0.3
+                        $product_taxonomies = get_object_taxonomies( 'product', 'objects' );
+                        if( !empty( $product_taxonomies ) ) {
+                            foreach( $product_taxonomies as $product_taxonomy ) {
+                                if( !in_array( $product_taxonomy->name, array( 'product_cat', 'product_tag', 'wcpv_product_vendors' ) ) ) {
+                                    if( $product_taxonomy->public && $product_taxonomy->show_ui && $product_taxonomy->meta_box_cb && $product_taxonomy->hierarchical ) {
+                                        $taxonomy_values = get_the_terms( $product->get_id(), $product_taxonomy->name );
+                                        $is_translated = $sitepress->is_translated_taxonomy( $product_taxonomy );
+                                        $is_first = true;
+                                        if( !empty($taxonomy_values) ) {
+                                            foreach($taxonomy_values as $pkey => $ptaxonomy) {
+                                                if( $is_translated ) {
+                                                    $term_id = apply_filters( 'translate_object_id', (int)$ptaxonomy->term_id, $product_taxonomy->name, false, $dest_lang );
+                                                } else {
+                                                    $term_id = (int)$ptaxonomy->term_id;
+                                                }
+                                                if($is_first) {
+                                                    $is_first = false;
+                                                    wp_set_object_terms( $duplicate->get_id(), $term_id, $product_taxonomy->name );
+                                                } else {
+                                                    wp_set_object_terms( $duplicate->get_id(), $term_id, $product_taxonomy->name, true );
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        do_action( 'wcmp_after_translated_new_product', $duplicate->get_id() );
+
+                        $product_url = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $duplicate->get_id()));
+
+                        // Redirect to the edit screen for the new draft page
+                        echo '{"status": true, "redirect": "' . $product_url . '", "id": "' . $duplicate->get_id() . '"}';
+                    }
+                }
+            }
+        }
+        die;
     }
 
 }
