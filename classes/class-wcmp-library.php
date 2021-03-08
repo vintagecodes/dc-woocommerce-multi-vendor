@@ -149,8 +149,8 @@ class WCMp_Library {
      * WP DatePicker library
      */
     public function load_datepicker_lib() {
-        wp_enqueue_script('jquery-ui-datepicker');
-        wp_enqueue_style('jquery-ui-style');
+        // wp_enqueue_script('jquery-ui-datepicker');
+        // wp_enqueue_style('jquery-ui-style');
     }
 
     /**
@@ -160,7 +160,7 @@ class WCMp_Library {
         global $wp_scripts;
         if (!wp_style_is('jquery-ui-style', 'registered')) {
             $jquery_version = isset($wp_scripts->registered['jquery-ui-core']->ver) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.11.4';
-            wp_register_style('jquery-ui-style', $this->jquery_lib_url . 'style_lib.css', array(), $jquery_version);
+            // wp_register_style('jquery-ui-style', $this->jquery_lib_url . 'style_lib.css', array(), $jquery_version);
         }
     }
 

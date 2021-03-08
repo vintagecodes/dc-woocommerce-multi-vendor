@@ -49,7 +49,8 @@ class WCMp_Report {
     public function woocommerce_admin_report_data( $report_data ) {
     	include_once( WC()->plugin_path() . '/includes/admin/reports/class-wc-admin-report.php' );
     	$report_range = new WC_Admin_Report();
-    	$report_range->calculate_current_range( wc_clean($_GET['range'] ) );
+    	$date_range = isset($_GET['range']) ? wc_clean($_GET['range']) : ''; 
+    	$report_range->calculate_current_range( $date_range ) );
     	// Find parent pertial refund
     	$child_orders_for_partial = array();
     	if (is_array($report_data->partial_refunds) && !empty($report_data->partial_refunds)) {
