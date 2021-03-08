@@ -4405,11 +4405,11 @@ class WCMp_Ajax {
                         $trid = $wpml_post_translations->get_element_trid ( $product_id );
                         $translation_edit_url = '';
                         if( $translated_id ) {
-                            $translate_text = sprintf( __ ( 'Edit the %s translation', 'sitepress' ), $language_data['display_name'] );
+                            $translate_text = sprintf( __ ( 'Edit the %s translation', 'dc-woocommerce-multi-vendor' ), $language_data['display_name'] );
                             $product_url = wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_edit_product_endpoint', 'vendor', 'general', 'edit-product'), $translated_id, '', $language_data['code']);
                             $translation_edit_url = '<a href="' . $product_url . '" title="' . $translate_text . '"><img style="padding:1px;margin:2px;" border="0" src="' . ICL_PLUGIN_URL . '/res/img/edit_translation.png" alt="' . $translate_text . '" width="16" height="16" /></a>';
                         } else {
-                            $translate_text = sprintf( __ ( 'Add translation to %s', 'sitepress' ), $language_data['display_name'] );
+                            $translate_text = sprintf( __ ( 'Add translation to %s', 'dc-woocommerce-multi-vendor' ), $language_data['display_name'] );
                             $translation_edit_url = '<a href="#" class="wcmp_product_new_translation" data-trid="' . $trid . '" data-source_lang="' . $current_language . '" data-proid="' . $product_id . '" data-lang="' . $language_data['code'] . '" title="' . $translate_text . '"><img style="padding:1px;margin:2px;" border="0" src="' . ICL_PLUGIN_URL . '/res/img/add_translation.png" alt="' . $translate_text . '" width="16" height="16" /></a>';
                         }
                         
@@ -4435,7 +4435,7 @@ class WCMp_Ajax {
                         $product = wc_get_product( $product_id );
                         if ( false === $product ) {
                             /* translators: %s: product id */
-                            echo '{"status": false, "message": "' . sprintf( __( 'Product creation failed, could not find original product: %s', 'woocommerce' ), $product_id ) . '" }';
+                            echo '{"status": false, "message": "' . sprintf( __( 'Product creation failed, could not find original product: %s', 'dc-woocommerce-multi-vendor' ), $product_id ) . '" }';
                         }
 
                         if( !class_exists( 'WC_Admin_Duplicate_Product' ) ) {
