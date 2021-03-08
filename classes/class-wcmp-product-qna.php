@@ -240,7 +240,7 @@ class WCMp_Product_QNA {
         if($args['where']){
             $get_qna_sql .= $args['where'];
         }
-        $product_QNAs = $wpdb->get_results( $wpdb->prepare( esc_sql($get_qna_sql), $product_ID ) );
+        $product_QNAs = $wpdb->get_results( $wpdb->prepare( wc_clean($get_qna_sql), absint($product_ID) ) );
         if($args['sortby'] == 'vote' && $product_QNAs){
             $votes = array();
             foreach ($product_QNAs as $key => $qna) { 
