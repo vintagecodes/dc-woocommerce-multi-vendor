@@ -3,7 +3,6 @@
   "version": "3.0.5",
   "description": "WC Marketplace - The most user recommended multivendor marketplace plugin for WooCommerce.",
   "main": "Gruntfile.js",
-  "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^8.1.0",
     "grunt": "^1.0.2",
