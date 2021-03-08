@@ -215,7 +215,7 @@ class WCMp_Product_QNA {
         if($where){
             $get_ans_sql .= $where;
         }
-        return $wpdb->get_results( esc_sql($get_ans_sql) );
+        return $wpdb->get_results( $get_ans_sql );
     }
     
     /**

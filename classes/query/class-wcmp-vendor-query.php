@@ -355,7 +355,7 @@ class WCMp_Vendor_Query {
 			// phpcs:disable
 			"SELECT vendor_id 
 			FROM {$wpdb->prefix}wcmp_shipping_zone_locations
-			WHERE " . wp_unslash(esc_sql( $where_sql ) ) . "",
+			WHERE " . wp_unslash(esc_sql( $where_sql ) ) . ""
 		);
 		
 		if( $search_results ) {
