@@ -3,9 +3,9 @@ Contributors: wcmp, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh8961
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.6.1
+Tested up to: 5.6.2
 Requires PHP: 5.6
-Stable tag: 3.5.18
+Stable tag: 3.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,25 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.6.0 - 2021-03-09 =
+* Added - WPML Compatibility #133.
+* Fix - SQL syntax issue #735.
+* Fix - Broken date picker issue fixed #720.
+* Fix - Report overview not showing any data #716.
+* Fix - The history section not working #714.
+* Fix - Product tab responsive issue #711.
+* Fix - Textdomain creation issue by grunt run.
+* Fix - Refund request translation issue fixed #708.
+* Fix - Dashboard responsive issue #706.
+* Fix - Policy display at admin backend issue #704.
+* Fix - SPMV product unclickable #698.
+* Fix - Sort by shipping not working #674.
+* Fix - The vendor getting an email when he replies to his customer review #666.
+* Fix - Styling Bugs dashboard as well as backend #677.
+* Fix - Reports Overview issue #688.
+* Fix - Customer Questions Direct Reply #705.
+* Updated - Language file.
 
 = 3.5.18 - 2021-02-12 =
 * Added - Admin mail for rejecting vendor reapply registration #650.
