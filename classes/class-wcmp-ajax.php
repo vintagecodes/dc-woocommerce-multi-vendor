@@ -2549,7 +2549,7 @@ class WCMp_Ajax {
                         $row .='<div class="modal fade" id="qna-reply-modal-' . $data->ques_ID . '" role="dialog">
                                     <div class="modal-dialog">
                                         <!-- Modal content-->
-                                        <div cla ss="modal-content">
+                                        <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                 <h4 class="modal-title">' . __('Product - ', 'dc-woocommerce-multi-vendor') . ' ' . $product->get_formatted_name() . '</h4>
