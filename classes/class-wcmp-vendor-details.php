@@ -1288,4 +1288,20 @@ class WCMp_Vendor {
         return false;
     }
 
+    public function get_top_rated_products( $args = array() ) {
+        $default = array(
+            'post_status'    => 'publish',
+            'post_type'      => 'product',
+            'author__in'     => $this->id,
+            'meta_key'       => '_wc_average_rating',
+            'orderby'        => 'meta_value_num',
+            'order'          => 'DESC',
+            'meta_query'     => WC()->query->get_meta_query(),
+            'tax_query'      => WC()->query->get_tax_query(),
+        );
+        $args = wp_parse_args($args, $default);
+        $top_products = $this->get_products( apply_filters( 'wcmp_get_top_rated_products_query_args', $args, $this->id ) );
+        return $top_products;
+    }
+
 }

@@ -149,6 +149,12 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
             wp_enqueue_script('wcmp_vendor_list');
             wp_style_add_data('wcmp_vendor_list', 'rtl', 'replace');
             wp_enqueue_style('wcmp_vendor_list');
+
+            if( !apply_filters( 'wcmp_load_default_vendor_list', false ) ){
+                wp_register_style('wcmp_vendor_list_new', $frontend_assets_path . 'css/vendor-nlist.css', array(), $WCMp->version);
+                wp_enqueue_style('wcmp_vendor_list_new');
+            }
+
             extract(shortcode_atts(array('orderby' => 'registered', 'order' => 'ASC'), $atts));
             $order_by = isset($_REQUEST['vendor_sort_type']) ? wc_clean($_REQUEST['vendor_sort_type']) : $orderby;
             
@@ -225,7 +231,12 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
                 'radius' => $radius,
                 'request' => isset($_REQUEST) ? wc_clean($_REQUEST) : '',
             ));
-            $WCMp->template->get_template('shortcode/vendor_lists.php', $data);
+            if ( apply_filters( 'wcmp_load_default_vendor_list', false ) ) {
+                $WCMp->template->get_template('shortcode/vendor_lists.php', $data);
+            } else {
+                $GLOBALS['vendor_list'] = $data;
+                $WCMp->template->get_template('shortcode/vendor-list.php');
+            }
         }
     }
 
