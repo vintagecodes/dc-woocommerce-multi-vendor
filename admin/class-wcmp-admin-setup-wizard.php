@@ -72,12 +72,25 @@ class WCMp_Admin_Setup_Wizard {
                 'view' => array($this, 'wcmp_setup_capability'),
                 'handler' => array($this, 'wcmp_setup_capability_save')
             ),
+            'introduction_migration' => array(
+                'name' => __('Migration', 'dc-woocommerce-multi-vendor' ),
+                'view' => array($this, 'wcmp_migration_introduction'),
+                'handler' => '',
+            ),
+            'store-process' => array(
+                'name' => __('Processing', 'dc-woocommerce-multi-vendor'),
+                'view' => array($this, 'wcmp_migration_store_process'),
+                'handler' => ''
+            ),
             'next_steps' => array(
                 'name' => __('Ready!', 'dc-woocommerce-multi-vendor'),
                 'view' => array($this, 'wcmp_setup_ready'),
                 'handler' => '',
             ),
         );
+        if (!$WCMp->multivendor_migration->wcmp_is_marketplace()) {
+            unset( $default_steps['introduction_migration'], $default_steps['store-process'] );
+        } 
         $this->steps = apply_filters('wcmp_setup_wizard_steps', $default_steps);
         $current_step = filter_input(INPUT_GET, 'step');
         $this->step = $current_step ? sanitize_key($current_step) : current(array_keys($this->steps));
@@ -909,6 +922,19 @@ class WCMp_Admin_Setup_Wizard {
         $WCMp->vendor_caps->update_wcmp_vendor_role_capability();
         wp_redirect(esc_url_raw($this->get_next_step_link()));
         exit;
+    }
+
+    /**
+     * Migration Introduction step.
+     */
+    public function wcmp_migration_introduction() {
+        global $WCMp;
+        $WCMp->multivendor_migration->wcmp_migration_first_step( $this->get_next_step_link() );
+    }
+    
+    public function wcmp_migration_store_process() {
+        global $WCMp;
+        $WCMp->multivendor_migration->wcmp_migration_third_step( $this->get_next_step_link() );
     }
 
     /**

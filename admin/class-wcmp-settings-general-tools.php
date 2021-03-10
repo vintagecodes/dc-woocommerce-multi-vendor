@@ -51,6 +51,7 @@ class WCMp_Settings_General_Tools {
      * @return array
      */
     public function get_tools() {
+        global $WCMp;
         $tools = array(
             'clear_all_vendor_transients'             => array(
                 'name'   => __( 'WCMp vendors transients', 'dc-woocommerce-multi-vendor' ),
@@ -67,8 +68,15 @@ class WCMp_Settings_General_Tools {
                 'button' => __( 'Order migrate', 'dc-woocommerce-multi-vendor' ),
                 'desc'   => __( 'This will regenerate all vendors older orders to individual orders', 'dc-woocommerce-multi-vendor' ),
             ),
+            'multivendor_migration'   => array(
+                'name'   => __( 'Multivendor Migration', 'dc-woocommerce-multi-vendor' ),
+                'button' => __( 'Multivendor migrate', 'dc-woocommerce-multi-vendor' ),
+                'desc'   => __( 'This will migrate older marketplace details', 'dc-woocommerce-multi-vendor' ),
+            ),
         );
-
+        if (!$WCMp->multivendor_migration->wcmp_is_marketplace()) {
+            unset( $tools['multivendor_migration'] );
+        } 
         return apply_filters( 'wcmp_settings_general_tools', $tools );
    }
    
@@ -100,6 +108,9 @@ class WCMp_Settings_General_Tools {
                     delete_option('wcmp_orders_table_migrated');
                     wp_schedule_event( time(), 'hourly', 'wcmp_orders_migration' );
                     $message = __( 'Force order migration started.', 'dc-woocommerce-multi-vendor' );
+                    break;
+                case 'multivendor_migration':
+                    wp_safe_redirect(admin_url('index.php?page=wcmp-migrator'));
                     break;
                 default:
                     do_action( 'wcmp_settings_tools_action_default_case', $action, $_REQUEST );
