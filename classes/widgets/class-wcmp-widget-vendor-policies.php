@@ -39,12 +39,11 @@ class WCMp_Widget_Vendor_Policies extends WC_Widget {
     }
 
     public function widget($args, $instance) {
-        global $wp_query, $WCMp;
+        global $WCMp;
         $content = '';
-        
-        $this->vendor_term_id = ( isset( $wp_query->queried_object->term_id ) ) ? $wp_query->queried_object->term_id : 0;
-        $vendor = get_wcmp_vendor_by_term($this->vendor_term_id);
-        if ((!is_tax($WCMp->taxonomy->taxonomy_name) && !$vendor)) {
+        $store_id = wcmp_find_shop_page_vendor();
+        $vendor = get_wcmp_vendor($store_id);
+        if ((!wcmp_is_store_page() && !$vendor)) {
             return;
         }
 
@@ -63,19 +62,19 @@ class WCMp_Widget_Vendor_Policies extends WC_Widget {
             $content .= '<div class="wcmp-product-policies">';
             if(isset($policies['shipping_policy']) && !empty($policies['shipping_policy']) && $shipping) {
                 $content .='<div class="wcmp-shipping-policies policy">
-                    <h2 class="wcmp_policies_heading heading">'.__('Shipping Policy', 'dc-woocommerce-multi-vendor').'</h2>
+                    <h2 class="wcmp_policies_heading heading">'. esc_html_e('Shipping Policy', 'dc-woocommerce-multi-vendor').'</h2>
                     <div class="wcmp_policies_description description" >'.$policies['shipping_policy'].'</div>
                 </div>';
             } 
             if(isset($policies['refund_policy']) && !empty($policies['refund_policy']) && $refund){ 
                 $content .='<div class="wcmp-refund-policies policy">
-                    <h2 class="wcmp_policies_heading heading heading">'.__('Refund Policy', 'dc-woocommerce-multi-vendor').'</h2>
+                    <h2 class="wcmp_policies_heading heading heading">'. esc_html_e('Refund Policy', 'dc-woocommerce-multi-vendor').'</h2>
                     <div class="wcmp_policies_description description">'.$policies['refund_policy'].'</div>
                 </div>';
             } 
             if(isset($policies['cancellation_policy']) && !empty($policies['cancellation_policy']) && $cancel){ 
                 $content .='<div class="wcmp-cancellation-policies policy">
-                    <h2 class="wcmp_policies_heading heading">'.__('Cancellation / Return / Exchange Policy', 'dc-woocommerce-multi-vendor').'</h2>
+                    <h2 class="wcmp_policies_heading heading">'. esc_html_e('Cancellation / Return / Exchange Policy', 'dc-woocommerce-multi-vendor').'</h2>
                     <div class="wcmp_policies_description description" >'.$policies['cancellation_policy'].'</div>
                 </div>';
             }

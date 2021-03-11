@@ -60,10 +60,10 @@ class DC_Woocommerce_Store_Location_Widget extends WP_Widget {
         $show_widget = false;
         $WCMp->library->load_gmap_api();
         
-        if (is_tax($WCMp->taxonomy->taxonomy_name)) {
-            $vendor_id = get_queried_object()->term_id;
+        if (wcmp_is_store_page()) {
+            $vendor_id = wcmp_find_shop_page_vendor();
             if ($vendor_id) {
-                $vendor = get_wcmp_vendor_by_term($vendor_id);
+                $vendor = get_wcmp_vendor($vendor_id);
                 $show_widget = true;
             }
         }
@@ -149,7 +149,7 @@ class DC_Woocommerce_Store_Location_Widget extends WP_Widget {
         ?>
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'dc-woocommerce-multi-vendor') ?>:
-                <input type="text" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $instance['title']; ?>" class="widefat" />
+                <input type="text" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo esc_attr($instance['title']); ?>" class="widefat" />
             </label>
         </p>
         <?php

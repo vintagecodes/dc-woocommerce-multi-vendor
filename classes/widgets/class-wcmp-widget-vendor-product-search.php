@@ -46,7 +46,7 @@ class WCMp_Widget_Vendor_Product_Search extends WC_Widget {
 	public function widget( $args, $instance ) {
         global $WCMp;
 
-        if ( !is_tax( $WCMp->taxonomy->taxonomy_name ) ) return;
+        if ( !wcmp_is_store_page() ) return;
 
         $this->widget_start( $args, $instance );
         

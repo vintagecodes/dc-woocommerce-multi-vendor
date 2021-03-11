@@ -32,11 +32,10 @@ class WCMp_Widget_Vendor_On_Sale_Products extends WC_Widget {
     }
 
     public function widget($args, $instance) {
-        global $wp_query, $WCMp;
-        
-        $this->vendor_term_id = ( isset( $wp_query->queried_object->term_id ) ) ? $wp_query->queried_object->term_id : 0;
-        $vendor = get_wcmp_vendor_by_term($this->vendor_term_id);
-        if ((!is_tax($WCMp->taxonomy->taxonomy_name) && !$vendor)) {
+        global $WCMp;
+        $store_id = wcmp_find_shop_page_vendor();
+        $vendor = get_wcmp_vendor($store_id);
+        if ((!wcmp_is_store_page() && !$vendor)) {
             return;
         }
 

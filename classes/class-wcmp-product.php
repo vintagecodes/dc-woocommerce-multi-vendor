@@ -1362,7 +1362,7 @@ class WCMp_Product {
 
     public function woocommerce_shop_loop_callback($product = null) {
         global $WCMp, $post;
-        if (is_tax($WCMp->taxonomy->taxonomy_name)) {
+        if (wcmp_is_store_page()) {
             return;
         }
         if (!is_object($product)) {
@@ -1393,7 +1393,7 @@ class WCMp_Product {
      */
     public function woocommerce_product_query($q) {
         global $WCMp;
-        if (is_tax($WCMp->taxonomy->taxonomy_name)) {
+        if (wcmp_is_store_page()) {
             return;
         }
         //$q->set('post_parent', 0);
@@ -1414,7 +1414,7 @@ class WCMp_Product {
     public function wcmp_filter_product_category($tax_query) {
         global $WCMp;
         $category = filter_input(INPUT_GET, 'category');
-        if (!is_tax($WCMp->taxonomy->taxonomy_name) || is_null($category)) {
+        if (!wcmp_is_store_page() || is_null($category)) {
             return $tax_query;
         }
         $tax_query[] = array(
