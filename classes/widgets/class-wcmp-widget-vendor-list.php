@@ -124,10 +124,10 @@ class DC_Widget_Vendor_List extends WP_Widget {
         $instance = wp_parse_args((array) $instance, $defaults);
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title (optional):', 'dc-woocommerce-multi-vendor'); ?></label>
-            <input type="text" name="<?php echo $this->get_field_name('title'); ?>"  value="<?php echo $instance['title']; ?>" class="widefat" id="<?php echo $this->get_field_id('title'); ?>" />
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php esc_html_e('Title (optional):', 'dc-woocommerce-multi-vendor'); ?></label>
+            <input type="text" name="<?php echo $this->get_field_name('title'); ?>"  value="<?php echo esc_attr($instance['title']); ?>" class="widefat" id="<?php echo $this->get_field_id('title'); ?>" />
         </p>
-        <span class="description"><?php _e('This widget shows a list of shop vendors..', 'dc-woocommerce-multi-vendor') ?> </span>
+        <span class="description"><?php esc_html_e('This widget shows a list of shop vendors..', 'dc-woocommerce-multi-vendor') ?> </span>
         <?php
     }
 

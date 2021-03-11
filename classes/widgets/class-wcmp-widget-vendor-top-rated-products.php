@@ -38,17 +38,16 @@ class WCMp_Widget_Vendor_Top_Rated_Products extends WC_Widget {
         }
         
         $enable_vshop_only = apply_filters( 'wcmp_vendor_top_rated_products_widget_shows_only_vendor_shop', true );	
-        if ( $enable_vshop_only && !is_tax( $WCMp->taxonomy->taxonomy_name ) ) return;
+        if ( $enable_vshop_only && !wcmp_is_store_page() ) return;
         if( !is_woocommerce() ) return;
         $author_in = array();
         if( !$enable_vshop_only ){
             // Get all active vendors
             $query_args = wp_parse_args( apply_filters( 'wcmp_vendor_top_rated_products_author_user_query', array() ), array('role' => 'dc_vendor', 'fields' => 'ids', 'orderby' => 'registered', 'meta_key' => '_vendor_turn_off', 'meta_value' => '', 'meta_compare' => 'NOT EXISTS'));
             $user_query = new WP_User_Query( $query_args );
-            if( is_woocommerce() && is_tax( $WCMp->taxonomy->taxonomy_name ) ){
-                $this->vendor_term_id = $wp_query->queried_object->term_id;
-                $vendor = get_wcmp_vendor_by_term($this->vendor_term_id);
-                $author_in[] = $vendor->id;
+            if( is_woocommerce() && wcmp_is_store_page() ){
+                $vendor_id = wcmp_find_shop_page_vendor();
+                $author_in[] = $vendor_id;
             }elseif( is_product() ){
                 global $product;
                 $vendor = get_wcmp_product_vendors( $product->get_id() );
@@ -58,9 +57,8 @@ class WCMp_Widget_Vendor_Top_Rated_Products extends WC_Widget {
                 $author_in = $user_query->results;
             }
         }else{
-            $this->vendor_term_id = $wp_query->queried_object->term_id;
-            $vendor = get_wcmp_vendor_by_term($this->vendor_term_id);
-            $author_in[] = $vendor->id;
+            $store_id = wcmp_find_shop_page_vendor();
+            $author_in[] = $store_id;
         }
 
         ob_start();

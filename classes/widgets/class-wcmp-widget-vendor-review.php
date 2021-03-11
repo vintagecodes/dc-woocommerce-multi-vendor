@@ -63,14 +63,14 @@ class WCMp_Widget_Vendor_Review_Widget extends WP_Widget {
                 $show_widget = false;
             }
         }
-        if (is_archive() && !is_tax($WCMp->taxonomy->taxonomy_name)) {
+        if (!wcmp_is_store_page()) {
             $show_widget = false;
         }
         if ($show_widget) {
-            if (is_tax($WCMp->taxonomy->taxonomy_name)) {
-                $vendor_id = get_queried_object()->term_id;
+            if (wcmp_is_store_page()) {
+                $vendor_id = wcmp_find_shop_page_vendor();
                 if ($vendor_id) {
-                    $vendor = get_wcmp_vendor_by_term($vendor_id);
+                    $vendor = get_wcmp_vendor($vendor_id);
                 }
             }
             if ($vendor) {
@@ -147,15 +147,15 @@ class WCMp_Widget_Vendor_Review_Widget extends WP_Widget {
         $instance = wp_parse_args((array) $instance, $defaults);
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title (optional):', 'dc-woocommerce-multi-vendor'); ?></label>
-            <input type="text" name="<?php echo $this->get_field_name('title'); ?>"  value="<?php echo $instance['title']; ?>" class="widefat" id="<?php echo $this->get_field_id('title'); ?>" />
+            <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Title (optional):', 'dc-woocommerce-multi-vendor'); ?></label>
+            <input type="text" name="<?php echo esc_attr($this->get_field_name('title')); ?>"  value="<?php echo esc_attr($instance['title']); ?>" class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('reviews_number'); ?>"><?php _e('Number of reviews', 'dc-woocommerce-multi-vendor') ?>:
-                <input type="number" id="<?php echo $this->get_field_id('reviews_number'); ?>" name="<?php echo $this->get_field_name('reviews_number'); ?>" value="<?php echo $instance['reviews_number']; ?>" class="widefat" min="1"/>
+            <label for="<?php echo esc_attr($this->get_field_id('reviews_number')); ?>"><?php esc_html_e('Number of reviews', 'dc-woocommerce-multi-vendor') ?>:
+                <input type="number" id="<?php echo esc_attr($this->get_field_id('reviews_number')); ?>" name="<?php echo esc_attr($this->get_field_name('reviews_number')); ?>" value="<?php echo esc_attr($instance['reviews_number']); ?>" class="widefat" min="1"/>
             </label>
         </p>
-        <span class="description"><?php _e('This widget shows vendor reviews.', 'dc-woocommerce-multi-vendor') ?> </span>
+        <span class="description"><?php esc_html_e('This widget shows vendor reviews.', 'dc-woocommerce-multi-vendor') ?> </span>
         <?php
     }
 }
