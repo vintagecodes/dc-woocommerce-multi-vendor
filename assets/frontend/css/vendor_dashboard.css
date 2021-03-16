@@ -845,7 +845,7 @@ body .mCSB_scrollTools {
       margin: 0 0 12px; }
     .panel.panel-default.pannel-outer-heading .panel-body {
       background-color: #fff;
-      border: 1px solid #d3dbe2; }
+      border: 1px solid #d3dbe2;}
     .panel.panel-default.pannel-outer-heading .panel-footer {
       background-color: #fff;
       margin: 0;
@@ -1113,7 +1113,8 @@ textarea {
     font-size: 13px; } }
 
 body .select2-container {
-  width: 100% !important;
+  /* width: 100% !important; */
+  width: auto !important;
   min-height: 34px !important; }
   body .select2-container .select2-selection.select2-selection--multiple {
     height: auto;
@@ -2189,10 +2190,10 @@ body .media-frame select, body .wp-admin .media-frame select {
     .top-order-note td {
       padding: 2px 0 12px;
     }
-    .vorder-info-top-left table tbody tr {
+    /* .vorder-info-top-left table tbody tr {
       display: flex;
       flex-direction: column;
-    } 
+    }  */
   }
 body.admin-bar .top-navbar {
   top: 32px; }
@@ -4712,8 +4713,8 @@ select[name="wcmp-vendor-orders_length"] {
 .single-order-detail-table .form-control {
   height: 28px; }
 
-.order_download_permissions .select2-container {
-  width: calc(100% - 143px) !important; }
+/* .order_download_permissions .select2-container {
+  width: calc(100% - 143px) !important; } */
 
 .change-status .wc-pending i {
   background: #f58020; }
@@ -5513,16 +5514,84 @@ button.wcmp_upload_btn {color: #fff;}
 .product_search .pro_search_key {
   height: 34px;
 }
+/* css start */
+.form-group .input-group-addon {
+  padding: 6px 12px;
+  color: #555;
+  text-align: center;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  border-right: 0;
+}
+.panel-body.panel-content-padding {padding: 20px 5px;}
+.dataTables_processing {z-index: 9999 !important;}
+form.search-pro-by-name-gtin {display: inline-flex;}
+#wcmp-edit-product-form #product_data_tabs {width: 100% !important; flex-wrap: unset; border: 0; z-index: 1; position: relative;}
+#wcmp-edit-product-form #product_data_tabs li { min-width: fit-content;}
+.add-product-info-header {
+  display: flex;
+  justify-content: space-between;
+}
+.product-info-tab-wrapper .form-group, .add-product-info-holder .form-group  {display: flex;}
+.product-info-tab-wrapper .nav li .nav-link {
+background: #bfc3c4;
+border: 1px solid #bfc3c4;
+padding: 13px 22px;
+margin-right: 1px;
+color: #383838;
+border-radius: 0;
+border-top: 2px solid transparent;
+}
+.product-info-tab-wrapper .nav li .nav-link:hover{  background: #b1becb;}
+.product-info-tab-wrapper .nav li .nav-link.active {background: #fff; border-top-color: #3f85b9;  border-bottom-color: #fff;}
+.add-coupon-info-holder .form-group {display: flex;  margin: 20px 0;}
+.wcmp-wrapper .panel .add-coupon-info-holder .nav-link {margin-bottom: 0; padding: 10px 15px;}
+#coupon_data_tabs {margin-left: 15px;}
+.wcmp-wrapper .panel .add-coupon-info-holder .nav-link {
+margin-bottom: -1px;
+padding: 12px 18px;
+margin-right: 2px;
+border: 1px solid transparent;
+border-radius: 4px 4px 0 0;
+}
+#coupon_data_tabs li .nav-link.active {
+color: #555;
+cursor: default;
+background-color: #fff;
+border: 1px solid #ddd;
+border-bottom-color: transparent;
+}
+#wcmp-order-details .panel-body.panel-content-padding {padding: 20px;}
+#vendor_ledger_date_filter .form-group { margin-right: 5px;}
+#coupon_data_tabs li {min-width: max-content;}
 @media screen and (min-width:320px) and (max-width:767px){
 .wcmp_shop_settings_form .form-group, .wcmp_policy_form .form-group, .wcmp_billing_form .form-group, form[name='wcmp_vendor_dashboard_stat_report'] .panel-heading {flex-direction: column;}
 #vendor_transactions_date_filter .form-group, form[name="wcmp_vendor_dashboard_orders"] .form-group, #vendor_ledger_date_filter .form-group {width: 100%;}
-.order-filter-actions .wcmp_black_btn {
-    margin: 5px 0;
-}
+.order-filter-actions .wcmp_black_btn {margin: 5px 0;}
 .order-filter-actions #order_bulk_actions, .order-filter-actions #filter_by_order_status {width:100%}
-.add-product-info-header, .product-list-filter-wrap .form-group {flex-direction: column;}
+.add-product-info-header, .product-list-filter-wrap .form-group, .add-product-info-holder .form-group {flex-direction: column;}
+#wcmp-edit-product-form #product_data_tabs {overflow-x: auto;}
+#coupon_data_tabs {
+  flex-wrap: unset;
+  width: 100%;
+  overflow-x: auto;
+  margin-left: 0;
 }
-
+.side-collapse-container .product_search {display: flex;}
+}
+ /* for iphone 5/SE responsive start */
+@media screen and (device-aspect-ratio: 40/71){
+  #wcmp-order-details .panel.panel-default .panel-heading h3 {font-size: 12px;}
+  .change-status .wc-on-hold i {
+    background: #ce9416;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: -3px -29px;
+}
+}
+ /* for iphone 5/SE responsive end */
 
 @media screen and (min-width:320px) and (max-width:768px){
   .wcmp-color-scheme-outer_space_blue .sidebar{top: 7px;}
@@ -5533,21 +5602,6 @@ button.wcmp_upload_btn {color: #fff;}
 
 
 
-/* css start */
-.form-group .input-group-addon {
-    padding: 6px 12px;
-    color: #555;
-    text-align: center;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    border-radius: 4px 0 0 4px;
-    border-right: 0;
-}
-.panel-body.panel-content-padding {padding: 20px 5px;}
-.dataTables_processing {z-index: 9999 !important;}
-form.search-pro-by-name-gtin {display: inline-flex;}
-#wcmp-edit-product-form #product_data_tabs {width: 100% !important;}
-.add-product-info-header {
-    display: flex;
-    justify-content: space-between;
-}
+
+
+/* #woocommerce-product-data .product-info-tab-wrapper > .tab-content{border-top: 0;} */
