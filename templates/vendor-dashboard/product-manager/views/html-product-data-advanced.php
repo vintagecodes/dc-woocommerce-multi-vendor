@@ -17,14 +17,14 @@ defined( 'ABSPATH' ) || exit;
             <div class="form-group">
                 <label class="control-label col-sm-3 col-md-3" for="_purchase_note"><?php esc_html_e( 'Purchase note', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <div class="col-md-6 col-sm-9">
-                    <textarea id="_purchase_note" name="_purchase_note" class="form-control"><?php esc_html( $product_object->get_purchase_note( 'edit' ) ); ?></textarea>
+                    <textarea id="_purchase_note" name="_purchase_note" class="form-control"><?php echo esc_html( $product_object->get_purchase_note( 'edit' ) ); ?></textarea>
                 </div>
             </div> 
         </div> 
         <div class="form-group">
             <label class="control-label col-sm-3 col-md-3" for="menu_order"><?php esc_html_e( 'Menu order', 'dc-woocommerce-multi-vendor' ); ?></label>
             <div class="col-md-6 col-sm-9">
-                <input id="menu_order" name="menu_order" type="number" class="form-control" value="<?php esc_attr( $product_object->get_menu_order( 'edit' ) ); ?>" step="1">
+                <input id="menu_order" name="menu_order" type="number" class="form-control" value="<?php echo esc_attr( $product_object->get_menu_order( 'edit' ) ); ?>" step="1">
             </div>
         </div> 
 
