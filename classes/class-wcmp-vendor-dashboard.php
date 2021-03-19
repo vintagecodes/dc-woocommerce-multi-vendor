@@ -1934,9 +1934,9 @@ Class WCMp_Admin_Dashboard {
                 // file paths will be stored in an array keyed off md5(file path)
                 $downloads = array();
                 if ( isset( $_POST['_downloadable'] ) && isset( $_POST['_wc_file_urls'] ) ) {
-                    $file_urls = isset($_POST['_wc_file_urls']) ? esc_url($_POST['_wc_file_urls']) : '';
-                    $file_names = isset( $_POST['_wc_file_names'] ) ? wc_clean($_POST['_wc_file_names']) : array();
-                    $file_hashes = isset( $_POST['_wc_file_hashes'] ) ? wc_clean($_POST['_wc_file_hashes']) : array();
+                    $file_urls = isset($_POST['_wc_file_urls']) ? wp_unslash($_POST['_wc_file_urls']) : '';
+                    $file_names = isset( $_POST['_wc_file_names'] ) ? wp_unslash($_POST['_wc_file_names']) : array();
+                    $file_hashes = isset( $_POST['_wc_file_hashes'] ) ? wp_unslash($_POST['_wc_file_hashes']) : array();
 
                     $file_url_size = sizeof( $file_urls );
                     for ( $i = 0; $i < $file_url_size; $i ++ ) {
@@ -1982,7 +1982,7 @@ Class WCMp_Admin_Dashboard {
                         'shipping_class_id'  => isset( $_POST['product_shipping_class'] ) ? absint( $_POST['product_shipping_class'] ) : null,
                         'upsell_ids'         => isset( $_POST['upsell_ids'] ) ? array_map( 'intval', (array) $_POST['upsell_ids'] ) : array(),
                         'cross_sell_ids'     => isset( $_POST['crosssell_ids'] ) ? array_map( 'intval', (array) $_POST['crosssell_ids'] ) : array(),
-                        'purchase_note'      => isset( $_POST['_purchase_note'] ) ? wp_kses_post( stripslashes( $_POST['_purchase_note'] ) ) : null,
+                        'purchase_note'      => isset( $_POST['_purchase_note'] ) ? wp_kses_post( wp_unslash( $_POST['_purchase_note'] ) ) : '',
                         'menu_order'         => isset( $_POST['menu_order'] ) ? wc_clean( $_POST['menu_order'] ) : null,
                         'reviews_allowed'    => ! empty( $_POST['comment_status'] ) && 'open' === $_POST['comment_status'],
                         'attributes'         => $attributes,

@@ -210,7 +210,7 @@ class WCMp_Ajax {
 
     public function wcmp_datatable_get_vendor_orders() {
         global $wpdb, $WCMp;
-        $requestData = ( $_REQUEST ) ? wc_clean( $_REQUEST ) : array();
+        $requestData = ( $_REQUEST ) ? wp_unslash( $_REQUEST ) : array();
         $date_start = isset( $_POST['start_date'] ) ? wc_clean( $_POST['start_date'] ) : '';
         $date_end = isset( $_POST['end_date'] ) ? wc_clean( $_POST['end_date'] ) : '';
         $start_date = date('Y-m-d G:i:s', $date_start);
