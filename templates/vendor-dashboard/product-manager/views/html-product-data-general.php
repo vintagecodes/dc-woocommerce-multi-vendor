@@ -58,7 +58,7 @@ global $WCMp;
                 $sale_price_dates_from = $product_object->get_date_on_sale_from( 'edit' ) && ( $date = $product_object->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) ? date_i18n( 'Y-m-d', $date ) : '';
                 $sale_price_dates_to = $product_object->get_date_on_sale_to( 'edit' ) && ( $date = $product_object->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) ? date_i18n( 'Y-m-d', $date ) : '';
                 ?> 
-                <div class="form-group">
+                <div class="form-group sale_price_dates_fields">
                     <label class="control-label col-sm-3 col-md-3"><?php _e( 'Sale price dates', 'dc-woocommerce-multi-vendor' ); ?></label>
                     <div class="col-md-6 col-sm-9">
                         <div class="row">

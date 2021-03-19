@@ -529,7 +529,7 @@ var wcmpAfmProductEditor = ( function ( $ ) {
                 var $wrap = $theseSaleDates.closest( 'div.form-group-row' ); //, table
 
                 //Initialize datepicker on text input
-                $theseSaleDates.find( 'input' ).datepicker( {
+                /*$theseSaleDates.find( 'input' ).datepicker( {
                     defaultDate: '',
                     dateFormat: 'yy-mm-dd',
                     numberOfMonths: 1,
@@ -544,7 +544,7 @@ var wcmpAfmProductEditor = ( function ( $ ) {
                         $( $otherDateField ).datepicker( 'option', option, null );
                     }
                     return false;
-                } );
+                } );*/
 
                 $theseSaleDates.find( 'input' ).each( function () {
                     if ( '' !== $( this ).val() ) {
