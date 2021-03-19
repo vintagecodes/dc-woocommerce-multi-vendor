@@ -1934,9 +1934,9 @@ Class WCMp_Admin_Dashboard {
                 // file paths will be stored in an array keyed off md5(file path)
                 $downloads = array();
                 if ( isset( $_POST['_downloadable'] ) && isset( $_POST['_wc_file_urls'] ) ) {
-                    $file_urls = isset($_POST['_wc_file_urls']) ? esc_url($_POST['_wc_file_urls']) : '';
-                    $file_names = isset( $_POST['_wc_file_names'] ) ? wc_clean($_POST['_wc_file_names']) : array();
-                    $file_hashes = isset( $_POST['_wc_file_hashes'] ) ? wc_clean($_POST['_wc_file_hashes']) : array();
+                    $file_urls = isset($_POST['_wc_file_urls']) ? wp_unslash($_POST['_wc_file_urls']) : '';
+                    $file_names = isset( $_POST['_wc_file_names'] ) ? wp_unslash($_POST['_wc_file_names']) : array();
+                    $file_hashes = isset( $_POST['_wc_file_hashes'] ) ? wp_unslash($_POST['_wc_file_hashes']) : array();
 
                     $file_url_size = sizeof( $file_urls );
                     for ( $i = 0; $i < $file_url_size; $i ++ ) {
