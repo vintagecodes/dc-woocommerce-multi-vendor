@@ -1616,14 +1616,8 @@ class WCMp_Order {
     }
 
     public function wcmp_suborder_hide( $args, $request ){
-        $woocommerce_orders = wcmp_get_orders();
-        $suborders = array();
-        foreach ($woocommerce_orders as $key => $value) {
-            if( wp_get_post_parent_id( $value ) ) {
-                $suborders[] = $value;
-            }
-        }
-        $args['post__not_in'] = array( $suborders );
+        $woocommerce_orders = wcmp_get_orders( array('post_status' => array('wc-processing', 'wc-completed', 'wc-on-hold')), 'ids', true );
+        $args['post__not_in'] = $woocommerce_orders;
         return $args;
     }
 
