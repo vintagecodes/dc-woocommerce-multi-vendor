@@ -1736,7 +1736,7 @@ class WCMp_Ajax {
                 $columns[] = $key;
             }
 
-            $requestData = ( $_REQUEST ) ? wc_clean( $_REQUEST ) : array();
+            $requestData = ( $_REQUEST ) ? wp_unslash( $_REQUEST ) : array();
             $filterActionData = array();
             parse_str($requestData['products_filter_action'], $filterActionData);
             do_action('before_wcmp_products_list_query_bind', $filterActionData, $requestData);
