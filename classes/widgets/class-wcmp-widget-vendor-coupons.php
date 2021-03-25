@@ -31,7 +31,6 @@ class WCMp_Widget_Vendor_Coupons extends WC_Widget {
             return;
         }
 
-        $this->widget_start($args, $instance); 
         $coupon_args = apply_filters( 'wcmp_get_vendor_coupon_widget_list_query_args', array(
                 'posts_per_page' => -1,
                 'offset' => 0,
@@ -43,7 +42,10 @@ class WCMp_Widget_Vendor_Coupons extends WC_Widget {
                 'suppress_filters' => true
             ), $vendor );
         $vendor_total_coupons = get_posts($coupon_args);
+
         if( empty( $vendor_total_coupons ) ) return;
+
+        $this->widget_start($args, $instance); 
 
         do_action($this->widget_cssclass . '_top', $vendor);
 	
