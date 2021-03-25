@@ -1031,10 +1031,12 @@ label.nolabel {
     .form-control {
       height: 30px; } }
 
-.form-control, button, button.button, button.btn, select.input-sm {
+.form-control, button, button.button, button.btn, select.input-sm, input {
   padding: 3px 5px 4px;
   box-shadow: none;
-  line-height: 20px; }
+  line-height: 20px;
+  height: 34px;
+  min-height: 34px;}
 
 select.input-sm {
   height: 34px; }
@@ -1053,7 +1055,8 @@ select.input-sm {
   -webkit-transition: all 0.4s;
   transition: all 0.4s;
   border-radius: 1px;
-  box-shadow: inset 0 -1px 3px rgba(0, 0, 0, 0.2); }
+  box-shadow: inset 0 -1px 3px rgba(0, 0, 0, 0.2); 
+  line-height:1.2}
   .btn.btn-default:hover, .btn.btn-default:active, .btn.btn-secondary:hover, .btn.btn-secondary:active {
     background-color: #202627;
     border-color: #202627;
@@ -1527,10 +1530,10 @@ body .media-frame select, body .wp-admin .media-frame select {
     padding-left: 15px;
     height: 34px;
     font-size: 14px; }
-    @media screen and (max-width: 480px) {
+    /* @media screen and (max-width: 480px) {
       .date-inp-wrap .hasDatepicker {
         width: 123px;
-        padding-left: 5px; } }
+        padding-left: 5px; } } */
 
 .wcmp-modal * {
   box-sizing: border-box; }
@@ -3018,7 +3021,8 @@ form[name="wcmp_vendor_dashboard_orders"] .form-group, #vendor_transactions_date
     float: none;
     margin: 0 auto;
     display: table;
-    text-align: center; }
+    /* text-align: center;  */
+  }
 
   form[name="wcmp_vendor_dashboard_orders"] .form-group,
   form[name="wcmp_vendor_dashboard_orders"] button,
@@ -3067,7 +3071,8 @@ input[type=radio], input[type=checkbox] {
   cursor: pointer;
   display: inline-block;
   line-height: 0;
-  height: 20px;
+  max-height: 20px;
+  min-height: 20px;
   margin: 0;
   outline: 0;
   padding: 0 !important;
@@ -5565,6 +5570,33 @@ border-bottom-color: transparent;
 #wcmp-order-details .panel-body.panel-content-padding {padding: 20px;}
 #vendor_ledger_date_filter .form-group { margin-right: 5px;}
 #coupon_data_tabs li {min-width: max-content;}
+
+
+
+/* //// */
+.shipping-zone-list{padding: 0 15px;}
+.wcmp-wrapper .panel .shipping-zone-list a {
+  display: block;
+  margin-bottom: 0;
+  border-bottom: 1px solid #d3dbe2;
+  padding: 15px 0;
+}
+.shipping-zone-list hr{display: none;}
+.zone-component .form-group {
+  padding: 0 15px;
+  display: flex;
+}
+.wcmp-zone-method-wrapper.form-group {
+  display: unset;
+}
+.wcmp-zone-method-wrapper .col-md-3.wcmp-zone-method-heading{   
+   float: left;
+  width: 25%;}
+.wcmp-zone-method-wrapper .wcmp-zone-method-content.col-md-9{ float: left; padding-bottom: 15px;}
+.wcmp-zone-method-footer.col-md-9.col-sm-9.col-md-offset-3.mt-15 {  margin-left: 25%;}
+#shipping-form-fields .form-group .control-label {
+  width: 20%;
+}
 @media screen and (min-width:320px) and (max-width:767px){
 .wcmp_shop_settings_form .form-group, .wcmp_policy_form .form-group, .wcmp_billing_form .form-group, form[name='wcmp_vendor_dashboard_stat_report'] .panel-heading {flex-direction: column;}
 #vendor_transactions_date_filter .form-group, form[name="wcmp_vendor_dashboard_orders"] .form-group, #vendor_ledger_date_filter .form-group {width: 100%;}
@@ -5579,6 +5611,17 @@ border-bottom-color: transparent;
   margin-left: 0;
 }
 .side-collapse-container .product_search {display: flex;}
+.date-inp-wrap .hasDatepicker { width: 100%; padding-left: 5px;}
+form[name="wcmp_vendor_dashboard_orders"] .date-inp-wrap { width: 100%;}
+.order-filter-actions select#cide_wise_tax {width: 100%;}
+.wcmp-zone-method-wrapper .col-md-3.wcmp-zone-method-heading {
+  float: unset; 
+   width: auto;
+}
+.wcmp-zone-method-footer.col-md-9.col-sm-9.col-md-offset-3.mt-15{margin-left:0}
+#shipping-form-fields .form-group { flex-direction: column; padding: 0}
+#shipping-form-fields .form-group .control-label{ width: auto;}
+#shipping-form-fields .form-group .col-md-9.col-sm-9 { padding: 0;}
 }
  /* for iphone 5/SE responsive start */
 @media screen and (device-aspect-ratio: 40/71){
