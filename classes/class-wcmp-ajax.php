@@ -143,6 +143,8 @@ class WCMp_Ajax {
             add_action( 'wp_ajax_wcmp_product_translations', array( &$this, 'wpml_wcmp_product_translations' ) );
             add_action( 'wp_ajax_wcmp_product_new_translation', array( &$this, 'wpml_wcmp_product_new_translation' ) );
         }
+        // Follow ajax
+        add_action('wp_ajax_wcmp_follow_store_toggle_status', array($this, 'wcmp_follow_store_toggle_status'));
     }
 
     /**
@@ -4533,6 +4535,64 @@ class WCMp_Ajax {
             }
         }
         die;
+    }
+
+    public function wcmp_follow_store_toggle_status() {
+        $store_vendor_id = isset( $_POST['vendor_id'] ) ? absint($_POST['vendor_id']) : 0;
+        $follow_status = isset( $_POST['status'] ) ? wc_clean($_POST['status']) : '';
+        $current_user_id = get_current_user_id() ? absint(get_current_user_id()) : 0;
+
+        if (!$current_user_id || !$store_vendor_id)
+            wp_send_json_error( new WP_Error( 'invalid_vendor', __( 'Invalid vendor or customer', 'dc-woocommerce-multi-vendor' ) ), 422 );
+
+        // get followed vendor by customer
+        $wcmp_customer_follow_vendor = get_user_meta( $current_user_id, 'wcmp_customer_follow_vendor', true ) ? get_user_meta( $current_user_id, 'wcmp_customer_follow_vendor', true ) : array();
+        
+        // get folloed customer from vendor
+        $wcmp_vendor_followed_by_customer = get_user_meta( $store_vendor_id, 'wcmp_vendor_followed_by_customer', true ) ? get_user_meta( $store_vendor_id, 'wcmp_vendor_followed_by_customer', true ) : array();
+
+        if ($follow_status && $follow_status == 'Follow') {
+
+            $follow_vendors_details[] = array(
+                'user_id'   =>   !empty($wcmp_customer_follow_vendor['user_id']) && in_array($store_vendor_id, $wcmp_customer_follow_vendor['user_id']) ? '' : $store_vendor_id,
+                'timestamp' => current_time( 'mysql' ),
+            );
+            $followed_by_customer[] = array(
+                'user_id'   =>   !empty($wcmp_vendor_followed_by_customer['user_id']) && in_array($current_user_id, $wcmp_vendor_followed_by_customer['user_id']) ? '' : $current_user_id,
+                'timestamp' => current_time( 'mysql' ),
+            );
+
+            $follow_vendors_details = array_merge( $follow_vendors_details, $wcmp_customer_follow_vendor );
+            $followed_by_customer = array_merge( $followed_by_customer, $wcmp_vendor_followed_by_customer );
+        }
+
+        if ($follow_status && $follow_status == 'Unfollow') {
+            foreach ($wcmp_customer_follow_vendor as $key => $value) {
+                if (absint($value['user_id']) == absint($store_vendor_id)) {
+                    $follow_vendors_details = $key;
+                }
+            }
+
+            foreach ($wcmp_vendor_followed_by_customer as $key_by_customer => $value_by_customer) {
+                if (absint($value_by_customer['user_id']) == absint($current_user_id)) {
+                    $unset_customer_key = $key_by_customer;
+                }
+            }
+
+            unset($wcmp_customer_follow_vendor[$follow_vendors_details]);
+            $follow_vendors_details = $wcmp_customer_follow_vendor;
+
+            unset($wcmp_vendor_followed_by_customer[$unset_customer_key]);
+            $followed_by_customer = $wcmp_vendor_followed_by_customer;
+        }
+
+        update_user_meta( $current_user_id, 'wcmp_customer_follow_vendor', array_filter( array_map( 'wc_clean', (array) $follow_vendors_details ) ) );
+        update_user_meta( $store_vendor_id, 'wcmp_vendor_followed_by_customer', array_filter( array_map( 'wc_clean', (array) $followed_by_customer ) ) );
+
+        if ( is_wp_error( $follow_status ) ) {
+            wp_send_json_error( $follow_status, 422 );
+        }
+        wp_send_json_success( array( 'status' => $follow_status ), 200 );
     }
 
 }

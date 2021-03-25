@@ -49,6 +49,7 @@ class WCMp_Email {
 		include( 'emails/class-wcmp-email-vendor-product-rejected.php' );
 		include( 'emails/class-wcmp-email-suspend-vendor-account.php' );
 		include( 'emails/class-wcmp-email-vendor-review.php' );
+		include( 'emails/class-wcmp-email-vendor-followed.php' );
 
         $wcmp_email = array();
         $wcmp_email['WC_Email_Vendor_New_Account'] = new WC_Email_Vendor_New_Account();
@@ -73,7 +74,8 @@ class WCMp_Email {
 		$wcmp_email['WC_Email_Vendor_Product_Rejected'] = new WC_Email_Vendor_Product_Rejected();
 		$wcmp_email['WC_Email_Suspend_Vendor_Account'] = new WC_Email_Suspend_Vendor_Account();
 		$wcmp_email['WC_Email_Vendor_Review'] = new WC_Email_Vendor_Review();
-		
+		$wcmp_email['WC_Email_Vendor_Followed'] = new WC_Email_Vendor_Followed();
+
         return array_merge( $emails, apply_filters( 'wcmp_email_classes', $wcmp_email ) );
     }
 

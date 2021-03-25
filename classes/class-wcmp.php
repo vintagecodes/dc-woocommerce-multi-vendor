@@ -196,7 +196,9 @@ final class WCMp {
         $this->init_wcmp_rest_api();
         // Init Ledger
         $this->init_ledger();
-        
+        // rewrite endpoint for followers details
+        add_rewrite_endpoint( 'followers', EP_ALL );
+
         if (!wp_next_scheduled('migrate_spmv_multivendor_table') && !get_option('spmv_multivendor_table_migrated', false)) {
             wp_schedule_event(time(), 'every_5minute', 'migrate_spmv_multivendor_table');
         }
