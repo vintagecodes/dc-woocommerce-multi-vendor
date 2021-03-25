@@ -1292,7 +1292,7 @@ class WCMp_Vendor {
         $default = array(
             'post_status'    => 'publish',
             'post_type'      => 'product',
-            'author__in'     => $this->id,
+            'author__in'     => array($this->id),
             'meta_key'       => '_wc_average_rating',
             'orderby'        => 'meta_value_num',
             'order'          => 'DESC',
