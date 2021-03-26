@@ -106,7 +106,7 @@ class DC_Widget_Quick_Info_Widget extends WP_Widget {
             echo $before_widget;
 
             // Set up widget title
-            if ($instance['title']) {
+            if (isset($instance['title'])) {
                 $title = apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
             } else {
                 $title = false;

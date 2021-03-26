@@ -22,6 +22,7 @@ extract( $instance );
         $message = sanitize_text_field( $_GET['message'] );
         echo "<div class='woocommerce-{$widget->response[ $message ]['class']}'>" . esc_html($widget->response[ $message ]['message']) . "</div>";
     } else {
+        $description = !empty($description) ? $description : '';
         echo '<p>' . esc_html($description) . '</p>';
     }?>
 

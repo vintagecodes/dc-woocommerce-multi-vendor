@@ -91,7 +91,7 @@ class DC_Woocommerce_Store_Location_Widget extends WP_Widget {
             );
 
             // Set up widget title
-            if ($instance['title']) {
+            if (isset($instance['title'])) {
                 $title = apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
             } else {
                 $title = false;
