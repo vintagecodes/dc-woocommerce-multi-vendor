@@ -406,6 +406,7 @@ class WCMp_Frontend {
         }
         if (wcmp_is_store_page()) {
             wp_enqueue_script('wcmp_seller_review_rating_js');
+            wp_enqueue_script('frontend_js');
         }
     }
 

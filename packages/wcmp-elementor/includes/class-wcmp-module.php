@@ -40,7 +40,13 @@ class WCMp_Elementor_Module extends WCMp_Elementor_ModuleBase {
             'StoreTabs',
             'StoreTabContents',
             'StoreSocial',
+            'StoreFollow'
         ];
+
+        require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+        if ( is_plugin_active('wcmp-live-chat/wcmp_live_chat.php') ) {
+            $widgets[] = 'StoreChat';
+        }
 
         return $widgets;
     }
@@ -80,6 +86,8 @@ class WCMp_Elementor_Module extends WCMp_Elementor_ModuleBase {
 					'StoreTabs',
 					'StoreDummyProducts',
 					'StoreSocial',
+                    'StoreFollow',
+                    'StoreChat'
 			];
 
 			$module = $wcmp_elementor->wcmp_elementor()->dynamic_tags;
