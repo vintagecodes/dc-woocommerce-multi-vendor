@@ -1626,7 +1626,14 @@ Class WCMp_Admin_Dashboard {
                 }
                 ?></div><?php
             } else {
-                esc_html_e('No customer follows you till now.', 'dc-woocommerce-multi-vendor');
+                ?>
+                <div class="panel panel-default pannel-outer-heading">
+                    <div class="wcmp-widget-dt table dataTable dtr-inline">
+                        <div class="col-md-12 wcmp-comments dash-widget-dt"> <?php esc_html_e('No customer follows you till now.', 'dc-woocommerce-multi-vendor'); ?>
+                        </div>
+                    </div>
+                </div>
+                <?php            
             }
         }
 

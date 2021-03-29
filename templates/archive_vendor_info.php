@@ -63,7 +63,9 @@ if ( $template_class == 'template3') { ?>
                 <div class="wcmp-banner-middle">
                     <div class="wcmp-heading"><?php echo esc_html($vendor->page_title) ?></div>
                     <!-- Follow button will be added here -->
+                    <?php if (get_wcmp_vendor_settings('store_follow_enabled', 'general') == 'Enable') { ?>
                     <button type="button" class="wcmp-butn <?php echo is_user_logged_in() ? 'wcmp-stroke-butn' : ''; ?>" data-vendor_id=<?php echo esc_attr($vendor_id); ?> data-status=<?php echo esc_attr($follow_status); ?> ><span></span><?php echo is_user_logged_in() ? esc_attr($follow_status) : esc_html_e('You must logged in to follow', 'dc-woocommerce-multi-vendor'); ?></button>
+                    <?php } ?>
                 </div>
                 <div class="wcmp-contact-deatil">
                     
@@ -167,7 +169,9 @@ if ( $template_class == 'template3') { ?>
                 </div>
                 <div class='wcmp-butn-area'>
                     <!-- Follow button will be added here -->
+                    <?php if (get_wcmp_vendor_settings('store_follow_enabled', 'general') == 'Enable') { ?>
                     <button type="button" class="wcmp-butn <?php echo is_user_logged_in() ? 'wcmp-stroke-butn' : ''; ?>" data-vendor_id=<?php echo esc_attr($vendor_id); ?> data-status=<?php echo esc_attr($follow_status); ?> ><span></span><?php echo is_user_logged_in() ? esc_attr($follow_status) : esc_html_e('You must logged in to follow', 'dc-woocommerce-multi-vendor'); ?></button>
+                    <?php } ?>
                     <?php do_action( 'wcmp_additional_button_at_banner' ); ?>
                 </div>
             </div>
@@ -237,7 +241,9 @@ if ( $template_class == 'template3') { ?>
                 </div>
                 <div class='wcmp-butn-area'>
                     <!-- Follow button will be added here -->
+                    <?php if (get_wcmp_vendor_settings('store_follow_enabled', 'general') == 'Enable') { ?>
                     <button type="button" class="wcmp-butn <?php echo is_user_logged_in() ? 'wcmp-stroke-butn' : ''; ?>" data-vendor_id=<?php echo esc_attr($vendor_id); ?> data-status=<?php echo esc_attr($follow_status); ?> ><span></span><?php echo is_user_logged_in() ? esc_attr($follow_status) : esc_html_e('You must logged in to follow', 'dc-woocommerce-multi-vendor'); ?></button>
+                    <?php } ?>
                     <?php do_action( 'wcmp_additional_button_at_banner' ); ?>
                 </div>
             </div>
