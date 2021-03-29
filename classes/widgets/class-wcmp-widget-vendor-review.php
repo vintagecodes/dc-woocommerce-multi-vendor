@@ -77,7 +77,8 @@ class WCMp_Widget_Vendor_Review_Widget extends WP_Widget {
                  $reviews_lists = $vendor->get_reviews_and_rating(0); 
                 if(isset($reviews_lists) && count($reviews_lists) > 0) {
                     foreach($reviews_lists as $comment) {
-                        if($review_count >= $instance['reviews_number'])
+                        $reviews_number = isset($instance['reviews_number']) ? $instance['reviews_number'] : 0;
+                        if($review_count >= $reviews_number)
                         break;
                         $rating   = intval( get_comment_meta( $comment->comment_ID, 'vendor_rating', true ) );
                         if ( $rating && get_option( 'woocommerce_enable_review_rating' ) === 'yes' && $rating >= intval(apply_filters('wcmp_vendor_rating_widget_set_avg',3)) ){

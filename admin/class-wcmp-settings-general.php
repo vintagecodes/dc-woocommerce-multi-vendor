@@ -56,6 +56,7 @@ class WCMp_Settings_General {
                         "show_related_products" => array('title' => __('Related Product Settings', 'dc-woocommerce-multi-vendor'), 'type' => 'select', 'id' => 'show_related_products', 'name' => 'show_related_products', 'label_for' => 'show_related_products', 'desc' => stripslashes(__('Select related products to show on the single product page.', 'dc-woocommerce-multi-vendor')), 'options' => array('all_related' => __('Related Products from Entire Store', 'dc-woocommerce-multi-vendor'), 'vendors_related' => __("Related Products from Vendor's Store", 'dc-woocommerce-multi-vendor'), 'disable' => __('Disable', 'dc-woocommerce-multi-vendor'))), // select
                         "is_enable_store_sidebar" => array('title' => __('Enable Store Sidebar', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'is_enable_store_sidebar', 'label_for' => 'is_enable_store_sidebar', 'name' => 'is_enable_store_sidebar', 'value' => 'Enable', 'text' => __('Uncheck this to disable vendor store sidebar..', 'dc-woocommerce-multi-vendor')), // Checkbox
                         "store_sidebar_position" => array('title' => __('Store Sidebar Position', 'dc-woocommerce-multi-vendor'), 'type' => 'select', 'id' => 'store_sidebar_position', 'name' => 'store_sidebar_position', 'label_for' => 'store_sidebar_position', 'desc' => stripslashes(__('Set store sidebar position.', 'dc-woocommerce-multi-vendor')), 'options' => array('left' => __('At Left', 'dc-woocommerce-multi-vendor'), 'right' => __("At Right", 'dc-woocommerce-multi-vendor'))), // select
+                        "store_follow_enabled" => array('title' => __('Enable Store Follow', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'store_follow_enabled', 'label_for' => 'store_follow_enabled', 'name' => 'store_follow_enabled', 'value' => 'Enable', 'text' => __('Checked this to enable store follow..', 'dc-woocommerce-multi-vendor')), // Checkbox
 
                         )
                     ),
@@ -128,7 +129,9 @@ class WCMp_Settings_General {
         if (isset($input['store_sidebar_position'])) {
             $new_input['store_sidebar_position'] = sanitize_text_field($input['store_sidebar_position']);
         }
-
+        if (isset($input['store_follow_enabled'])) {
+            $new_input['store_follow_enabled'] = sanitize_text_field($input['store_follow_enabled']);
+        }
         if (!$hasError) {
             add_settings_error(
                     "wcmp_{$this->tab}_settings_name", esc_attr("wcmp_{$this->tab}_settings_admin_updated"), __('General Settings Updated', 'dc-woocommerce-multi-vendor'), 'updated'

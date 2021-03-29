@@ -3,9 +3,9 @@ Contributors: wcmp, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh8961
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.6.2
+Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 3.6.0
+Stable tag: 3.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,43 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 
 == Changelog ==
+
+= 3.7.0 - 2021-03-30 =
+* Added - WCMp Store Follow.
+* Added - Elementor support with WCMp vendor shop page.
+* Added - Migration support from other multivendors( Dokan, wcfm, wc vendors, woocommerce product vendor ).
+* Added - Brand new vendor list design.
+* Added - Compatibility of WordPress 5.6.
+* Fix - Bulk product action not working in vendor dashboard #775.
+* Fix - Shipping title is missing #763.
+* Fix - SQL syntax issue #760.
+* Fix - Purchase note of the product is not saving #757.
+* Fix - List all orders by vendor returns empty Array #750.
+* Fix - Vendors when try to edit downloadable products they are not able to see the downloadable files #749.
+* Fix - Vendor storefront, policy page, store description editor breaking in mobile view #746.
+* Fix - Order Status Bulk Change not working #742.
+* Fix - sale price date javascript issue #739.
+* Fix - Suborder remove from woocommerce orders rest API.
+* Fix - Text correction at vendor dashboard.
+* Fix - Vendor dashboard responsive issue.
+* Fix - Vendor Coupon Widget bug #771.
+* Fix - save shipping class value #740.
+* Dev - Added `wcmp_load_default_vendor_list` filter.
+* Dev - Added `wcmp_break_loop_offset` filter.
+* Dev - Added `wcmp_elementor_social_network_map` filter.
+* Dev - Added `wcmp_elementor_store_data_defaults` filter.
+* Dev - Added `wcmp_elementor_store_data` filter.
+* Dev - Added `wcmp_elementor_tags_store_info_value` filter.
+* Dev - Added `wcmp_elementor_tags_store_tab_items_value` filter.
+* Dev - Added `wcmp_before_vendor_list` action.
+* Dev - Added `wcmp_before_vendor_list_map_section` action.
+* Dev - Added `wcmp_vendor_list_map_section` action.
+* Dev - Added `wcmp_after_vendor_list_map_section` action.
+* Dev - Added `wcmp_before_vendor_list_vendors_section` action.
+* Dev - Added `wcmp_vendor_list_vendors_section` action.
+* Dev - Added `wcmp_after_vendor_list_vendors_section` action.
+* Dev - Added `wcmp_after_vendor_list` action.
+* Updated - Language file.
 
 = 3.6.0 - 2021-03-09 =
 * Added - WPML Compatibility #133.
