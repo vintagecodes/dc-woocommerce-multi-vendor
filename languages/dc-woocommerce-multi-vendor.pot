@@ -6,7 +6,7 @@ msgstr ""
 "Marketplace 3.6.0\n"
 "Report-Msgid-Bugs-To: "
 "https://github.com/dualcube/dc-woocommerce-multi-vendor/issues\n"
-"POT-Creation-Date: 2021-03-11 08:31:21+00:00\n"
+"POT-Creation-Date: 2021-03-29 10:45:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,13 +16,13 @@ msgstr ""
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
 #: admin/class-wcmp-admin-setup-wizard.php:51
-#: classes/class-wcmp-vendor-dashboard.php:2270
+#: classes/class-wcmp-vendor-dashboard.php:2306
 #: classes/migration/class-wcmp-migration.php:105
 msgid "Introduction"
 msgstr ""
 
 #: admin/class-wcmp-admin-setup-wizard.php:56
-#: classes/class-wcmp-vendor-dashboard.php:2440
+#: classes/class-wcmp-vendor-dashboard.php:2476
 msgid "Store Setup"
 msgstr ""
 
@@ -55,7 +55,7 @@ msgid "Processing"
 msgstr ""
 
 #: admin/class-wcmp-admin-setup-wizard.php:86
-#: classes/class-wcmp-vendor-dashboard.php:2285
+#: classes/class-wcmp-vendor-dashboard.php:2321
 msgid "Ready!"
 msgstr ""
 
@@ -104,17 +104,17 @@ msgid ""
 msgstr ""
 
 #: admin/class-wcmp-admin-setup-wizard.php:434
-#: classes/class-wcmp-vendor-dashboard.php:2396
+#: classes/class-wcmp-vendor-dashboard.php:2432
 msgid "Let's go!"
 msgstr ""
 
 #: admin/class-wcmp-admin-setup-wizard.php:435
-#: classes/class-wcmp-vendor-dashboard.php:2397
+#: classes/class-wcmp-vendor-dashboard.php:2433
 msgid "Not right now"
 msgstr ""
 
 #: admin/class-wcmp-admin-setup-wizard.php:445
-#: classes/class-wcmp-vendor-dashboard.php:2275
+#: classes/class-wcmp-vendor-dashboard.php:2311
 msgid "Store setup"
 msgstr ""
 
@@ -134,8 +134,8 @@ msgstr ""
 #: admin/class-wcmp-admin-setup-wizard.php:552
 #: admin/class-wcmp-admin-setup-wizard.php:629
 #: admin/class-wcmp-admin-setup-wizard.php:719
-#: classes/class-wcmp-vendor-dashboard.php:2498
-#: classes/class-wcmp-vendor-dashboard.php:2595
+#: classes/class-wcmp-vendor-dashboard.php:2534
+#: classes/class-wcmp-vendor-dashboard.php:2631
 msgid "Continue"
 msgstr ""
 
@@ -143,8 +143,8 @@ msgstr ""
 #: admin/class-wcmp-admin-setup-wizard.php:553
 #: admin/class-wcmp-admin-setup-wizard.php:630
 #: admin/class-wcmp-admin-setup-wizard.php:720
-#: classes/class-wcmp-vendor-dashboard.php:2499
-#: classes/class-wcmp-vendor-dashboard.php:2596
+#: classes/class-wcmp-vendor-dashboard.php:2535
+#: classes/class-wcmp-vendor-dashboard.php:2632
 msgid "Skip this step"
 msgstr ""
 
@@ -393,7 +393,7 @@ msgstr ""
 #: admin/class-wcmp-admin-setup-wizard.php:966
 #: admin/class-wcmp-settings-payment.php:27
 #: classes/class-wcmp-post-transaction.php:332
-#: classes/class-wcmp-vendor-dashboard.php:184
+#: classes/class-wcmp-vendor-dashboard.php:186
 #: includes/wcmp-core-functions.php:4155
 msgid "Direct Bank Transfer"
 msgstr ""
@@ -578,7 +578,7 @@ msgstr ""
 #: packages/wcmp-elementor/includes/Tags/StoreInfo.php:53
 #: templates/vendor-dashboard/profile.php:37
 #: templates/vendor-dashboard/vendor-policy.php:75
-#: templates/widget/quick-info.php:54
+#: templates/widget/quick-info.php:55
 msgid "Email"
 msgstr ""
 
@@ -597,8 +597,8 @@ msgstr ""
 #: admin/class-wcmp-settings-general-customer_support_details.php:38
 #: admin/class-wcmp-settings-vendor-registration.php:95
 #: admin/class-wcmp-settings-vendors.php:492 classes/class-wcmp-user.php:420
-#: classes/class-wcmp-vendor-dashboard.php:2470
-#: classes/class-wcmp-vendor-dashboard.php:2472
+#: classes/class-wcmp-vendor-dashboard.php:2506
+#: classes/class-wcmp-vendor-dashboard.php:2508
 #: templates/vendor-dashboard/vendor-policy.php:94
 msgid "State"
 msgstr ""
@@ -606,7 +606,7 @@ msgstr ""
 #: admin/class-wcmp-settings-general-customer_support_details.php:39
 #: admin/class-wcmp-settings-vendor-registration.php:98
 #: admin/class-wcmp-settings-vendors.php:493 classes/class-wcmp-user.php:396
-#: classes/class-wcmp-vendor-dashboard.php:2465
+#: classes/class-wcmp-vendor-dashboard.php:2501
 #: templates/vendor-dashboard/shop-front.php:205
 #: templates/vendor-dashboard/vendor-policy.php:97
 msgid "City"
@@ -615,7 +615,7 @@ msgstr ""
 #: admin/class-wcmp-settings-general-customer_support_details.php:40
 #: admin/class-wcmp-settings-vendor-registration.php:92
 #: admin/class-wcmp-settings-vendors.php:491 classes/class-wcmp-user.php:426
-#: classes/class-wcmp-vendor-dashboard.php:2451
+#: classes/class-wcmp-vendor-dashboard.php:2487
 #: includes/wcmp-core-functions.php:2510
 #: templates/vendor-dashboard/vendor-policy.php:91
 msgid "Country"
@@ -773,20 +773,20 @@ msgid "Select option for shown products under SPMV concept."
 msgstr ""
 
 #: admin/class-wcmp-settings-general.php:49
-msgid "Disable Advance Marketplace Product Listing"
+msgid "Disable Advanced Marketplace Product Listing"
 msgstr ""
 
 #: admin/class-wcmp-settings-general.php:49
 msgid ""
-"Disable advance marketplace product listing flows like popular ecommerce "
+"Disable advanced marketplace product listing flows like popular ecommerce "
 "site."
 msgstr ""
 
 #: admin/class-wcmp-settings-general.php:49
 msgid ""
-"Advance Marketplace Product Listing is a well known e-commerce product "
-"listing where you can not changed the options like Categoires, GTIN once "
-"you chosen. By disabling you can override it."
+"Advanced Marketplace Product Listing is a well known e-commerce product "
+"listing where you cannot change the options like Categoires, GTIN once "
+"chosen. By disabling you can override it."
 msgstr ""
 
 #: admin/class-wcmp-settings-general.php:50
@@ -916,8 +916,8 @@ msgstr ""
 
 #: admin/class-wcmp-settings-payment-refund_payment.php:30
 #: admin/class-wcmp-settings-vendors.php:181
-#: admin/class-wcmp-settings-vendors.php:298 classes/class-wcmp-ajax.php:1974
-#: classes/class-wcmp-ajax.php:2850
+#: admin/class-wcmp-settings-vendors.php:298 classes/class-wcmp-ajax.php:1976
+#: classes/class-wcmp-ajax.php:2852
 #: templates/vendor-dashboard/dashboard-widgets/wcmp_vendor_product_stats.php:51
 #: templates/vendor-dashboard/product-manager/products.php:27
 msgid "Pending"
@@ -1125,7 +1125,7 @@ msgstr ""
 #: classes/class-wcmp-post-commission.php:405
 #: classes/class-wcmp-post-commission.php:738
 #: classes/class-wcmp-post-commission.php:739
-#: classes/class-wcmp-vendor-dashboard.php:288
+#: classes/class-wcmp-vendor-dashboard.php:290
 #: templates/vendor-dashboard/vendor-orders/views/html-order-items.php:64
 #: templates/vendor-dashboard/vendor-orders/views/html-order-items.php:65
 msgid "Tax"
@@ -1135,12 +1135,12 @@ msgstr ""
 msgid "Transfer the tax collected (per product) to the vendor. "
 msgstr ""
 
-#: admin/class-wcmp-settings-payment.php:61 classes/class-wcmp-ajax.php:3193
+#: admin/class-wcmp-settings-payment.php:61 classes/class-wcmp-ajax.php:3195
 #: classes/class-wcmp-post-commission.php:394
 #: classes/class-wcmp-post-commission.php:920
-#: classes/class-wcmp-vendor-dashboard.php:289
-#: classes/class-wcmp-vendor-dashboard.php:519
-#: classes/class-wcmp-vendor-dashboard.php:537
+#: classes/class-wcmp-vendor-dashboard.php:291
+#: classes/class-wcmp-vendor-dashboard.php:521
+#: classes/class-wcmp-vendor-dashboard.php:539
 #: classes/class-wcmp-vendor-hooks.php:100
 #: classes/products/class-wcmp-products-edit-product.php:151
 #: templates/vendor-dashboard/vendor-orders/views/html-order-shipping.php:20
@@ -1195,7 +1195,7 @@ msgstr ""
 #: admin/class-wcmp-settings-reports.php:41
 #: admin/class-wcmp-settings-vendors.php:20
 #: admin/class-wcmp-settings-vendors.php:321 admin/class-wcmp-settings.php:279
-#: classes/class-wcmp-admin.php:70 classes/class-wcmp-post-commission.php:1460
+#: classes/class-wcmp-admin.php:72 classes/class-wcmp-post-commission.php:1460
 #: classes/class-wcmp-product.php:539 classes/class-wcmp-product.php:695
 #: classes/class-wcmp-product.php:722 classes/class-wcmp-product.php:1221
 #: classes/class-wcmp-taxonomy.php:44 classes/class-wcmp-taxonomy.php:45
@@ -1278,12 +1278,14 @@ msgid "Overview"
 msgstr ""
 
 #: admin/class-wcmp-settings-reports.php:47 admin/class-wcmp-settings.php:331
-#: classes/class-wcmp-ajax.php:1724 classes/class-wcmp-post-commission.php:1459
-#: classes/class-wcmp-vendor-dashboard.php:1583
+#: classes/class-wcmp-ajax.php:1726 classes/class-wcmp-post-commission.php:1459
+#: classes/class-wcmp-vendor-dashboard.php:1588
 #: classes/class-wcmp-vendor-hooks.php:522
 #: includes/wcmp-core-functions.php:2061 templates/emails/new-product.php:17
+#: templates/emails/plain/vendor-followed.php:25
 #: templates/emails/product-rejected.php:16
 #: templates/emails/report-abuse-email.php:25
+#: templates/emails/vendor-followed.php:16
 #: templates/emails/vendor-new-order.php:26
 #: templates/emails/vendor-notify-shipped.php:29
 #: templates/vendor-dashboard/dashboard-widgets/wcmp_vendor_product_sales_report.php:17
@@ -1310,11 +1312,11 @@ msgstr ""
 #: admin/class-wcmp-settings-to_do_list.php:81
 #: admin/class-wcmp-settings-to_do_list.php:156
 #: admin/class-wcmp-settings-vendors.php:75
-#: admin/class-wcmp-settings-vendors.php:761 classes/class-wcmp-ajax.php:1907
-#: classes/class-wcmp-ajax.php:2118 classes/class-wcmp-ajax.php:2665
-#: classes/class-wcmp-ajax.php:3363 classes/class-wcmp-post-commission.php:378
-#: classes/class-wcmp-vendor-dashboard.php:721
-#: classes/class-wcmp-vendor-dashboard.php:862
+#: admin/class-wcmp-settings-vendors.php:761 classes/class-wcmp-ajax.php:1909
+#: classes/class-wcmp-ajax.php:2120 classes/class-wcmp-ajax.php:2667
+#: classes/class-wcmp-ajax.php:3365 classes/class-wcmp-post-commission.php:378
+#: classes/class-wcmp-vendor-dashboard.php:723
+#: classes/class-wcmp-vendor-dashboard.php:864
 #: templates/vendor-dashboard/product-manager/views/html-product-highlights.php:124
 #: templates/vendor-dashboard/product-manager/views/html-product-highlights.php:146
 #: templates/vendor-dashboard/product-manager/views/html-product-highlights.php:181
@@ -1324,13 +1326,13 @@ msgid "Edit"
 msgstr ""
 
 #: admin/class-wcmp-settings-to_do_list.php:37
-#: admin/class-wcmp-settings-vendors.php:800 classes/class-wcmp-ajax.php:2832
+#: admin/class-wcmp-settings-vendors.php:800 classes/class-wcmp-ajax.php:2834
 msgid "Activate"
 msgstr ""
 
 #: admin/class-wcmp-settings-to_do_list.php:38
 #: admin/class-wcmp-settings-to_do_list.php:365
-#: admin/class-wcmp-settings-vendors.php:816 classes/class-wcmp-ajax.php:2863
+#: admin/class-wcmp-settings-vendors.php:816 classes/class-wcmp-ajax.php:2865
 #: classes/class-wcmp-user.php:802
 msgid "Reject"
 msgstr ""
@@ -1349,7 +1351,7 @@ msgstr ""
 #: admin/class-wcmp-settings-to_do_list.php:79
 #: admin/class-wcmp-settings-to_do_list.php:154
 #: admin/class-wcmp-settings-to_do_list.php:262
-#: classes/class-wcmp-vendor-dashboard.php:284
+#: classes/class-wcmp-vendor-dashboard.php:286
 #: templates/customer_support_details_to_buyer.php:31
 #: templates/vendor_message_to_buyer.php:35
 msgid "Vendor Name"
@@ -1380,7 +1382,7 @@ msgid "Add your note for seller"
 msgstr ""
 
 #: admin/class-wcmp-settings-to_do_list.php:210
-#: classes/class-wcmp-ajax.php:2562 classes/class-wcmp-ajax.php:2645
+#: classes/class-wcmp-ajax.php:2564 classes/class-wcmp-ajax.php:2647
 #: templates/vendor-dashboard/product-manager/views/html-product-data-attributes.php:36
 msgid "Add"
 msgstr ""
@@ -1402,14 +1404,14 @@ msgstr ""
 #: classes/class-wcmp-product.php:788 classes/class-wcmp-product.php:1190
 #: classes/class-wcmp-product.php:1200 classes/class-wcmp-product.php:1532
 #: classes/class-wcmp-product.php:1569
-#: classes/class-wcmp-vendor-dashboard.php:167
+#: classes/class-wcmp-vendor-dashboard.php:169
 #: includes/wcmp-core-functions.php:4214
 #: templates/emails/vendor-new-order.php:28
 #: templates/vendor-dashboard/vendor-orders/views/html-order-items.php:77
 msgid "Commission"
 msgstr ""
 
-#: admin/class-wcmp-settings-to_do_list.php:264 classes/class-wcmp-admin.php:71
+#: admin/class-wcmp-settings-to_do_list.php:264 classes/class-wcmp-admin.php:73
 #: classes/class-wcmp-post-commission.php:1461
 #: classes/class-wcmp-post-transaction.php:176
 #: classes/class-wcmp-post-transaction.php:244
@@ -1453,7 +1455,7 @@ msgid "Question details"
 msgstr ""
 
 #: admin/class-wcmp-settings-to_do_list.php:364
-#: admin/class-wcmp-settings-vendors.php:815 classes/class-wcmp-ajax.php:2856
+#: admin/class-wcmp-settings-vendors.php:815 classes/class-wcmp-ajax.php:2858
 #: classes/class-wcmp-user.php:801 classes/class-wcmp-user.php:808
 msgid "Approve"
 msgstr ""
@@ -1571,9 +1573,9 @@ msgid "Set endpoint for vendor announcements page"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendor-general.php:51
-#: classes/class-wcmp-admin.php:226 classes/class-wcmp-admin.php:229
+#: classes/class-wcmp-admin.php:228 classes/class-wcmp-admin.php:231
 #: classes/class-wcmp-endpoints.php:46
-#: classes/class-wcmp-vendor-dashboard.php:1365
+#: classes/class-wcmp-vendor-dashboard.php:1367
 #: classes/class-wcmp-vendor-hooks.php:76
 msgid "Storefront"
 msgstr ""
@@ -1636,8 +1638,8 @@ msgstr ""
 
 #: admin/class-wcmp-settings-vendor-general.php:59
 #: classes/class-wcmp-endpoints.php:70
-#: classes/class-wcmp-vendor-dashboard.php:1328
-#: classes/class-wcmp-vendor-dashboard.php:1435
+#: classes/class-wcmp-vendor-dashboard.php:1330
+#: classes/class-wcmp-vendor-dashboard.php:1437
 #: classes/class-wcmp-vendor-hooks.php:126
 #: templates/vendor-dashboard/product-manager/products.php:132
 #: templates/vendor-dashboard/vendor-products-qna.php:48
@@ -1704,7 +1706,7 @@ msgstr ""
 #: admin/class-wcmp-settings-vendor-general.php:67
 #: admin/class-wcmp-settings.php:98 admin/class-wcmp-settings.php:147
 #: classes/class-wcmp-endpoints.php:98
-#: classes/class-wcmp-vendor-dashboard.php:1415
+#: classes/class-wcmp-vendor-dashboard.php:1417
 msgid "Transaction Details"
 msgstr ""
 
@@ -1807,7 +1809,7 @@ msgstr ""
 
 #: admin/class-wcmp-settings-vendor-registration.php:89
 #: admin/class-wcmp-settings-vendors.php:488 classes/class-wcmp-user.php:432
-#: classes/class-wcmp-vendor-dashboard.php:2481
+#: classes/class-wcmp-vendor-dashboard.php:2517
 #: templates/vendor-dashboard/shop-front.php:159
 #: templates/vendor-dashboard/vendor-orders/views/html-order-info.php:109
 #: templates/vendor-dashboard/vendor-policy.php:69
@@ -1835,7 +1837,7 @@ msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:21
 #: admin/class-wcmp-settings-vendors.php:325 admin/class-wcmp-settings.php:92
-#: classes/class-wcmp-ajax.php:1267 classes/class-wcmp-post-notices.php:35
+#: classes/class-wcmp-ajax.php:1269 classes/class-wcmp-post-notices.php:35
 #: classes/class-wcmp-taxonomy.php:46
 #: classes/reports/class-wcmp-report-vendor.php:166
 msgid "Vendors"
@@ -1847,7 +1849,7 @@ msgstr ""
 #: templates/emails/vendor-contact-widget-email.php:24
 #: templates/vendor-dashboard/product-manager/views/html-product-attribute.php:30
 #: templates/vendor-dashboard/product-manager/views/html-product-data-general.php:93
-#: templates/widget/quick-info.php:52
+#: templates/widget/quick-info.php:53
 msgid "Name"
 msgstr ""
 
@@ -1856,14 +1858,14 @@ msgid "Registered"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:36 classes/class-wcmp-endpoints.php:78
-#: classes/class-wcmp-frontend.php:848
+#: classes/class-wcmp-frontend.php:853
 #: classes/class-wcmp-post-transaction.php:244 classes/class-wcmp-user.php:760
 #: packages/wcmp-elementor/includes/Tags/StoreTabs.php:95
 #: templates/vendor-dashboard/coupon-manager/views/html-coupon-data-usage-restriction.php:68
 msgid "Products"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendors.php:37 classes/class-wcmp-ajax.php:1729
+#: admin/class-wcmp-settings-vendors.php:37 classes/class-wcmp-ajax.php:1731
 #: classes/class-wcmp-post-commission.php:1463
 #: classes/class-wcmp-post-transaction.php:244
 #: classes/class-wcmp-vendor-hooks.php:443
@@ -1875,8 +1877,8 @@ msgid "Status"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:76
-#: admin/class-wcmp-settings-vendors.php:243 classes/class-wcmp-ajax.php:3365
-#: classes/class-wcmp-vendor-dashboard.php:723
+#: admin/class-wcmp-settings-vendors.php:243 classes/class-wcmp-ajax.php:3367
+#: classes/class-wcmp-vendor-dashboard.php:725
 #: templates/vendor-dashboard/product-manager/edit-product.php:122
 #: templates/vendor-dashboard/product-manager/edit-product.php:139
 #: templates/vendor-dashboard/product-manager/views/html-product-download.php:21
@@ -1893,22 +1895,22 @@ msgstr ""
 msgid "Shop"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendors.php:84 classes/class-wcmp-ajax.php:1867
+#: admin/class-wcmp-settings-vendors.php:84 classes/class-wcmp-ajax.php:1869
 msgid "Preview"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:174
-#: admin/class-wcmp-settings-vendors.php:306 classes/class-wcmp-ajax.php:2826
+#: admin/class-wcmp-settings-vendors.php:306 classes/class-wcmp-ajax.php:2828
 msgid "Suspended"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:176
-#: admin/class-wcmp-settings-vendors.php:294 classes/class-wcmp-ajax.php:2836
+#: admin/class-wcmp-settings-vendors.php:294 classes/class-wcmp-ajax.php:2838
 msgid "Approved"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:179
-#: admin/class-wcmp-settings-vendors.php:302 classes/class-wcmp-ajax.php:2847
+#: admin/class-wcmp-settings-vendors.php:302 classes/class-wcmp-ajax.php:2849
 #: classes/emails/class-wcmp-email-customer-order-refund-request.php:70
 msgid "Rejected"
 msgstr ""
@@ -1934,8 +1936,8 @@ msgid "Title Update Error"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:362 classes/class-wcmp-user.php:860
-#: classes/class-wcmp-user.php:897 classes/class-wcmp-vendor-dashboard.php:1065
-#: classes/class-wcmp-vendor-dashboard.php:1067
+#: classes/class-wcmp-user.php:897 classes/class-wcmp-vendor-dashboard.php:1067
+#: classes/class-wcmp-vendor-dashboard.php:1069
 msgid "Slug already exists"
 msgstr ""
 
@@ -2016,8 +2018,8 @@ msgid "Store URL will be something like - %s"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:489
-#: classes/class-wcmp-vendor-dashboard.php:1585
-#: classes/class-wcmp-vendor-dashboard.php:2457
+#: classes/class-wcmp-vendor-dashboard.php:1590
+#: classes/class-wcmp-vendor-dashboard.php:2493
 #: packages/wcmp-elementor/includes/Tags/StoreInfo.php:43
 #: templates/vendor-dashboard/dashboard/vendor-dasboard-pending-shipping-items-header.php:20
 #: templates/vendor-dashboard/shop-front.php:171
@@ -2033,7 +2035,7 @@ msgid "ZIP code"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:495
-#: classes/class-wcmp-vendor-dashboard.php:2485
+#: classes/class-wcmp-vendor-dashboard.php:2521
 #: templates/vendor-dashboard/shop-front.php:226
 msgid "Timezone"
 msgstr ""
@@ -2064,7 +2066,7 @@ msgid "Instagram"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:506
-#: classes/class-wcmp-frontend.php:714 classes/class-wcmp-product.php:894
+#: classes/class-wcmp-frontend.php:719 classes/class-wcmp-product.php:894
 #: classes/class-wcmp-user.php:644
 #: classes/widgets/class-wcmp-widget-vendor-policies.php:25
 #: classes/widgets/class-wcmp-widget-vendor-policies.php:65
@@ -2075,7 +2077,7 @@ msgid "Shipping Policy"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:507
-#: classes/class-wcmp-frontend.php:724 classes/class-wcmp-product.php:895
+#: classes/class-wcmp-frontend.php:729 classes/class-wcmp-product.php:895
 #: classes/class-wcmp-user.php:637
 #: classes/widgets/class-wcmp-widget-vendor-policies.php:30
 #: classes/widgets/class-wcmp-widget-vendor-policies.php:71
@@ -2086,7 +2088,7 @@ msgid "Refund Policy"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:508
-#: classes/class-wcmp-frontend.php:734 classes/class-wcmp-product.php:896
+#: classes/class-wcmp-frontend.php:739 classes/class-wcmp-product.php:896
 #: classes/class-wcmp-user.php:631
 #: classes/widgets/class-wcmp-widget-vendor-policies.php:35
 #: templates/vendor-dashboard/product-manager/views/html-product-data-policy.php:63
@@ -2123,7 +2125,7 @@ msgid "Savings"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:533
-#: classes/class-wcmp-vendor-dashboard.php:2584
+#: classes/class-wcmp-vendor-dashboard.php:2620
 #: templates/vendor-dashboard/vendor-billing.php:40
 msgid "Choose Payment Method"
 msgstr ""
@@ -2144,7 +2146,7 @@ msgstr ""
 msgid "Account type"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendors.php:538 classes/class-wcmp-admin.php:99
+#: admin/class-wcmp-settings-vendors.php:538 classes/class-wcmp-admin.php:101
 #: classes/class-wcmp-post-transaction.php:188 classes/class-wcmp-user.php:577
 #: templates/vendor-dashboard/vendor-billing.php:68
 msgid "Bank Name"
@@ -2168,19 +2170,19 @@ msgstr ""
 msgid "Bank Address"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendors.php:542 classes/class-wcmp-admin.php:101
+#: admin/class-wcmp-settings-vendors.php:542 classes/class-wcmp-admin.php:103
 #: classes/class-wcmp-post-transaction.php:192 classes/class-wcmp-user.php:605
 #: templates/vendor-dashboard/vendor-billing.php:92
 msgid "IBAN"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendors.php:543 classes/class-wcmp-admin.php:93
+#: admin/class-wcmp-settings-vendors.php:543 classes/class-wcmp-admin.php:95
 #: classes/class-wcmp-post-transaction.php:193 classes/class-wcmp-user.php:612
 #: templates/vendor-dashboard/vendor-billing.php:98
 msgid "Account Holder Name"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendors.php:544 classes/class-wcmp-admin.php:95
+#: admin/class-wcmp-settings-vendors.php:544 classes/class-wcmp-admin.php:97
 #: templates/vendor-dashboard/vendor-billing.php:104
 msgid "Account Number"
 msgstr ""
@@ -2212,7 +2214,7 @@ msgid "Social"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:611 admin/class-wcmp-settings.php:281
-#: classes/class-wcmp-vendor-dashboard.php:2280
+#: classes/class-wcmp-vendor-dashboard.php:2316
 msgid "Payment"
 msgstr ""
 
@@ -2239,7 +2241,7 @@ msgid "Social Information"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:650
-#: classes/class-wcmp-vendor-dashboard.php:2570
+#: classes/class-wcmp-vendor-dashboard.php:2606
 #: includes/wcmp-core-functions.php:2057
 #: templates/vendor-dashboard/vendor-billing.php:36
 msgid "Payment Method"
@@ -2262,25 +2264,25 @@ msgid "Notes"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:721
-#: classes/class-wcmp-vendor-dashboard.php:821
+#: classes/class-wcmp-vendor-dashboard.php:823
 #: templates/vendor-dashboard/vendor-shipping.php:32
 msgid "Zone name"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:722
-#: classes/class-wcmp-vendor-dashboard.php:822
+#: classes/class-wcmp-vendor-dashboard.php:824
 #: templates/vendor-dashboard/vendor-shipping.php:33
 msgid "Region(s)"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:723
-#: classes/class-wcmp-vendor-dashboard.php:823
+#: classes/class-wcmp-vendor-dashboard.php:825
 #: templates/vendor-dashboard/vendor-shipping.php:34
 msgid "Shipping method(s)"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendors.php:724 classes/class-wcmp-ajax.php:1730
-#: classes/class-wcmp-vendor-dashboard.php:824
+#: admin/class-wcmp-settings-vendors.php:724 classes/class-wcmp-ajax.php:1732
+#: classes/class-wcmp-vendor-dashboard.php:826
 #: classes/class-wcmp-vendor-hooks.php:528
 #: templates/vendor-dashboard/coupon-manager/coupons.php:22
 #: templates/vendor-dashboard/vendor-shipping.php:35
@@ -2288,14 +2290,14 @@ msgid "Actions"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:752
-#: classes/class-wcmp-vendor-dashboard.php:853
+#: classes/class-wcmp-vendor-dashboard.php:855
 #: templates/vendor-dashboard/vendor-shipping.php:64
 msgid "No shipping methods offered to this zone."
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:771
-#: classes/class-wcmp-vendor-dashboard.php:554
-#: classes/class-wcmp-vendor-dashboard.php:872
+#: classes/class-wcmp-vendor-dashboard.php:556
+#: classes/class-wcmp-vendor-dashboard.php:874
 #: templates/vendor-dashboard/vendor-shipping.php:84
 msgid ""
 "No shipping zone found for configuration. Please contact with admin for "
@@ -2304,13 +2306,13 @@ msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:801
 #: admin/class-wcmp-settings-vendors.php:806
-#: classes/class-wcmp-vendor-dashboard.php:1728
+#: classes/class-wcmp-vendor-dashboard.php:1764
 #: templates/vendor-dashboard/coupon-manager/add-coupons.php:119
 #: templates/vendor-dashboard/product-manager/edit-product.php:350
 msgid "Update"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendors.php:805 classes/class-wcmp-ajax.php:2842
+#: admin/class-wcmp-settings-vendors.php:805 classes/class-wcmp-ajax.php:2844
 msgid "Suspend"
 msgstr ""
 
@@ -2323,9 +2325,9 @@ msgstr ""
 msgid "Search Vendors"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendors.php:880 classes/class-wcmp-ajax.php:3386
-#: classes/class-wcmp-ajax.php:3436 classes/class-wcmp-vendor-dashboard.php:744
-#: classes/class-wcmp-vendor-dashboard.php:792
+#: admin/class-wcmp-settings-vendors.php:880 classes/class-wcmp-ajax.php:3388
+#: classes/class-wcmp-ajax.php:3438 classes/class-wcmp-vendor-dashboard.php:746
+#: classes/class-wcmp-vendor-dashboard.php:794
 #: templates/vendor-dashboard/vendor-shipping/vendor-add-shipping-method.php:12
 #: templates/vendor-dashboard/vendor-shipping/vendor-edit-shipping-method.php:21
 msgid "Close modal panel"
@@ -2395,20 +2397,20 @@ msgstr ""
 msgid "No of order"
 msgstr ""
 
-#: admin/class-wcmp-settings-vendors.php:1004 classes/class-wcmp-ajax.php:1090
+#: admin/class-wcmp-settings-vendors.php:1004 classes/class-wcmp-ajax.php:1092
 #: templates/vendor-dashboard/dashboard/vendor-dashboard-sales-item-header.php:18
 #: templates/vendor-dashboard/dashboard-widgets/wcmp_vendor_stats_reports.php:37
 msgid "Sales"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:1005
-#: classes/class-wcmp-vendor-dashboard.php:290
+#: classes/class-wcmp-vendor-dashboard.php:292
 #: templates/vendor-dashboard/dashboard-widgets/wcmp_vendor_stats_reports.php:44
 msgid "Earning"
 msgstr ""
 
 #: admin/class-wcmp-settings-vendors.php:1006
-#: classes/class-wcmp-vendor-dashboard.php:1413
+#: classes/class-wcmp-vendor-dashboard.php:1415
 #: classes/class-wcmp-vendor-hooks.php:205
 #: includes/wcmp-core-functions.php:4216
 #: templates/vendor-dashboard/dashboard-widgets/wcmp_vendor_stats_reports.php:49
@@ -2460,7 +2462,7 @@ msgstr ""
 #: admin/class-wcmp-settings.php:83 admin/class-wcmp-settings.php:84
 #: classes/class-wcmp-post-commission.php:1232
 #: classes/class-wcmp-post-commission.php:1233
-#: packages/wcmp-elementor/includes/class-wcmp-module.php:88
+#: packages/wcmp-elementor/includes/class-wcmp-module.php:96
 msgid "WCMp"
 msgstr ""
 
@@ -2562,7 +2564,7 @@ msgstr ""
 msgid "Capabilities"
 msgstr ""
 
-#: admin/class-wcmp-settings.php:292 classes/class-wcmp-frontend.php:856
+#: admin/class-wcmp-settings.php:292 classes/class-wcmp-frontend.php:861
 #: classes/class-wcmp-product.php:877 classes/class-wcmp-product.php:1253
 #: classes/class-wcmp-vendor-hooks.php:84
 #: classes/products/class-wcmp-products-edit-product.php:218
@@ -2652,7 +2654,7 @@ msgid "Report a bugs"
 msgstr ""
 
 #: admin/class-wcmp-settings.php:581 admin/class-wcmp-settings.php:584
-#: classes/class-wcmp-ajax.php:3328 classes/class-wcmp-vendor-dashboard.php:686
+#: classes/class-wcmp-ajax.php:3330 classes/class-wcmp-vendor-dashboard.php:688
 #: classes/widgets/class-wcmp-widget-vendor-coupons.php:20
 #: classes/widgets/class-wcmp-widget-vendor-location.php:151
 #: classes/widgets/class-wcmp-widget-vendor-on-sale-products.php:20
@@ -2669,7 +2671,7 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: admin/class-wcmp-settings.php:589 classes/class-wcmp-ajax.php:2494
+#: admin/class-wcmp-settings.php:589 classes/class-wcmp-ajax.php:2496
 msgid "Comment"
 msgstr ""
 
@@ -2858,7 +2860,7 @@ msgid "Wrong position name."
 msgstr ""
 
 #: api/class-wcmp-rest-vendors-controller.php:526
-#: classes/class-wcmp-ajax.php:171
+#: classes/class-wcmp-ajax.php:173
 msgid "Image could not be processed. Please go back and try again."
 msgstr ""
 
@@ -2880,56 +2882,56 @@ msgstr ""
 msgid "The vendor cannot be deleted."
 msgstr ""
 
-#: classes/class-wcmp-admin.php:67 classes/class-wcmp-post-transaction.php:175
+#: classes/class-wcmp-admin.php:69 classes/class-wcmp-post-transaction.php:175
 msgid "Date of request"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:68 classes/class-wcmp-vendor-dashboard.php:164
+#: classes/class-wcmp-admin.php:70 classes/class-wcmp-vendor-dashboard.php:166
 msgid "Transaction ID"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:69 classes/class-wcmp-vendor-dashboard.php:165
+#: classes/class-wcmp-admin.php:71 classes/class-wcmp-vendor-dashboard.php:167
 #: templates/vendor-dashboard/vendor-transactions.php:20
 msgid "Commission IDs"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:72
+#: classes/class-wcmp-admin.php:74
 msgid "Bank Details"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:97
+#: classes/class-wcmp-admin.php:99
 msgid "Account Type"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:103
+#: classes/class-wcmp-admin.php:105
 msgid "Routing Number"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:135
+#: classes/class-wcmp-admin.php:137
 msgid "Sorry, no pending bank transaction data is available."
 msgstr ""
 
-#: classes/class-wcmp-admin.php:167
+#: classes/class-wcmp-admin.php:169
 msgid "Vendor Shop Base"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:177
+#: classes/class-wcmp-admin.php:179
 msgid "vendor slug"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:214
+#: classes/class-wcmp-admin.php:216
 msgid "Frontend  Dashboard"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:217
+#: classes/class-wcmp-admin.php:219
 msgid "Frontend Dashboard"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:259
+#: classes/class-wcmp-admin.php:261
 msgid "Powered by"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:282
+#: classes/class-wcmp-admin.php:284
 msgid ""
 "\"Knowledgebase\" section is visible only to vendors through the vendor "
 "dashboard. You may use this section to onboard your vendors. Share "
@@ -2937,128 +2939,139 @@ msgid ""
 "appropriate with your vendors."
 msgstr ""
 
-#: classes/class-wcmp-admin.php:285
+#: classes/class-wcmp-admin.php:287
 msgid ""
 "Announcements are visible only to vendors through the vendor "
 "dashboard(message section). You may use this section to broadcast your "
 "announcements."
 msgstr ""
 
-#: classes/class-wcmp-admin.php:369
+#: classes/class-wcmp-admin.php:371
 msgid "In Percentage"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:370
+#: classes/class-wcmp-admin.php:372
 msgid "In Fixed"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:421
+#: classes/class-wcmp-admin.php:423
 msgid "Select an option&hellip;"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:540
+#: classes/class-wcmp-admin.php:542
 msgid "Regenerate order commissions"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:573
+#: classes/class-wcmp-admin.php:575
 msgid "Regenerated order commission."
 msgstr ""
 
-#: classes/class-wcmp-admin.php:600
+#: classes/class-wcmp-admin.php:602
 msgid ""
 "%sAdvance Frontend Manager%s will not work with latest WCMp (v%s), so "
 "please update Advance Frontend Manager with latest one (v3.0.0)."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:249
+#: classes/class-wcmp-admin.php:632
+msgid ""
+"Enhance your marketplace site with the latest WPML integration that lets "
+"you organise content in different languages, build-up pages with Elementor "
+"compatibility and track favourite stores with WCMp Follow Store."
+msgstr ""
+
+#: classes/class-wcmp-admin.php:634
+msgid "Checkout latest release"
+msgstr ""
+
+#: classes/class-wcmp-ajax.php:251
 msgid "Order status changed by vendor bulk edit:"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:254
+#: classes/class-wcmp-ajax.php:256
 msgid "%s orders"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:254
+#: classes/class-wcmp-ajax.php:256
 msgid "%s order"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:254
+#: classes/class-wcmp-ajax.php:256
 msgid "status changed to."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:283 classes/class-wcmp-ajax.php:2986
+#: classes/class-wcmp-ajax.php:285 classes/class-wcmp-ajax.php:2988
 msgid "Mark as shipped"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:285 classes/class-wcmp-ajax.php:2988
+#: classes/class-wcmp-ajax.php:287 classes/class-wcmp-ajax.php:2990
 msgid "Shipped"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:290 classes/class-wcmp-ajax.php:1865
+#: classes/class-wcmp-ajax.php:292 classes/class-wcmp-ajax.php:1867
 #: classes/class-wcmp-user.php:794
 msgid "View"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:296
+#: classes/class-wcmp-ajax.php:298
 msgid "Download"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:556
+#: classes/class-wcmp-ajax.php:558
 msgid "No Suggestion found"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:599
+#: classes/class-wcmp-ajax.php:601
 msgid "Admin Message:"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:607
+#: classes/class-wcmp-ajax.php:609
 msgid "DETAILS"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:613
+#: classes/class-wcmp-ajax.php:615
 msgid "No Messages Found:"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:618
+#: classes/class-wcmp-ajax.php:620
 msgid "Error in process:"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:663
+#: classes/class-wcmp-ajax.php:665
 #: templates/vendor-dashboard/vendor-announcements/vendor-announcements-all.php:31
 #: templates/vendor-dashboard/vendor-announcements/vendor-announcements-read.php:28
 msgid "Mark Unread"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:679
+#: classes/class-wcmp-ajax.php:681
 #: templates/vendor-dashboard/vendor-announcements/vendor-announcements-all.php:28
 #: templates/vendor-dashboard/vendor-announcements/vendor-announcements-unread.php:28
 msgid "Mark Read"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:695
+#: classes/class-wcmp-ajax.php:697
 msgid "Mark Restore"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:718 classes/class-wcmp-ajax.php:738
+#: classes/class-wcmp-ajax.php:720 classes/class-wcmp-ajax.php:740
 msgid "no more data found"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:881 classes/class-wcmp-ajax.php:991
-#: classes/class-wcmp-ajax.php:1085 classes/class-wcmp-ajax.php:1255
+#: classes/class-wcmp-ajax.php:883 classes/class-wcmp-ajax.php:993
+#: classes/class-wcmp-ajax.php:1087 classes/class-wcmp-ajax.php:1257
 #: classes/reports/class-wcmp-report-product.php:229
 #: classes/reports/class-wcmp-report-vendor.php:154
 msgid "Sales and Earnings"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:884 classes/class-wcmp-ajax.php:994
-#: classes/class-wcmp-ajax.php:1153 classes/class-wcmp-ajax.php:1258
+#: classes/class-wcmp-ajax.php:886 classes/class-wcmp-ajax.php:996
+#: classes/class-wcmp-ajax.php:1155 classes/class-wcmp-ajax.php:1260
 #: classes/reports/class-wcmp-report-product.php:232
 #: classes/reports/class-wcmp-report-vendor.php:157
 msgid "Gross Sales"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:886 classes/class-wcmp-ajax.php:996
-#: classes/class-wcmp-ajax.php:1155 classes/class-wcmp-ajax.php:1260
+#: classes/class-wcmp-ajax.php:888 classes/class-wcmp-ajax.php:998
+#: classes/class-wcmp-ajax.php:1157 classes/class-wcmp-ajax.php:1262
 #: classes/reports/class-wcmp-report-product.php:234
 #: classes/reports/class-wcmp-report-vendor.php:159
 #: classes/reports/views/html-wcmp-report-by-product.php:65
@@ -3066,9 +3079,9 @@ msgstr ""
 msgid "Admin Earnings"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:888 classes/class-wcmp-ajax.php:998
-#: classes/class-wcmp-ajax.php:1157 classes/class-wcmp-ajax.php:1163
-#: classes/class-wcmp-ajax.php:1262
+#: classes/class-wcmp-ajax.php:890 classes/class-wcmp-ajax.php:1000
+#: classes/class-wcmp-ajax.php:1159 classes/class-wcmp-ajax.php:1165
+#: classes/class-wcmp-ajax.php:1264
 #: classes/reports/class-wcmp-report-product.php:236
 #: classes/reports/class-wcmp-report-vendor.php:161
 #: classes/reports/views/html-wcmp-report-by-product.php:66
@@ -3076,67 +3089,67 @@ msgstr ""
 msgid "Vendor Earnings"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:893 classes/class-wcmp-ajax.php:1003
-#: classes/class-wcmp-ajax.php:1089 classes/class-wcmp-ajax.php:1162
+#: classes/class-wcmp-ajax.php:895 classes/class-wcmp-ajax.php:1005
+#: classes/class-wcmp-ajax.php:1091 classes/class-wcmp-ajax.php:1164
 #: classes/reports/class-wcmp-report-product.php:241
 msgid "Month"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:894 classes/class-wcmp-ajax.php:1004
-#: classes/class-wcmp-ajax.php:1268
+#: classes/class-wcmp-ajax.php:896 classes/class-wcmp-ajax.php:1006
+#: classes/class-wcmp-ajax.php:1270
 #: classes/reports/class-wcmp-report-product.php:242
 #: classes/reports/class-wcmp-report-vendor.php:167
 msgid "Sales Report"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:903
+#: classes/class-wcmp-ajax.php:905
 #: classes/reports/class-wcmp-report-product.php:251
 msgid "No product was sold in the given period."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1013
+#: classes/class-wcmp-ajax.php:1015
 msgid "This product was not sold in the given period."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1018
+#: classes/class-wcmp-ajax.php:1020
 msgid "Please select a product."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1094
+#: classes/class-wcmp-ajax.php:1096
 msgid "No Sales :("
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1172
+#: classes/class-wcmp-ajax.php:1174
 msgid "This vendor did not generate any sales in the given period."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1277
+#: classes/class-wcmp-ajax.php:1279
 msgid "Any vendor did not generate any sales in the given period."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1315
+#: classes/class-wcmp-ajax.php:1317
 msgid "Withdrawal generated for Commission &ndash; #%s"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1590
+#: classes/class-wcmp-ajax.php:1592
 msgid "No Vendor Matched!"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1725 classes/class-wcmp-vendor-hooks.php:523
+#: classes/class-wcmp-ajax.php:1727 classes/class-wcmp-vendor-hooks.php:523
 #: templates/emails/vendor-notify-shipped.php:31
 #: templates/single-product/multiple_vendors_products.php:28
 msgid "Price"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1726 classes/class-wcmp-vendor-hooks.php:524
+#: classes/class-wcmp-ajax.php:1728 classes/class-wcmp-vendor-hooks.php:524
 msgid "Stock"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1727 classes/class-wcmp-vendor-hooks.php:525
+#: classes/class-wcmp-ajax.php:1729 classes/class-wcmp-vendor-hooks.php:525
 msgid "Categories"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1728 classes/class-wcmp-vendor-dashboard.php:163
+#: classes/class-wcmp-ajax.php:1730 classes/class-wcmp-vendor-dashboard.php:165
 #: classes/class-wcmp-vendor-hooks.php:444
 #: classes/class-wcmp-vendor-hooks.php:526
 #: classes/reports/class-wcmp-report-overview.php:669
@@ -3147,44 +3160,44 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1752 classes/class-wcmp-ajax.php:1761
-#: classes/class-wcmp-ajax.php:1771
+#: classes/class-wcmp-ajax.php:1754 classes/class-wcmp-ajax.php:1763
+#: classes/class-wcmp-ajax.php:1773
 msgid "%s products"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1752 classes/class-wcmp-ajax.php:1761
-#: classes/class-wcmp-ajax.php:1771
+#: classes/class-wcmp-ajax.php:1754 classes/class-wcmp-ajax.php:1763
+#: classes/class-wcmp-ajax.php:1773
 msgid "%s product"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1752
+#: classes/class-wcmp-ajax.php:1754
 msgid "moved to the Trash."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1761
+#: classes/class-wcmp-ajax.php:1763
 msgid "restored from the Trash."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1771
+#: classes/class-wcmp-ajax.php:1773
 msgid "deleted from the Trash."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1776
+#: classes/class-wcmp-ajax.php:1778
 msgid "Sorry! You do not have this permission."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1864
+#: classes/class-wcmp-ajax.php:1866
 msgid "Are you sure want to delete this product?"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1870 classes/class-wcmp-ajax.php:2115
+#: classes/class-wcmp-ajax.php:1872 classes/class-wcmp-ajax.php:2117
 #: classes/class-wcmp-post-commission.php:1071
 #: templates/vendor-dashboard/vendor-orders/views/html-order-refund.php:33
 #. translators: 1: ID who refunded
 msgid "ID: %d"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1882 classes/class-wcmp-product.php:1729
+#: classes/class-wcmp-ajax.php:1884 classes/class-wcmp-product.php:1729
 #: classes/class-wcmp-taxonomy.php:185
 #: templates/vendor-dashboard/product-manager/views/html-product-highlights.php:140
 #: templates/vendor-dashboard/product-manager/views/html-product-highlights.php:142
@@ -3192,43 +3205,43 @@ msgstr ""
 msgid "GTIN"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1895
+#: classes/class-wcmp-ajax.php:1897
 #: templates/vendor-dashboard/product-manager/edit-product.php:241
 msgid "Rejection Note"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1908 classes/class-wcmp-ajax.php:2119
+#: classes/class-wcmp-ajax.php:1910 classes/class-wcmp-ajax.php:2121
 msgid "Restore from the Trash"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1909 classes/class-wcmp-ajax.php:2120
+#: classes/class-wcmp-ajax.php:1911 classes/class-wcmp-ajax.php:2122
 msgid "Move to the Trash"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1910 classes/class-wcmp-ajax.php:2121
+#: classes/class-wcmp-ajax.php:1912 classes/class-wcmp-ajax.php:2123
 #: templates/vendor-dashboard/product-manager/products.php:60
 msgid "Delete Permanently"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1911
+#: classes/class-wcmp-ajax.php:1913
 msgid "Click to view reason for dismiss"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1946
+#: classes/class-wcmp-ajax.php:1948
 msgid "In stock"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1952
+#: classes/class-wcmp-ajax.php:1954
 msgid "Out of stock"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1971
+#: classes/class-wcmp-ajax.php:1973
 #: templates/vendor-dashboard/dashboard-widgets/wcmp_vendor_product_stats.php:46
 #: templates/vendor-dashboard/product-manager/products.php:26
 msgid "Published"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1976
+#: classes/class-wcmp-ajax.php:1978
 #: templates/vendor-dashboard/coupon-manager/add-coupons.php:126
 #: templates/vendor-dashboard/dashboard-widgets/wcmp_vendor_product_stats.php:56
 #: templates/vendor-dashboard/product-manager/edit-product.php:357
@@ -3236,301 +3249,301 @@ msgstr ""
 msgid "Draft"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1978
+#: classes/class-wcmp-ajax.php:1980
 msgid "Private"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:1980
+#: classes/class-wcmp-ajax.php:1982
 #: templates/vendor-dashboard/product-manager/products.php:29
 #: templates/vendor-dashboard/vendor-announcements.php:22
 msgid "Trash"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2113
+#: classes/class-wcmp-ajax.php:2115
 msgid "Are you sure want to delete this coupon?"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2260
+#: classes/class-wcmp-ajax.php:2262
 msgid "Your question submitted successfully!"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2302 templates/wcmp-customer-qna-form.php:58
+#: classes/class-wcmp-ajax.php:2304 templates/wcmp-customer-qna-form.php:58
 msgid "You already gave a thumbs up."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2304 classes/class-wcmp-ajax.php:2313
+#: classes/class-wcmp-ajax.php:2306 classes/class-wcmp-ajax.php:2315
 #: templates/wcmp-customer-qna-form.php:60
 msgid "Give a thumbs down"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2306 classes/class-wcmp-ajax.php:2311
+#: classes/class-wcmp-ajax.php:2308 classes/class-wcmp-ajax.php:2313
 #: templates/wcmp-customer-qna-form.php:62
 msgid "Give a thumbs up"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2308 templates/wcmp-customer-qna-form.php:64
+#: classes/class-wcmp-ajax.php:2310 templates/wcmp-customer-qna-form.php:64
 msgid "You already gave a thumbs down."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2322
+#: classes/class-wcmp-ajax.php:2324
 msgid "Q: "
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2326
+#: classes/class-wcmp-ajax.php:2328
 msgid "A: "
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2338 templates/wcmp-customer-qna-form.php:96
+#: classes/class-wcmp-ajax.php:2340 templates/wcmp-customer-qna-form.php:96
 #: templates/wcmp-vendor-review-form.php:92
 msgid "Load More"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2344
+#: classes/class-wcmp-ajax.php:2346
 msgid "You are not logged in."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2375
+#: classes/class-wcmp-ajax.php:2377
 msgid "No more customer query found."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2407
+#: classes/class-wcmp-ajax.php:2409
 msgid "Thanks for your vote!"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2424
+#: classes/class-wcmp-ajax.php:2426
 msgid "Answer updated successfully!"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2477
+#: classes/class-wcmp-ajax.php:2479
 msgid " ago"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2479 classes/class-wcmp-ajax.php:2546
+#: classes/class-wcmp-ajax.php:2481 classes/class-wcmp-ajax.php:2548
 msgid "Reply"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2488
+#: classes/class-wcmp-ajax.php:2490
 msgid "Reply to "
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2491
+#: classes/class-wcmp-ajax.php:2493
 msgid "Enter reply..."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2555
+#: classes/class-wcmp-ajax.php:2557
 msgid "Product - "
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2559 classes/class-wcmp-ajax.php:2642
+#: classes/class-wcmp-ajax.php:2561 classes/class-wcmp-ajax.php:2644
 msgid "Post your answer..."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2640
+#: classes/class-wcmp-ajax.php:2642
 #: templates/vendor-dashboard/vendor-products-qna.php:58
 msgid "Unanswered"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2649
+#: classes/class-wcmp-ajax.php:2651
 msgid "Answered"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2742
+#: classes/class-wcmp-ajax.php:2744
 msgid "No Vendor ID found"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2750
+#: classes/class-wcmp-ajax.php:2752
 msgid "Invalid request"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2933
+#: classes/class-wcmp-ajax.php:2935
 msgid "You don't have permission to add product tags"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:2941
+#: classes/class-wcmp-ajax.php:2943
 msgid "An error has occurred. Please reload the page and try again."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3082
+#: classes/class-wcmp-ajax.php:3084
 msgid "This product does not exists"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3266 classes/class-wcmp-vendor-dashboard.php:624
+#: classes/class-wcmp-ajax.php:3268 classes/class-wcmp-vendor-dashboard.php:626
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:9
 msgid "Zone Name"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3274 classes/class-wcmp-vendor-dashboard.php:632
+#: classes/class-wcmp-ajax.php:3276 classes/class-wcmp-vendor-dashboard.php:634
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:13
 msgid "Zone region"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3283 classes/class-wcmp-vendor-dashboard.php:641
+#: classes/class-wcmp-ajax.php:3285 classes/class-wcmp-vendor-dashboard.php:643
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:23
 msgid "Limit Zone Location"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3293 classes/class-wcmp-vendor-dashboard.php:651
+#: classes/class-wcmp-ajax.php:3295 classes/class-wcmp-vendor-dashboard.php:653
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:31
 msgid "Select specific states"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3309 classes/class-wcmp-vendor-dashboard.php:667
+#: classes/class-wcmp-ajax.php:3311 classes/class-wcmp-vendor-dashboard.php:669
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:43
 msgid "Set your postcode"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3313 classes/class-wcmp-vendor-dashboard.php:671
+#: classes/class-wcmp-ajax.php:3315 classes/class-wcmp-vendor-dashboard.php:673
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:45
 msgid "Postcodes need to be comma separated"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3320 classes/class-wcmp-vendor-dashboard.php:678
+#: classes/class-wcmp-ajax.php:3322 classes/class-wcmp-vendor-dashboard.php:680
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:52
 msgid "Shipping methods"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3321 classes/class-wcmp-vendor-dashboard.php:679
+#: classes/class-wcmp-ajax.php:3323 classes/class-wcmp-vendor-dashboard.php:681
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:53
 msgid "Add your shipping method for appropiate zone"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3329 classes/class-wcmp-vendor-dashboard.php:687
+#: classes/class-wcmp-ajax.php:3331 classes/class-wcmp-vendor-dashboard.php:689
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:60
 msgid "Enabled"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3330 classes/class-wcmp-ajax.php:3600
-#: classes/class-wcmp-ajax.php:3629 classes/class-wcmp-ajax.php:3658
-#: classes/class-wcmp-user.php:350 classes/class-wcmp-vendor-dashboard.php:688
+#: classes/class-wcmp-ajax.php:3332 classes/class-wcmp-ajax.php:3602
+#: classes/class-wcmp-ajax.php:3631 classes/class-wcmp-ajax.php:3660
+#: classes/class-wcmp-user.php:350 classes/class-wcmp-vendor-dashboard.php:690
 #: classes/widgets/class-wcmp-widget-vendor-quick-info.php:183
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:61
 msgid "Description"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3331 classes/class-wcmp-vendor-dashboard.php:689
-#: classes/class-wcmp-vendor-dashboard.php:1587
+#: classes/class-wcmp-ajax.php:3333 classes/class-wcmp-vendor-dashboard.php:691
+#: classes/class-wcmp-vendor-dashboard.php:1592
 #: templates/vendor-dashboard/vendor-orders.php:23
 #: templates/vendor-dashboard/vendor-products-qna.php:42
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:62
 msgid "Action"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3337 classes/class-wcmp-ajax.php:3384
-#: classes/class-wcmp-ajax.php:3408 classes/class-wcmp-vendor-dashboard.php:695
-#: classes/class-wcmp-vendor-dashboard.php:742
-#: classes/class-wcmp-vendor-dashboard.php:764
+#: classes/class-wcmp-ajax.php:3339 classes/class-wcmp-ajax.php:3386
+#: classes/class-wcmp-ajax.php:3410 classes/class-wcmp-vendor-dashboard.php:697
+#: classes/class-wcmp-vendor-dashboard.php:744
+#: classes/class-wcmp-vendor-dashboard.php:766
 #: templates/vendor-dashboard/vendor-shipping/vendor-add-shipping-method.php:10
 #: templates/vendor-dashboard/vendor-shipping/vendor-add-shipping-method.php:34
 msgid "Add shipping method"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3344 classes/class-wcmp-vendor-dashboard.php:702
+#: classes/class-wcmp-ajax.php:3346 classes/class-wcmp-vendor-dashboard.php:704
 #: templates/vendor-dashboard/vendor-shipping/vendor-shipping-zone-settings.php:69
 msgid ""
 "You can add multiple shipping methods within this zone. Only customers "
 "within the zone will see them."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3395 classes/class-wcmp-vendor-dashboard.php:751
+#: classes/class-wcmp-ajax.php:3397 classes/class-wcmp-vendor-dashboard.php:753
 #: templates/vendor-dashboard/vendor-shipping/vendor-add-shipping-method.php:18
 msgid ""
 "Choose the shipping method you wish to add. Only shipping methods which "
 "support zones are listed."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3421 classes/class-wcmp-ajax.php:3574
-#: classes/class-wcmp-ajax.php:3714 classes/class-wcmp-shipping-gateway.php:99
+#: classes/class-wcmp-ajax.php:3423 classes/class-wcmp-ajax.php:3576
+#: classes/class-wcmp-ajax.php:3716 classes/class-wcmp-shipping-gateway.php:99
 #: classes/class-wcmp-shipping-gateway.php:184
-#: classes/class-wcmp-vendor-dashboard.php:777
+#: classes/class-wcmp-vendor-dashboard.php:779
 #: templates/vendor-dashboard/product-manager/views/html-product-data-general.php:162
 #: templates/vendor-dashboard/vendor-shipping/vendor-edit-shipping-method.php:5
 msgid "None"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3422 classes/class-wcmp-ajax.php:3575
-#: classes/class-wcmp-ajax.php:3715 classes/class-wcmp-shipping-gateway.php:100
+#: classes/class-wcmp-ajax.php:3424 classes/class-wcmp-ajax.php:3577
+#: classes/class-wcmp-ajax.php:3717 classes/class-wcmp-shipping-gateway.php:100
 #: classes/class-wcmp-shipping-gateway.php:185
-#: classes/class-wcmp-vendor-dashboard.php:778
+#: classes/class-wcmp-vendor-dashboard.php:780
 #: classes/shipping-gateways/class-wcmp-shipping-method.php:166
 #: templates/vendor-dashboard/product-manager/views/html-product-data-general.php:160
 #: templates/vendor-dashboard/vendor-shipping/vendor-edit-shipping-method.php:6
 msgid "Taxable"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3426 classes/class-wcmp-ajax.php:3579
-#: classes/class-wcmp-ajax.php:3719 classes/class-wcmp-shipping-gateway.php:104
-#: classes/class-wcmp-vendor-dashboard.php:782
+#: classes/class-wcmp-ajax.php:3428 classes/class-wcmp-ajax.php:3581
+#: classes/class-wcmp-ajax.php:3721 classes/class-wcmp-shipping-gateway.php:104
+#: classes/class-wcmp-vendor-dashboard.php:784
 #: templates/vendor-dashboard/vendor-shipping/vendor-edit-shipping-method.php:10
 msgid "Per class: Charge shipping for each shipping class individually"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3427 classes/class-wcmp-ajax.php:3580
-#: classes/class-wcmp-ajax.php:3720 classes/class-wcmp-shipping-gateway.php:105
-#: classes/class-wcmp-vendor-dashboard.php:783
+#: classes/class-wcmp-ajax.php:3429 classes/class-wcmp-ajax.php:3582
+#: classes/class-wcmp-ajax.php:3722 classes/class-wcmp-shipping-gateway.php:105
+#: classes/class-wcmp-vendor-dashboard.php:785
 #: templates/vendor-dashboard/vendor-shipping/vendor-edit-shipping-method.php:11
 msgid "Per order: Charge shipping for the most expensive shipping class"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3434 classes/class-wcmp-vendor-dashboard.php:790
+#: classes/class-wcmp-ajax.php:3436 classes/class-wcmp-vendor-dashboard.php:792
 #: templates/vendor-dashboard/vendor-shipping/vendor-edit-shipping-method.php:19
 msgid "Edit Shipping Methods"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3451 classes/class-wcmp-vendor-dashboard.php:806
+#: classes/class-wcmp-ajax.php:3453 classes/class-wcmp-vendor-dashboard.php:808
 #: templates/vendor-dashboard/vendor-shipping/vendor-edit-shipping-method.php:36
 msgid "Save changes"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3481
+#: classes/class-wcmp-ajax.php:3483
 msgid "Shipping method added successfully"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3497
+#: classes/class-wcmp-ajax.php:3499
 msgid "Shipping title must be required"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3519
+#: classes/class-wcmp-ajax.php:3521
 msgid "Shipping method updated"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3539
+#: classes/class-wcmp-ajax.php:3541
 msgid "Shipping method deleted"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3556
+#: classes/class-wcmp-ajax.php:3558
 msgid "Shipping method enabled successfully"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3556
+#: classes/class-wcmp-ajax.php:3558
 msgid "Shipping method disabled successfully"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3587 classes/class-wcmp-ajax.php:3608
-#: classes/class-wcmp-ajax.php:3637 classes/class-wcmp-shipping-gateway.php:79
+#: classes/class-wcmp-ajax.php:3589 classes/class-wcmp-ajax.php:3610
+#: classes/class-wcmp-ajax.php:3639 classes/class-wcmp-shipping-gateway.php:79
 #: classes/class-wcmp-shipping-gateway.php:110
 #: classes/class-wcmp-shipping-gateway.php:191
 msgid "Method Title"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3589 classes/class-wcmp-ajax.php:3610
-#: classes/class-wcmp-ajax.php:3639 classes/class-wcmp-shipping-gateway.php:81
+#: classes/class-wcmp-ajax.php:3591 classes/class-wcmp-ajax.php:3612
+#: classes/class-wcmp-ajax.php:3641 classes/class-wcmp-shipping-gateway.php:81
 #: classes/class-wcmp-shipping-gateway.php:112
 #: classes/class-wcmp-shipping-gateway.php:193
 msgid "Enter method title"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3592 classes/class-wcmp-shipping-gateway.php:85
+#: classes/class-wcmp-ajax.php:3594 classes/class-wcmp-shipping-gateway.php:85
 msgid "Minimum order amount for free shipping"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3594 classes/class-wcmp-ajax.php:3615
-#: classes/class-wcmp-ajax.php:3644 classes/class-wcmp-shipping-gateway.php:87
+#: classes/class-wcmp-ajax.php:3596 classes/class-wcmp-ajax.php:3617
+#: classes/class-wcmp-ajax.php:3646 classes/class-wcmp-shipping-gateway.php:87
 #: classes/class-wcmp-shipping-gateway.php:118
 #: classes/class-wcmp-shipping-gateway.php:199
 msgid "0.00"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3613 classes/class-wcmp-ajax.php:3642
+#: classes/class-wcmp-ajax.php:3615 classes/class-wcmp-ajax.php:3644
 #: classes/class-wcmp-post-commission.php:731
 #: classes/class-wcmp-shipping-gateway.php:116
 #: classes/class-wcmp-shipping-gateway.php:197
@@ -3538,97 +3551,101 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3619 classes/class-wcmp-ajax.php:3648
+#: classes/class-wcmp-ajax.php:3621 classes/class-wcmp-ajax.php:3650
 #: classes/class-wcmp-shipping-gateway.php:123
 #: classes/class-wcmp-shipping-gateway.php:204
 msgid "Tax Status"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3664 classes/class-wcmp-shipping-gateway.php:142
+#: classes/class-wcmp-ajax.php:3666 classes/class-wcmp-shipping-gateway.php:142
 msgid "Shipping Class Cost"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3665 classes/class-wcmp-shipping-gateway.php:143
+#: classes/class-wcmp-ajax.php:3667 classes/class-wcmp-shipping-gateway.php:143
 msgid ""
 "These costs can be optionally entered based on the shipping class set per "
 "product (This cost will be added with the shipping cost above)."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3670 classes/class-wcmp-shipping-gateway.php:150
+#: classes/class-wcmp-ajax.php:3672 classes/class-wcmp-shipping-gateway.php:150
 msgid "No Shipping Classes set by Admin"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3674
+#: classes/class-wcmp-ajax.php:3676
 msgid "Cost of Shipping Class:"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3677 classes/class-wcmp-email.php:94
+#: classes/class-wcmp-ajax.php:3679 classes/class-wcmp-email.php:96
 #: classes/class-wcmp-post-commission.php:927
 #: classes/class-wcmp-shipping-gateway.php:157
 #: templates/emails/vendor-new-order.php:84
 msgid "N/A"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3678 classes/class-wcmp-shipping-gateway.php:158
+#: classes/class-wcmp-ajax.php:3680 classes/class-wcmp-shipping-gateway.php:158
 msgid "Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3678 classes/class-wcmp-shipping-gateway.php:158
+#: classes/class-wcmp-ajax.php:3680 classes/class-wcmp-shipping-gateway.php:158
 msgid ""
 "Use <code>[qty]</code> for the number of items, <br/><code>[cost]</code> "
 "for the total cost of items, and <code>[fee percent=\"10\" min_fee=\"20\" "
 "max_fee=\"\"]</code> for percentage based fees."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3682 classes/class-wcmp-shipping-gateway.php:165
+#: classes/class-wcmp-ajax.php:3684 classes/class-wcmp-shipping-gateway.php:165
 msgid "Calculation type"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3767 classes/class-wcmp-ajax.php:3816
+#: classes/class-wcmp-ajax.php:3769 classes/class-wcmp-ajax.php:3818
 #: includes/wcmp-core-functions.php:3862
 msgid "Select"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3852
+#: classes/class-wcmp-ajax.php:3854
 msgid "No results found"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3929
+#: classes/class-wcmp-ajax.php:3931
 msgid "Sell yours"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3937
+#: classes/class-wcmp-ajax.php:3939
 msgid "No Suggestions found"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:3940
+#: classes/class-wcmp-ajax.php:3942
 msgid "Empty search field! Enter a text to search."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:4053
+#: classes/class-wcmp-ajax.php:4055
 msgid "Invalid refund amount"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:4057
+#: classes/class-wcmp-ajax.php:4059
 msgid "Error processing refund. Please try again."
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:4290
+#: classes/class-wcmp-ajax.php:4292
 #: templates/vendor-dashboard/vendor-orders/views/html-order-downloadable-permissions.php:51
 msgid "File %d"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:4408
+#: classes/class-wcmp-ajax.php:4410
 msgid "Edit the %s translation"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:4412
+#: classes/class-wcmp-ajax.php:4414
 msgid "Add translation to %s"
 msgstr ""
 
-#: classes/class-wcmp-ajax.php:4438
+#: classes/class-wcmp-ajax.php:4440
 #. translators: %s: product id
 msgid "Product creation failed, could not find original product: %s"
+msgstr ""
+
+#: classes/class-wcmp-ajax.php:4546
+msgid "Invalid vendor or customer"
 msgstr ""
 
 #: classes/class-wcmp-calculate-commission.php:236
@@ -3667,24 +3684,24 @@ msgstr ""
 msgid "monthly"
 msgstr ""
 
-#: classes/class-wcmp-email.php:90
+#: classes/class-wcmp-email.php:92
 msgid "WCMp Footer text"
 msgstr ""
 
-#: classes/class-wcmp-email.php:91
+#: classes/class-wcmp-email.php:93
 msgid "The text to appear in the footer of WCMp emails."
 msgstr ""
 
-#: classes/class-wcmp-email.php:97
+#: classes/class-wcmp-email.php:99
 #. translators: %s: site name
 msgid "%s - Powered by WC Marketplace"
 msgstr ""
 
-#: classes/class-wcmp-email.php:166
+#: classes/class-wcmp-email.php:168
 msgid "Customer Support Details of : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:173 classes/class-wcmp-email.php:240
+#: classes/class-wcmp-email.php:175 classes/class-wcmp-email.php:242
 #: templates/customer_support_details_to_buyer.php:38
 #: templates/customer_support_details_to_buyer.php:74
 #: templates/vendor_message_to_buyer.php:48
@@ -3692,7 +3709,7 @@ msgstr ""
 msgid "Email : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:180 classes/class-wcmp-email.php:250
+#: classes/class-wcmp-email.php:182 classes/class-wcmp-email.php:252
 #: templates/customer_support_details_to_buyer.php:43
 #: templates/customer_support_details_to_buyer.php:79
 #: templates/vendor_message_to_buyer.php:53
@@ -3700,44 +3717,44 @@ msgstr ""
 msgid "Phone : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:185
+#: classes/class-wcmp-email.php:187
 msgid "Return Address of : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:190 classes/class-wcmp-email.php:266
+#: classes/class-wcmp-email.php:192 classes/class-wcmp-email.php:268
 msgid "Address Line 1 : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:195 classes/class-wcmp-email.php:276
+#: classes/class-wcmp-email.php:197 classes/class-wcmp-email.php:278
 msgid "Address Line 2 : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:200 classes/class-wcmp-email.php:286
+#: classes/class-wcmp-email.php:202 classes/class-wcmp-email.php:288
 msgid "State : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:205 classes/class-wcmp-email.php:296
+#: classes/class-wcmp-email.php:207 classes/class-wcmp-email.php:298
 msgid "City : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:210 classes/class-wcmp-email.php:306
+#: classes/class-wcmp-email.php:212 classes/class-wcmp-email.php:308
 msgid "Country : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:215 classes/class-wcmp-email.php:316
+#: classes/class-wcmp-email.php:217 classes/class-wcmp-email.php:318
 msgid "Zip Code : "
 msgstr ""
 
-#: classes/class-wcmp-email.php:234
+#: classes/class-wcmp-email.php:236
 msgid "Customer Support Details :"
 msgstr ""
 
-#: classes/class-wcmp-email.php:259
+#: classes/class-wcmp-email.php:261
 msgid "Our Return Address :"
 msgstr ""
 
 #: classes/class-wcmp-endpoints.php:41
-#: classes/class-wcmp-vendor-dashboard.php:1374
+#: classes/class-wcmp-vendor-dashboard.php:1376
 msgid "Profile management"
 msgstr ""
 
@@ -3755,41 +3772,53 @@ msgstr ""
 msgid "Resubmit Application"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:161 classes/class-wcmp-frontend.php:172
+#: classes/class-wcmp-frontend.php:165 classes/class-wcmp-frontend.php:176
 #: classes/class-wcmp-user.php:143 classes/class-wcmp-user.php:154
 msgid "Please Verify  Recaptcha"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:189 classes/class-wcmp-user.php:170
+#: classes/class-wcmp-frontend.php:193 classes/class-wcmp-user.php:170
 msgid "Please Upload valid file"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:196 classes/class-wcmp-user.php:176
+#: classes/class-wcmp-frontend.php:200 classes/class-wcmp-user.php:176
 msgid "File upload limit exceeded"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:328
+#: classes/class-wcmp-frontend.php:332
 msgid " Shipping"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:624 classes/class-wcmp-frontend.php:625
+#: classes/class-wcmp-frontend.php:629 classes/class-wcmp-frontend.php:630
 msgid "Translations"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:699 classes/class-wcmp-frontend.php:701
-#: classes/class-wcmp-frontend.php:703
+#: classes/class-wcmp-frontend.php:704 classes/class-wcmp-frontend.php:706
+#: classes/class-wcmp-frontend.php:708
 msgid "No policy found"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:708
+#: classes/class-wcmp-frontend.php:713
 msgid "Shop policies"
 msgstr ""
 
-#: classes/class-wcmp-frontend.php:852
-#: classes/class-wcmp-vendor-dashboard.php:1439
+#: classes/class-wcmp-frontend.php:857
+#: classes/class-wcmp-vendor-dashboard.php:1441
 #: packages/wcmp-elementor/includes/Tags/StoreTabs.php:103
 #: templates/review/rating.php:31
 msgid "Reviews"
+msgstr ""
+
+#: classes/class-wcmp-frontend.php:959
+msgid "Following"
+msgstr ""
+
+#: classes/class-wcmp-frontend.php:960
+msgid "Log out"
+msgstr ""
+
+#: classes/class-wcmp-frontend.php:982
+msgid "You do not follow any customer till now"
 msgstr ""
 
 #: classes/class-wcmp-ledger.php:46 classes/class-wcmp-ledger.php:83
@@ -3913,12 +3942,12 @@ msgid "Update status"
 msgstr ""
 
 #: classes/class-wcmp-order.php:1595
-#: classes/class-wcmp-vendor-dashboard.php:2674
+#: classes/class-wcmp-vendor-dashboard.php:2710
 msgid "accepted"
 msgstr ""
 
 #: classes/class-wcmp-order.php:1597
-#: classes/class-wcmp-vendor-dashboard.php:2676
+#: classes/class-wcmp-vendor-dashboard.php:2712
 msgid "rejected"
 msgstr ""
 
@@ -3927,8 +3956,8 @@ msgid "Site admin "
 msgstr ""
 
 #: classes/class-wcmp-order.php:1601 classes/class-wcmp-order.php:1609
-#: classes/class-wcmp-vendor-dashboard.php:2680
-#: classes/class-wcmp-vendor-dashboard.php:2688
+#: classes/class-wcmp-vendor-dashboard.php:2716
+#: classes/class-wcmp-vendor-dashboard.php:2724
 msgid " refund request for order #"
 msgstr ""
 
@@ -4219,7 +4248,7 @@ msgid "Reversed"
 msgstr ""
 
 #: classes/class-wcmp-post-commission.php:1429
-#: classes/class-wcmp-vendor-dashboard.php:105
+#: classes/class-wcmp-vendor-dashboard.php:107
 #: classes/gateways/class-wcmp-gateway-bank-transfer.php:41
 #: classes/gateways/class-wcmp-gateway-paypal-masspay.php:61
 #: classes/gateways/class-wcmp-gateway-paypal-payout.php:69
@@ -4232,7 +4261,7 @@ msgid "Please set payment method for this commission vendor"
 msgstr ""
 
 #: classes/class-wcmp-post-commission.php:1458
-#: classes/class-wcmp-vendor-dashboard.php:1582
+#: classes/class-wcmp-vendor-dashboard.php:1587
 #: templates/emails/customer-order-refund-request.php:25
 #: templates/vendor-dashboard/vendor-orders.php:19
 #: templates/vendor-dashboard/vendor-withdrawal.php:22
@@ -4371,7 +4400,7 @@ msgid "Commission ID"
 msgstr ""
 
 #: classes/class-wcmp-post-transaction.php:330
-#: classes/class-wcmp-vendor-dashboard.php:180
+#: classes/class-wcmp-vendor-dashboard.php:182
 msgid "PayPal"
 msgstr ""
 
@@ -4779,7 +4808,7 @@ msgstr ""
 msgid "Customer Phone"
 msgstr ""
 
-#: classes/class-wcmp-user.php:526 classes/class-wcmp-vendor-dashboard.php:293
+#: classes/class-wcmp-user.php:526 classes/class-wcmp-vendor-dashboard.php:295
 msgid "Customer Email"
 msgstr ""
 
@@ -4808,269 +4837,277 @@ msgstr ""
 msgid "Select a Vendor."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:102
+#: classes/class-wcmp-vendor-dashboard.php:104
 msgid "Oops! Something went wrong please try again later"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:108
+#: classes/class-wcmp-vendor-dashboard.php:110
 msgid "No payment method has been selected for commission withdrawal"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:111
+#: classes/class-wcmp-vendor-dashboard.php:113
 msgid "Please select atleast one or more commission."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:122
+#: classes/class-wcmp-vendor-dashboard.php:124
 msgid ""
 "Your withdrawal request has been sent to the admin and your commission will "
 "be disbursed shortly!"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:125
+#: classes/class-wcmp-vendor-dashboard.php:127
 msgid "Congrats! You have successfully received your commission amount."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:128
+#: classes/class-wcmp-vendor-dashboard.php:130
 msgid "Oops something went wrong! Your commission withdrawal request was declined!"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:166
+#: classes/class-wcmp-vendor-dashboard.php:168
 msgid "Mode"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:168
+#: classes/class-wcmp-vendor-dashboard.php:170
 #: templates/vendor-dashboard/vendor-transactions.php:21
 msgid "Fee"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:169
+#: classes/class-wcmp-vendor-dashboard.php:171
 #: classes/class-wcmp-vendor-hooks.php:447
 #: classes/reports/views/html-wcmp-report-banking-overview.php:70
 msgid "Credit"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:182
+#: classes/class-wcmp-vendor-dashboard.php:184
 msgid "Stripe"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:214
+#: classes/class-wcmp-vendor-dashboard.php:216
 msgid "Sorry. no transaction data is available upon your selection"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:225
+#: classes/class-wcmp-vendor-dashboard.php:227
 msgid "Please select atleast one and more transactions."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:281
+#: classes/class-wcmp-vendor-dashboard.php:283
 msgid "Order"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:282
+#: classes/class-wcmp-vendor-dashboard.php:284
 msgid "Date of Purchase"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:283
+#: classes/class-wcmp-vendor-dashboard.php:285
 msgid "Time Of Purchase"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:285
+#: classes/class-wcmp-vendor-dashboard.php:287
 msgid "Items bought"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:286
+#: classes/class-wcmp-vendor-dashboard.php:288
 #: templates/emails/vendor-new-order.php:27
 #: templates/emails/vendor-notify-shipped.php:30
 msgid "Quantity"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:287
+#: classes/class-wcmp-vendor-dashboard.php:289
 msgid "Discount Used"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:291
+#: classes/class-wcmp-vendor-dashboard.php:293
 msgid "Payment System"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:292
+#: classes/class-wcmp-vendor-dashboard.php:294
 msgid "Customer Name"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:294
+#: classes/class-wcmp-vendor-dashboard.php:296
 msgid "Customer Contact"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:295
+#: classes/class-wcmp-vendor-dashboard.php:297
 msgid "Billing Address Details"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:296
+#: classes/class-wcmp-vendor-dashboard.php:298
 msgid "Shipping Address Details"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:297
+#: classes/class-wcmp-vendor-dashboard.php:299
 msgid "Order Status"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:459
+#: classes/class-wcmp-vendor-dashboard.php:461
 msgid "Order note added"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:479
+#: classes/class-wcmp-vendor-dashboard.php:481
 msgid "Product note added"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:502
+#: classes/class-wcmp-vendor-dashboard.php:504
 msgid "Vendor transients cleared!"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:941
+#: classes/class-wcmp-vendor-dashboard.php:943
 msgid "Shipping Data Updated"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:971
-#: classes/class-wcmp-vendor-dashboard.php:1337
+#: classes/class-wcmp-vendor-dashboard.php:973
+#: classes/class-wcmp-vendor-dashboard.php:1339
 #: classes/class-wcmp-vendor-hooks.php:190
 msgid "Orders"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1001
+#: classes/class-wcmp-vendor-dashboard.php:1003
 #: templates/vendor-dashboard/product-manager/views/html-product-data-shipping.php:52
 msgid "No shipping class"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1009
+#: classes/class-wcmp-vendor-dashboard.php:1011
 #: templates/vendor-dashboard/product-manager/views/html-product-data-shipping.php:46
 msgid "Shipping class"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1011
+#: classes/class-wcmp-vendor-dashboard.php:1013
 msgid ""
 "Shipping classes are used by certain shipping methods to group similar "
 "products."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1039
+#: classes/class-wcmp-vendor-dashboard.php:1041
 msgid "Please select atleast one and more order."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1077
 #: classes/class-wcmp-vendor-dashboard.php:1079
+#: classes/class-wcmp-vendor-dashboard.php:1081
 msgid "Slug can not be empty"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1113
 #: classes/class-wcmp-vendor-dashboard.php:1115
+#: classes/class-wcmp-vendor-dashboard.php:1117
 msgid "Shop Title can not be empty"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1122
 #: classes/class-wcmp-vendor-dashboard.php:1124
+#: classes/class-wcmp-vendor-dashboard.php:1126
 msgid "Shop Title Update Error"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1265
+#: classes/class-wcmp-vendor-dashboard.php:1267
 msgid "Please provide a valid email address."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1268
+#: classes/class-wcmp-vendor-dashboard.php:1270
 msgid "This email address is already registered."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1275
+#: classes/class-wcmp-vendor-dashboard.php:1277
 msgid "Please fill out all password fields."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1279
+#: classes/class-wcmp-vendor-dashboard.php:1281
 msgid "Please enter your current password."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1283
+#: classes/class-wcmp-vendor-dashboard.php:1285
 msgid "Please re-enter your password."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1287
+#: classes/class-wcmp-vendor-dashboard.php:1289
 msgid "New passwords do not match."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1291
+#: classes/class-wcmp-vendor-dashboard.php:1293
 msgid "Your current password is incorrect."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1306
+#: classes/class-wcmp-vendor-dashboard.php:1308
 msgid "Profile Data Updated"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1319
+#: classes/class-wcmp-vendor-dashboard.php:1321
 msgid "My Shop"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1346
+#: classes/class-wcmp-vendor-dashboard.php:1348
 msgid "Announcement"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1383
+#: classes/class-wcmp-vendor-dashboard.php:1385
 msgid "WordPress backend"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1392
+#: classes/class-wcmp-vendor-dashboard.php:1394
 msgid "Logout"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1417
-#: classes/class-wcmp-vendor-dashboard.php:1560
+#: classes/class-wcmp-vendor-dashboard.php:1419
+#: classes/class-wcmp-vendor-dashboard.php:1565
 #: includes/wcmp-core-functions.php:2458 includes/wcmp-core-functions.php:2561
 msgid "Last 7 days"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1418
-#: classes/class-wcmp-vendor-dashboard.php:1561
+#: classes/class-wcmp-vendor-dashboard.php:1420
+#: classes/class-wcmp-vendor-dashboard.php:1566
 #: includes/wcmp-core-functions.php:2459 includes/wcmp-core-functions.php:2562
 msgid "Last 30 days"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1430
+#: classes/class-wcmp-vendor-dashboard.php:1432
 msgid "Visitors Map"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1432
+#: classes/class-wcmp-vendor-dashboard.php:1434
 msgid "Pending Shipping"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1435
+#: classes/class-wcmp-vendor-dashboard.php:1437
 msgid "Product Stats"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1436
+#: classes/class-wcmp-vendor-dashboard.php:1438
 msgid "Product Sales Report"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1441
+#: classes/class-wcmp-vendor-dashboard.php:1444
+msgid "Followers"
+msgstr ""
+
+#: classes/class-wcmp-vendor-dashboard.php:1446
 msgid "Customer Questions"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1441
+#: classes/class-wcmp-vendor-dashboard.php:1446
 msgid "Show All Q&As"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1584
+#: classes/class-wcmp-vendor-dashboard.php:1589
 #: templates/vendor-dashboard/dashboard/vendor-dasboard-pending-shipping-items-header.php:17
 msgid "Order Date"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1586
+#: classes/class-wcmp-vendor-dashboard.php:1591
 #: templates/vendor-dashboard/dashboard/vendor-dasboard-pending-shipping-items-header.php:21
 msgid "Charges"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1692
+#: classes/class-wcmp-vendor-dashboard.php:1629
+msgid "No customer follows you till now."
+msgstr ""
+
+#: classes/class-wcmp-vendor-dashboard.php:1728
 msgid "Update your store country and state."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1697
+#: classes/class-wcmp-vendor-dashboard.php:1733
 msgid "Store Country"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1699
+#: classes/class-wcmp-vendor-dashboard.php:1735
 #: templates/shortcode/vendor-list/order-sort.php:52
 #: templates/shortcode/vendor_lists.php:108
 #: templates/vendor-dashboard/shop-front.php:180
@@ -5078,30 +5115,30 @@ msgstr ""
 msgid "Select a country&hellip;"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1709
+#: classes/class-wcmp-vendor-dashboard.php:1745
 msgid "Store state"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1715
+#: classes/class-wcmp-vendor-dashboard.php:1751
 #: templates/shortcode/vendor-list/order-sort.php:61
 #: templates/shortcode/vendor_lists.php:117
 #: templates/vendor-dashboard/shop-front.php:193
 msgid "Select a state&hellip;"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1729
+#: classes/class-wcmp-vendor-dashboard.php:1765
 msgid "Skip"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1803
+#: classes/class-wcmp-vendor-dashboard.php:1839
 msgid "Invalid product."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1821
+#: classes/class-wcmp-vendor-dashboard.php:1857
 msgid "Invalid product status."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:1925
+#: classes/class-wcmp-vendor-dashboard.php:1961
 #: includes/class-wcmp-woo-helper.php:97
 #. translators: 1: product ID 2: quantity in stock
 msgid ""
@@ -5109,65 +5146,65 @@ msgid ""
 "Product %1$d has %2$d units in stock."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2019
+#: classes/class-wcmp-vendor-dashboard.php:2055
 msgid "Product is successfully drafted"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2021
+#: classes/class-wcmp-vendor-dashboard.php:2057
 msgid "Product is successfully submitted for review"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2023
+#: classes/class-wcmp-vendor-dashboard.php:2059
 msgid "Product updated and live. <a href=\"%s\" target=\"_blank\">View Product</a>"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2030
+#: classes/class-wcmp-vendor-dashboard.php:2066
 msgid "Content, title, and excerpt are empty."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2055
+#: classes/class-wcmp-vendor-dashboard.php:2091
 msgid "Coupon code can't be empty."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2063
+#: classes/class-wcmp-vendor-dashboard.php:2099
 msgid "Select atleast one product or category."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2076
+#: classes/class-wcmp-vendor-dashboard.php:2112
 msgid ""
 "Coupon code already exists - customers will use the latest coupon with this "
 "code."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2078
+#: classes/class-wcmp-vendor-dashboard.php:2114
 msgid "Coupon code already exists - provide a different coupon code."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2092
+#: classes/class-wcmp-vendor-dashboard.php:2128
 msgid "Invalid coupon status."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2154
+#: classes/class-wcmp-vendor-dashboard.php:2190
 msgid "Coupon is successfully drafted"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2156
+#: classes/class-wcmp-vendor-dashboard.php:2192
 msgid "Coupon is successfully submitted for review"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2158
+#: classes/class-wcmp-vendor-dashboard.php:2194
 msgid "Coupon updated and live."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2307
+#: classes/class-wcmp-vendor-dashboard.php:2343
 msgid "%s &rsaquo; Store Setup Wizard"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2388
+#: classes/class-wcmp-vendor-dashboard.php:2424
 msgid "Welcome to the %s family!"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2392
+#: classes/class-wcmp-vendor-dashboard.php:2428
 msgid ""
 "Thank you for being the part of us. This quick setup wizard will help you "
 "configure the basic store settings and you will have your marketplace ready "
@@ -5175,95 +5212,95 @@ msgid ""
 "five minutes.</strong>"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2393
+#: classes/class-wcmp-vendor-dashboard.php:2429
 msgid ""
 "If you don't want to go through the wizard right now, you can skip and "
 "return to the dashboard. Come back anytime if you change your mind!"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2443
+#: classes/class-wcmp-vendor-dashboard.php:2479
 msgid ""
 "The following wizard will help you configure your store and get you started "
 "quickly."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2447
+#: classes/class-wcmp-vendor-dashboard.php:2483
 #: includes/wcmp-core-functions.php:2045
 #: packages/wcmp-elementor/includes/Tags/StoreName.php:35
 #: packages/wcmp-elementor/widgets/class-wcmp-widget-storename.php:28
 msgid "Store Name"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2448
+#: classes/class-wcmp-vendor-dashboard.php:2484
 #: templates/vendor-dashboard/shop-front.php:118
 #: templates/vendor-dashboard/shop-front.php:136
 msgid "Enter your Store Name here"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2450
+#: classes/class-wcmp-vendor-dashboard.php:2486
 msgid "Where is your store based?"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2451
+#: classes/class-wcmp-vendor-dashboard.php:2487
 msgid "Choose a country&hellip;"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2460
+#: classes/class-wcmp-vendor-dashboard.php:2496
 #: templates/vendor-dashboard/shop-front.php:176
 #: templates/vendor-dashboard/vendor-policy.php:88
 msgid "Address line 2"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2472
+#: classes/class-wcmp-vendor-dashboard.php:2508
 msgid "Choose a state&hellip;"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2475
+#: classes/class-wcmp-vendor-dashboard.php:2511
 msgid "Postcode / ZIP"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2576
+#: classes/class-wcmp-vendor-dashboard.php:2612
 msgid "%s offers the following payment methods for you."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2619
+#: classes/class-wcmp-vendor-dashboard.php:2655
 msgid "You're ready to start selling!"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2624
+#: classes/class-wcmp-vendor-dashboard.php:2660
 msgid "Next step"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2625
+#: classes/class-wcmp-vendor-dashboard.php:2661
 msgid "Create some products"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2626
+#: classes/class-wcmp-vendor-dashboard.php:2662
 msgid "You're ready to add products to your store."
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2631
+#: classes/class-wcmp-vendor-dashboard.php:2667
 msgid "Create a product"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2638
+#: classes/class-wcmp-vendor-dashboard.php:2674
 msgid "You can also:"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2643
+#: classes/class-wcmp-vendor-dashboard.php:2679
 msgid "Visit Dashboard"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2646
+#: classes/class-wcmp-vendor-dashboard.php:2682
 msgid "Payment Configure"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2649
+#: classes/class-wcmp-vendor-dashboard.php:2685
 msgid "Store Customize"
 msgstr ""
 
-#: classes/class-wcmp-vendor-dashboard.php:2680
-#: classes/class-wcmp-vendor-dashboard.php:2688
+#: classes/class-wcmp-vendor-dashboard.php:2716
+#: classes/class-wcmp-vendor-dashboard.php:2724
 #: classes/class-wcmp-vendor-details.php:1041
 msgid "Vendor "
 msgstr ""
@@ -5531,69 +5568,69 @@ msgstr ""
 msgid "Vendor Store Sidebar"
 msgstr ""
 
-#: classes/class-wcmp.php:481
+#: classes/class-wcmp.php:483
 msgid "Every 7 Days"
 msgstr ""
 
-#: classes/class-wcmp.php:485
+#: classes/class-wcmp.php:487
 msgid "Every 1 Month"
 msgstr ""
 
-#: classes/class-wcmp.php:489
+#: classes/class-wcmp.php:491
 msgid "Every 15 Days"
 msgstr ""
 
-#: classes/class-wcmp.php:493 classes/migration/class-wcmp-migration.php:78
+#: classes/class-wcmp.php:495 classes/migration/class-wcmp-migration.php:78
 msgid "Every 5 minute"
 msgstr ""
 
-#: classes/class-wcmp.php:514
+#: classes/class-wcmp.php:516
 msgid ""
 "Are you sure and want to delete this Product?\n"
 "You can't undo this action ..."
 msgstr ""
 
-#: classes/class-wcmp.php:515
+#: classes/class-wcmp.php:517
 msgid "Report has been sent"
 msgstr ""
 
-#: classes/class-wcmp.php:533
+#: classes/class-wcmp.php:535
 msgid "Please rate the vendor"
 msgstr ""
 
-#: classes/class-wcmp.php:534
+#: classes/class-wcmp.php:536
 msgid "Please review your vendor and minimum 10 Character required"
 msgstr ""
 
-#: classes/class-wcmp.php:535
+#: classes/class-wcmp.php:537
 msgid "Your review submitted successfully"
 msgstr ""
 
-#: classes/class-wcmp.php:536
+#: classes/class-wcmp.php:538
 msgid "Error in system please try again later"
 msgstr ""
 
-#: classes/class-wcmp.php:546
+#: classes/class-wcmp.php:548
 msgid "Are you absolutely sure to delete this shipping method?"
 msgstr ""
 
-#: classes/class-wcmp.php:554
+#: classes/class-wcmp.php:556
 msgid "Generate coupon code"
 msgstr ""
 
-#: classes/class-wcmp.php:625
+#: classes/class-wcmp.php:627
 msgid ""
 "%sWCMp Stripe Gateway%s requires PHP 5.3.29 or greater. We recommend "
 "upgrading to PHP %s or greater."
 msgstr ""
 
-#: classes/class-wcmp.php:633 classes/class-wcmp.php:641
+#: classes/class-wcmp.php:635 classes/class-wcmp.php:643
 msgid ""
 "%sWCMp Stripe gateway depends on the %s PHP extension. Please enable it, or "
 "ask your hosting provider to enable it."
 msgstr ""
 
-#: classes/class-wcmp.php:649
+#: classes/class-wcmp.php:651
 msgid ""
 "%sWCMp Vendor Membership Stripe gateway depends on the %s PHP extension. "
 "Please enable it, or ask your hosting provider to enable it."
@@ -5653,6 +5690,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:131
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:148
 #: classes/emails/class-wcmp-email-vendor-direct-bank.php:145
+#: classes/emails/class-wcmp-email-vendor-followed.php:120
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:137
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:138
 #: classes/emails/class-wcmp-email-vendor-new-order.php:139
@@ -5668,6 +5706,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:164
 #: classes/emails/class-wcmp-email-admin-new-question.php:145
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:133
+#: classes/emails/class-wcmp-email-vendor-followed.php:122
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:139
 #: classes/emails/class-wcmp-email-vendor-new-order.php:141
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:166
@@ -5683,6 +5722,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:144
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:154
 #: classes/emails/class-wcmp-email-vendor-direct-bank.php:151
+#: classes/emails/class-wcmp-email-vendor-followed.php:126
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:143
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:144
 #: classes/emails/class-wcmp-email-vendor-new-order.php:145
@@ -5692,7 +5732,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-vendor-product-rejected.php:172
 #: classes/emails/class-wcmp-email-vendor-review.php:151
 #: classes/emails/class-wcmp-email-vendor-transaction.php:152
-#: templates/widget/quick-info.php:53
+#: templates/widget/quick-info.php:54
 msgid "Subject"
 msgstr ""
 
@@ -5701,6 +5741,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:146
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:156
 #: classes/emails/class-wcmp-email-vendor-direct-bank.php:153
+#: classes/emails/class-wcmp-email-vendor-followed.php:128
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:145
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:146
 #: classes/emails/class-wcmp-email-vendor-new-order.php:147
@@ -5720,6 +5761,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:151
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:161
 #: classes/emails/class-wcmp-email-vendor-direct-bank.php:158
+#: classes/emails/class-wcmp-email-vendor-followed.php:133
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:150
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:151
 #: classes/emails/class-wcmp-email-vendor-new-order.php:152
@@ -5735,6 +5777,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:177
 #: classes/emails/class-wcmp-email-admin-new-question.php:158
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:153
+#: classes/emails/class-wcmp-email-vendor-followed.php:135
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:152
 #: classes/emails/class-wcmp-email-vendor-new-order.php:154
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:186
@@ -5752,6 +5795,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:158
 #: classes/emails/class-wcmp-email-admin-withdrawal-request.php:168
 #: classes/emails/class-wcmp-email-vendor-direct-bank.php:165
+#: classes/emails/class-wcmp-email-vendor-followed.php:140
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:157
 #: classes/emails/class-wcmp-email-vendor-new-commission-transaction.php:158
 #: classes/emails/class-wcmp-email-vendor-new-order.php:159
@@ -5767,6 +5811,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:184
 #: classes/emails/class-wcmp-email-admin-new-question.php:165
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:160
+#: classes/emails/class-wcmp-email-vendor-followed.php:142
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:159
 #: classes/emails/class-wcmp-email-vendor-new-order.php:161
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:193
@@ -5780,6 +5825,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:188
 #: classes/emails/class-wcmp-email-admin-new-question.php:169
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:164
+#: classes/emails/class-wcmp-email-vendor-followed.php:146
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:163
 #: classes/emails/class-wcmp-email-vendor-new-order.php:165
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:197
@@ -5793,6 +5839,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:189
 #: classes/emails/class-wcmp-email-admin-new-question.php:170
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:165
+#: classes/emails/class-wcmp-email-vendor-followed.php:147
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:164
 #: classes/emails/class-wcmp-email-vendor-new-order.php:166
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:198
@@ -5806,6 +5853,7 @@ msgstr ""
 #: classes/emails/class-wcmp-email-admin-added-new-product-to-vendor.php:190
 #: classes/emails/class-wcmp-email-admin-new-question.php:171
 #: classes/emails/class-wcmp-email-admin-new-vendor-account.php:166
+#: classes/emails/class-wcmp-email-vendor-followed.php:148
 #: classes/emails/class-wcmp-email-vendor-new-announcement.php:165
 #: classes/emails/class-wcmp-email-vendor-new-order.php:167
 #: classes/emails/class-wcmp-email-vendor-new-product-added.php:199
@@ -6031,6 +6079,21 @@ msgstr ""
 
 #: classes/emails/class-wcmp-email-vendor-direct-bank.php:91
 msgid "Vendor's Commission Requests"
+msgstr ""
+
+#: classes/emails/class-wcmp-email-vendor-followed.php:26
+#: classes/emails/class-wcmp-email-vendor-followed.php:53
+msgid "Vendor Followed"
+msgstr ""
+
+#: classes/emails/class-wcmp-email-vendor-followed.php:27
+msgid ""
+"Vendor Followed emails are sent a followed vendor created new product or "
+"coupon."
+msgstr ""
+
+#: classes/emails/class-wcmp-email-vendor-followed.php:43
+msgid "Vendor Followed Email"
 msgstr ""
 
 #: classes/emails/class-wcmp-email-vendor-new-account.php:35
@@ -6872,7 +6935,7 @@ msgstr ""
 msgid "WCMp Vendor Coupons"
 msgstr ""
 
-#: classes/widgets/class-wcmp-widget-vendor-coupons.php:58
+#: classes/widgets/class-wcmp-widget-vendor-coupons.php:60
 msgid "Expiry Date: "
 msgstr ""
 
@@ -7404,8 +7467,45 @@ msgstr ""
 msgid "Fallback"
 msgstr ""
 
+#: packages/wcmp-elementor/includes/Tags/StoreChat.php:35
+#: packages/wcmp-elementor/widgets/class-wcmp-widget-storechat.php:27
+msgid "Store Chat Button"
+msgstr ""
+
+#: packages/wcmp-elementor/includes/Tags/StoreChat.php:55
+msgid "Chat module is not active"
+msgstr ""
+
+#: packages/wcmp-elementor/includes/Tags/StoreChat.php:58
+msgid "Chat Now"
+msgstr ""
+
 #: packages/wcmp-elementor/includes/Tags/StoreDummyProducts.php:35
 msgid "Store Dummy Products"
+msgstr ""
+
+#: packages/wcmp-elementor/includes/Tags/StoreFollow.php:35
+#: packages/wcmp-elementor/widgets/class-wcmp-widget-storefollow.php:27
+msgid "Store Follow Button"
+msgstr ""
+
+#: packages/wcmp-elementor/includes/Tags/StoreFollow.php:52
+#: packages/wcmp-elementor/widgets/class-wcmp-widget-storefollow.php:168
+#: templates/archive_vendor_info.php:28
+msgid "Unfollow"
+msgstr ""
+
+#: packages/wcmp-elementor/includes/Tags/StoreFollow.php:52
+#: packages/wcmp-elementor/includes/Tags/StoreFollow.php:55
+#: packages/wcmp-elementor/widgets/class-wcmp-widget-storefollow.php:168
+#: templates/archive_vendor_info.php:28
+msgid "Follow"
+msgstr ""
+
+#: packages/wcmp-elementor/includes/Tags/StoreFollow.php:53
+#: templates/archive_vendor_info.php:66 templates/archive_vendor_info.php:170
+#: templates/archive_vendor_info.php:240
+msgid "You must logged in to follow"
 msgstr ""
 
 #: packages/wcmp-elementor/includes/Tags/StoreInfo.php:26
@@ -7483,6 +7583,11 @@ msgstr ""
 msgid "Left"
 msgstr ""
 
+#: packages/wcmp-elementor/widgets/class-wcmp-widget-storechat.php:126
+#: packages/wcmp-elementor/widgets/class-wcmp-widget-storefollow.php:126
+msgid "No link required."
+msgstr ""
+
 #: packages/wcmp-elementor/widgets/class-wcmp-widget-storeinfo.php:98
 msgid "Content"
 msgstr ""
@@ -7557,8 +7662,8 @@ msgstr ""
 msgid "Store Tab Contents"
 msgstr ""
 
-#: templates/archive_vendor_info.php:79 templates/archive_vendor_info.php:144
-#: templates/archive_vendor_info.php:224
+#: templates/archive_vendor_info.php:84 templates/archive_vendor_info.php:149
+#: templates/archive_vendor_info.php:230
 msgid "External Store URL"
 msgstr ""
 
@@ -7701,6 +7806,7 @@ msgstr ""
 #: templates/emails/new-admin-product.php:19
 #: templates/emails/plain/new-admin-product.php:18
 #: templates/emails/plain/new-product.php:17
+#: templates/emails/plain/vendor-followed.php:20
 msgid "Hi there! This is to notify that a new product has been submitted in %s."
 msgstr ""
 
@@ -7717,6 +7823,7 @@ msgstr ""
 #: templates/emails/plain/new-product.php:21
 #: templates/emails/plain/product-rejected.php:21
 #: templates/emails/product-rejected.php:26
+#: templates/emails/vendor-followed.php:29
 msgid "Submitted by: %s"
 msgstr ""
 
@@ -7732,15 +7839,16 @@ msgstr ""
 msgid "View product: %s"
 msgstr ""
 
-#: templates/emails/new-product.php:16
+#: templates/emails/new-product.php:16 templates/emails/vendor-followed.php:15
 msgid "Coupon"
 msgstr ""
 
-#: templates/emails/new-product.php:23
+#: templates/emails/new-product.php:23 templates/emails/vendor-followed.php:26
 msgid "Hi there! This is a notification about a new %s on %s."
 msgstr ""
 
 #: templates/emails/new-product.php:26 templates/emails/product-rejected.php:25
+#: templates/emails/vendor-followed.php:28
 msgid "%s title: %s"
 msgstr ""
 
@@ -7870,7 +7978,7 @@ msgstr ""
 #: templates/emails/plain/vendor-contact-widget-email.php:23
 #: templates/emails/report-abuse-email.php:31
 #: templates/emails/vendor-contact-widget-email.php:25
-#: templates/vendor_message_to_buyer.php:29 templates/widget/quick-info.php:55
+#: templates/vendor_message_to_buyer.php:29 templates/widget/quick-info.php:56
 msgid "Message"
 msgstr ""
 
@@ -7879,6 +7987,14 @@ msgstr ""
 msgid ""
 "Hello,<br>We have received a new withdrawal request for %s from you and "
 "your request is being processed.The order details are as follows:"
+msgstr ""
+
+#: templates/emails/plain/vendor-followed.php:26
+msgid "A new product is created %s: %s"
+msgstr ""
+
+#: templates/emails/plain/vendor-followed.php:29
+msgid "A new coupon is created:"
 msgstr ""
 
 #: templates/emails/plain/vendor-new-account.php:18
@@ -9827,82 +9943,82 @@ msgstr ""
 msgid "A Free Extension That Transforms Your WooCommerce Site into a Marketplace."
 msgstr ""
 
-#: admin/class-wcmp-admin-setup-wizard.php:103 classes/class-wcmp-admin.php:422
-#: classes/class-wcmp-vendor-dashboard.php:2205
+#: admin/class-wcmp-admin-setup-wizard.php:103 classes/class-wcmp-admin.php:424
+#: classes/class-wcmp-vendor-dashboard.php:2241
 #: classes/class-wcmp-vendor-hooks.php:599
 msgctxt "enhanced select"
 msgid "No matches found"
 msgstr ""
 
-#: admin/class-wcmp-admin-setup-wizard.php:104 classes/class-wcmp-admin.php:423
-#: classes/class-wcmp-vendor-dashboard.php:2206
+#: admin/class-wcmp-admin-setup-wizard.php:104 classes/class-wcmp-admin.php:425
+#: classes/class-wcmp-vendor-dashboard.php:2242
 #: classes/class-wcmp-vendor-hooks.php:600
 msgctxt "enhanced select"
 msgid "Loading failed"
 msgstr ""
 
-#: admin/class-wcmp-admin-setup-wizard.php:105 classes/class-wcmp-admin.php:424
-#: classes/class-wcmp-vendor-dashboard.php:2207
+#: admin/class-wcmp-admin-setup-wizard.php:105 classes/class-wcmp-admin.php:426
+#: classes/class-wcmp-vendor-dashboard.php:2243
 #: classes/class-wcmp-vendor-hooks.php:601
 msgctxt "enhanced select"
 msgid "Please enter 1 or more characters"
 msgstr ""
 
-#: admin/class-wcmp-admin-setup-wizard.php:106 classes/class-wcmp-admin.php:425
-#: classes/class-wcmp-vendor-dashboard.php:2208
+#: admin/class-wcmp-admin-setup-wizard.php:106 classes/class-wcmp-admin.php:427
+#: classes/class-wcmp-vendor-dashboard.php:2244
 #: classes/class-wcmp-vendor-hooks.php:602
 msgctxt "enhanced select"
 msgid "Please enter %qty% or more characters"
 msgstr ""
 
-#: admin/class-wcmp-admin-setup-wizard.php:107 classes/class-wcmp-admin.php:426
-#: classes/class-wcmp-vendor-dashboard.php:2209
+#: admin/class-wcmp-admin-setup-wizard.php:107 classes/class-wcmp-admin.php:428
+#: classes/class-wcmp-vendor-dashboard.php:2245
 #: classes/class-wcmp-vendor-hooks.php:603
 msgctxt "enhanced select"
 msgid "Please delete 1 character"
 msgstr ""
 
-#: admin/class-wcmp-admin-setup-wizard.php:108 classes/class-wcmp-admin.php:427
-#: classes/class-wcmp-vendor-dashboard.php:2210
+#: admin/class-wcmp-admin-setup-wizard.php:108 classes/class-wcmp-admin.php:429
+#: classes/class-wcmp-vendor-dashboard.php:2246
 #: classes/class-wcmp-vendor-hooks.php:604
 msgctxt "enhanced select"
 msgid "Please delete %qty% characters"
 msgstr ""
 
-#: admin/class-wcmp-admin-setup-wizard.php:109 classes/class-wcmp-admin.php:428
-#: classes/class-wcmp-vendor-dashboard.php:2211
+#: admin/class-wcmp-admin-setup-wizard.php:109 classes/class-wcmp-admin.php:430
+#: classes/class-wcmp-vendor-dashboard.php:2247
 #: classes/class-wcmp-vendor-hooks.php:605
 msgctxt "enhanced select"
 msgid "You can only select 1 item"
 msgstr ""
 
-#: admin/class-wcmp-admin-setup-wizard.php:110 classes/class-wcmp-admin.php:429
-#: classes/class-wcmp-vendor-dashboard.php:2212
+#: admin/class-wcmp-admin-setup-wizard.php:110 classes/class-wcmp-admin.php:431
+#: classes/class-wcmp-vendor-dashboard.php:2248
 #: classes/class-wcmp-vendor-hooks.php:606
 msgctxt "enhanced select"
 msgid "You can only select %qty% items"
 msgstr ""
 
-#: admin/class-wcmp-admin-setup-wizard.php:111 classes/class-wcmp-admin.php:430
-#: classes/class-wcmp-vendor-dashboard.php:2213
+#: admin/class-wcmp-admin-setup-wizard.php:111 classes/class-wcmp-admin.php:432
+#: classes/class-wcmp-vendor-dashboard.php:2249
 #: classes/class-wcmp-vendor-hooks.php:607
 msgctxt "enhanced select"
 msgid "Loading more results&hellip;"
 msgstr ""
 
-#: admin/class-wcmp-admin-setup-wizard.php:112 classes/class-wcmp-admin.php:431
-#: classes/class-wcmp-vendor-dashboard.php:2214
+#: admin/class-wcmp-admin-setup-wizard.php:112 classes/class-wcmp-admin.php:433
+#: classes/class-wcmp-vendor-dashboard.php:2250
 #: classes/class-wcmp-vendor-hooks.php:608
 msgctxt "enhanced select"
 msgid "Searching&hellip;"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:308
+#: classes/class-wcmp-admin.php:310
 msgctxt "Admin menu name"
 msgid "Commissions"
 msgstr ""
 
-#: classes/class-wcmp-admin.php:312
+#: classes/class-wcmp-admin.php:314
 msgctxt "Admin menu name"
 msgid "To-do List"
 msgstr ""

@@ -39,6 +39,8 @@ class WCMp_Admin {
         // vendor shipping capability
         add_filter('wcmp_current_vendor_id', array(&$this, 'wcmp_vendor_shipping_admin_capability'));
         add_filter('wcmp_dashboard_shipping_vendor', array(&$this, 'wcmp_vendor_shipping_admin_capability'));
+        // for version 3.7 only
+        add_action('admin_notices', array(&$this, 'wcmp_service_page_notice'));
 
         $this->actions_handler();
     }
@@ -613,6 +615,37 @@ class WCMp_Admin {
             }
         } 
         return $current_id;
+    }
+
+    /**
+     * Display WCMp service notice in admin panel
+     */
+    public function wcmp_service_page_notice() {
+        ?>
+        <div class="updated wcmp_admin_new_banner">
+            <div class="round"></div>
+            <div class="round1"></div>
+            <div class="round2"></div>
+            <div class="round3"></div>
+            <div class="round4"></div>
+            <div class="wcmp_banner-content">
+                <span class="txt"><?php esc_html_e('Enhance your marketplace site with the latest WPML integration that lets you organise content in different languages, build-up pages with Elementor compatibility and track favourite stores with WCMp Follow Store.', 'dc-woocommerce-multi-vendor') ?>  </span>
+                <div class="rightside">        
+                    <a href="https://wc-marketplace.com/latest-release/" target="_blank" class="wcmp_btn_service_claim_now"><?php esc_html_e('Checkout latest release', 'dc-woocommerce-multi-vendor'); ?></a>
+                    <button onclick="dismiss_servive_notice(event);" type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                </div>
+
+            </div>
+        </div>
+        <style type="text/css">.clearfix{clear:both}.wcmp_admin_new_banner.updated{border-left:0}.wcmp_admin_new_banner{box-shadow:0 3px 1px 1px rgba(0,0,0,.2);padding:10px 30px;background:#fff;position:relative;overflow:hidden;clear:both;border-top:2px solid #8abee5;text-align:left;background-size:contain}.wcmp_admin_new_banner .round{width:200px;height:200px;position:absolute;border-radius:100%;border:30px solid rgba(157,42,255,.05);top:-150px;left:73px;z-index:1}.wcmp_admin_new_banner .round1{position:absolute;border-radius:100%;border:45px solid rgba(194,108,144,.05);bottom:-82px;right:-58px;width:180px;height:180px;z-index:1}.wcmp_admin_new_banner .round2,.wcmp_admin_new_banner .round3{border-radius:100%;width:180px;height:180px;position:absolute;z-index:1}.wcmp_admin_new_banner .round2{border:18px solid rgba(194,108,144,.05);top:35px;left:249px}.wcmp_admin_new_banner .round3{border:45px solid rgba(31,194,255,.05);top:2px;right:40%}.wcmp_admin_new_banner .round4{position:absolute;border-radius:100%;border:31px solid rgba(31,194,255,.05);top:11px;left:-49px;width:100px;height:100px;z-index:1}.wcmp_banner-content{display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;align-items:center}.wcmp_admin_new_banner .txt{color:#333;font-size:15px;line-height:1.4;width:calc(100% - 345px);position:relative;z-index:2;display:inline-block;font-weight:400;float:left;padding-left:8px}.wcmp_admin_new_banner .link,.wcmp_admin_new_banner .wcmp_btn_service_claim_now{font-weight:400;display:inline-block;z-index:2;padding:0 20px;position:relative}.wcmp_admin_new_banner .rightside{float:right;width:345px}.wcmp_admin_new_banner .wcmp_btn_service_claim_now{cursor:pointer;background:#8abee5;height:40px;color:#fff;font-size:20px;text-align:center;border:none;margin:5px 13px;border-radius:5px;text-decoration:none;line-height:40px}.wcmp_admin_new_banner button:hover{opacity:.8;transition:.5s}.wcmp_admin_new_banner .link{font-size:18px;line-height:49px;background:0 0;height:50px}.wcmp_admin_new_banner .link a{color:#333;text-decoration:none}@media (max-width:990px){.wcmp_admin_new_banner::before{left:-4%;top:-12%}}@media (max-width:767px){.wcmp_admin_new_banner::before{left:0;top:0;transform:rotate(0);width:10px}.wcmp_admin_new_banner .txt{width:400px;max-width:100%;text-align:center;padding:0;margin:0 auto 5px;float:none;display:block;font-size:17px;line-height:1.6}.wcmp_admin_new_banner .rightside{width:100%;padding-left:10px;text-align:center;box-sizing:border-box}.wcmp_admin_new_banner .wcmp_btn_service_claim_now{margin:10px 0}.wcmp_banner-content{display:block}}.wcmp_admin_new_banner button.notice-dismiss{z-index:1;position:absolute;top:50%;transform:translateY(-50%)}</style>
+        <script type="text/javascript">
+            function dismiss_servive_notice(e, i) {
+                jQuery.post(ajaxurl, {action: "dismiss_wcmp_servive_notice"}, function (e) {
+                    e && (jQuery(".wcmp_admin_new_banner").addClass("hidden"), void 0 !== i && (window.open(i, '_blank')))
+                })
+            }
+        </script>
+        <?php
     }
 
 }
