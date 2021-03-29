@@ -40,6 +40,8 @@ Class WCMp_Admin_Dashboard {
         
         add_filter( 'wcmp_vendor_dashboard_add_product_url', array( &$this, 'wcmp_vendor_dashboard_add_product_url' ), 10 );
         add_filter( 'wcmp_vendor_submit_product', array( &$this, 'wcmp_vendor_dashboard_add_product_url' ), 10 );
+        // send email to folloed customer
+        add_action( 'save_post', array( &$this, 'notify_followed_customers' ), 99, 2 );
 
         // Submit comment
         $this->submit_comment();
@@ -1438,6 +1440,9 @@ Class WCMp_Admin_Dashboard {
         if (get_wcmp_vendor_settings('is_sellerreview', 'general') == 'Enable') {
             $this->wcmp_add_dashboard_widget('wcmp_customer_reviews', __('Reviews', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_customer_review'));
         }
+        // Vendor followeres list
+        $this->wcmp_add_dashboard_widget('wcmp_vendor_follower', __('Followers', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_vendor_followers'));
+
         $this->wcmp_add_dashboard_widget('wcmp_vendor_products_cust_qna', __('Customer Questions', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_vendor_products_cust_qna'), 'side', '', array('action' => array('title' => __('Show All Q&As', 'dc-woocommerce-multi-vendor'), 'link' => esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_products_qnas_endpoint', 'vendor', 'general', 'products-qna'))))));
     }
 
@@ -1592,6 +1597,37 @@ Class WCMp_Admin_Dashboard {
         public function wcmp_customer_review() {
             global $WCMp, $wpdb;
             $WCMp->template->get_template('vendor-dashboard/dashboard-widgets/wcmp_customer_review.php');
+        }
+
+        public function wcmp_vendor_followers() {
+            $wcmp_vendor_followed_by_customer = get_user_meta( get_current_vendor_id(), 'wcmp_vendor_followed_by_customer', true ) ? get_user_meta( get_current_vendor_id(), 'wcmp_vendor_followed_by_customer', true ) : array();
+            if (!empty($wcmp_vendor_followed_by_customer)) {
+                ?><div style="overflow: scroll;"><?php
+                foreach ($wcmp_vendor_followed_by_customer as $key_folloed => $value_followed) {
+                    $user_details = get_user_by( 'ID', $value_followed['user_id'] );
+                    if ( !$user_details ) continue;
+                    ?>
+                    <div class="col-md-12 wcmp-comments dash-widget-dt">
+                        <table class="wcmp-widget-dt table">
+                            <tbody class="media-list">
+                                <td class=" media" tabindex="0">
+                                    <div class="media-left pull-left">   
+                                        <a href="<?php echo esc_url(get_permalink($value_followed['user_id'])); ?>"> <?php echo wp_kses_post(get_avatar($value_followed['user_id'], 50, '', '')) ?> </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading"><?php echo esc_html($user_details->data->display_name); ?> -- <small><?php echo esc_html(human_time_diff(strtotime($value_followed['timestamp']))) . esc_html(' ago', 'dc-woocommerce-multi-vendor') ?> </small></h4>
+                                    </div>
+                                </td>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <?php
+                }
+                ?></div><?php
+            } else {
+                esc_html_e('No customer follows you till now.', 'dc-woocommerce-multi-vendor');
+            }
         }
 
         public function wcmp_vendor_product_stats($args = array()) {
@@ -2692,6 +2728,22 @@ Class WCMp_Admin_Dashboard {
                         $billing_email = get_post_meta( $vendor_order_id, '_billing_email', true );
                         $mail->trigger( $billing_email, $vendor_order_id, $refund_details, 'customer' );
                     }
+                }
+            }
+        }
+    }
+
+    public function notify_followed_customers($post_id, $post) {
+        if( ( $post->post_type == 'product' || $post->post_type == 'shop_coupon' ) && $post->post_status == 'publish' ) {
+            $wcmp_vendor_followed_by_customer = get_user_meta( $post->post_author, 'wcmp_vendor_followed_by_customer', true ) ? get_user_meta( $post->post_author, 'wcmp_vendor_followed_by_customer', true ) : array();
+            if($wcmp_vendor_followed_by_customer) {
+                foreach($wcmp_vendor_followed_by_customer as $cust_id) {
+                    $mail_already_sent = get_user_meta($cust_id['user_id'], 'wcmp_new_post_added_notification', true);
+                    if ( $mail_already_sent ) continue;
+                    $customer = get_userdata($cust_id['user_id']);
+                    $email = WC()->mailer()->emails['WC_Email_Vendor_Followed'];
+                    $email->trigger($customer, $post);
+                    update_user_meta($cust_id['user_id'], 'wcmp_new_post_added_notification', true);
                 }
             }
         }

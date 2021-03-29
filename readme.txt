@@ -1041,5 +1041,5 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Upgrade Notice ==
 
-= 3.5.0 =
-3.5+ is a major update. Make a full site backup and [review latest release](https://wc-marketplace.com/latest-release/) before upgrading your marketplace to avoid any undesirable situations.
+= 3.7.0 =
+3.7+ is a major update. Make a full site backup and [review latest release](https://wc-marketplace.com/latest-release/) before upgrading your marketplace to avoid any undesirable situations.

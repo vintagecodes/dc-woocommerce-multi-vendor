@@ -149,4 +149,34 @@ jQuery(document).ready(function ($) {
             }
         });
     }
+    // Follow and unfollow by customer
+    $('.wcmp-stroke-butn').on('click', function() {
+        
+        var vendor_id = $(this).attr('data-vendor_id');
+        var status = $(this).attr('data-status');
+
+        $('.wcmp_bannersec_start').block({
+            message: null,
+            overlayCSS: {
+                background: '#fff',
+                opacity: 0.6
+            }
+        });
+
+        var data = {
+            action      : 'wcmp_follow_store_toggle_status',
+            vendor_id   : vendor_id,
+            status      : status,
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: frontend_js_script_data.ajax_url,
+            data: data,
+            success: function(response) {
+                window.location.href = window.location.href;
+            }
+        });
+
+    });
 });

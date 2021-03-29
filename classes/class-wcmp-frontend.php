@@ -66,6 +66,10 @@ class WCMp_Frontend {
         // Pllicies tab section
         add_action( 'wcmp_vendor_shop_page_policies_endpoint', array(&$this, 'wcmp_vendor_shop_page_policies_endpoint' ), 10, 2 );
         flush_rewrite_rules();
+
+        // Customer follows vendor list on my account page
+        add_filter( 'woocommerce_account_menu_items',array($this, 'wcmp_customer_followers_vendor'), 99 );
+        add_action( 'woocommerce_account_followers_endpoint', array($this, 'wcmp_customer_followers_vendor_callback' ));
     }
 
     /**
@@ -402,6 +406,7 @@ class WCMp_Frontend {
         }
         if (wcmp_is_store_page()) {
             wp_enqueue_script('wcmp_seller_review_rating_js');
+            wp_enqueue_script('frontend_js');
         }
     }
 
@@ -944,6 +949,42 @@ class WCMp_Frontend {
             </div> 
             <?php
         }
+    }
+
+    public function wcmp_customer_followers_vendor($items) {
+        if (is_user_wcmp_vendor(get_current_user_id())) {
+            return $items;
+        }
+        unset( $items['customer-logout'] );
+        $items[ 'followers' ] = __( 'Following', 'dc-woocommerce-multi-vendor' );
+        $items[ 'customer-logout' ] = __( 'Log out', 'dc-woocommerce-multi-vendor' );
+        return $items;
+    }
+    public function wcmp_customer_followers_vendor_callback() {
+        $wcmp_customer_follow_vendor = get_user_meta( get_current_user_id(), 'wcmp_customer_follow_vendor', true ) ? get_user_meta( get_current_user_id(), 'wcmp_customer_follow_vendor', true ) : array();
+        ?>
+        <table>
+            <tbody>
+                <?php 
+                if ($wcmp_customer_follow_vendor) {
+                    foreach ($wcmp_customer_follow_vendor as $key_follow_vendor => $value_follow_vendor) {
+                        $vendor = get_wcmp_vendor($value_follow_vendor['user_id']);
+                        if (!$vendor) continue;
+                        ?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo esc_url($vendor->permalink); ?>"> <?php echo esc_html($vendor->page_title); ?> </a>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                } else {
+                    esc_html_e('You do not follow any customer till now', 'dc-woocommerce-multi-vendor');
+                }
+                ?>
+            </tbody>
+        </table>
+        <?php
     }
 
 }

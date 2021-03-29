@@ -77,7 +77,7 @@ class DC_Widget_Vendor_Info extends WP_Widget {
 
             if ($vendor) {
                 // Set up widget title
-                if ($instance['title']) {
+                if (isset($instance['title'])) {
                     $title = apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
                 } else {
                     $title = false;
