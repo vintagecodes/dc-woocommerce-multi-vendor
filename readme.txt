@@ -16,10 +16,12 @@ Afraid of launching an **Online Marketplace**? Well, worry no more WC Marketplac
 
 [Try Our Demo](http://wcmpdemos.com/all-in-one-demo/my-account/) | [Support](https://wc-marketplace.com/support-forum/) | [Features](https://wc-marketplace.com/features/) | [Extensions](https://wc-marketplace.com/addons/) | Marketplaces 
 
-Curb in all your fears, as this **free software** requires **no codes**, provides **regular updates,** is  **easy to install** and has a fabulous support team to back it . So, no need to hold back when you can get so much for **free**.
+### Try us because we provide:
+* **Free Software** that requires **no codes**
+* **Regular Updates** to enhance your user experience
+* A fabulous **Support Team**
 
-##### ✓ Free Tools for Marketplace Beginners 
-WC Marketplace presents you with a range of tools that can help you operate any kind of marketplace be it an all-in-one **Marketplace like Amazon,** or a niche marketplace like **Etsy.**
+##### ✓ Free Tools for Marketplace Beginners - WC Marketplace presents you with a range of tools that can help you operate any kind of marketplace be it an all-in-one **Marketplace like Amazon,** or a niche marketplace like **Etsy.**
 
 ##### ✓  **Easy Startup Guide** -  WC Marketplace plugin provides you with an **[Easy Setup Wizard](https://wc-marketplace.com/knowledgebase/admin-multi-step-setup-wizard/)**, which will help you get started in no time 
 
@@ -221,7 +223,7 @@ To know more on what we learnt from our customer [***read this blog*** ](https:/
 ### [Popular Blogs ](https://wc-marketplace.com/blog/)
 Confused about **how to get started**? Read our Blogs on**e-commerce best practices**, **Multivendor Shops, how to increase your website traffic** and many more. These blogs are powerful, inspirational and detailed enough to educate on anything marketplace. 
 
-### Connect with us 
+### Stay Connected
 Now that you have understood the basics of what WCMp is made-up of and the benefits it can provide, connect with us through. 
 
 **[Quick Setup QuickStart ](https://wc-marketplace.com/knowledgebase/admin-multi-step-setup-wizard/)** - Setting up a Marketplace has now become more comfortable with our easy to follow Setup Wizard. 
