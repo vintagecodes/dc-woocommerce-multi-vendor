@@ -49,7 +49,6 @@ WC Marketplace presents you with a range of tools that can help you operate any 
 
 ##### ✓ **Trustworthy Customers Support** - WCMp knows how much you treasure your customers which is why we offer your customer support tools like **[Vendor Reviews](https://wc-marketplace.com/knowledgebase/wcmp-vendor-dashboard-widgets/#nav-8)**, [Product Question and Answers](https://wc-marketplace.com/knowledgebase/wcmp-vendor-dashboard-widgets/#nav-9), **[Customer Support](https://wc-marketplace.com/knowledgebase/wcmp-setup-guide/)** that will help you support your customers and create trust in them.
 
-
 ##### ✓ **Social Marketplace -** WCMp also provides support to help you create a marketplace like **Facebook marketplace**. Now you can utilise the power of social media to not only communicate but also sell products. As WC Marketplace is **BBPress or BuddyPress Compatible,** you will not only be able to track consumers and customers on your site but also your vendors and their associates**.** 
 
 ##### ✓ **Easy Migration Support** - WCMp encourages its customers to sample everything before they invest into our plugin for a long term. Which is why users who wish to switch from **Dokan, WCFM or WC Vendors** can now happily convert into a WCMpian, without the fear of losing precious data. The easy migration tool will allow its users to transfer data gathered from using Dokan or any other WooCommerce compatible marketplace plugin to WCMp without breaking a sweat. 
