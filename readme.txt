@@ -254,7 +254,6 @@ Now that you have understood the basics of what WCMp is made-up of and the benef
 == Installation ==
 NOTE: WC Marketplace plugin is an extension of WooCommerce, so the WooCommerce plugin must be installed and activated in your WordPress site for this plugin to work properly.
 
-
 1. Download and install WC Marketplace plugin using the built-in WordPress plugin installer.
 If you download WC Marketplace plugin manually, make sure it is uploaded to `/wp-content/plugins/` and activate the plugin through the `Plugins` menu in WordPress. Or follow the steps below:
 Plugins > Add new > Upload plugin > Upload dc-woocommerce-multi-vendor.zip > Install Now > Activate Plugin.
@@ -262,9 +261,6 @@ Plugins > Add new > Upload plugin > Upload dc-woocommerce-multi-vendor.zip > Ins
 3. Configure email notifications from WooCommerce / Settings.
 4. View Commissions under WCMp / Commissions.
 5. View reports WCMp / Reports.
-
-
-
 
 == Frequently Asked Questions ==
 = Does this plugin work with newest WP version and also older versions? =
@@ -277,8 +273,6 @@ Ans. This plugin is tested with PHP version 5.6.
 Ans. You can find the documentation of our REST API on the [WCMp REST API Docs](https://wc-marketplace.github.io/rest-api-docs/).
 = WC Marketplace is awesome! Can I contribute? =
 Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/dualcube/dc-woocommerce-multi-vendor/) :)
-
-
 
 == Screenshots ==
 1. Vendor Dashboard.
@@ -295,9 +289,6 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 12. Vendor application and admin notes.
 13. Vendor profile management form dashboard.
 14. Show Multiple Seller in Single Product.
-
-
-
 
 == Changelog ==
 
