@@ -97,7 +97,6 @@ Competition requires competent products which is why we bring to you a list of *
 - **Marketplace like Amazon**
 - **Marketplace like Flipkart**
 
-
 Note: WC marketplace does not set an e-commerce platform, but it converts an e-commerce platform into a marketplace. 
 
 ### WCMp List of Free and Advanced Features 
