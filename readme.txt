@@ -16,7 +16,6 @@ Afraid of launching an **Online Marketplace**? Well, worry no more WC Marketplac
 
 [Try Our Demo](http://wcmpdemos.com/all-in-one-demo/my-account/) | [Support](https://wc-marketplace.com/support-forum/) | [Features](https://wc-marketplace.com/features/) | [Extensions](https://wc-marketplace.com/addons/) | Marketplaces 
 
-
 ### Try us because we provide:
 * **Free Software** that requires **no codes** to start with 
 * **Regular Updates** for security fixes and better user experience
