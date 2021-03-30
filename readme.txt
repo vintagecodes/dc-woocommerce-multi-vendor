@@ -161,7 +161,7 @@ Stress-free Order Manager
 
 - Weight-Based Shipping
 - Product Based Shipping
-- Print Shipping Labe**l**
+- Print Shipping Label
 - **Shipping Tracking**
 
 **Diverse Commission and Commission Types**
