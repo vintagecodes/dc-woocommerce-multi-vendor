@@ -51,8 +51,6 @@ class WCMp_Dokan {
 
 	public function store_product_migrate( $vendor_id, $term_id ) {
 		global $WCMp;
-		i/*nclude_once ($WCMp->plugin_path . "/classes/migration/class-wcmp-migration.php" );
-		$get_product_vendor = new WCMp_Migrator();*/
 		$vendor_products = $WCMp->multivendor_migration->wcmp_get_products_by_vendor( $vendor_id );
 		if($vendor_products) {
 			foreach($vendor_products as $product ) {

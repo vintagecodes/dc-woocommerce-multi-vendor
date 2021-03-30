@@ -40,8 +40,9 @@ class WCMp_Admin {
         add_filter('wcmp_current_vendor_id', array(&$this, 'wcmp_vendor_shipping_admin_capability'));
         add_filter('wcmp_dashboard_shipping_vendor', array(&$this, 'wcmp_vendor_shipping_admin_capability'));
         // for version 3.7 only
-        add_action('admin_notices', array(&$this, 'wcmp_service_page_notice'));
-
+        if (!get_option('_is_dismiss_wcmp340_notice', false) && current_user_can('manage_options')) {
+            add_action('admin_notices', array(&$this, 'wcmp_service_page_notice'));
+        }
         $this->actions_handler();
     }
     
