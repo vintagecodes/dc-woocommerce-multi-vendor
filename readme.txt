@@ -22,6 +22,8 @@ Afraid of launching an **Online Marketplace**? Well, worry no more WC Marketplac
 * **Regular Updates** for security fixes and better user experience
 * A fabulous **Support Team**
 
+### Why WCMP?
+
 ##### ✓ **Free Tools for Marketplace Beginners** - WC Marketplace presents you with a range of tools that can help you operate any kind of marketplace be it an all-in-one **Marketplace like Amazon,** or a niche marketplace like **Etsy.**
 
 ##### ✓  **Easy Startup Guide** -  WC Marketplace plugin provides you with an **[Easy Setup Wizard](https://wc-marketplace.com/knowledgebase/admin-multi-step-setup-wizard/)**, which will help you get started in no time 
