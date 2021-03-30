@@ -224,7 +224,7 @@ To know more on what we learnt from our customer [***read this blog*** ](https:/
 Confused about **how to get started**? Read our Blogs on**e-commerce best practices**, **Multivendor Shops, how to increase your website traffic** and many more. These blogs are powerful, inspirational and detailed enough to educate on anything marketplace. 
 
 ### Stay Connected
-Now that you have understood the basics of what WCMp is made-up of and the benefits it can provide, connect with us through. 
+Stay connected with WCMp and reap benefits like - 
 
 **[Quick Setup QuickStart ](https://wc-marketplace.com/knowledgebase/admin-multi-step-setup-wizard/)** - Setting up a Marketplace has now become more comfortable with our easy to follow Setup Wizard. 
 
