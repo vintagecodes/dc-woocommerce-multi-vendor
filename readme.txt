@@ -23,7 +23,7 @@ WC Marketplace presents you with a range of tools that can help you operate any 
 
 ##### ✓  **Easy Startup Guide** -  WC Marketplace plugin provides you with an **[Easy Setup Wizard](https://wc-marketplace.com/knowledgebase/admin-multi-step-setup-wizard/)**, which will help you get started in no time 
 
-##### ✓ **Simple Application Process** - Do away with all the complicated processes involved in creating a personalised registration form as WCMp provides you with a [**customisable registration form**](https://wcmarketp.staging.wpengine.com/knowledgebase/setting-vendor-registration-wcmp/). With this registration form, you can add, remove or change the query details anyway you like. 
+##### ✓ **Simple Application Process** - Do away with all the complicated processes involved in creating a personalised registration form as WCMp provides you with a [**customisable registration form**](https://wc-marketplace.com/knowledgebase/setting-vendor-registration-wcmp/). With this registration form, you can add, remove or change the query details anyway you like. 
 
 ##### ✓ **Personalised Dashboard** - With WCMp you get an uncomplicated [**user friendly dashboard**](https://wc-marketplace.com/knowledgebase/admin-multi-step-setup-wizard/) that can help your vendors manage and track all their tasks. Whatever you want to track and manage you can convert this dashboard into a **sales dashboard, report dashboard or a management dashboard**.
 
@@ -47,7 +47,7 @@ WC Marketplace presents you with a range of tools that can help you operate any 
 
 ##### ✓ [**Flexible Shipping** ](https://wc-marketplace.com/knowledgebase/wcmp-shipping/)- Make managing shipping more effective and efficient with the WC Marketplace plugin as we provide you with the option of **Vendor Shipping**. This option allows vendors to charge various **shipping rates** on the basis of weight, country or product category. Along with this vendors can also avail the **shipping tracking** option that lets them know the status of their delivery.
 
-##### ✓ **Trustworthy Customers Support** - WCMp knows how much you treasure your customers which is why we offer your customer support tools like **[Vendor Reviews](https://wcmarketp.staging.wpengine.com/knowledgebase/wcmp-vendor-dashboard-widgets/#nav-8)**, [Product Question and Answers](https://wcmarketp.staging.wpengine.com/knowledgebase/wcmp-vendor-dashboard-widgets/#nav-9), **[Customer Support](https://wcmarketp.staging.wpengine.com/knowledgebase/wcmp-setup-guide/)** that will help you support your customers and create trust in them.
+##### ✓ **Trustworthy Customers Support** - WCMp knows how much you treasure your customers which is why we offer your customer support tools like **[Vendor Reviews](https://wc-marketplace.com/knowledgebase/wcmp-vendor-dashboard-widgets/#nav-8)**, [Product Question and Answers](https://wc-marketplace.com/knowledgebase/wcmp-vendor-dashboard-widgets/#nav-9), **[Customer Support](https://wc-marketplace.com/knowledgebase/wcmp-setup-guide/)** that will help you support your customers and create trust in them.
 
 
 ##### ✓ **Social Marketplace -** WCMp also provides support to help you create a marketplace like **Facebook marketplace**. Now you can utilise the power of social media to not only communicate but also sell products. As WC Marketplace is **BBPress or BuddyPress Compatible,** you will not only be able to track consumers and customers on your site but also your vendors and their associates**.** 
@@ -60,14 +60,14 @@ WC Marketplace presents you with a range of tools that can help you operate any 
 
 ##### ✓ **WCMp Follow Store -** Another latest innovation from WCMp is the follow Store feature that let's customers be posted with store updates of their choice.
 
-##### ✓ **Additional Management Tools** - You can find other management tools with WC Marketplace like **[Announcements](https://wcmarketp.staging.wpengine.com/knowledgebase/wcmp-setup-guide/#nav-12)**, [To-Do List](https://wcmarketp.staging.wpengine.com/knowledgebase/setting-up-to-do-list-for-wcmp/), and **[Knowledgebase](https://wcmarketp.staging.wpengine.com/knowledgebase/wcmp-setup-guide/#nav-13)**. These tools are unique to only the WC Marketplace plugin. 
+##### ✓ **Additional Management Tools** - You can find other management tools with WC Marketplace like **[Announcements](https://wc-marketplace.com/knowledgebase/wcmp-setup-guide/#nav-12)**, [To-Do List](https://wc-marketplace.com/knowledgebase/setting-up-to-do-list-for-wcmp/), and **[Knowledgebase](https://wc-marketplace.com/knowledgebase/wcmp-setup-guide/#nav-13)**. These tools are unique to only the WC Marketplace plugin. 
 
 ### Taste Victory with Advanced Features
 Competition requires competent products which is why we bring to you a list of **affordable, easy to use extension** that will keep you ahead of your competition along with increasing your websites’ functionality. 
 
 ##### ✓ **Customizable Vendor Shop** - Vendors can create and customise any kind of **virtual store** like a **baseball shop, a shoe-repair shop, ski shop** and others to customers by using our store management dashboard. To help vendors customize their vendor shops, we provide them with tools like **Store Logo, Store Banner, Store location,** and **Social media links.**
 
-##### ✓ **Advanced Product Features -** WCMp shares one goal that is to provide its users with any kind of marketplace they desire. To fulfil this goal, WCMp presents a **premium add-on** like [**Advanced Frontend Manager**](https://wcmarketp.staging.wpengine.com/addons/). With this add-on, vendors can upload any type of product like **bookings, rental, accommodation, auction, subscription,** and many more. They can also export-**import products**, **create product add-ons** and many more. [To know more about Advanced Frontend Manager read here. ](https://wc-marketplace.com/knowledgebase/wcmp-frontend-manager/)
+##### ✓ **Advanced Product Features -** WCMp shares one goal that is to provide its users with any kind of marketplace they desire. To fulfil this goal, WCMp presents a **premium add-on** like [**Advanced Frontend Manager**](https://wc-marketplace.com/addons/). With this add-on, vendors can upload any type of product like **bookings, rental, accommodation, auction, subscription,** and many more. They can also export-**import products**, **create product add-ons** and many more. [To know more about Advanced Frontend Manager read here. ](https://wc-marketplace.com/knowledgebase/wcmp-frontend-manager/)
 
 ##### ✓ [**Customizable Membership Plan**](https://wc-marketplace.com/product/wcmp-vendor-membership/) - **Membership model** businesses have flourished quite well. You can now create membership packages like **Free membership**, **trial membership** or **paid membership** package using our WCMP Vendor membership. Here you can decide the **membership fee, adjust price rates** and create **membership benefits** and plans to your desire. 
 
