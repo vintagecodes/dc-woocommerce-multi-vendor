@@ -106,26 +106,23 @@ Note: WC marketplace does not set an e-commerce platform, but it converts an e-c
 **WCMp Follow Store (New)**
 
 **Easy Setup Guide**
-
 - **Admin Setup Wizard**
 - Vendor Setup Wizard 
 
 Swift **Application** 
-
 - **Customizable** Vendors **Registration Form**
 
 **Managing Multiple Vendors on a Multi-Vendor Site** 
-
 - **[Seller Verification](https://wc-marketplace.com/product/wcmp-seller-verification/) (Pro)**
 - **Vendor List** 
 - Vendor’s Information/ Archive
 
 **Powerful Product Tools**
-
 - Effortlessly **upload product** 
 - Product GTINs
 - **Bulk Product Upload**
 - **[Product import-export ](https://wc-marketplace.com/product/wcmp-frontend-manager/)(Pro)**
+
 ##### Multiple Product Type Support
 - Simple Product
 - Downloadable Product
@@ -140,32 +137,27 @@ Swift **Application**
 - [Bundled ](https://wc-marketplace.com/product/wcmp-frontend-manager/)(Pro)
 
 Stress-free Order Manager
-
 - **Order Lists**
 - Order Status list
 - **Track Order**
 
-**Manage Inventory** with WCMp Stock Alert  
-
+**Manage Inventory** with WCMp Stock Alert
 - **[Inventory list ](https://wc-marketplace.com/product/wcmp-vendor-stock-alert/)(Pro)**
 - [Stock Alert](https://wc-marketplace.com/product/wcmp-vendor-stock-alert/) (Pro)
 
 **Suitable Payment Gateway** 
-
 - **PayPal** 
 - **MassPay** 
 - **Stripe and [Stripe Add-On](https://wc-marketplace.com/product/wcmp-stripe-marketplace/)** 
 - **[Mangopay](https://wc-marketplace.com/product/wcmp-mangopay-marketplace/) (Pro)**
 
 **Flexible Shipping** 
-
 - Weight-Based Shipping
 - Product Based Shipping
 - Print Shipping Label
 - **Shipping Tracking**
 
 **Diverse Commission and Commission Types**
-
 - **Product Commission**
 - Category based Commission
 - **Vendor Based Commission**
@@ -176,7 +168,6 @@ Stress-free Order Manager
 - Fixed+Percentage Commission Per Unit
 
 **Multiple Reports** 
-
 - **Sales**
 - **Product**
 - **Vendor**
@@ -186,30 +177,25 @@ Stress-free Order Manager
 - **Downloads Report (Pro)**
 
 [**Advanced Product Catalogue**](https://wc-marketplace.com/product/woocommerce-catalog-enquiry-pro/)
-
 - **[Product Catalogue](https://wc-marketplace.com/product/woocommerce-catalog-enquiry-pro/) (Pro)**
 - **[Product inquiry](https://wc-marketplace.com/product/woocommerce-catalog-enquiry-pro/) (Pro)**
 
 **Personalized Invoice** 
-
 - **[Auto-Generated Invoice ](https://wc-marketplace.com/product/wcmp-pdf-invoice/) (Pro)**
 - **[PDF and Packaging Slip Download ](https://wc-marketplace.com/product/wcmp-pdf-invoice/) (Pro)**
 - [Fully Customisable](https://wc-marketplace.com/product/wcmp-pdf-invoice/) (Pro)
 
 **SEO and Google Analytics**
-
 - **[Track Google Analytics data](https://wc-marketplace.com/product/wcmp-vendor-seo-and-analytics/) (Pro)**
 - **[Yoast Compatible ](https://wc-marketplace.com/product/wcmp-vendor-seo-and-analytics/) (Pro)**
 - **[Customizable Open-graph Messages](https://wc-marketplace.com/product/wcmp-vendor-seo-and-analytics/) (Pro)**
 
 **Vendor Shop hours**
-
 - **[Shop’s Business hours](https://wc-marketplace.com/product/wcmp-vendor-vacation/) (Pro)**
 - **[Vendor Holiday Calendar](https://wc-marketplace.com/product/wcmp-vendor-vacation/) (Pro)**
 - **[Vacation Messages](https://wc-marketplace.com/product/wcmp-vendor-vacation/) (Pro)**
 
 **Individual Seller Dashboard**
-
 - **Product Manager**
 - **Order Manager**
 - **Coupon Manager**
@@ -217,13 +203,12 @@ Stress-free Order Manager
 - **Payment Manager** 
 
 **Vendor Staff**
-
 - **[Manage Staff ](https://wc-marketplace.com/product/wcmp-vendor-staff/) (Pro)**
 - **[Assign Tasks](https://wc-marketplace.com/product/wcmp-vendor-staff/) (Pro)**
 - **[Track Staff Members](https://wc-marketplace.com/product/wcmp-vendor-staff/) (Pro)**
 
 
-## Words of Trust 
+## Words of Trust
 
 [“Plugin works as promised and the customer service rocks."](https://wordpress.org/support/topic/plugin-works-as-promised-and-customer-service-rocks/) ~ [***Fredo Lopez***](https://wordpress.org/support/topic/plugin-works-as-promised-and-customer-service-rocks/)
 
