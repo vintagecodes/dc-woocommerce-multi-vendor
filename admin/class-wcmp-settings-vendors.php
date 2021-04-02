@@ -618,6 +618,9 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 					<li> 
 						<a href="#vendor-shipping"><span class="dashicons dashicons-id-alt"></span> <?php echo __('Vendor Shipping', 'dc-woocommerce-multi-vendor'); ?></a>
 					</li>
+					<li> 
+						<a href="#vendor-follow"><span class="dashicons dashicons-id-alt"></span> <?php echo __('Vendor Followers', 'dc-woocommerce-multi-vendor'); ?></a>
+					</li>
 						<?php if($is_approved_vendor && get_wcmp_vendor_settings( 'is_policy_on', 'general' ) == 'Enable' ) {?>
 							<li> 
 								<a href="#vendor-policy"><span class="dashicons dashicons-lock"></span> <?php esc_html_e('Vendor Policy', 'dc-woocommerce-multi-vendor'); ?></a>
@@ -777,7 +780,50 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 						<table class="form-table wcmp-shipping-zone-settings wc-shipping-zone-settings">
 						</table>
 					</div>
-					
+					<div id="vendor-follow">
+						<?php 
+						$followers_list_table_headers = apply_filters('wcmp_datatable_order_list_table_headers', array(
+							'customer_name'      => array('label' => __( 'Customer Name', 'dc-woocommerce-multi-vendor' )),
+							'time'    => array('label' => __( 'Date', 'dc-woocommerce-multi-vendor' )),
+						));
+						?>
+						<table class="widefat">
+							<thead>
+								<tr>
+									<?php 
+									if($followers_list_table_headers) :
+										foreach ($followers_list_table_headers as $key => $header) {
+											?><th><?php if(isset($header['label'])) echo $header['label']; ?></th>         
+											<?php
+										}
+									endif;
+									?>
+								</tr>
+							</thead>
+							<tbody>
+							<?php
+							$vendor_id = ( $user->ID ) ? absint($user->ID) : 0;
+					        $wcmp_vendor_followed_by_customer = get_user_meta( $vendor_id, 'wcmp_vendor_followed_by_customer', true ) ? get_user_meta( $vendor_id, 'wcmp_vendor_followed_by_customer', true ) : array();
+					        if ($wcmp_vendor_followed_by_customer) {
+						        foreach ($wcmp_vendor_followed_by_customer as $key_folloed => $value_followed) {
+						            $user_details = get_user_by( 'ID', $value_followed['user_id'] );
+						            if ( !$user_details ) continue;
+									?>
+									<tr>
+										<td>
+											<?php echo esc_html($user_details->data->display_name); ?>
+										</td>
+										<td><?php echo esc_html(human_time_diff(strtotime($value_followed['timestamp']))); ?></td>
+									</tr>
+								<?php } ?>
+							<?php } else { ?>
+								<tr>
+									<td><?php esc_html_e('No followers found', 'dc-woocommerce-multi-vendor'); ?></td>
+								</tr>
+							<?php } ?>
+							</tbody>
+						</table>
+					</div>
 					<?php }
 					if ($is_approved_vendor && get_wcmp_vendor_settings( 'is_policy_on', 'general' ) == 'Enable' ) { ?>
 						<div id="vendor-policy">
