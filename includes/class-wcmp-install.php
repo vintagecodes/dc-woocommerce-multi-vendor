@@ -159,6 +159,10 @@ class WCMp_Install {
         if (!get_wcmp_vendor_settings('downloadable', 'capabilities', 'product')) {
             update_wcmp_vendor_settings('downloadable', 'Enable', 'capabilities', 'product');
         }
+        // enabled store folled by default
+        if (!get_wcmp_vendor_settings('store_follow_enabled', 'general')) {
+            update_wcmp_vendor_settings('store_follow_enabled', 'Enable', 'general');
+        }
         $payment_settings = get_option('wcmp_payment_settings_name');
         if (empty($payment_settings)) {
             $payment_settings = array(
