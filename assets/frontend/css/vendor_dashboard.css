@@ -1117,7 +1117,6 @@ textarea {
 
 body .select2-container {
   /* width: 100% !important; */
-  width: auto !important;
   min-height: 34px !important; }
   body .select2-container .select2-selection.select2-selection--multiple {
     height: auto;
@@ -5586,9 +5585,11 @@ border-bottom-color: transparent;
   padding: 0 15px;
   display: flex;
 }
-.wcmp-zone-method-wrapper.form-group {
-  display: unset;
+
+.wcmp-color-scheme-outer_space_blue .wcmp-zone-method-add-btn.show-shipping-methods {
+margin: 10px 0 0;
 }
+
 .wcmp-zone-method-wrapper .col-md-3.wcmp-zone-method-heading{   
    float: left;
   width: 25%;}
@@ -5641,10 +5642,5 @@ form[name="wcmp_vendor_dashboard_orders"] .date-inp-wrap { width: 100%;}
   .wcmp-action-container { top: 69px;right: 20px;}
   .side-collapse-container div.dataTables_wrapper div.dataTables_length {text-align: left;}
 }
-
-
-
-
-
 
 /* #woocommerce-product-data .product-info-tab-wrapper > .tab-content{border-top: 0;} */

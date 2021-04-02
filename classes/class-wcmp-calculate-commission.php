@@ -417,7 +417,7 @@ class WCMp_Calculate_Commission {
      * @param  int $line_total Line total of product
      * @return void
      */
-    public function record_commission($product_id = 0, $order_id = 0, $variation_id = 0, $order, $vendor, $item_id = 0, $item) {
+    public function record_commission($product_id = 0, $order_id = 0, $variation_id = 0, $order = '', $vendor = '', $item_id = 0, $item = '') {
         if ($product_id > 0) {
             if ($vendor) {
                 $vendor_due = $vendor->wcmp_get_vendor_part_from_order($order, $vendor->term_id);
@@ -438,7 +438,7 @@ class WCMp_Calculate_Commission {
      * @param  int $amount     Commission total
      * @return void
      */
-    public function create_commission($vendor_id = 0, $product_id = 0, $amount = 0, $order_id = 0, $variation_id = 0, $item_id = 0, $item, $order) {
+    public function create_commission($vendor_id = 0, $product_id = 0, $amount = 0, $order_id = 0, $variation_id = 0, $item_id = 0, $item = '', $order = '') {
         global $wpdb;
         if ($vendor_id == 0) {
             return false;

@@ -1846,7 +1846,7 @@ class WCMp_Product {
         }
     }
     
-    public function show_default_product_cats_in_wp_backend( $termlist_html, $taxonomy = 'product_cat', $product_id, $termlist = array(), $terms = array() ){
+    public function show_default_product_cats_in_wp_backend( $termlist_html, $taxonomy = 'product_cat', $product_id = 0, $termlist = array(), $terms = array() ){
         $default_cat_hierarchy = get_post_meta( $product_id, '_default_cat_hierarchy_term_id', true );
         if( $taxonomy != 'product_cat' ) return $termlist_html;
         if( !$default_cat_hierarchy ) return $termlist_html;

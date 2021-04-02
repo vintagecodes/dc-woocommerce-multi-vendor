@@ -208,7 +208,7 @@ final class WCMp_Woo_Helper {
      * @param  int    $index
      * @return array
      */
-    public function prepare_set_attributes( $all_attributes, $key_prefix = 'attribute_', $data, $index = null ) {
+    public function prepare_set_attributes( $all_attributes, $key_prefix = 'attribute_', $data = '', $index = null ) {
         $attributes = array();
 
         if ( $all_attributes ) {

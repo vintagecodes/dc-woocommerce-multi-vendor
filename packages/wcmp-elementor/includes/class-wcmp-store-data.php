@@ -35,11 +35,14 @@ class WCMp_Elementor_StoreData {
 				'address'         => '',
 				'phone'           => '',
 				'email'           => '',
-				'rating'          => ''
+				'rating'          => '',
+				'store_description' => ''
 		] );
 
 		$store_id = wcmp_find_shop_page_vendor();
 		$store = get_wcmp_vendor( $store_id );
+		$vendor_hide_description = apply_filters('wcmp_vendor_store_header_hide_description', get_user_meta($store_id, '_vendor_hide_description', true), $store_id);
+
 		if ( $store_id ) {
 			$this->store_data['id'] = $store_id;
 
@@ -53,7 +56,9 @@ class WCMp_Elementor_StoreData {
 			}
 
 			$this->store_data['name'] = $store->page_title;
-
+			if (!$vendor_hide_description && !is_null($store->description)) {
+				$this->store_data['store_description'] = $store->description;
+			}
 			$image = $store->get_image() ? $store->get_image() : $WCMp->plugin_url . 'assets/images/WP-stdavatar.png';
 			$logo_id = get_user_meta( $store_id, '_vendor_image', true );
 			if ( $logo_id ) {
@@ -125,6 +130,7 @@ class WCMp_Elementor_StoreData {
 				'phone'           => '888-888-8888',
 				'email'           => 'wcmarketplace@dualcube.com',
 				'rating'          => '5 rating from 50 reviews',
+				'store_description'          => 'Vendor store description',
 		] );
 	}
 }
