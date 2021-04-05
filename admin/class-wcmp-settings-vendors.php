@@ -618,9 +618,11 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 					<li> 
 						<a href="#vendor-shipping"><span class="dashicons dashicons-id-alt"></span> <?php echo __('Vendor Shipping', 'dc-woocommerce-multi-vendor'); ?></a>
 					</li>
-					<li> 
-						<a href="#vendor-follow"><span class="dashicons dashicons-id-alt"></span> <?php echo __('Vendor Followers', 'dc-woocommerce-multi-vendor'); ?></a>
-					</li>
+					<?php if ( get_wcmp_vendor_settings('store_follow_enabled', 'general') && get_wcmp_vendor_settings('store_follow_enabled', 'general') == 'Enable' ) { ?>
+						<li> 
+							<a href="#vendor-follow"><span class="dashicons dashicons-id-alt"></span> <?php echo __('Vendor Followers', 'dc-woocommerce-multi-vendor'); ?></a>
+						</li>
+					<?php } ?>
 						<?php if($is_approved_vendor && get_wcmp_vendor_settings( 'is_policy_on', 'general' ) == 'Enable' ) {?>
 							<li> 
 								<a href="#vendor-policy"><span class="dashicons dashicons-lock"></span> <?php esc_html_e('Vendor Policy', 'dc-woocommerce-multi-vendor'); ?></a>
@@ -780,6 +782,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 						<table class="form-table wcmp-shipping-zone-settings wc-shipping-zone-settings">
 						</table>
 					</div>
+					<?php if ( get_wcmp_vendor_settings('store_follow_enabled', 'general') && get_wcmp_vendor_settings('store_follow_enabled', 'general') == 'Enable' ) { ?>
 					<div id="vendor-follow">
 						<?php 
 						$followers_list_table_headers = apply_filters('wcmp_datatable_order_list_table_headers', array(
@@ -825,6 +828,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 						</table>
 					</div>
 					<?php }
+					}
 					if ($is_approved_vendor && get_wcmp_vendor_settings( 'is_policy_on', 'general' ) == 'Enable' ) { ?>
 						<div id="vendor-policy">
 							<h2><?php esc_html_e('Policy Settings', 'dc-woocommerce-multi-vendor'); ?></h2>

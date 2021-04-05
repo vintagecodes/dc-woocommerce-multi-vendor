@@ -68,8 +68,10 @@ class WCMp_Frontend {
         flush_rewrite_rules();
 
         // Customer follows vendor list on my account page
-        add_filter( 'woocommerce_account_menu_items',array($this, 'wcmp_customer_followers_vendor'), 99 );
-        add_action( 'woocommerce_account_followers_endpoint', array($this, 'wcmp_customer_followers_vendor_callback' ));
+        if ( get_wcmp_vendor_settings('store_follow_enabled', 'general') && get_wcmp_vendor_settings('store_follow_enabled', 'general') == 'Enable' ) {
+            add_filter( 'woocommerce_account_menu_items',array($this, 'wcmp_customer_followers_vendor'), 99 );
+            add_action( 'woocommerce_account_followers_endpoint', array($this, 'wcmp_customer_followers_vendor_callback' ));
+        }
     }
 
     /**
