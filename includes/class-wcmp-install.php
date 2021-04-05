@@ -16,6 +16,7 @@ if (!defined('ABSPATH')) {
 class WCMp_Install {
 
     public function __construct() {
+
         if (!get_option('dc_product_vendor_plugin_db_version')) {
             $this->save_default_plugin_settings();
         }
@@ -31,6 +32,15 @@ class WCMp_Install {
             set_transient( '_wcmp_activation_redirect', 1, 30 );
         }
         $this->do_schedule_cron_events();
+
+        // Enabled store sideber by default
+        if (!get_option('wcmp_store_sideber_position_set')) {
+            if (!get_wcmp_vendor_settings('is_enable_store_sidebar', 'general')) {
+                update_wcmp_vendor_settings('is_enable_store_sidebar', 'Enable', 'general');
+            }
+            update_wcmp_vendor_settings('store_sidebar_position', 'left', 'general');
+            update_option('wcmp_store_sideber_position_set', 'at_left');
+        }
     }
 
     /**
@@ -158,10 +168,6 @@ class WCMp_Install {
         }
         if (!get_wcmp_vendor_settings('downloadable', 'capabilities', 'product')) {
             update_wcmp_vendor_settings('downloadable', 'Enable', 'capabilities', 'product');
-        }
-        // enabled store folled by default
-        if (!get_wcmp_vendor_settings('store_follow_enabled', 'general')) {
-            update_wcmp_vendor_settings('store_follow_enabled', 'Enable', 'general');
         }
         $payment_settings = get_option('wcmp_payment_settings_name');
         if (empty($payment_settings)) {

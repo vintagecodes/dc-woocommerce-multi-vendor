@@ -944,7 +944,7 @@ class WCMp_Frontend {
         }
         if ($widget_class != '' && is_active_sidebar('sidebar-wcmp-store') && get_wcmp_vendor_settings('is_enable_store_sidebar', 'general') == 'Enable') {
             ?>
-            <div class="column-class <?php echo $widget_class ?>" >
+            <div class="column-class <?php //echo $widget_class ?>" >
                 <?php dynamic_sidebar( 'sidebar-wcmp-store' ); ?>
             </div> 
             <?php
