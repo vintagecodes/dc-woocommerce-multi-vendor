@@ -124,7 +124,7 @@ class WCMp_Report {
 	 * @param  array $args
 	 * @return mixed depending on query_type
 	 */
-	public function get_order_report_data( $args = array(), $report_data) {
+	public function get_order_report_data( $args = array(), $report_data = array()) {
 		global $wpdb;
 
 		$default_args = array(

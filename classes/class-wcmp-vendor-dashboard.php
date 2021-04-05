@@ -1441,8 +1441,9 @@ Class WCMp_Admin_Dashboard {
             $this->wcmp_add_dashboard_widget('wcmp_customer_reviews', __('Reviews', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_customer_review'));
         }
         // Vendor followeres list
-        $this->wcmp_add_dashboard_widget('wcmp_vendor_follower', __('Followers', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_vendor_followers'));
-
+        if ( get_wcmp_vendor_settings('store_follow_enabled', 'general') && get_wcmp_vendor_settings('store_follow_enabled', 'general') == 'Enable' ) {
+            $this->wcmp_add_dashboard_widget('wcmp_vendor_follower', __('Followers', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_vendor_followers'));
+        }
         $this->wcmp_add_dashboard_widget('wcmp_vendor_products_cust_qna', __('Customer Questions', 'dc-woocommerce-multi-vendor'), array(&$this, 'wcmp_vendor_products_cust_qna'), 'side', '', array('action' => array('title' => __('Show All Q&As', 'dc-woocommerce-multi-vendor'), 'link' => esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_products_qnas_endpoint', 'vendor', 'general', 'products-qna'))))));
     }
 

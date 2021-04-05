@@ -68,8 +68,10 @@ class WCMp_Frontend {
         flush_rewrite_rules();
 
         // Customer follows vendor list on my account page
-        add_filter( 'woocommerce_account_menu_items',array($this, 'wcmp_customer_followers_vendor'), 99 );
-        add_action( 'woocommerce_account_followers_endpoint', array($this, 'wcmp_customer_followers_vendor_callback' ));
+        if ( get_wcmp_vendor_settings('store_follow_enabled', 'general') && get_wcmp_vendor_settings('store_follow_enabled', 'general') == 'Enable' ) {
+            add_filter( 'woocommerce_account_menu_items',array($this, 'wcmp_customer_followers_vendor'), 99 );
+            add_action( 'woocommerce_account_followers_endpoint', array($this, 'wcmp_customer_followers_vendor_callback' ));
+        }
     }
 
     /**
@@ -944,7 +946,7 @@ class WCMp_Frontend {
         }
         if ($widget_class != '' && is_active_sidebar('sidebar-wcmp-store') && get_wcmp_vendor_settings('is_enable_store_sidebar', 'general') == 'Enable') {
             ?>
-            <div class="column-class <?php echo $widget_class ?>" >
+            <div class="column-class <?php //echo $widget_class ?>" >
                 <?php dynamic_sidebar( 'sidebar-wcmp-store' ); ?>
             </div> 
             <?php

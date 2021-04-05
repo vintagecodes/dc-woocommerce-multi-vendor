@@ -68,6 +68,16 @@ class StoreInfo extends WCMp_Elementor_TagBase {
                     'text' => $store_data['phone'],
                 ]
             ],
+            [
+                'key'         => 'store_description',
+                'title'       => __( 'Store Description', 'dc-woocommerce-multi-vendor' ),
+                'text'        => $store_data['store_description'],
+                'icon'        => 'wcmp-font ico-location-icon',
+                'show'        => true,
+                '__dynamic__' => [
+                    'text' => $store_data['store_description'],
+                ]
+            ],
         ];
 
         return apply_filters( 'wcmp_elementor_tags_store_info_value', $store_info );

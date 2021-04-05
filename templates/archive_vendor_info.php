@@ -15,6 +15,7 @@ $vendor_hide_phone = apply_filters('wcmp_vendor_store_header_hide_store_phone', 
 $vendor_hide_email = apply_filters('wcmp_vendor_store_header_hide_store_email', get_user_meta($vendor_id, '_vendor_hide_email', true), $vendor->id);
 $template_class = get_wcmp_vendor_settings('wcmp_vendor_shop_template', 'vendor', 'dashboard', 'template1');
 $template_class = apply_filters('can_vendor_edit_shop_template', false) && get_user_meta($vendor_id, '_shop_template', true) ? get_user_meta($vendor_id, '_shop_template', true) : $template_class;
+$vendor_hide_description = apply_filters('wcmp_vendor_store_header_hide_description', get_user_meta($vendor_id, '_vendor_hide_description', true), $vendor->id);
 
 $vendor_fb_profile = get_user_meta($vendor_id, '_vendor_fb_profile', true);
 $vendor_twitter_profile = get_user_meta($vendor_id, '_vendor_twitter_profile', true);
@@ -69,13 +70,11 @@ if ( $template_class == 'template3') { ?>
                 </div>
                 <div class="wcmp-contact-deatil">
                     
-                    
                     <?php if (!empty($location) && $vendor_hide_address != 'Enable') { ?><p class="wcmp-address"><span><i class="wcmp-font ico-location-icon"></i></span><?php echo esc_html($location); ?></p><?php } ?>
 
-                    
                     <?php if (!empty($mobile) && $vendor_hide_phone != 'Enable') { ?><p class="wcmp-address"><span><i class="wcmp-font ico-call-icon"></i></span><?php echo apply_filters('vendor_shop_page_contact', $mobile, $vendor_id); ?></p><?php } ?>
 
-                    <?php if (!empty($location) && $vendor_hide_address != 'Enable') { ?>
+                    <?php if (!empty($email) && $vendor_hide_email != 'Enable') { ?>
                     <p class="wcmp-address"><a href="mailto:<?php echo apply_filters('vendor_shop_page_email', $email, $vendor_id); ?>" class="wcmp_vendor_detail"><i class="wcmp-font ico-mail-icon"></i><?php echo apply_filters('vendor_shop_page_email', $email, $vendor_id); ?></a></p><?php } ?>
 
                     <?php
@@ -90,9 +89,15 @@ if ( $template_class == 'template3') { ?>
                         }
                         ?>
                     <?php do_action('after_wcmp_vendor_information',$vendor_id);?>   
-                    
                 </div>
+
+                <?php if (!$vendor_hide_description && !empty($description)) { ?>                
+                    <div class="description_data"> 
+                        <?php echo wp_kses_post(htmlspecialchars_decode( wpautop( $description ), ENT_QUOTES )); ?>
+                    </div>
+                <?php } ?>
             </div>
+
             <div class="wcmp_vendor_rating">
                 <?php
                 if (get_wcmp_vendor_settings('is_sellerreview', 'general') == 'Enable') {
@@ -104,7 +109,9 @@ if ( $template_class == 'template3') { ?>
                 }
                 ?>      
             </div>  
+
         </div>
+
     </div>
 </div>
 <?php } elseif ( $template_class == 'template1' ) {
@@ -141,7 +148,7 @@ if ( $template_class == 'template3') { ?>
                     
                     <?php if (!empty($mobile) && $vendor_hide_phone != 'Enable') { ?><p class="wcmp-address"><span><i class="wcmp-font ico-call-icon"></i></span><?php echo esc_html(apply_filters('vendor_shop_page_contact', $mobile, $vendor_id)); ?></p><?php } ?>
 
-                    <?php if (!empty($location) && $vendor_hide_address != 'Enable') { ?>
+                    <?php if (!empty($email) && $vendor_hide_email != 'Enable') { ?>
                     <p class="wcmp-address"><a href="mailto:<?php echo apply_filters('vendor_shop_page_email', $email, $vendor_id); ?>" class="wcmp_vendor_detail"><i class="wcmp-font ico-mail-icon"></i><?php echo esc_html(apply_filters('vendor_shop_page_email', $email, $vendor_id)); ?></a></p><?php } ?>
                     <?php
                     if (apply_filters('is_vendor_add_external_url_field', true, $vendor->id)) {
@@ -175,8 +182,14 @@ if ( $template_class == 'template3') { ?>
                     <?php do_action( 'wcmp_additional_button_at_banner' ); ?>
                 </div>
             </div>
+
         </div>
         </div>
+        <?php if (!$vendor_hide_description && !empty($description)) { ?>                
+            <div class="description_data">
+                <?php echo wp_kses_post(htmlspecialchars_decode( wpautop( $description ), ENT_QUOTES )); ?>
+            </div>
+        <?php } ?>
     </div>
 <?php } elseif ( $template_class == 'template2' ) {
     ?>
@@ -224,8 +237,9 @@ if ( $template_class == 'template3') { ?>
 
                     <?php if (!empty($mobile) && $vendor_hide_phone != 'Enable') { ?><p class="wcmp-address"><span><i class="wcmp-font ico-call-icon"></i></span><?php echo apply_filters('vendor_shop_page_contact', $mobile, $vendor_id); ?></p><?php } ?>
                     
-                    <?php if (!empty($location) && $vendor_hide_address != 'Enable') { ?>
+                    <?php if (!empty($email) && $vendor_hide_email != 'Enable') { ?>
                     <p class="wcmp-address"><a href="mailto:<?php echo apply_filters('vendor_shop_page_email', $email, $vendor_id); ?>" class="wcmp_vendor_detail"><i class="wcmp-font ico-mail-icon"></i><?php echo apply_filters('vendor_shop_page_email', $email, $vendor_id); ?></a></p><?php } ?>
+
                     <?php
                     if (apply_filters('is_vendor_add_external_url_field', true, $vendor->id)) {
                         $external_store_url = get_user_meta($vendor_id, '_vendor_external_store_url', true);
@@ -239,6 +253,13 @@ if ( $template_class == 'template3') { ?>
                         ?>
                     <?php do_action('after_wcmp_vendor_information',$vendor_id);?>   
                 </div>
+                
+                <?php if (!$vendor_hide_description && !empty($description)) { ?>                
+                    <div class="description_data"> 
+                        <?php echo wp_kses_post(htmlspecialchars_decode( wpautop( $description ), ENT_QUOTES )); ?>
+                    </div>
+                <?php } ?>
+
                 <div class='wcmp-butn-area'>
                     <!-- Follow button will be added here -->
                     <?php if (get_wcmp_vendor_settings('store_follow_enabled', 'general') == 'Enable') { ?>

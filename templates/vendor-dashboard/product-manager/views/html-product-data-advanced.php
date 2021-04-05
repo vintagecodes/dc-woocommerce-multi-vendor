@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
             <div class="form-group">
                 <label class="control-label col-sm-3 col-md-3" for="comment_status"><?php esc_html_e( 'Enable reviews', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <div class="col-md-6 col-sm-9">
-                    <input id="comment_status" name="comment_status" type="checkbox" class="form-control" value="<?php esc_attr( $product_object->get_reviews_allowed( 'edit' ) ? 'open' : 'closed'  ); ?>" <?php checked( $product_object->get_reviews_allowed( 'edit' ), true ); ?>>
+                    <input id="comment_status" name="comment_status" type="checkbox" class="form-control" value="<?php echo esc_attr('open'); ?>" <?php checked( $product_object->get_reviews_allowed( 'edit' ), true ); ?>>
                 </div>
             </div> 
         <?php endif; ?>
