@@ -59,7 +59,7 @@ class StoreTabs extends WCMp_Elementor_TagBase {
             }
 
             $tab_items[] = [
-                'key'         => $item_key,
+                'key'         => $item['id'],
                 'title'       => $item['title'],
                 'text'        => $item['title'],
                 'url'         => $url,

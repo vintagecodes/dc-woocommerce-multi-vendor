@@ -27,13 +27,12 @@ $vendor_phone = $vendor->phone ? $vendor->phone : __('No number yet', 'dc-woocom
         <div class="wcmp-vendor-details">
             <div class="vendor-heading">
                 <div class="wcmp-store-picture">
-                    <img class="vendor_img" src="<?php echo $image; ?>" id="vendor_image_display">
-
+                    <img class="vendor_img" src="<?php echo esc_url($image); ?>" id="vendor_image_display">
                 </div>
                 <div class="vendor-header-icon">
                     <div class="dashicons dashicons-phone">
                         <div class="on-hover-cls">
-                            <p><?php echo $vendor_phone; ?></p>
+                            <p><?php echo esc_html($vendor_phone); ?></p>
                         </div>
                     </div>
                     <div class="dashicons dashicons-location">
@@ -44,26 +43,31 @@ $vendor_phone = $vendor->phone ? $vendor->phone : __('No number yet', 'dc-woocom
                 </div>
             </div>
             <div class="wcmp-vendor-name">
-                <a href="<?php echo $vendor->get_permalink(); ?>" class="store-name"><?php echo $vendor->page_title; ?></a>
+                <a href="<?php echo $vendor->get_permalink(); ?>" class="store-name"><?php echo esc_html($vendor->page_title); ?></a>
                 <?php do_action('wcmp_vendor_lists_single_after_button', $vendor->term_id, $vendor->id); ?>
                 <?php do_action('wcmp_vendor_lists_vendor_after_title', $vendor); ?>
             </div>
             <!-- star rating -->
-            <div class="wcmp-rating-block extraCls">
-                <div class="wcmp-rating-rate"><?php echo $rating; ?></div>
-                <?php
-                $WCMp->template->get_template('review/rating_vendor_lists.php', array('rating_val_array' => $rating_info));
-                ?>
-                <div class="wcmp-rating-review"><?php echo $review_count; ?></div>
-            </div>
+            <?php
+            $is_enable = wcmp_seller_review_enable(absint($vendor->term_id));
+            if (isset($is_enable) && $is_enable) {
+            ?>
+                <div class="wcmp-rating-block extraCls">
+                    <div class="wcmp-rating-rate"><?php echo esc_html($rating); ?></div>
+                    <?php
+                    $WCMp->template->get_template('review/rating_vendor_lists.php', array('rating_val_array' => $rating_info));
+                    ?>
+                    <div class="wcmp-rating-review"><?php echo esc_html($review_count); ?></div>
+                </div>
+            <?php } ?>
             <!-- vendor description -->
             <div class="add-call-block">
                 <div class="wcmp-detail-block"></div>
                 <div class="wcmp-detail-block"></div>
-                <?php if ($vendor->description) : ?>
+                <?php if ($vendor->address_2) : ?>
                     <div class="wcmp-detail-block">
                         <i class="wcmp-font ico-location-icon2" aria-hidden="true"></i>
-                        <span class="descrptn_txt"><?php echo substr($vendor->description, 0, 10) . '...'; ?></span>
+                        <span class="descrptn_txt"><?php echo esc_html(substr($vendor->address_2, 0, 10) . '...'); ?></span>
                     </div>
                 <?php endif; ?>
             </div>

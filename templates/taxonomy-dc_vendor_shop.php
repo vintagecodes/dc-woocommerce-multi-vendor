@@ -30,7 +30,11 @@ if($is_block) {
 		 * @hooked woocommerce_output_content_wrapper - 10 (outputs opening divs for the content)
 		 * @hooked woocommerce_breadcrumb - 20
 		 */
-		do_action( 'wcmp_before_main_content' );
+		if ( apply_filters( 'wcmp_load_default_vendor_store', false ) ) {
+			do_action( 'woocommerce_before_main_content' );
+		} else {
+			do_action( 'wcmp_before_main_content' );
+		}
 	?>
 
 		<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
@@ -39,11 +43,19 @@ if($is_block) {
 
 		<?php endif; ?>
 
-		<?php do_action( 'woocommerce_archive_description' ); 
+		<?php
+
+		if ( apply_filters( 'wcmp_load_default_vendor_store', false ) ) {
+			do_action( 'woocommerce_archive_description' );
+		} else {
+			do_action( 'wcmp_archive_description' );
+		}
+
+		do_action( 'woocommerce_archive_description' ); 
 		$block_vendor_desc = apply_filters('wcmp_blocked_vendor_text', __('Site Administrator has blocked this vendor', 'dc-woocommerce-multi-vendor'), $vendor);
 		?>
 		<p class="blocked_desc">
-			<?php echo esc_attr($block_vendor_desc); ?>
+			<?php echo esc_html($block_vendor_desc); ?>
 		<p>
 		<?php
 		/**
@@ -51,7 +63,12 @@ if($is_block) {
 		 *
 		 * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
 		 */
-		do_action( 'wcmp_after_main_content' );
+
+		if ( apply_filters( 'wcmp_load_default_vendor_store', false ) ) {
+			do_action( 'woocommerce_after_main_content' );
+		} else {
+			do_action( 'wcmp_after_main_content' );
+		}
 	?>
 
 	<?php
@@ -67,5 +84,9 @@ if($is_block) {
 <?php get_footer( 'shop' ); 
 	
 } else {
-	$WCMp->template->get_store_template('wcmp-archive-page-vendor.php');
+	if ( apply_filters( 'wcmp_load_default_vendor_store', false ) ) {
+		wc_get_template( 'archive-product.php' );
+	} else {
+		$WCMp->template->get_store_template('wcmp-archive-page-vendor.php');
+	}
 }

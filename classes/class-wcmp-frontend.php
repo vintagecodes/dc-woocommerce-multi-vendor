@@ -18,8 +18,11 @@ class WCMp_Frontend {
         add_action('wp_enqueue_scripts', array(&$this, 'frontend_scripts'));
         //enqueue styles
         add_action('wp_enqueue_scripts', array(&$this, 'frontend_styles'), 999);
-
-        add_action('wcmp_archive_description', array(&$this, 'product_archive_vendor_info'), 10);
+        if ( apply_filters( 'wcmp_load_default_vendor_store', false ) ) {
+            add_action('woocommerce_archive_description', array(&$this, 'product_archive_vendor_info'), 10);
+        } else {
+            add_action('wcmp_archive_description', array(&$this, 'product_archive_vendor_info'), 10);
+        }
         add_filter('body_class', array(&$this, 'set_product_archive_class'));
         add_action('template_redirect', array(&$this, 'template_redirect'));
 
@@ -820,7 +823,7 @@ class WCMp_Frontend {
                         ?>
                         <?php if ( $tab['url'] ): ?>
                             <a href="<?php echo esc_url( $tab['url'] ); ?>">
-                                <div class="wcmp-tablink <?php if( $key == $query_vars_name ) echo 'active'; ?>">
+                                <div class="wcmp-tablink <?php if( $tab['id'] == $query_vars_name ) echo 'active'; ?>">
                                     <?php echo esc_html( $tab['title'] ); ?>
                                 </div>
                             </a>                         
@@ -846,25 +849,36 @@ class WCMp_Frontend {
     }
 
     public function wcmp_get_store_tabs( $store_id ) {
-
         $store_id = wcmp_find_shop_page_vendor();
         $vendor = get_wcmp_vendor($store_id);
         $userstore = $vendor->permalink;
         $tabs = array(
             'products' => array(
+                'id' => 'products',
                 'title' => __( 'Products', 'dc-woocommerce-multi-vendor' ),
                 'url'   => $userstore,
-            ),
-            'reviews' => array(
-                'title' => __( 'Reviews', 'dc-woocommerce-multi-vendor' ),
-                'url'   => $this->wcmp_get_review_url( $store_id ),
+                'priority' => 1
             ),
             'policies' => array(
+                'id' => 'policies',
                 'title' => __( 'Policies', 'dc-woocommerce-multi-vendor' ),
                 'url'   => $this->wcmp_get_policies_url( $store_id ),
+                'priority' => 3
             ),
         );
-
+        $is_enable = wcmp_seller_review_enable(absint($vendor->term_id));
+        if (isset($is_enable) && $is_enable) {
+            $tabs['reviews'] = array(
+                'id' => 'reviews',
+                'title' => __( 'Reviews', 'dc-woocommerce-multi-vendor' ),
+                'url'   => $this->wcmp_get_review_url( $store_id ),
+                'priority' => 2
+            );
+        }
+        // reorder as per pririty
+        usort($tabs, function($a, $b) {
+            return $a['priority'] <=> $b['priority'];
+        });
         return apply_filters( 'wcmp_store_tabs', $tabs, $store_id );
     }
 
