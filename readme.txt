@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 3.7.0
+Stable tag: 3.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -280,12 +280,30 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Changelog ==
 
+= 3.7.1 - 2021-04-09 =
+* Added - Vendor shop page old structure support along with new structure.
+* Added - Language French compatibility #794.
+* Added - Shop page tabs position can be changed by using priority.
+* Added - Store description support with Elementor #801.
+* Added - Compatibility of PHP 8.0.3.
+* Enhancement - Keep the vendor sidebar option enabled by default.
+* Enhancement - Create a follow user list at the admin backend.
+* Fix - Vendor list page icon issue.
+* Fix - Vendor not able to see store wizard setup after registering #795.
+* Fix - Edit/delete buttons of shipping modes are not working in the vendor dashboard #796.
+* Fix - Enable review tab in the vendor dashboard is not working properly #798.
+* Fix - Vendor review cannot be removed from WCMp settings #805.
+* Fix - Store description missing from store banner.
+* Fix - Shop page email hide filter not working.
+* Dev - Added `wcmp_load_default_vendor_store` filter.
+* Updated - Language file.
+
 = 3.7.0 - 2021-03-30 =
 * Added - WCMp Store Follow.
 * Added - Elementor support with WCMp vendor shop page.
 * Added - Migration support from other multivendors( Dokan, wcfm, wc vendors, woocommerce product vendor ).
 * Added - Brand new vendor list design.
-* Added - Compatibility of WordPress 5.6.
+* Added - Compatibility of WordPress 5.7.
 * Fix - Bulk product action not working in vendor dashboard #775.
 * Fix - Shipping title is missing #763.
 * Fix - SQL syntax issue #760.
