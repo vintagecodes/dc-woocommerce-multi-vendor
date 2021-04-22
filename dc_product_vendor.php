@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: *Version-3.7.1 - WC Marketplace
+ * Plugin Name: Multivendor Marketplace Solution for WooCommerce - WC Marketplace
  * Plugin URI: https://wc-marketplace.com/
  * Description: A Free Extension That Transforms Your WooCommerce Site into a Marketplace.
  * Author: WC Marketplace
