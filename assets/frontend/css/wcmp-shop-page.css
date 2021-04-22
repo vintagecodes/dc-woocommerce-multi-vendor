@@ -41,11 +41,6 @@ body {
   padding: 20px;
 }
 
-.wcmp-imgcls {
-  width: 100%;
-  height: 320px;
-}
-
 .column-class {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
@@ -64,10 +59,6 @@ body {
   color: #fff;
 }
 
-.wcmp-theme02 .wcmp-banner-wrap {
-  padding: 0;
-}
-
 .wcmp-theme02 .wcmp-banner-area {
   height: 100%;
 }
@@ -76,12 +67,17 @@ body {
   position: relative;
   height: auto;
   background: #fff;
-  padding: 0 0 20px;
+}
+
+.banner-img-cls .wcmp-imgcls {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .wcmp_bannersec_start {
   height: 100%;
-  /* padding: 0 80px; */
 }
 
 .wcmp_breadcrumb-cls {
@@ -132,7 +128,7 @@ body {
   color: #001027;
 }
 
-img.wcmp-profile-imgcls {
+.wcmp-profile-imgcls {
   width: 120px;
   height: 120px;
   border: 5px solid #fff;
@@ -178,10 +174,6 @@ img.wcmp-profile-imgcls {
   font-size: 15px;
 }
 
-.wcmp-contact-deatil p.wcmp-address:first-child {
-  margin-right: 30px;
-}
-
 .wcmp-contact-deatil {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -198,11 +190,15 @@ img.wcmp-profile-imgcls {
           flex-direction: row;
 }
 
-.wcmp-address span {
+.wcmp-contact-deatil .wcmp-address:first-child {
+  margin-right: 30px;
+}
+
+.wcmp-contact-deatil .wcmp-address span {
   padding-right: 4px;
 }
 
-.wcmp-address a {
+.wcmp-contact-deatil .wcmp-address a {
   color: #fff;
   text-decoration: none;
 }
@@ -268,10 +264,6 @@ button.wcmp-fill-butn {
   color: #fff;
 }
 
-.wcmp-theme02 .wcmp-banner-wrap {
-  padding: 0;
-}
-
 .wcmp-theme01 .wcmp-heading {
   font-family: "Montserrat", sans-serif;
   font-size: 24px;
@@ -304,10 +296,6 @@ button.wcmp-fill-butn {
   margin: 2px 30px 2px 0;
 }
 
-.wcmp-theme01 .wcmp-address a, .wcmp-theme03 .wcmp-address a {
-  color: #001027;
-}
-
 .wcmp-theme01 .wcmp-banner-middle {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -322,16 +310,6 @@ button.wcmp-fill-butn {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
-}
-
-.wcmp-theme01 button.wcmp-stroke-butn, .wcmp-theme03 button.wcmp-stroke-butn {
-  color: #5b82e2;
-  border-color: #5b82e2;
-  margin-right: 10px;
-}
-
-.wcmp-theme01 .wcmp-address .fa, .wcmp-theme03 .wcmp-address .fa {
-  color: #5b82e2;
 }
 
 .wcmp-theme01 .wcmp-ratingcls {
@@ -350,8 +328,21 @@ button.wcmp-fill-butn {
           flex-direction: row;
 }
 
-.wcmp-theme03 .wcmp-banner-area {
-  height: 220px;
+.wcmp-theme01 .wcmp-address a,
+.wcmp-theme03 .wcmp-address a {
+  color: #001027;
+}
+
+.wcmp-theme01 button.wcmp-stroke-butn,
+.wcmp-theme03 button.wcmp-stroke-butn {
+  color: #5b82e2;
+  border-color: #5b82e2;
+  margin-right: 10px;
+}
+
+.wcmp-theme01 .wcmp-address .fa,
+.wcmp-theme03 .wcmp-address .fa {
+  color: #5b82e2;
 }
 
 .wcmp-theme03 .wcmp-banner-below {
@@ -359,7 +350,7 @@ button.wcmp-fill-butn {
 }
 
 .wcmp-theme03 .wcmp-profile-area {
-  margin-top: -100px;
+  margin-top: -60px;
 }
 
 .wcmp-theme03 .wcmp-rating-digit {
@@ -401,6 +392,10 @@ button.wcmp-fill-butn {
 .wcmp-theme03 .wcmp-address {
   color: #001027;
   margin: 18px 30px 12px 0;
+}
+
+.wcmp-theme03 .wcmp-profile-imgcls {
+  margin: auto;
 }
 
 .wcmp-main-section {
@@ -1019,6 +1014,10 @@ form.wcmp-short-cls select:focus {
   border: 1px solid #676c74;
 }
 
+.error404 main p {
+  margin: 0 0;
+}
+
 @media screen and (min-width: 320px) and (max-width: 767px) {
   .wcmp-product-content {
     -ms-grid-columns: 100%;
@@ -1092,6 +1091,24 @@ form.wcmp-short-cls select:focus {
   .wcmp-status {
     margin: 4px 0 0 12px;
     font-size: 14px;
+  }
+  .wcmp-theme03 .wcmp-contact-deatil {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .wcmp-contact-deatil .wcmp-address:first-child {
+    margin-right: 0;
   }
 }
 
@@ -1168,8 +1185,8 @@ form.wcmp-short-cls select:focus {
   .wcmp-vendor-profile {
     margin: 0;
   }
-  .wcmp-theme02 .wcmp-banner-wrap {
-    height: 200px;
+  .banner-img-cls {
+    height: 320px;
   }
   .wcmp-theme02 .wcmp-banner-wrap img {
     height: 100%;

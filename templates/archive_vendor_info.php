@@ -32,7 +32,9 @@ if ( $template_class == 'template3') { ?>
 <div class='wcmp_bannersec_start wcmp-theme01'>
     <div class="wcmp-banner-wrap">
         <?php if($banner != '') { ?>
+            <div class='banner-img-cls'>
             <img src="<?php echo esc_url($banner); ?>" class="wcmp-imgcls"/>
+            </div>
         <?php } else { ?>
             <img src="<?php echo $WCMp->plugin_url . 'assets/images/banner_placeholder.jpg'; ?>" class="wcmp-imgcls"/>
         <?php } ?>
@@ -120,7 +122,9 @@ if ( $template_class == 'template3') { ?>
         
         <div class="wcmp-banner-wrap">
         <?php if($banner != '') { ?>
+            <div class='banner-img-cls'>
             <img src="<?php echo esc_url($banner); ?>" class="wcmp-imgcls"/>
+            </div>
         <?php } else { ?>
             <img src="<?php echo $WCMp->plugin_url . 'assets/images/banner_placeholder.jpg'; ?>" class="wcmp-imgcls"/>
         <?php } ?>
@@ -196,7 +200,9 @@ if ( $template_class == 'template3') { ?>
     <div class='wcmp_bannersec_start wcmp-theme03'>
         <div class="wcmp-banner-wrap">
             <?php if($banner != '') { ?>
+                <div class='banner-img-cls'>
                 <img src="<?php echo esc_url($banner); ?>" class="wcmp-imgcls"/>
+                </div>
             <?php } else { ?>
                 <img src="<?php echo $WCMp->plugin_url . 'assets/images/banner_placeholder.jpg'; ?>" class="wcmp-imgcls"/>
             <?php } ?>
