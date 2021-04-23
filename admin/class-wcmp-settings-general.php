@@ -54,11 +54,14 @@ class WCMp_Settings_General {
                         "is_vendor_shipping_on" => array('title' => __('Enable Vendor Shipping ', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'is_vendor_shipping_on', 'label_for' => 'is_vendor_shipping_on', 'name' => 'is_vendor_shipping_on', 'value' => 'Enable', 'text' => __('If enabled vendor can configure their shipping on dashboard.', 'dc-woocommerce-multi-vendor')), // Checkbox
                         "is_customer_support_details" => array('title' => __('Enable Customer Support', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'is_customer_support_details', 'label_for' => 'is_customer_support_details', 'name' => 'is_customer_support_details', 'value' => 'Enable', 'text' => __('Show support channel details in "Thank You" page and new order email.', 'dc-woocommerce-multi-vendor')), // Checkbox
                         "show_related_products" => array('title' => __('Related Product Settings', 'dc-woocommerce-multi-vendor'), 'type' => 'select', 'id' => 'show_related_products', 'name' => 'show_related_products', 'label_for' => 'show_related_products', 'desc' => stripslashes(__('Select related products to show on the single product page.', 'dc-woocommerce-multi-vendor')), 'options' => array('all_related' => __('Related Products from Entire Store', 'dc-woocommerce-multi-vendor'), 'vendors_related' => __("Related Products from Vendor's Store", 'dc-woocommerce-multi-vendor'), 'disable' => __('Disable', 'dc-woocommerce-multi-vendor'))), // select
-                        "is_enable_store_sidebar" => array('title' => __('Enable Store Sidebar', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'is_enable_store_sidebar', 'label_for' => 'is_enable_store_sidebar', 'name' => 'is_enable_store_sidebar', 'value' => 'Enable', 'text' => __('Uncheck this to disable vendor store sidebar..', 'dc-woocommerce-multi-vendor')), // Checkbox
-                        "store_sidebar_position" => array('title' => __('Store Sidebar Position', 'dc-woocommerce-multi-vendor'), 'type' => 'select', 'id' => 'store_sidebar_position', 'name' => 'store_sidebar_position', 'label_for' => 'store_sidebar_position', 'desc' => stripslashes(__('Set store sidebar position.', 'dc-woocommerce-multi-vendor')), 'options' => array('left' => __('At Left', 'dc-woocommerce-multi-vendor'), 'right' => __("At Right", 'dc-woocommerce-multi-vendor'))), // select
-                        "store_follow_enabled" => array('title' => __('Enable Store Follow', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'store_follow_enabled', 'label_for' => 'store_follow_enabled', 'name' => 'store_follow_enabled', 'value' => 'Enable', 'text' => __('Checked this to enable store follow..', 'dc-woocommerce-multi-vendor')), // Checkbox
-
                         )
+                    ),
+                ),
+                "wcmp_store_section" => array("title" => __('Store setting', 'dc-woocommerce-multi-vendor'), // Section one
+                    "fields" => array(
+                        "is_enable_store_sidebar" => array('title' => __('Enable Store Sidebar', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'is_enable_store_sidebar', 'label_for' => 'is_enable_store_sidebar', 'name' => 'is_enable_store_sidebar', 'value' => 'Enable', 'text' => __('Uncheck this to disable vendor store sidebar.', 'dc-woocommerce-multi-vendor')), // Checkbox
+                        "store_sidebar_position" => array('title' => __('Store Sidebar Position', 'dc-woocommerce-multi-vendor'), 'type' => 'select', 'id' => 'store_sidebar_position', 'name' => 'store_sidebar_position', 'label_for' => 'store_sidebar_position', 'desc' => stripslashes(__('Set store sidebar position.', 'dc-woocommerce-multi-vendor')), 'options' => array('left' => __('At Left', 'dc-woocommerce-multi-vendor'), 'right' => __("At Right", 'dc-woocommerce-multi-vendor'))), // select
+                        "store_follow_enabled" => array('title' => __('Enable Store Follow', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'store_follow_enabled', 'label_for' => 'store_follow_enabled', 'name' => 'store_follow_enabled', 'value' => 'Enable', 'text' => __('Checked this to enable store follow.', 'dc-woocommerce-multi-vendor')), // Checkbox                    
                     ),
                 ),
             ),
@@ -138,6 +141,33 @@ class WCMp_Settings_General {
             );
         }
         return apply_filters("settings_{$this->tab}_tab_new_input", $new_input, $input);
+    }
+
+    public function wcmp_store_section_info() {
+        echo '<div class="wcmp_payment_help">';
+        _e("If you are not sure where to add widget, just go to admin <a href=".admin_url('widgets.php')." terget='_blank'>widget</a> section and add your preferred widgets to <b>vendor store sidebar</b>.", 'dc-woocommerce-multi-vendor');
+        echo '</div>';
+        ?>
+        <style type="text/css">
+             .wcmp_payment_help {
+                display: inline-block;
+                padding: 10px;
+                background: #ffffff;
+                color: #333;
+                font-style: italic;
+                max-width: 300px;
+                position: absolute;
+                right: 20px;
+                z-index: 9;
+            }
+            @media (max-width: 960px){
+                .wcmp_payment_help {
+                    position: relative;
+                    right: auto;
+                }
+            }
+        </style>
+        <?php
     }
 
 }
