@@ -1266,7 +1266,7 @@ article .vendor-info-row.payment-info-row {
   border-right: solid 2px #d6c9c6;
   border-bottom: solid 3px #d6c9c6;
   text-indent: -99999px;
-  background: url(../../images/icon-vendor-edit.png)-2px-2px; }
+  background: url(../../images/icon-vendor-edit.png) -2px -2px; }
   .wcmp_page_wcmp-to-do .vendor_edit_button:hover {
     cursor: pointer;
     border-color: #beaba6; }
