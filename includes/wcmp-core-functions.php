@@ -4384,7 +4384,9 @@ if (!function_exists('wcmp_is_store_page')) {
             $vendor = $vendor_id ? get_wcmp_vendor_by_term($vendor_id) : false;
         } else {
             $store_id = get_query_var('author');
-            $vendor = get_wcmp_vendor($store_id);
+            if ($store_id) {
+                $vendor = get_wcmp_vendor($store_id);
+            }
         }
         if ($vendor) {
             return true;
