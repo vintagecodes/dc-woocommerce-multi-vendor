@@ -1945,13 +1945,13 @@ class WCMp_Ajax {
                     $actions_col_html = '<div class="col-actions">' . implode(' <span class="divider">|</span> ', $row_actions_col) . '</div>';
                     // is in stock
                     if ($product->is_in_stock()) {
-                        $stock_html = '<span class="label label-success instock">' . __('In stock', 'dc-woocommerce-multi-vendor');
+                        $stock_html = '<span class="text-success">' . __('In stock', 'dc-woocommerce-multi-vendor');
                         if ($product->managing_stock()) {
                             $stock_html .= ' (' . wc_stock_amount($product->get_stock_quantity()) . ')';
                         }
                         $stock_html .= '</span>';
                     } else {
-                        $stock_html = '<span class="label label-danger outofstock">' . __('Out of stock', 'dc-woocommerce-multi-vendor') . '</span>';
+                        $stock_html = '<span class="text-danger">' . __('Out of stock', 'dc-woocommerce-multi-vendor') . '</span>';
                     }
                     // product cat
                     $product_cats = '';
