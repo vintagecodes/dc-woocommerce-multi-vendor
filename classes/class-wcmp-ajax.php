@@ -2235,7 +2235,8 @@ class WCMp_Ajax {
 
         if ($handler == 'submit') {
             $qna_form_data = array();
-            parse_str(wc_clean($_POST['customer_qna_data']), $qna_form_data);
+            $customer_qna_data = isset($_POST['customer_qna_data']) ? wp_unslash($_POST['customer_qna_data']) : '';
+            parse_str($customer_qna_data, $qna_form_data);
             $wpnonce = isset($qna_form_data['cust_qna_nonce']) ? $qna_form_data['cust_qna_nonce'] : '';
             $product_id = isset($qna_form_data['product_ID']) ? (int) $qna_form_data['product_ID'] : 0;
             $cust_id = isset($qna_form_data['cust_ID']) ? (int) $qna_form_data['cust_ID'] : 0;
