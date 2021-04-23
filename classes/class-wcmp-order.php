@@ -823,6 +823,13 @@ class WCMp_Order {
     }
     
     public function wcmp_vendor_order_to_parent_order_status_synchronization($order_id, $old_status, $new_status){
+        $is_vendor_order = ($order_id) ? wcmp_get_order($order_id) : false;
+        if ($is_vendor_order && current_user_can('administrator') && $new_status != $old_status && apply_filters('wcmp_vendor_notified_when_admin_change_status', true)) {
+            $email_admin = WC()->mailer()->emails['WC_Email_Admin_Change_Order_Status'];
+            $vendor_id = get_post_meta($order_id, '_vendor_id', true);
+            $vendor = get_wcmp_vendor($vendor_id);
+            $email_admin->trigger($order_id, $new_status, $vendor);
+        }
         // parent order synchronization
         $parent_order_id = wp_get_post_parent_id( $order_id );
         if($parent_order_id){
