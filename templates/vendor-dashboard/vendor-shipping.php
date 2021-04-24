@@ -44,7 +44,7 @@ $vendor_shipping_data = get_user_meta($vendor->id, 'vendor_shipping_data', true)
                                         <td>
                                             <a href="JavaScript:void(0);" data-zone-id="<?php echo esc_attr($vendor_shipping_zones['zone_id']); ?>" class="vendor_edit_zone modify-shipping-methods"><?php echo esc_html($vendor_shipping_zones['zone_name']); ?></a> 
                                         </td> 
-                                        <td><?php echo esc_html($vendor_shipping_zones['formatted_zone_location'], 'dc-woocommerce-multi-vendor'); ?></td> 
+                                        <td><?php echo esc_html($vendor_shipping_zones['formatted_zone_location']); ?></td> 
                                         <td>
                                             <div class="wcmp-shipping-zone-methods">
                                                 <?php
