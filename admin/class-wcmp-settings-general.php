@@ -54,6 +54,7 @@ class WCMp_Settings_General {
                         "is_vendor_shipping_on" => array('title' => __('Enable Vendor Shipping ', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'is_vendor_shipping_on', 'label_for' => 'is_vendor_shipping_on', 'name' => 'is_vendor_shipping_on', 'value' => 'Enable', 'text' => __('If enabled vendor can configure their shipping on dashboard.', 'dc-woocommerce-multi-vendor')), // Checkbox
                         "is_customer_support_details" => array('title' => __('Enable Customer Support', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'is_customer_support_details', 'label_for' => 'is_customer_support_details', 'name' => 'is_customer_support_details', 'value' => 'Enable', 'text' => __('Show support channel details in "Thank You" page and new order email.', 'dc-woocommerce-multi-vendor')), // Checkbox
                         "show_related_products" => array('title' => __('Related Product Settings', 'dc-woocommerce-multi-vendor'), 'type' => 'select', 'id' => 'show_related_products', 'name' => 'show_related_products', 'label_for' => 'show_related_products', 'desc' => stripslashes(__('Select related products to show on the single product page.', 'dc-woocommerce-multi-vendor')), 'options' => array('all_related' => __('Related Products from Entire Store', 'dc-woocommerce-multi-vendor'), 'vendors_related' => __("Related Products from Vendor's Store", 'dc-woocommerce-multi-vendor'), 'disable' => __('Disable', 'dc-woocommerce-multi-vendor'))), // select
+                        "custom_date_order_stat_report_mail" => array('title' => __('Set custom date for order stat report mail', 'dc-woocommerce-multi-vendor'), 'type' => 'number', 'id' => 'custom_date_order_stat_report_mail', 'label_for' => 'custom_date_order_stat_report_mail', 'name' => 'custom_date_order_stat_report_mail', 'desc' => __('Email will send as per select dates ( put is blank for disabled it ).', 'dc-woocommerce-multi-vendor'), 'placeholder' => __('in days', 'dc-woocommerce-multi-vendor')), // Text
                         )
                     ),
                 ),
@@ -134,6 +135,9 @@ class WCMp_Settings_General {
         }
         if (isset($input['store_follow_enabled'])) {
             $new_input['store_follow_enabled'] = sanitize_text_field($input['store_follow_enabled']);
+        }
+        if (isset($input['custom_date_order_stat_report_mail'])) {
+            $new_input['custom_date_order_stat_report_mail'] = sanitize_text_field($input['custom_date_order_stat_report_mail']);
         }
         if (!$hasError) {
             add_settings_error(
