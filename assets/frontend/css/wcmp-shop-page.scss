@@ -28,9 +28,6 @@ body {
 .wcmp-banner-area {
     @include wcmpBanner;
 }
-.wcmp-imgcls{
-    @include wcmpImg(320px);
-}
 .column-class {
     @include columns;
 }
@@ -38,18 +35,21 @@ body {
 // theme02 start
 .wcmp-theme02 {
     .wcmp-heading{ color: map-get($color, light_primaryColor );}
-    .wcmp-banner-wrap { padding: 0;}
     .wcmp-banner-area {height: 100%;}
 }
 .wcmp-banner-wrap{
     position: relative;
     height:auto;
     background: map-get($color, light_primaryColor );
-    padding: 0 0 20px;
+}
+.banner-img-cls{
+    .wcmp-imgcls{
+        @include wcmpImg;
+        object-fit: cover;
+    }
 }
 .wcmp_bannersec_start {
     height: 100%;
-    /* padding: 0 80px; */
 }
 .wcmp_breadcrumb-cls {
     @include flexCenter( start, row);
@@ -80,7 +80,7 @@ body {
     color: map-get($color, dark_primaryColor );
 
 }
-img.wcmp-profile-imgcls {
+.wcmp-profile-imgcls {
     width: 120px;
     height: 120px;
     border: 5px solid map-get($color, light_primaryColor );
@@ -110,19 +110,18 @@ img.wcmp-profile-imgcls {
     font-family: $text;
     font-size: map-get($font_size, medium);
 }
-.wcmp-contact-deatil p.wcmp-address:first-child {
-    margin-right: 30px;
-}
-.wcmp-contact-deatil{
+.wcmp-contact-deatil {
     @include flexCenter(start, row);
+    .wcmp-address{
+        &:first-child {margin-right: 30px;}
+        span{padding-right: 4px;}
+        a{
+            color: map-get($color, light_primaryColor );
+            text-decoration: none;
+        }
+    }
 }
-.wcmp-address span {
-    padding-right: 4px;
-}
-.wcmp-address a{
-    color: map-get($color, light_primaryColor );
-    text-decoration: none;
-}
+
 .socialicn-area{
     @include flexCenter( flex-end, row);
 }
@@ -151,76 +150,83 @@ button.wcmp-fill-butn{
     background: map-get($color, theme_primaryColor );
     color: map-get($color, light_primaryColor );
 }
-.wcmp-theme02 .wcmp-banner-wrap {
-    padding: 0;
-}
 // theme02 end
 
 
 
 // theme01 start
-.wcmp-theme01 .wcmp-heading{
-    @include wcmpHeading(12px 20px 15px 0);
+.wcmp-theme01 {
+    .wcmp-heading{
+        @include wcmpHeading(12px 20px 15px 0);
+    }
+    .wcmp-banner-area{
+        height:280px
+    }
+    .wcmp-banner-below {
+        display: grid;
+        grid-template-columns: 0.5fr 2fr 1fr;
+        padding: 0 20px;
+    }
+    .wcmp-profile-area {
+        margin-top: -55px;
+    }
+    .wcmp-rating-digit{
+        color: map-get($color, dark_primaryColor );
+    }
+    .wcmp-address{
+        color: map-get($color, dark_primaryColor );
+        margin: 2px 30px 2px 0;
+    }
+    .wcmp-banner-middle {
+        @include flexCenter( start, row)
+    }
+    .wcmp-ratingcls{
+        @include flexCenter(flex-end, row)
+    }
 }
-.wcmp-theme01 .wcmp-banner-area{
-    height:280px
-}
-.wcmp-theme01 .wcmp-banner-below {
-    display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr;
-    padding: 0 20px;
-}
-.wcmp-theme01 .wcmp-profile-area {
-    margin-top: -55px;
-}
-.wcmp-theme01 .wcmp-rating-digit{
+
+.wcmp-theme01 .wcmp-address a, 
+.wcmp-theme03 .wcmp-address a{
     color: map-get($color, dark_primaryColor );
 }
-.wcmp-theme01 .wcmp-address{
-    color: map-get($color, dark_primaryColor );
-    margin: 2px 30px 2px 0;
-}
-.wcmp-theme01 .wcmp-address a, .wcmp-theme03 .wcmp-address a{
-    color: map-get($color, dark_primaryColor );
-}
-.wcmp-theme01 .wcmp-banner-middle {
-    @include flexCenter( start, row)
-}
-.wcmp-theme01 button.wcmp-stroke-butn, .wcmp-theme03 button.wcmp-stroke-butn{
+.wcmp-theme01 button.wcmp-stroke-butn, 
+.wcmp-theme03 button.wcmp-stroke-butn{
     color: map-get($color, theme_primaryColor );
     border-color: map-get($color, theme_primaryColor );
     margin-right: 10px;
 }
-.wcmp-theme01 .wcmp-address .fa, .wcmp-theme03 .wcmp-address .fa{
+.wcmp-theme01 .wcmp-address .fa, 
+.wcmp-theme03 .wcmp-address .fa{
     color: map-get($color, theme_primaryColor );
 }
-.wcmp-theme01 .wcmp-ratingcls{
-    @include flexCenter(flex-end, row)
-}
+
 // theme01 end
 
 // theme03 start
-.wcmp-theme03 .wcmp-banner-area {
-    height: 220px;
-}
-.wcmp-theme03 .wcmp-banner-below {
-    text-align: center;
-}
-.wcmp-theme03 .wcmp-profile-area {
-    margin-top: -100px;
-}
-.wcmp-theme03 .wcmp-rating-digit{
-    color: map-get($color, dark_primaryColor );
-}
-.wcmp-theme03 .wcmp-ratingcls{
-    @include flexCenter(center, row)
-}
-.wcmp-theme03 .wcmp-contact-deatil{
-    @include flexCenter(center, row);
-}
-.wcmp-theme03 .wcmp-address{
-    color: map-get($color, dark_primaryColor );
-    margin: 18px 30px 12px 0;
+
+.wcmp-theme03 {
+    .wcmp-banner-below {
+        text-align: center;
+    }
+    .wcmp-profile-area {
+        margin-top: -60px;
+    }
+    .wcmp-rating-digit{
+        color: map-get($color, dark_primaryColor );
+    }
+    .wcmp-ratingcls{
+        @include flexCenter(center, row)
+    }
+    .wcmp-contact-deatil{
+        @include flexCenter(center, row);
+    }
+    .wcmp-address{
+        color: map-get($color, dark_primaryColor );
+        margin: 18px 30px 12px 0;
+    }
+    .wcmp-profile-imgcls{
+        margin:auto;
+    }
 }
 // theme03 end
 
@@ -462,7 +468,7 @@ button.wcmp-fill-butn{
     height: 45px;
 }
 .wcmp-profile-cls img {
-    @include wcmpImg(100%);
+    @include wcmpImg;
     object-fit: contain;
 }
 .wcmp-follower-leftside{
@@ -613,6 +619,9 @@ form.wcmp-short-cls{
 
 // WCMP-Follower-Sec end
 
+.error404 main p {
+    margin: 0 0;
+}
 
 @media screen and (min-width:320px) and (max-width:767px){
     .wcmp-product-content {
@@ -666,6 +675,12 @@ form.wcmp-short-cls{
         margin: 4px 0 0 12px;
         font-size: map-get($font_size , regular );
     }
+    .wcmp-theme03 {
+        .wcmp-contact-deatil{ @include flexCenter(center, column);}
+    }
+    .wcmp-contact-deatil {
+        .wcmp-address:first-child{margin-right: 0;}
+    }
 }
 
 @media screen and (min-width:320px) and (max-width:768px){
@@ -692,24 +707,23 @@ form.wcmp-short-cls{
     }
 
     // Theme01 start responsive
-    .wcmp-theme01 .wcmp-banner-below{
-        grid-template-columns: unset;
-    }
-    .wcmp-theme01 .wcmp-ratingcls{
-        @include flexCenter(flex-start, row)
+    .wcmp-theme01 {
+        .wcmp-banner-below{
+            grid-template-columns: unset;
+        }
+        .wcmp-ratingcls{
+            @include flexCenter(flex-start, row)
+        }
     }
     // Theme01 end responsive
 
-    // WCMP-Body-Sec start
-    // .wcmp-main-section{
-    //     padding:20px;
-    // }
     // WCMP-Body-Sec end
     .wcmp-vendor-profile{
         margin:0
     }
+    .banner-img-cls{height: 320px;}
     .wcmp-theme02 {
-        .wcmp-banner-wrap{height:200px}
+
         .wcmp-banner-wrap img{height: 100%;}
         .wcmp-bannerright {
             align-items: center;
