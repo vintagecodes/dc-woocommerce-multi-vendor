@@ -1945,13 +1945,13 @@ class WCMp_Ajax {
                     $actions_col_html = '<div class="col-actions">' . implode(' <span class="divider">|</span> ', $row_actions_col) . '</div>';
                     // is in stock
                     if ($product->is_in_stock()) {
-                        $stock_html = '<span class="label label-success instock">' . __('In stock', 'dc-woocommerce-multi-vendor');
+                        $stock_html = '<span class="text-success">' . __('In stock', 'dc-woocommerce-multi-vendor');
                         if ($product->managing_stock()) {
                             $stock_html .= ' (' . wc_stock_amount($product->get_stock_quantity()) . ')';
                         }
                         $stock_html .= '</span>';
                     } else {
-                        $stock_html = '<span class="label label-danger outofstock">' . __('Out of stock', 'dc-woocommerce-multi-vendor') . '</span>';
+                        $stock_html = '<span class="text-danger">' . __('Out of stock', 'dc-woocommerce-multi-vendor') . '</span>';
                     }
                     // product cat
                     $product_cats = '';
@@ -2235,7 +2235,8 @@ class WCMp_Ajax {
 
         if ($handler == 'submit') {
             $qna_form_data = array();
-            parse_str(wc_clean($_POST['customer_qna_data']), $qna_form_data);
+            $customer_qna_data = isset($_POST['customer_qna_data']) ? wp_unslash($_POST['customer_qna_data']) : '';
+            parse_str($customer_qna_data, $qna_form_data);
             $wpnonce = isset($qna_form_data['cust_qna_nonce']) ? $qna_form_data['cust_qna_nonce'] : '';
             $product_id = isset($qna_form_data['product_ID']) ? (int) $qna_form_data['product_ID'] : 0;
             $cust_id = isset($qna_form_data['cust_ID']) ? (int) $qna_form_data['cust_ID'] : 0;

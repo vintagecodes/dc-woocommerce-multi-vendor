@@ -47,7 +47,7 @@ class WCMp_Seller_Review_Rating {
                             $term_id = get_user_meta($vendor->id, '_vendor_term_id', true);
                             $term = get_term_by('id', $term_id, $WCMp->taxonomy->taxonomy_name);
                             $term_link = get_term_link($term, $WCMp->taxonomy->taxonomy_name);
-                            $review_link = trailingslashit($term_link) . '#reviews';
+                            $review_link = trailingslashit($term_link) . 'reviews';
                             $arr_values['vendor_review_link'] = $review_link;
                             $arr_values['shop_name'] = $vendor->page_title;
                             $arr_values['product_name'] = $product->post_title;
@@ -65,7 +65,7 @@ class WCMp_Seller_Review_Rating {
                         $term_id = get_user_meta($vendor->id, '_vendor_term_id', true);
                         $term = get_term_by('id', $term_id, $WCMp->taxonomy->taxonomy_name);
                         $term_link = get_term_link($term, $WCMp->taxonomy->taxonomy_name);
-                        $review_link = trailingslashit($term_link) . '#reviews';
+                        $review_link = trailingslashit($term_link) . 'reviews';
                         $arr_values['vendor_review_link'] = $review_link;
                         $arr_values['shop_name'] = $vendor->page_title;
                         $arr_values['product_name'] = $product->post_title;

@@ -57,16 +57,16 @@ class DC_Widget_Vendor_Info extends WP_Widget {
         $vendor_id = false;
         $vendor = false;
         // Only show current vendor widget when showing a vendor's product(s)
-        $show_widget = true;
+        $show_widget = false;
         if (is_singular('product')) {
             global $post;
             $vendor = get_wcmp_product_vendors($post->ID);
-            if (!$vendor) {
-                $show_widget = false;
+            if ($vendor) {
+                $show_widget = true;
             }
         }
-        if (!wcmp_is_store_page()) {
-            $show_widget = false;
+        if (wcmp_is_store_page()) {
+            $show_widget = true;
         }
 
         if ($show_widget) {

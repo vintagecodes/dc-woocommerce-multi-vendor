@@ -1852,6 +1852,12 @@ if (!function_exists('wcmp_count_to_do_list')) {
             'author__in' => $vendor_ids,
             'post_type' => 'shop_coupon',
             'post_status' => 'pending',
+            'meta_query' => array(
+                array(
+                    'key' => '_dismiss_to_do_list',
+                    'compare' => 'NOT EXISTS',
+                ),
+            )
         );
         $get_pending_coupons = new WP_Query($args);
         $to_do_list_count += count($get_pending_coupons->get_posts());
@@ -1862,6 +1868,12 @@ if (!function_exists('wcmp_count_to_do_list')) {
             'author__in' => $vendor_ids,
             'post_type' => 'product',
             'post_status' => 'pending',
+            'meta_query' => array(
+                array(
+                    'key' => '_dismiss_to_do_list',
+                    'compare' => 'NOT EXISTS',
+                ),
+            )
         );
         $get_pending_products = new WP_Query($args);
         $to_do_list_count += count($get_pending_products->get_posts());
@@ -1872,7 +1884,13 @@ if (!function_exists('wcmp_count_to_do_list')) {
             'post_status' => 'wcmp_processing',
             'meta_key' => 'transaction_mode',
             'meta_value' => 'direct_bank',
-            'posts_per_page' => -1
+            'posts_per_page' => -1,
+            'meta_query' => array(
+                array(
+                    'key' => '_dismiss_to_do_list',
+                    'compare' => 'NOT EXISTS',
+                ),
+            )
         );
         $transactions = get_posts($args);
         $to_do_list_count += count($transactions);
@@ -4366,7 +4384,9 @@ if (!function_exists('wcmp_is_store_page')) {
             $vendor = $vendor_id ? get_wcmp_vendor_by_term($vendor_id) : false;
         } else {
             $store_id = get_query_var('author');
-            $vendor = get_wcmp_vendor($store_id);
+            if ($store_id) {
+                $vendor = get_wcmp_vendor($store_id);
+            }
         }
         if ($vendor) {
             return true;

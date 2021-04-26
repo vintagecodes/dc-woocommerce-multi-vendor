@@ -17,6 +17,8 @@ class WCMp_Cron_Job {
         add_action('vendor_monthly_order_stats', array(&$this, 'vendor_monthly_order_stats_report'));
         // migrate all products having parent-child concept
         add_action('migrate_spmv_multivendor_table', array(&$this, 'migrate_spmv_multivendor_table'));
+        // vendor Custom date order stats reports
+        add_action('vendor_custom_date_order_stats', array(&$this, 'vendor_custom_date_order_stats_report'));
         // bind spmv excluded products mapping 
         add_action('wcmp_spmv_excluded_products_map', array(&$this, 'wcmp_spmv_excluded_products_map'));
         // bind spmv excluded products mapping 
@@ -39,6 +41,7 @@ class WCMp_Cron_Job {
             'masspay_cron_start',
             'vendor_weekly_order_stats',
             'vendor_monthly_order_stats',
+            'vendor_custom_date_order_stats',
             'migrate_spmv_multivendor_table',
             'wcmp_spmv_excluded_products_map',
             'wcmp_spmv_product_meta_update',
@@ -115,7 +118,7 @@ class WCMp_Cron_Job {
     public function vendor_weekly_order_stats_report() {
         global $WCMp;
         $vendors = get_wcmp_vendors();
-        if ($vendors) {
+        if ($vendors && apply_filters('wcmp_enabled_vendor_weekly_report_mail', true)) {
             foreach ($vendors as $key => $vendor_obj) {
                 if ($vendor_obj->user_data->user_email) {
                     $order_data = array();
@@ -193,7 +196,7 @@ class WCMp_Cron_Job {
     public function vendor_monthly_order_stats_report() {
         global $WCMp;
         $vendors = get_wcmp_vendors();
-        if ($vendors) {
+        if ($vendors && apply_filters('wcmp_enabled_vendor_monthly_report_mail', true)) {
             foreach ($vendors as $key => $vendor_obj) {
                 if ($vendor_obj->user_data->user_email) {
                     $order_data = array();
@@ -214,6 +217,87 @@ class WCMp_Cron_Job {
                     );
                     $attachments = array();
                     $vendor_monthly_orders = $vendor->get_vendor_orders_reports_of('', array('vendor_id' => $vendor->id, 'start_date' => date('Y-m-d H:i:s', strtotime('-30 days'))));
+                    if ($vendor_monthly_orders && count($vendor_monthly_orders) > 0) {
+                        foreach ($vendor_monthly_orders as $key => $data) {
+                            if ($data->commission_id != 0 && $data->commission_id != '') {
+                                $order_data[$data->commission_id] = $key;
+                            }
+                        }
+                        if (count($order_data) > 0) {
+                            $report_data['order_data'] = $order_data;
+                            $args = array(
+                                'filename' => 'OrderReports-' . $report_data['start_date'] . '-To-' . $report_data['end_date'] . '.csv',
+                                'action' => 'temp',
+                            );
+                            $report_csv = $WCMp->vendor_dashboard->generate_csv($order_data, $vendor, $args);
+                            if ($report_csv)
+                                $attachments[] = $report_csv;
+                            if ($email->trigger($vendor, $report_data, $attachments)) {
+                                $email->find[] = $vendor->page_title;
+                                $email->replace[] = '{STORE_NAME}';
+                                if (file_exists($report_csv)) {
+                                    @unlink($report_csv);
+                                }
+                            } else {
+                                if (file_exists($report_csv)) {
+                                    @unlink($report_csv);
+                                }
+                            }
+                        } else {
+                            if (apply_filters('wcmp_send_vendor_monthly_zero_order_stats_report', true, $vendor)) {
+                                $report_data['order_data'] = $order_data;
+                                if ($email->trigger($vendor, $report_data, $attachments)) {
+                                    $email->find[] = $vendor->page_title;
+                                    $email->replace[] = '{STORE_NAME}';
+                                }
+                            }
+                        }
+                    } else {
+                        if (apply_filters('wcmp_send_vendor_monthly_zero_order_stats_report', true, $vendor)) {
+                            $report_data['order_data'] = $order_data;
+                            if ($email->trigger($vendor, $report_data, $attachments)) {
+                                $email->find[] = $vendor->page_title;
+                                $email->replace[] = '{STORE_NAME}';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Order stats report by custom date
+     *
+     * 
+     */
+    public function vendor_custom_date_order_stats_report() {
+        global $WCMp;
+        $custom_date_order_stat_report_mail = get_wcmp_vendor_settings( 'custom_date_order_stat_report_mail', 'general' ) ? get_wcmp_vendor_settings( 'custom_date_order_stat_report_mail', 'general' ) : 0;
+        $vendors = get_wcmp_vendors();
+        if ($vendors && $custom_date_order_stat_report_mail && apply_filters('wcmp_enabled_vendor_custom_date_report_mail', true)) {
+            $strtotime = strtotime('-'. $custom_date_order_stat_report_mail .' days');
+            foreach ($vendors as $key => $vendor_obj) {
+                if ($vendor_obj->user_data->user_email) {
+                    $order_data = array();
+                    $vendor = get_wcmp_vendor($vendor_obj->id);
+                    $is_block = get_user_meta($vendor->id, '_vendor_turn_off', true);
+                    if($is_block) continue;
+                    $email = WC()->mailer()->emails['WC_Email_Vendor_Orders_Stats_Report'];
+                    $vendor_custom_date_stats = $vendor->get_vendor_orders_reports_of('vendor_stats', array('vendor_id' => $vendor->id, 'start_date' => date('Y-m-d H:i:s', $strtotime)));
+                    $transaction_details = $WCMp->transaction->get_transactions($vendor->term_id, date('Y-m-d', $strtotime), date('Y-m-d'));
+                    if (is_array($vendor_custom_date_stats)) {
+                        $vendor_custom_date_stats['total_transaction'] = array_sum(wp_list_pluck($transaction_details, 'total_amount'));
+                    }
+                    $report_data = array(
+                        'period' => __('monthly', 'dc-woocommerce-multi-vendor'),
+                        'start_date' => date('Y-m-d', $strtotime),
+                        'end_date' => @date('Y-m-d'),
+                        'stats' => $vendor_custom_date_stats,
+                    );
+
+                    $attachments = array();
+                    $vendor_monthly_orders = $vendor->get_vendor_orders_reports_of('', array('vendor_id' => $vendor->id, 'start_date' => date('Y-m-d H:i:s', $strtotime)));
                     if ($vendor_monthly_orders && count($vendor_monthly_orders) > 0) {
                         foreach ($vendor_monthly_orders as $key => $data) {
                             if ($data->commission_id != 0 && $data->commission_id != '') {
