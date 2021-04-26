@@ -182,7 +182,6 @@ class WCMp_Migrator {
 				?>
 				<?php do_action('admin_print_scripts'); ?>
 				<?php do_action('admin_print_styles'); ?>
-				<?php do_action('admin_head'); ?>
 				<style type="text/css">
 					.wc-setup-steps {
 						justify-content: center;

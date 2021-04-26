@@ -379,8 +379,7 @@ class WCMp_Admin_Setup_Wizard {
                 <title><?php esc_html_e('WC Marketplace &rsaquo; Setup Wizard', 'dc-woocommerce-multi-vendor'); ?></title>
                 <?php wp_print_scripts('wc-setup'); ?>
                 <?php wp_print_scripts('wcmp-setup'); ?>
-        <?php do_action('admin_print_styles'); ?>
-        <?php do_action('admin_head'); ?>
+                <?php do_action('admin_print_styles'); ?>
                 <style type="text/css">
                     .wc-setup-steps {
                         justify-content: center;
