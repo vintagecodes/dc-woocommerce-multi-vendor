@@ -3,9 +3,9 @@ Contributors: wcmp, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh8961
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.7
+Tested up to: 5.7.1
 Requires PHP: 5.6
-Stable tag: 3.7.1
+Stable tag: 3.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,6 +279,24 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 3.7.2 - 2021-04-27 =
+* Added - Vendor mail when order status changed by admin #802.
+* Added - Sales report mail as per custom date selected by admin #782.
+* Added - WCMp Sidebar help #814.
+* Fix - Vendor quick view widget is not working #823.
+* Fix - Todo list number count issue #819.
+* Fix - Vendor 404 page not working #818.
+* Fix - Mobile view issue at shop page #816.
+* Fix - Customer Q&A not wokring on Russian Language #813.
+* Fix - Stock table is empty at dashboard product page #812.
+* Fix - To-do list page icon not working #807.
+* Fix - String issue at dashboard shipping page #778.
+* Fix - Error at admin section setup widget page.
+* Dev - Added `custom_date_order_stat_report_mail` filter.
+* Dev - Added `wcmp_enabled_vendor_monthly_report_mail` filter.
+* Dev - Added `custom_date_order_stat_report_mail` filter.
+* Updated - Language file.
 
 = 3.7.1 - 2021-04-09 =
 * Added - Vendor shop page old structure support along with new structure.
