@@ -159,9 +159,9 @@ button.wcmp-fill-butn{
     .wcmp-heading{
         @include wcmpHeading(12px 20px 15px 0);
     }
-    .wcmp-banner-area{
-        height:280px
-    }
+    // .wcmp-banner-area{
+    //     height:100%;
+    // }
     .wcmp-banner-below {
         display: grid;
         grid-template-columns: 0.5fr 2fr 1fr;
@@ -175,7 +175,7 @@ button.wcmp-fill-butn{
     }
     .wcmp-address{
         color: map-get($color, dark_primaryColor );
-        margin: 2px 30px 2px 0;
+        margin: 2px 10px 2px 0;
     }
     .wcmp-banner-middle {
         @include flexCenter( start, row)
@@ -732,8 +732,24 @@ form.wcmp-short-cls{
             margin:12px 0;
         }
     }
-    .woocommerce .content-area .site-main{    padding-top: 28px; margin: 0 2vw;}
+    .woocommerce .content-area .site-main{ padding-top: 28px; margin: 0 2vw;}
 
+    // new css add
+    .wcmp-theme02 .wcmp-banner-area {
+        position: relative;
+    }
+    .wcmp-banner-area {
+        padding: 15px 15px 0 15px;
+    }
+    .description_data p {
+        text-align: center;
+    }
+    .wcmp-theme02 .wcmp-heading, 
+    .wcmp-address,
+    .wcmp-contact-deatil .wcmp-address a {
+        color: #6d6d6d;
+    }
+// new css end
 }
 
 @media screen and (min-width: 768px) and (max-width: 1023px){
