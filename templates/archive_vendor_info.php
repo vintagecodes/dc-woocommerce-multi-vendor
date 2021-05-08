@@ -42,7 +42,7 @@ if ( $template_class == 'template3') { ?>
         <div class='wcmp-banner-area'>
             <div class='wcmp-bannerright'>
                 <div class="socialicn-area">
-
+                    <div class="wcmp_social_profile">
                     <?php if ($vendor_fb_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_fb_profile); ?>"><i class="wcmp-font ico-facebook-icon"></i></a><?php } ?>
                     <?php if ($vendor_twitter_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_twitter_profile); ?>"><i class="wcmp-font ico-twitter-icon"></i></a><?php } ?>
                     <?php if ($vendor_linkdin_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_linkdin_profile); ?>"><i class="wcmp-font ico-linkedin-icon"></i></a><?php } ?>
@@ -50,7 +50,7 @@ if ( $template_class == 'template3') { ?>
                     <?php if ($vendor_youtube) { ?> <a target="_blank" href="<?php echo esc_url($vendor_youtube); ?>"><i class="wcmp-font ico-youtube-icon"></i></a><?php } ?>
                     <?php if ($vendor_instagram) { ?> <a target="_blank" href="<?php echo esc_url($vendor_instagram); ?>"><i class="wcmp-font ico-instagram-icon"></i></a><?php } ?>
                     <?php do_action( 'wcmp_vendor_store_header_social_link', $vendor_id ); ?>
-
+                    </div>
                 </div>
                 <div class='wcmp-butn-area'>
                     <?php do_action( 'wcmp_additional_button_at_banner' ); ?>
@@ -170,6 +170,7 @@ if ( $template_class == 'template3') { ?>
             </div>
             <div class='wcmp-bannerright'>
                 <div class="socialicn-area">
+                    <div class="wcmp_social_profile">
                     <?php if ($vendor_fb_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_fb_profile); ?>"><i class="wcmp-font ico-facebook-icon"></i></a><?php } ?>
                     <?php if ($vendor_twitter_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_twitter_profile); ?>"><i class="wcmp-font ico-twitter-icon"></i></a><?php } ?>
                     <?php if ($vendor_linkdin_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_linkdin_profile); ?>"><i class="wcmp-font ico-linkedin-icon"></i></a><?php } ?>
@@ -177,6 +178,7 @@ if ( $template_class == 'template3') { ?>
                     <?php if ($vendor_youtube) { ?> <a target="_blank" href="<?php echo esc_url($vendor_youtube); ?>"><i class="wcmp-font ico-youtube-icon"></i></a><?php } ?>
                     <?php if ($vendor_instagram) { ?> <a target="_blank" href="<?php echo esc_url($vendor_instagram); ?>"><i class="wcmp-font ico-instagram-icon"></i></a><?php } ?>
                     <?php do_action( 'wcmp_vendor_store_header_social_link', $vendor_id ); ?>
+                    </div>
                 </div>
                 <div class='wcmp-butn-area'>
                     <!-- Follow button will be added here -->
@@ -209,6 +211,7 @@ if ( $template_class == 'template3') { ?>
             <div class='wcmp-banner-area'>
                 <div class='wcmp-bannerright'>
                     <div class="socialicn-area">
+                        <div class="wcmp_social_profile">
                         <?php if ($vendor_fb_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_fb_profile); ?>"><i class="wcmp-font ico-facebook-icon"></i></a><?php } ?>
                         <?php if ($vendor_twitter_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_twitter_profile); ?>"><i class="wcmp-font ico-twitter-icon"></i></a><?php } ?>
                         <?php if ($vendor_linkdin_profile) { ?> <a target="_blank" href="<?php echo esc_url($vendor_linkdin_profile); ?>"><i class="wcmp-font ico-linkedin-icon"></i></a><?php } ?>
@@ -216,6 +219,7 @@ if ( $template_class == 'template3') { ?>
                         <?php if ($vendor_youtube) { ?> <a target="_blank" href="<?php echo esc_url($vendor_youtube); ?>"><i class="wcmp-font ico-youtube-icon"></i></a><?php } ?>
                         <?php if ($vendor_instagram) { ?> <a target="_blank" href="<?php echo esc_url($vendor_instagram); ?>"><i class="wcmp-font ico-instagram-icon"></i></a><?php } ?>
                         <?php do_action( 'wcmp_vendor_store_header_social_link', $vendor_id ); ?>
+                        </div>
                     </div>
                 </div>
             </div>
