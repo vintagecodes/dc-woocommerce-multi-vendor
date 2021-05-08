@@ -36,7 +36,11 @@ if( $rating_type == 'product-rating' ) {
 <?php if ($count > 0) { ?>
     <span class="wcmp_total_rating_number"><?php echo esc_html(sprintf(' %s ', $rating)); ?></span>
 <?php } ?>
-<a href="<?php echo ($rating_type != 'product-rating' ) ? esc_url($rating_url) : ''; ?>">
+<?php if ( apply_filters( 'wcmp_load_default_vendor_store', false ) ) { ?>
+        <a href="#<?php echo ($rating_type != 'product-rating' ) ? 'reviews' : ''; ?>">
+<?php } else { ?>
+    <a href="<?php echo ($rating_type != 'product-rating' ) ? esc_url($rating_url) : ''; ?>">
+<?php } ?>
 <?php if ($count > 0) { ?>  
         <span itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating" class="star-rating" title="<?php echo sprintf(__('Rated %s out of 5', 'dc-woocommerce-multi-vendor'), $rating) ?>">
             <span style="width:<?php echo ( round($rating_val_array['avg_rating']) / 5 ) * 100; ?>%"><strong itemprop="ratingValue"><?php echo esc_html($rating); ?></strong> <?php esc_html_e('out of 5', 'dc-woocommerce-multi-vendor'); ?></span>
