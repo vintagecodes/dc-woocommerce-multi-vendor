@@ -271,10 +271,6 @@ button.wcmp-fill-butn {
   margin: 12px 20px 15px 0;
 }
 
-.wcmp-theme01 .wcmp-banner-area {
-  height: 280px;
-}
-
 .wcmp-theme01 .wcmp-banner-below {
   display: -ms-grid;
   display: grid;
@@ -293,7 +289,7 @@ button.wcmp-fill-butn {
 
 .wcmp-theme01 .wcmp-address {
   color: #001027;
-  margin: 2px 30px 2px 0;
+  margin: 2px 10px 2px 0;
 }
 
 .wcmp-theme01 .wcmp-banner-middle {
@@ -1207,6 +1203,20 @@ form.wcmp-short-cls select:focus {
   .woocommerce .content-area .site-main {
     padding-top: 28px;
     margin: 0 2vw;
+  }
+  .wcmp-theme02 .wcmp-banner-area {
+    position: relative;
+  }
+  .wcmp-banner-area {
+    padding: 15px 15px 0 15px;
+  }
+  .description_data p {
+    text-align: center;
+  }
+  .wcmp-theme02 .wcmp-heading,
+  .wcmp-address,
+  .wcmp-contact-deatil .wcmp-address a {
+    color: #6d6d6d;
   }
 }
 
