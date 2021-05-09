@@ -38,6 +38,7 @@ class WCMp_Settings {
         add_action( 'settings_page_payment_paypal_payout_tab_init', array( &$this, 'payment_paypal_payout_init' ), 10, 2 );
         add_action( 'settings_page_payment_stripe_gateway_tab_init', array(&$this, 'payment_stripe_gateway_tab_init'), 10, 2);
         add_action( 'settings_page_payment_refund_payment_tab_init', array( &$this, 'payment_refund_tab_init' ), 10, 2 );
+        add_action( 'settings_page_payment_razorpay_tab_init', array( &$this, 'payment_razorpay_init' ), 10, 2 );
         // Settings tabs capability
         add_action( 'settings_page_capabilities_product_tab_init', array( &$this, 'capabilites_product_tab_init' ), 10, 2 );
 //        add_action('settings_page_capabilities_order_tab_init', array(&$this, 'capabilites_order_tab_init'), 10, 2);
@@ -308,6 +309,9 @@ class WCMp_Settings {
         }
         if ( 'Enable' === get_wcmp_vendor_settings( 'payment_method_paypal_payout', 'payment' ) ) {
             $tabsection_payment['paypal_payout'] = array( 'title' => __( 'Paypal Payout', 'dc-woocommerce-multi-vendor' ), 'icon' => 'dashicons-randomize' );
+        }
+        if ( 'Enable' === get_wcmp_vendor_settings( 'payment_method_razorpay', 'payment' ) ) {
+            $tabsection_payment['razorpay'] = array( 'title' => __( 'Razorpay', 'dc-woocommerce-multi-vendor' ), 'icon' => 'dashicons-admin-settings' );
         }
         if ( 'Enable' === get_wcmp_vendor_settings( 'payment_method_stripe_masspay', 'payment' ) ) {
             $tabsection_payment['stripe_gateway'] = array( 'title' => __( 'Stripe Gateway', 'dc-woocommerce-multi-vendor' ), 'icon' => 'dashicons-tickets-alt' );
@@ -833,6 +837,12 @@ class WCMp_Settings {
         global $WCMp;
         $WCMp->admin->load_class( "settings-{$tab}-{$subsection}", $WCMp->plugin_path, $WCMp->token );
         new WCMp_Settings_Refund_Payment( $tab, $subsection );
+    }
+
+    public function payment_razorpay_init( $tab, $subsection ) {
+        global $WCMp;
+        $WCMp->admin->load_class( "settings-{$tab}-{$subsection}", $WCMp->plugin_path, $WCMp->token );
+        new WCMp_Settings_Payment_Razorpay( $tab, $subsection );
     }
 
 //    public function frontend_tab_init($tab) {

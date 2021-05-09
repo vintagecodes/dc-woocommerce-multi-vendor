@@ -24,7 +24,7 @@ class WCMp_Settings_Payment {
     public function settings_page_init() {
         global $WCMp;
 
-        $this->automatic_payment_method = apply_filters('automatic_payment_method', array('paypal_masspay' => __('PayPal Masspay', 'dc-woocommerce-multi-vendor'), 'paypal_payout' => __('Paypal Payout', 'dc-woocommerce-multi-vendor'), 'stripe_masspay' => __('Stripe Connect', 'dc-woocommerce-multi-vendor'), 'direct_bank' => __('Direct Bank Transfer', 'dc-woocommerce-multi-vendor')));
+        $this->automatic_payment_method = apply_filters('automatic_payment_method', array('paypal_masspay' => __('PayPal Masspay', 'dc-woocommerce-multi-vendor'), 'paypal_payout' => __('Paypal Payout', 'dc-woocommerce-multi-vendor'), 'stripe_masspay' => __('Stripe Connect', 'dc-woocommerce-multi-vendor'), 'direct_bank' => __('Direct Bank Transfer', 'dc-woocommerce-multi-vendor'), 'razorpay' => __('Razorpay', 'dc-woocommerce-multi-vendor')));
         $automatic_method = array();
         $gateway_charge = array();
         $i = 0;

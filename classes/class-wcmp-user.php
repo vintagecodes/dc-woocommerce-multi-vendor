@@ -543,6 +543,9 @@ class WCMp_User {
         if (isset($payment_admin_settings['payment_method_paypal_payout']) && $payment_admin_settings['payment_method_paypal_payout'] = 'Enable') {
             $payment_mode['paypal_payout'] = __('PayPal Payout', 'dc-woocommerce-multi-vendor');
         }
+        if (isset($payment_admin_settings['payment_method_razorpay']) && $payment_admin_settings['payment_method_razorpay'] = 'Enable') {
+            $payment_mode['razorpay'] = __('Razorpay Payout', 'dc-woocommerce-multi-vendor');
+        }
         if (isset($payment_admin_settings['payment_method_stripe_masspay']) && $payment_admin_settings['payment_method_stripe_masspay'] = 'Enable') {
             $payment_mode['stripe_masspay'] = __('Stripe Connect', 'dc-woocommerce-multi-vendor');
         }
@@ -620,7 +623,12 @@ class WCMp_User {
             'value' => $vendor->paypal_email,
             'class' => "user-profile-fields regular-text"
         ); // Text
-
+        $fields["vendor_razorpay_account_id"] = array(
+            'label' => __('Razorpay Route Account Id', 'dc-woocommerce-multi-vendor'),
+            'type' => 'text',
+            'value' => $vendor->razorpay_account_id,
+            'class' => "user-profile-fields regular-text"
+        );
         if (apply_filters('wcmp_vendor_can_overwrite_policies', true) && get_wcmp_vendor_settings('is_policy_on', 'general') == 'Enable') {
             $_wp_editor_settings = array('tinymce' => true);
             if (!$WCMp->vendor_caps->vendor_can('is_upload_files')) {
