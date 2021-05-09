@@ -257,7 +257,7 @@ if ( $template_class == 'template3') { ?>
                         if (empty($external_store_label))
                             $external_store_label = __('External Store URL', 'dc-woocommerce-multi-vendor');
                         if (isset($external_store_url) && !empty($external_store_url)) {
-                            ?><p class="external_store_url"><label><a target="_blank" href="<?php echo apply_filters('vendor_shop_page_external_store', esc_url_rafolw($external_store_url), $vendor_id); ?>"><?php echo esc_html($external_store_label); ?></a></label></p><?php
+                            ?><p class="external_store_url"><label><a target="_blank" href="<?php echo apply_filters('vendor_shop_page_external_store', esc_url_raw($external_store_url), $vendor_id); ?>"><?php echo esc_html($external_store_label); ?></a></label></p><?php
                             }
                         }
                         ?>
