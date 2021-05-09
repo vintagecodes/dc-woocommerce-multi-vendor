@@ -753,17 +753,21 @@ class WCMp_Frontend {
     }
 
     public function store_query_filter( $query ) {
-        global $wp_query;
+        global $wp_query, $WCMp;
         $author = get_query_var( $this->custom_store_url );
         if ( ! is_admin() && $query->is_main_query() && ! empty( $author ) ) {
-            $seller_info = get_user_by( 'slug', $author );
-
+            $seller_info = '';
+            $term_details = get_term_by('slug', $author, $WCMp->taxonomy->taxonomy_name);
+            $term_id = $term_details && $term_details->term_id ? $term_details->term_id : 0;
+            if ($term_id) {
+               $seller_info = get_wcmp_vendor_by_term($term_id);
+            }
             if ( ! $seller_info ) {
                 return get_404_template();
             }
 
             $query->set( 'post_type', 'product' );
-            $query->set( 'author_name', $author );
+            $query->set( 'author_name', $seller_info->user_data->data->user_nicename );
         }
     }
 

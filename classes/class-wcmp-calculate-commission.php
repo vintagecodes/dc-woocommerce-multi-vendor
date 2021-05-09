@@ -536,7 +536,7 @@ class WCMp_Calculate_Commission {
                     }
 
                     $product_value_total += $item->get_total();
-                    if ($amount > $product_value_total) {
+                    if ( apply_filters('wcmp_admin_pay_commission_more_than_order_amount', true) && $amount > $product_value_total) {
                         $amount = $product_value_total;
                     }
                     return apply_filters('vendor_commission_amount', $amount, $product_id, $variation_id, $item, $order_id, $item_id);
