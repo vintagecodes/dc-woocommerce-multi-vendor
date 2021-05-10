@@ -53,12 +53,10 @@ if (!class_exists('WC_Email_Admin_Change_Order_Status')) :
          * @param unknown $order_id
          */
         function trigger($order_id, $new_status, $vendor) {
-            global $WCMp;
-
             if (!$this->is_enabled())
                 return;
             
-            $this->object = $post;
+            $this->object = $order_id;
             $this->find[] = '{order_id}';
             $this->order_id = $order_id;
             $this->replace[] = $this->order_id;
