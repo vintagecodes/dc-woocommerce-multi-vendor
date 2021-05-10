@@ -51,7 +51,7 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
                     <button class="wcmp_black_btn btn btn-secondary" type="button" id="order_list_do_bulk_action"><?php esc_html_e('Apply', 'dc-woocommerce-multi-vendor'); ?></button>
                     <?php 
                     $filter_by_status = apply_filters( 'wcmp_vendor_dashboard_order_filter_status_arr', array_merge( 
-                        array( 'all' => __('All', 'dc-woocommerce-multi-vendor') ), 
+                        array( 'all' => __('All', 'dc-woocommerce-multi-vendor'), 'request_refund' => __('Request Refund', 'dc-woocommerce-multi-vendor') ), 
                         wc_get_order_statuses()
                     ) ); 
                     echo '<select id="filter_by_order_status" name="order_status" class="wcmp-filter-dtdd wcmp_filter_order_status form-control inline-input">';

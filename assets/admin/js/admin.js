@@ -301,10 +301,10 @@ jQuery(document).ready(function ($) {
                     if($(this).is(':checked') && $('#payment_gateway_charge').prop('checked')){
                         $('#' + terget_id).closest('tr').show();
                         $('#' + terget_id).attr('placeholder', wcmp_admin_js_script_data.lang.in_percentage);
-                        $('#' + terget_id).siblings('.description').html($('#' + terget_id).siblings('.description').html()+' '+wcmp_admin_js_script_data.lang.in_percentage);
+                        //$('#' + terget_id).siblings('.description').html($('#' + terget_id).siblings('.description').html()+' '+wcmp_admin_js_script_data.lang.in_percentage);
                         $('#' + terget_fixed_id).closest('tr').show();
                         $('#' + terget_fixed_id).attr('placeholder', wcmp_admin_js_script_data.lang.in_fixed);
-                        $('#' + terget_fixed_id).siblings('.description').html($('#' + terget_fixed_id).siblings('.description').html()+' '+wcmp_admin_js_script_data.lang.in_fixed);
+                        //$('#' + terget_fixed_id).siblings('.description').html($('#' + terget_fixed_id).siblings('.description').html()+' '+wcmp_admin_js_script_data.lang.in_fixed);
                     }else{
                         $('#' + terget_id).closest('tr').hide();
                         $('#' + terget_fixed_id).closest('tr').hide();
@@ -312,6 +312,20 @@ jQuery(document).ready(function ($) {
                 }
             });
             
+        } else {
+            $('.automatic_payment_method').each(function(){
+                var id = $(this).attr('id');
+                if (id !== undefined) {
+                    var terget_id = 'gateway_charge' + id.split('payment_method')[1];
+                    var terget_fixed_id = 'gateway_charge_fixed_with' + id.split('payment_method')[1];
+                    $('#' + terget_fixed_id).closest('tr').hide();
+                    $('#' + terget_fixed_id).attr('placeholder', '');
+                    $('#' + terget_id).attr('placeholder', '');
+                    $('#' + terget_id).siblings('.description').html($('#' + terget_id).siblings('.description').html()+' '+ '');
+                    $('#' + terget_fixed_id).siblings('.description').html($('#' + terget_fixed_id).siblings('.description').html()+' '+'');
+
+                }
+            });
         }
     }).trigger('change');
 

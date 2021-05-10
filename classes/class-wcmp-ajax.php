@@ -267,6 +267,16 @@ class WCMp_Ajax {
                         unset($vendor_all_orders[$key]);
                     }
                 }
+                // filter order for rwquest refund
+                if( $filterActionData['order_status'] == 'request_refund') {
+                    $vendor_all_orders = wcmp_get_orders($args);
+                    foreach ($vendor_all_orders as $key_refund => $value_refund) {
+                        $cust_refund_status = get_post_meta( $value_refund, '_customer_refund_order', true ) ? get_post_meta( $value_refund, '_customer_refund_order', true ) : '';
+                        if ($cust_refund_status != 'refund_request') {
+                            unset($vendor_all_orders[$key_refund]);
+                        }
+                    }
+                }
             }
             do_action('wcmp_orders_list_do_handle_filter_actions', $filterActionData, $ids, $requestData, $vendor_all_orders );
         }
