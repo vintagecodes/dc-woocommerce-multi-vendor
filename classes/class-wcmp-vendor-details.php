@@ -803,7 +803,7 @@ class WCMp_Vendor {
         global $WCMp;
         $is_enable = false;
         // omitted from if condition -- $WCMp->vendor_caps->vendor_payment_settings('give_shipping') && !get_user_meta($this->id, '_vendor_give_shipping', true) and replace with get_wcmp_vendor_settings( 'is_vendor_shipping_on', 'general' )
-        if ('Enable' === get_wcmp_vendor_settings( 'is_vendor_shipping_on', 'general' ) && wc_shipping_enabled()) {
+        if ('Enable' === get_wcmp_vendor_settings( 'give_shipping', 'payment' ) && wc_shipping_enabled()) {
             $is_enable = true;
         }
         return apply_filters('is_wcmp_vendor_shipping_enable', $is_enable, $this->id);

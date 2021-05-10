@@ -3682,7 +3682,7 @@ if ( ! function_exists( 'wcmp_is_allowed_vendor_shipping' ) ) {
                 update_wcmp_vendor_settings( 'is_vendor_shipping_on', 'Enable', 'general' );
             }
         }
-        return 'Enable' === get_wcmp_vendor_settings( 'is_vendor_shipping_on', 'general' );
+        return 'Enable' === get_wcmp_vendor_settings( 'give_shipping', 'payment' );
     }
 
 }
