@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.7.1
 Requires PHP: 5.6
-Stable tag: 3.7.2
+Stable tag: 3.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,6 +279,23 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 3.7.3 - 2021-05-11 =
+* Added - Razor pay payment gateway integration.
+* Added - Order search for refund request #822.
+* Added - Older version review link compatibility with filter #835.
+* Enhancement - Shipping settings enhancement #843.
+* Enhancement - Grunt version updated.
+* Fix - Admin end gateway charge section js issue #845.
+* Fix - Display output modification on the shop page #833.
+* Fix - Woocommerce order count display issue #831.
+* Fix - Mobile view issue at the shop page #829.
+* Fix - Increase the size of social icons on the shop page #827.
+* Fix - Vendor shop page endpoints are not working when vendor nickname and shop slug are different #826.
+* Fix - Error at checkout page #830.
+* Fix - Added filter for create commission with coupon #828.
+* Dev - Added `wcmp_admin_pay_commission_more_than_order_amount` filter.
+* Updated - Language file.
 
 = 3.7.2 - 2021-04-27 =
 * Added - Vendor mail when order status changed by admin #802.
