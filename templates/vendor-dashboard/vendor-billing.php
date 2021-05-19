@@ -27,9 +27,6 @@ if (isset($payment_admin_settings['payment_method_stripe_masspay']) && $payment_
 if (isset($payment_admin_settings['payment_method_direct_bank']) && $payment_admin_settings['payment_method_direct_bank'] = 'Enable') {
     $payment_mode['direct_bank'] = __('Direct Bank', 'dc-woocommerce-multi-vendor');
 }
-if (isset($payment_admin_settings['payment_method_razorpay']) && $payment_admin_settings['payment_method_razorpay'] = 'Enable') {
-    $payment_mode['razorpay'] = __('Razorpay Payout', 'dc-woocommerce-multi-vendor');
-}
 $vendor_payment_mode_select = apply_filters('wcmp_vendor_payment_mode', $payment_mode);
 ?>
 <div class="col-md-12">
@@ -54,14 +51,6 @@ $vendor_payment_mode_select = apply_filters('wcmp_vendor_payment_mode', $payment
                         <label for="vendor_paypal_email" class="control-label col-sm-3 col-md-3"><?php _e('Paypal Email', 'dc-woocommerce-multi-vendor'); ?></label>
                         <div class="col-md-6 col-sm-9">
                             <input  class="form-control" type="text" name="vendor_paypal_email" value="<?php echo isset($vendor_paypal_email['value']) ? $vendor_paypal_email['value'] : ''; ?>"  placeholder="<?php _e('Paypal Email', 'dc-woocommerce-multi-vendor'); ?>">
-                        </div>
-                    </div>
-                </div>
-                <div class="payment-gateway payment-gateway-razorpay <?php echo apply_filters('wcmp_vendor_paypal_email_container_class', ''); ?>">
-                    <div class="form-group">
-                        <label for="vendor_razorpay_account_id" class="control-label col-sm-3 col-md-3"><?php esc_html_e('Razorpay Account Id', 'dc-woocommerce-multi-vendor'); ?></label>
-                        <div class="col-md-6 col-sm-9">
-                            <input id="vendor_razorpay_account_id" class="form-control" type="text" name="vendor_razorpay_account_id" value="<?php echo isset($vendor_razorpay_account_id['value']) ? $vendor_razorpay_account_id['value'] : ''; ?>"  placeholder="<?php esc_attr_e('Razorpay Account Id', 'dc-woocommerce-multi-vendor'); ?>">
                         </div>
                     </div>
                 </div>
