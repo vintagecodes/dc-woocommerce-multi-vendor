@@ -254,7 +254,51 @@ $_wp_editor_settings = apply_filters('wcmp_vendor_storefront_wp_editor_settings'
                         <div class="col-md-6 col-sm-9">  
                             <?php
                             $api_key = get_wcmp_vendor_settings('google_api_key');
-                            if (!empty($api_key)) {
+                            if (wcmp_mapbox_api_enabled()) {
+                                $WCMp->library->load_mapbox_api();
+                                $map_style = apply_filters( 'wcmp_dashboard_location_widget_map_style', 'mapbox://styles/mapbox/streets-v11');
+                                ?>
+                                <div class="vendor_store_map" id="vendor_store_map" style="width: 100%; height: 300px;"></div>
+                                <div class="form_area">
+                                    <?php
+                                    $store_location = get_user_meta($vendor->id, '_store_location', true) ? get_user_meta($vendor->id, '_store_location', true) : '';
+                                    $store_lat = get_user_meta($vendor->id, '_store_lat', true) ? get_user_meta($vendor->id, '_store_lat', true) : 0;
+                                    $store_lng = get_user_meta($vendor->id, '_store_lng', true) ? get_user_meta($vendor->id, '_store_lng', true) : 0;
+                                    ?>
+                                    <input type="hidden" name="_store_location" id="store_location" value="<?php echo $store_location; ?>">
+                                    <input type="hidden" name="_store_lat" id="store_lat" value="<?php echo $store_lat; ?>">
+                                    <input type="hidden" name="_store_lng" id="store_lng" value="<?php echo $store_lng; ?>">
+                                </div>
+                                <script>
+                                    mapboxgl.accessToken = '<?php echo wcmp_mapbox_api_enabled(); ?>';
+                                    var map = new mapboxgl.Map({
+                                        container: 'vendor_store_map', // container id
+                                        style: '<?php echo $map_style ?>',
+                                        center: [<?php echo $store_lat ?>, <?php echo $store_lng ?>],
+                                        zoom: 5
+                                    });
+
+                                    var marker1 = new mapboxgl.Marker()
+                                        .setLngLat([<?php echo $store_lat ?>, <?php echo $store_lng ?>])
+                                    .addTo(map);
+                                    var geocoder = new MapboxGeocoder({
+                                        accessToken: mapboxgl.accessToken,
+                                        marker: {
+                                            color: 'red'
+                                        },
+                                        mapboxgl: mapboxgl
+                                    });
+                                    map.on('load', function() {
+                                        geocoder.on('result', function(ev) {
+                                            document.getElementById("store_location").value = ev.result.place_name;
+                                            document.getElementById("store_lat").value = ev.result.center[0];
+                                            document.getElementById("store_lng").value = ev.result.center[1];
+                                        });
+                                    });
+                                    map.addControl(geocoder);
+                                </script>
+                                <?php
+                            } elseif (!empty($api_key)) {
                                 ?>
                                 <div class="row">
                                     <div class="col-md-8">

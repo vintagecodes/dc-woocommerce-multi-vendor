@@ -138,9 +138,14 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
             $frontend_assets_path = $WCMp->plugin_url . 'assets/frontend/';
             $frontend_assets_path = str_replace(array('http:', 'https:'), '', $frontend_assets_path);
             $suffix = defined('WCMP_SCRIPT_DEBUG') && WCMP_SCRIPT_DEBUG ? '' : '.min';
-            $WCMp->library->load_gmap_api();
             wp_register_style('wcmp_vendor_list', $frontend_assets_path . 'css/vendor-list' . $suffix . '.css', array(), $WCMp->version);
-            wp_register_script('wcmp_vendor_list', $frontend_assets_path . 'js/vendor-list' . $suffix . '.js', array('jquery','wcmp-gmaps-api'), $WCMp->version, true);
+            if (wcmp_mapbox_api_enabled()) {
+                $WCMp->library->load_mapbox_api();
+                wp_register_script('wcmp_vendor_list', $frontend_assets_path . 'js/vendor-list' . $suffix . '.js', array('jquery'), $WCMp->version, true);
+            } else {
+                $WCMp->library->load_gmap_api();
+                wp_register_script('wcmp_vendor_list', $frontend_assets_path . 'js/vendor-list' . $suffix . '.js', array('jquery','wcmp-gmaps-api'), $WCMp->version, true);
+            }            
             // country js
             wp_enqueue_script( 'wc-country-select' );
             wp_enqueue_script('wcmp_country_state_js');
@@ -186,6 +191,7 @@ if (!class_exists('WCMp_Shortcode_Vendor_List')) {
             }
 
             $script_param = array(
+                'mapbox_emable' => wcmp_mapbox_api_enabled(),
                 'stores'    => $listed_stores['stores'],
                 'lang'      => array(
                     'geolocation_service_failed' => __('Error: The Geolocation service failed.', 'dc-woocommerce-multi-vendor'),

@@ -31,7 +31,6 @@ i.wcmp-font {
 
 #wcmp-store-conatiner * {
   box-sizing: border-box;
-  margin: 0;
   font-size: 15px;
   word-wrap: break-word; }
 
@@ -59,7 +58,6 @@ i.wcmp-font {
 #wcmp-store-conatiner input[type="text"] {
   display: inline-block;
   vertical-align: top;
-  width: auto;
   height: 44px;
   color: #4a4a4a;
   padding: 6px 18px;

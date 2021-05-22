@@ -264,4 +264,22 @@ class WCMp_Library {
         wp_enqueue_script( 'wcmp-tabs', $this->lib_url . 'tabs/tabs.js', array( 'jquery' ) );
     }
 
+    /**
+     * Load mapbox Library
+     */
+    public function load_mapbox_api() {
+        global $WCMp;
+        $frontend_assets_path = $WCMp->plugin_url . 'assets/frontend/';
+        $frontend_assets_path = str_replace(array('http:', 'https:'), '', $frontend_assets_path);
+        ?>
+        <script src="<?php echo $frontend_assets_path . 'js/mapbox/mapboc-gl1.js' ?>"></script>
+        <script src="<?php echo $frontend_assets_path . 'js/mapbox/mapboc-gl2.js' ?>"></script>
+        <script src="<?php echo $frontend_assets_path . 'js/mapbox/mapboc-gl2.js' ?>"></script>
+        <script src="<?php echo $frontend_assets_path . 'js/mapbox/mapboc-gl3.js' ?>"></script>
+
+        <link href="<?php echo $frontend_assets_path . 'css/mapbox/googleapis.css' ?>" rel="stylesheet" />
+        <link href="<?php echo $frontend_assets_path . 'css/mapbox/mapbox-gl.css' ?>" rel="stylesheet" />
+        <link rel="stylesheet" href="<?php echo $frontend_assets_path . 'css/mapbox/mapbox-gl-geocoder.css' ?>" type="text/css">
+        <?php
+    }
 }
