@@ -2,8 +2,8 @@
 
 use Elementor\Controls_Manager;
 use Elementor\Widget_Base;
-use Elementor\Scheme_Color;
-use Elementor\Scheme_Typography;
+use Elementor\Core\Schemes\Color;
+use Elementor\Core\Schemes\Typography;
 use Elementor\Group_Control_Typography;
 
 class WCMp_Elementor_StoreRating extends Widget_Base {
@@ -205,8 +205,8 @@ class WCMp_Elementor_StoreRating extends Widget_Base {
 				'label' => __( 'Text Color', 'dc-woocommerce-multi-vendor' ),
 				'type' => Controls_Manager::COLOR,
 				'scheme' => [
-					'type' => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_3,
+					'type' => Color::get_type(),
+					'value' => Color::COLOR_3,
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-star-rating__title' => 'color: {{VALUE}}',
@@ -219,7 +219,7 @@ class WCMp_Elementor_StoreRating extends Widget_Base {
 			[
 				'name' => 'title_typography',
 				'selector' => '{{WRAPPER}} .elementor-star-rating__title',
-				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+				'scheme' => Typography::TYPOGRAPHY_3,
 			]
 		);
 
