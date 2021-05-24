@@ -208,7 +208,7 @@ global $WCMp;
                             <?php
                             $WCMp->template->get_template( 'vendor-dashboard/product-manager/views/html-product-data-general.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
                             $WCMp->template->get_template( 'vendor-dashboard/product-manager/views/html-product-data-inventory.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
-                            if ( !apply_filters('wcmp_disabled_product_shipping_tab', true) ||wcmp_is_allowed_vendor_shipping() ) {
+                            if ( !apply_filters('wcmp_disabled_product_shipping_tab', true) || wcmp_is_allowed_vendor_shipping() ) {
                                 $WCMp->template->get_template( 'vendor-dashboard/product-manager/views/html-product-data-shipping.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
                             }
                             $WCMp->template->get_template( 'vendor-dashboard/product-manager/views/html-product-data-linked-products.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post ) );
