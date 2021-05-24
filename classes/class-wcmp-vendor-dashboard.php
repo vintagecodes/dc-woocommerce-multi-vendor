@@ -1852,11 +1852,13 @@ Class WCMp_Admin_Dashboard {
             }
 
             $title = ( ( is_product_wcmp_spmv($product_id) && isset( $_POST['original_post_title'] ) ) ? wc_clean( $_POST['original_post_title'] ) : isset( $_POST['post_title'] ) ) ? wc_clean( $_POST['post_title'] ) : '';
-
+            $needs_admin_approval_for_publish = get_wcmp_vendor_settings('is_publish_needs_admin_approval', 'capabilities', 'product') && get_wcmp_vendor_settings('is_publish_needs_admin_approval', 'capabilities', 'product') == 'Enable' ? true : false;
             if ( isset( $_POST['status'] ) && $_POST['status'] === 'draft' ) {
                 $status = 'draft';
             } elseif ( isset( $_POST['status'] ) && $_POST['status'] === 'publish' ) {
                 if ( ! current_user_can( 'publish_products' ) ) {
+                    $status = 'pending';
+                } elseif (isset($_POST['original_post_title']) && !empty($_POST['original_post_title']) && $needs_admin_approval_for_publish) {
                     $status = 'pending';
                 } else {
                     $status = 'publish';

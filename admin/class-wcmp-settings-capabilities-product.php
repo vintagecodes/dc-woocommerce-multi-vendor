@@ -35,6 +35,7 @@ class WCMp_Settings_Capabilities_Product {
                         "is_submit_product"                => array( 'title' => __( 'Submit Products', 'dc-woocommerce-multi-vendor' ), 'type' => 'checkbox', 'id' => 'is_submit_product', 'label_for' => 'is_submit_product', 'text' => __( 'Allow vendors to submit products for approval/publishing.', 'dc-woocommerce-multi-vendor' ), 'name' => 'is_submit_product', 'value' => 'Enable' ), // Checkbox
                         "is_published_product"             => array( 'title' => __( 'Publish Products', 'dc-woocommerce-multi-vendor' ), 'type' => 'checkbox', 'id' => 'is_published_product', 'label_for' => 'is_published_product', 'name' => 'is_published_product', 'text' => __( 'If checked, products uploaded by vendors will be directly published without admin approval.', 'dc-woocommerce-multi-vendor' ), 'value' => 'Enable' ), // Checkbox
                         "is_edit_delete_published_product" => array( 'title' => __( 'Edit Published Products', 'dc-woocommerce-multi-vendor' ), 'type' => 'checkbox', 'id' => 'is_edit_delete_published_product', 'label_for' => 'is_edit_delete_published_product', 'name' => 'is_edit_delete_published_product', 'text' => __( 'Allow vendors to edit published products.', 'dc-woocommerce-multi-vendor' ), 'value' => 'Enable' ), // Checkbox
+                        "is_publish_needs_admin_approval" => array( 'title' => __( 'Publish needs admin approval', 'dc-woocommerce-multi-vendor' ), 'type' => 'checkbox', 'id' => 'is_publish_needs_admin_approval', 'label_for' => 'is_publish_needs_admin_approval', 'name' => 'is_publish_needs_admin_approval', 'text' => __( 'Publish products needs admin approval.', 'dc-woocommerce-multi-vendor' ), 'value' => 'Enable' ), // Checkbox
                         "is_submit_coupon"                 => array( 'title' => __( 'Submit Coupons', 'dc-woocommerce-multi-vendor' ), 'type' => 'checkbox', 'id' => 'is_submit_coupon', 'label_for' => 'is_submit_coupon', 'name' => 'is_submit_coupon', 'text' => __( 'Allow vendors to create coupons.', 'dc-woocommerce-multi-vendor' ), 'value' => 'Enable' ), // Checkbox
                         "is_published_coupon"              => array( 'title' => __( 'Publish Coupons', 'dc-woocommerce-multi-vendor' ), 'type' => 'checkbox', 'id' => 'is_published_coupon', 'label_for' => 'is_published_coupon', 'name' => 'is_published_coupon', 'text' => __( 'If checked, coupons added by vendors will be directly published without admin approval.', 'dc-woocommerce-multi-vendor' ), 'value' => 'Enable' ), // Checkbox
                         "is_edit_delete_published_coupon"  => array( 'title' => __( 'Edit Published Coupons', 'dc-woocommerce-multi-vendor' ), 'type' => 'checkbox', 'id' => 'is_edit_delete_published_coupon', 'label_for' => 'is_edit_delete_published_coupon', 'name' => 'is_edit_delete_published_coupon', 'text' => __( 'Allow vendor to edit/delete published shop coupons.', 'dc-woocommerce-multi-vendor' ), 'value' => 'Enable' ), // Checkbox
@@ -83,6 +84,10 @@ class WCMp_Settings_Capabilities_Product {
 
         if ( isset( $input['is_edit_delete_published_product'] ) ) {
             $new_input['is_edit_delete_published_product'] = $input['is_edit_delete_published_product'];
+        }
+
+        if ( isset( $input['is_publish_needs_admin_approval'] ) ) {
+            $new_input['is_publish_needs_admin_approval'] = $input['is_publish_needs_admin_approval'];
         }
 
         if ( isset( $input['is_submit_product'] ) ) {
