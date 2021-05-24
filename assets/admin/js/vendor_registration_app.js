@@ -87,7 +87,8 @@ app.controller('postbox_menu',['$scope', 'vendor_registration_service', function
                     defaultValue: '',
                     limit : '',
                     required: false,
-                    cssClass: ''
+                    cssClass: '',
+                    tip_description: ''
                 });
                 break;
             case 'checkbox':
