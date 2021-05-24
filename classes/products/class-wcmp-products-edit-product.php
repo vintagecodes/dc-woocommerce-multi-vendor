@@ -44,7 +44,7 @@ class WCMp_Products_Edit_Product {
             add_action( 'wcmp_product_tabs_content', array( $this, 'policy_tab_content' ) );
         }
         // If vendor's don't have shipping allowed, remove shipping tab
-        if ( ! wcmp_is_allowed_vendor_shipping() ) {
+        if ( apply_filters('wcmp_disabled_product_shipping_tab', true) && !wcmp_is_allowed_vendor_shipping() ) {
             add_filter( 'wcmp_product_data_tabs', array( $this, 'remove_shipping_tab' ) );
         }
         //check support for virtual and downloadable
