@@ -13,6 +13,8 @@ global $WCMp;
 if (!empty($wcmp_vendor_registration_form_data) && is_array($wcmp_vendor_registration_form_data)) {
 	if(isset($_POST) && is_array($_POST) && count($_POST) > 0) $form_data = $_POST;
     $sep_count = 0;
+    // load tooltip librery
+    $WCMp->library->load_qtip_lib();
     foreach ($wcmp_vendor_registration_form_data as $key => $value) {
         switch ($value['type']) {
             case 'separator':
@@ -26,7 +28,11 @@ if (!empty($wcmp_vendor_registration_form_data) && is_array($wcmp_vendor_registr
             case 'textbox':
                 ?>
                 <div class="wcmp-regi-form-row <?php if(!empty($value['cssClass'])){ echo $value['cssClass']; } else {  echo 'wcmp-regi-12'; } ?>">
-                    <label><?php echo __($value['label'],'dc-woocommerce-multi-vendor'); ?><?php if($value['required']){ echo ' <span class="required">*</span>'; }?></label>
+                    <label><?php echo __($value['label'],'dc-woocommerce-multi-vendor'); ?><?php if($value['required']){ echo ' <span class="required">*</span>'; }?>
+                    <?php if (isset($value['tip_description']) && !empty($value['tip_description'])) { ?>
+                        <span class="img_tip" data-desc="<?php echo esc_html( $value['tip_description'] ); ?>"></span>
+                    <?php } ?>
+                    </label>
                     <input type="text" value="<?php if (!empty($form_data['wcmp_vendor_fields'][$key]["value"])) echo esc_attr($form_data['wcmp_vendor_fields'][$key]["value"]); ?>" name="wcmp_vendor_fields[<?php echo $key; ?>][value]" placeholder="<?php echo $value['placeholder']; ?>" <?php if($value['required']){ echo 'required="required"'; }?> />
                     <input type="hidden" name="wcmp_vendor_fields[<?php echo $key; ?>][label]" value="<?php echo htmlentities($value['label']); ?>" />
                     <input type="hidden" name="wcmp_vendor_fields[<?php echo $key; ?>][type]" value="textbox" />
@@ -46,7 +52,11 @@ if (!empty($wcmp_vendor_registration_form_data) && is_array($wcmp_vendor_registr
             case 'textarea':
                 ?>
                 <div class="wcmp-regi-form-row <?php if(!empty($value['cssClass'])){ echo $value['cssClass']; } else {  echo 'wcmp-regi-12'; } ?>">
-                    <label><?php echo __($value['label'],'dc-woocommerce-multi-vendor'); ?><?php if($value['required']){ echo ' <span class="required">*</span>'; }?></label>
+                    <label><?php echo __($value['label'],'dc-woocommerce-multi-vendor'); ?><?php if($value['required']){ echo ' <span class="required">*</span>'; }?>
+                    <?php if (isset($value['tip_description']) && !empty($value['tip_description'])) { ?>
+                        <span class="img_tip" data-desc="<?php echo esc_html( $value['tip_description'] ); ?>"></span>
+                    <?php } ?>
+                    </label>
                     <textarea <?php if(!empty($value['limit'])){ echo 'maxlength="'.$value['limit'].'"'; } ?> name="wcmp_vendor_fields[<?php echo $key; ?>][value]" placeholder="<?php echo $value['defaultValue']; ?>" <?php if($value['required']){ echo 'required'; }?>><?php if (!empty($form_data['wcmp_vendor_fields'][$key]["value"])){ echo esc_attr($form_data['wcmp_vendor_fields'][$key]["value"]); } ?></textarea>
                     <input type="hidden" name="wcmp_vendor_fields[<?php echo $key; ?>][label]" value="<?php echo htmlentities($value['label']); ?>" />
                     <input type="hidden" name="wcmp_vendor_fields[<?php echo $key; ?>][type]" value="textarea" />
@@ -252,3 +262,31 @@ if (!empty($wcmp_vendor_registration_form_data) && is_array($wcmp_vendor_registr
         }
     }
 }
+
+?>
+<script>
+    jQuery(document).ready(function ($) {
+        $('.img_tip').each(function () {
+            $(this).qtip({
+                content: $(this).attr('data-desc'),
+                position: {
+                    my: 'top center',
+                    at: 'bottom center',
+                    viewport: $(window)
+                },
+                show: {
+                    event: 'mouseover',
+                    solo: true,
+                },
+                hide: {
+                    inactive: 6000,
+                    fixed: true
+                },
+                style: {
+                    classes: 'qtip-dark qtip-shadow qtip-rounded qtip-dc-css',
+                    width: 200
+                }
+            });
+        });
+    });
+</script>

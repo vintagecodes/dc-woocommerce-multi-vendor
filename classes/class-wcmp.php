@@ -63,8 +63,6 @@ final class WCMp {
         $this->init_custom_widgets();
         // Intialize Stripe library
         $this->init_stripe_library();
-        // intialize razorpay librery
-        $this->init_razorpay_library();
         // Init payment gateways
         $this->init_payment_gateway();
         // includes functions
@@ -623,10 +621,6 @@ final class WCMp {
         }
     }
 
-    public function init_razorpay_library() {
-        require_once( $this->plugin_path . 'lib/razorpay/Razorpay.php' );
-    }
-    
     public function wcmp_stripe_phpversion_required_notice() {
         ?>
         <div id="message" class="error">

@@ -11,8 +11,8 @@
 if (!defined('ABSPATH'))
     exit; // Exit if accessed directly
 global $WCMp;
+wcmp_mapbox_design_switcher();
 ?>
-
 <div id="wcmp-store-conatiner">
     <!-- Map Start -->
     <div class="wcmp-store-locator-wrap">
@@ -21,10 +21,15 @@ global $WCMp;
         <form name="vendor_list_sort" method="post">
             <input type="hidden" id="wcmp_vlist_center_lat" name="wcmp_vlist_center_lat" value=""/>
             <input type="hidden" id="wcmp_vlist_center_lng" name="wcmp_vlist_center_lng" value=""/>
+            <?php if (wcmp_mapbox_api_enabled()) { ?>
+                <div id="locationText"></div> 
+            <?php } ?>
             <div class="wcmp-store-map-filter">
-                <div class="wcmp-inp-wrap">
-                    <input type="text" name="locationText" id="locationText" placeholder="<?php esc_attr_e('Enter Address', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($request['locationText']) ? $request['locationText'] : ''; ?>">
-                </div>
+                <?php if (!wcmp_mapbox_api_enabled()) { ?>
+                    <div class="wcmp-inp-wrap">
+                        <input type="text" name="locationText" id="locationText" placeholder="<?php esc_attr_e('Enter Address', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($request['locationText']) ? $request['locationText'] : ''; ?>">
+                    </div>
+                <?php } ?>
                 <div class="wcmp-inp-wrap">
                     <select name="radiusSelect" id="radiusSelect">
                         <option value=""><?php esc_attr_e('Within', 'dc-woocommerce-multi-vendor'); ?></option>
@@ -40,14 +45,14 @@ global $WCMp;
                 <div class="wcmp-inp-wrap">
                     <select name="distanceSelect" id="distanceSelect">
                         <?php $selected_distance = isset($request['distanceSelect']) ? $request['distanceSelect'] : ''; ?>
-                        <option value="M" <?php echo selected( $selected_distance, "M", false ); ?>><?php _e('Miles', 'dc-woocommerce-multi-vendor'); ?></option>
-                        <option value="K" <?php echo selected( $selected_distance, "K", false ); ?>><?php _e('Kilometers', 'dc-woocommerce-multi-vendor'); ?></option>
-                        <option value="N" <?php echo selected( $selected_distance, "N", false ); ?>><?php _e('Nautical miles', 'dc-woocommerce-multi-vendor'); ?></option>
+                        <option value="M" <?php echo selected( $selected_distance, "M", false ); ?>><?php esc_html_e('Miles', 'dc-woocommerce-multi-vendor'); ?></option>
+                        <option value="K" <?php echo selected( $selected_distance, "K", false ); ?>><?php esc_html_e('Kilometers', 'dc-woocommerce-multi-vendor'); ?></option>
+                        <option value="N" <?php echo selected( $selected_distance, "N", false ); ?>><?php esc_html_e('Nautical miles', 'dc-woocommerce-multi-vendor'); ?></option>
                         <?php do_action('wcmp_vendor_list_sort_distanceSelect_extra_options'); ?>
                     </select>
                 </div>
                 <?php do_action( 'wcmp_vendor_list_vendor_sort_map_extra_filters', $request ); ?>
-                <input type="submit" name="vendorListFilter" value="<?php _e('Submit', 'dc-woocommerce-multi-vendor'); ?>">
+                <input type="submit" name="vendorListFilter" value="<?php esc_attr_e('Submit', 'dc-woocommerce-multi-vendor'); ?>">
             </div>
         </form>
         <?php endif; ?>
@@ -105,7 +110,7 @@ global $WCMp;
                     }
                     ?>
                     <select name="vendor_country" id="vendor_country" class="country_to_state vendors_sort_shipping_fields form-control regular-select" rel="vendor_country">
-                        <option value=""><?php _e( 'Select a country&hellip;', 'dc-woocommerce-multi-vendor' ); ?></option>
+                        <option value=""><?php esc_html_e( 'Select a country&hellip;', 'dc-woocommerce-multi-vendor' ); ?></option>
                         <?php $country_code = 0;
                         foreach ( WC()->countries->get_allowed_countries() as $key => $value ) {
                             echo '<option value="' . esc_attr( $key ) . '"' . selected( esc_attr( $country_code ), esc_attr( $key ), false ) . '>' . esc_html( $value ) . '</option>';
@@ -120,7 +125,7 @@ global $WCMp;
                     <!-- Sort by Category -->
                     <select name="vendor_sort_category" id="vendor_sort_category" class="select"><?php echo $options_html; ?></select>
                     <?php do_action( 'wcmp_vendor_list_vendor_sort_extra_attributes', $request ); ?>
-                    <input value="<?php echo __('Sort', 'dc-woocommerce-multi-vendor'); ?>" type="submit">
+                    <input value="<?php esc_attr_e('Sort', 'dc-woocommerce-multi-vendor'); ?>" type="submit">
                 </div>
             </form>
 
@@ -178,7 +183,7 @@ global $WCMp;
                 <?php
             }
         } else {
-            _e('No vendor found!', 'dc-woocommerce-multi-vendor');
+            esc_html_e('No vendor found!', 'dc-woocommerce-multi-vendor');
         }
         ?>
     </div>

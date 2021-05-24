@@ -4418,15 +4418,68 @@ if (!function_exists('wcmp_get_attachment_url')) {
     /**
      * WCMp get attachment URL by ID
      */
-    if( !function_exists( 'wcmp_get_attachment_url') ) {
-        function wcmp_get_attachment_url( $attachment_id ) {
-            $attachment_url = '';
-            if( $attachment_id && is_numeric( $attachment_id ) ) {
-                $attachment_url = wp_get_attachment_url( $attachment_id );
-            } else {
-                $attachment_url = $attachment_id;
-            }
-            return $attachment_url;
+    function wcmp_get_attachment_url( $attachment_id ) {
+        $attachment_url = '';
+        if( $attachment_id && is_numeric( $attachment_id ) ) {
+            $attachment_url = wp_get_attachment_url( $attachment_id );
+        } else {
+            $attachment_url = $attachment_id;
+        }
+        return $attachment_url;
+    }
+    
+}
+
+if (!function_exists('wcmp_mapbox_api_enabled')) {
+    function wcmp_mapbox_api_enabled() {
+        $get_choose_map = get_wcmp_vendor_settings('choose_map_api') ? get_wcmp_vendor_settings('choose_map_api') : '';
+        $mapbox_api_key = get_wcmp_vendor_settings('mapbox_api_key') ? get_wcmp_vendor_settings('mapbox_api_key') : '';
+        $mapbox_enabled = !empty($mapbox_api_key) && !empty($get_choose_map) && $get_choose_map == 'mapbox_api_set' ? $mapbox_api_key : false;
+        return $mapbox_enabled;
+    }
+}
+
+if (!function_exists('wcmp_mapbox_design_switcher')) {
+    function wcmp_mapbox_design_switcher() {
+        if (wcmp_mapbox_api_enabled()) {
+            $map_styles_option = apply_filters('wcmp_mapbox_map_style_switcher', 
+                array(
+                    'satellite' => array(
+                        'id' => 'satellite-v9',
+                        'name' => 'rtoggle',
+                        'value' => __('Satellite', 'dc-woocommerce-multi-vendor'),
+                        'checked' => 'yes'
+                    ),
+                    'light' => array(
+                        'id' => 'light-v10',
+                        'name' => 'rtoggle',
+                        'value' => __('Light', 'dc-woocommerce-multi-vendor'),
+                    ),
+                    'dark' => array(
+                        'id' => 'dark-v10',
+                        'name' => 'rtoggle',
+                        'value' => __('Dark', 'dc-woocommerce-multi-vendor'),
+                    ),
+                    'streets' => array(
+                        'id' => 'streets-v11',
+                        'name' => 'rtoggle',
+                        'value' => __('Streets', 'dc-woocommerce-multi-vendor'),
+                    ),
+                    'outdoors' => array(
+                        'id' => 'outdoors-v11',
+                        'name' => 'rtoggle',
+                        'value' => __('Outdoors', 'dc-woocommerce-multi-vendor'),
+                    ),
+                ) 
+            );
+            ?>
+            <div id="menu">
+                <?php foreach ($map_styles_option as $map_key => $map_value) { ?>
+                    <input id="<?php echo $map_value['id'] ?>" type="radio" name="<?php echo $map_value['name'] ?>" value="<?php echo $map_key ?>" <?php if( isset($map_value['checked']) && $map_value['checked']){ echo 'checked="checked"'; } ?> >
+                    <label for="<?php echo $map_value['id'] ?>"><?php echo esc_html($map_value['value']); ?></label>
+                <?php } ?>
+            </div>
+            <?php
         }
     }
 }

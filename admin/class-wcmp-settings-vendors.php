@@ -522,9 +522,6 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 					if (isset($payment_admin_settings['payment_method_direct_bank']) && $payment_admin_settings['payment_method_direct_bank'] = 'Enable') {
 						$payment_mode['direct_bank'] = __('Direct Bank', 'dc-woocommerce-multi-vendor');
 					}
-					if (isset($payment_admin_settings['payment_method_razorpay']) && $payment_admin_settings['payment_method_razorpay'] = 'Enable') {
-						$payment_mode['razorpay'] = __('Razorpay', 'dc-woocommerce-multi-vendor');
-					}
 					$vendor_payment_mode_select = apply_filters('wcmp_vendor_payment_mode', $payment_mode);
 					
 					$vendor_bank_account_type_select = array(
@@ -545,7 +542,6 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 							"vendor_iban" => array('label' => __('IBAN', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'vendor_iban', 'label_for' => 'vendor_iban', 'name' => 'vendor_iban', 'value' => $vendor_obj->iban, 'wrapper_class' => 'payment-gateway-direct_bank payment-gateway'),
 							"vendor_account_holder_name" => array('label' => __('Account Holder Name', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'vendor_account_holder_name', 'label_for' => 'vendor_account_holder_name', 'name' => 'vendor_account_holder_name', 'value' => $vendor_obj->account_holder_name, 'wrapper_class' => 'payment-gateway-direct_bank payment-gateway'),
 							"vendor_bank_account_number" => array('label' => __('Account Number', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'vendor_bank_account_number', 'label_for' => 'vendor_bank_account_number', 'name' => 'vendor_bank_account_number', 'value' => $vendor_obj->bank_account_number, 'wrapper_class' => 'payment-gateway-direct_bank payment-gateway'),
-							"vendor_razorpay_account_id" => array('label' => __('Account Number', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'vendor_razorpay_account_id', 'label_for' => 'vendor_razorpay_account_id', 'name' => 'vendor_razorpay_account_id', 'value' => $vendor_obj->razorpay_account_id, 'wrapper_class' => 'payment-gateway-razorpay payment-gateway'),
 						);
                                         
                                         if ($WCMp->vendor_caps->payment_cap['commission_type'] == 'fixed_with_percentage') {

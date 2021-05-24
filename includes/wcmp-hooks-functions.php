@@ -46,6 +46,8 @@ if ( ! function_exists( 'wcmp_vendor_list_main_wrapper' ) ) {
 	 * Get vendor list main wrapper template.
 	 */
 	function wcmp_vendor_list_main_wrapper() {
+		// Mapbox design switcher
+		wcmp_mapbox_design_switcher();
         echo apply_filters( 'wcmp_vendor_list_main_wrapper_start', '<div id="wcmp-store-conatiner">' );
 	}
 }

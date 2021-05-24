@@ -24,7 +24,7 @@ class WCMp_Settings_Payment {
     public function settings_page_init() {
         global $WCMp;
 
-        $this->automatic_payment_method = apply_filters('automatic_payment_method', array('paypal_masspay' => __('PayPal Masspay', 'dc-woocommerce-multi-vendor'), 'paypal_payout' => __('Paypal Payout', 'dc-woocommerce-multi-vendor'), 'stripe_masspay' => __('Stripe Connect', 'dc-woocommerce-multi-vendor'), 'direct_bank' => __('Direct Bank Transfer', 'dc-woocommerce-multi-vendor'), 'razorpay' => __('Razorpay', 'dc-woocommerce-multi-vendor')));
+        $this->automatic_payment_method = apply_filters('automatic_payment_method', array('paypal_masspay' => __('PayPal Masspay', 'dc-woocommerce-multi-vendor'), 'paypal_payout' => __('Paypal Payout', 'dc-woocommerce-multi-vendor'), 'stripe_masspay' => __('Stripe Connect', 'dc-woocommerce-multi-vendor'), 'direct_bank' => __('Direct Bank Transfer', 'dc-woocommerce-multi-vendor'), 'razorpay_block' => __('Razorpay', 'dc-woocommerce-multi-vendor')));
         $automatic_method = array();
         $gateway_charge = array();
         $i = 0;
@@ -33,6 +33,8 @@ class WCMp_Settings_Payment {
                 $automatic_method['payment_method_' . $key] = array('title' => __('Allowed Payment Methods', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'payment_method_' . $key, 'class' => 'automatic_payment_method', 'label_for' => 'payment_method_' . $key, 'text' => $val, 'name' => 'payment_method_' . $key, 'value' => 'Enable', 'data-display-label' => $val);
             } else if ($key == 'direct_bank') {
                 $automatic_method['payment_method_' . $key] = array('title' => __('', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'payment_method_' . $key, 'class' => 'automatic_payment_method', 'label_for' => 'payment_method_' . $key, 'text' => $val, 'name' => 'payment_method_' . $key, 'value' => 'Enable', 'data-display-label' => $val);
+            } else if ($key == 'razorpay_block') {
+                $automatic_method['payment_method_' . $key] = array('title' => __('', 'dc-woocommerce-multi-vendor'), 'custom_tags'=> array('disabled' => 'disabled'), 'type' => 'checkbox', 'id' => 'payment_method_' . $key, 'class' => 'automatic_payment_method', 'label_for' => 'payment_method_' . $key, 'text' => __('For use <a href="//wc-marketplace.com/product/wcmp-frontend-manager/">Razorpay</a> please visit our site.', 'dc-woocommerce-multi-vendor'), 'name' => 'payment_method_' . $key, 'value' => 'Enable', 'data-display-label' => $val);
             } else {
                 $automatic_method['payment_method_' . $key] = array('title' => __('', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'payment_method_' . $key, 'class' => 'automatic_payment_method', 'label_for' => 'payment_method_' . $key, 'text' => $val, 'name' => 'payment_method_' . $key, 'value' => 'Enable', 'data-display-label' => $val);
             }
