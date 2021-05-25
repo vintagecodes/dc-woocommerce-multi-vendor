@@ -465,9 +465,9 @@ Class WCMp_Admin_Dashboard {
 
             if (!empty($_POST['wcmp_submit_product_comment'])) {
                 // verify nonce
-                if (isset($_POST['vendor_add_product_nonce']) && !wp_verify_nonce($_POST['vendor_add_product_nonce'], 'dc-vendor-add-product-comment'))
+            if (!isset($_POST['vendor_add_product_nonce']) || !wp_verify_nonce($_POST['vendor_add_product_nonce'], 'dc-vendor-add-product-comment'))
                     return false;
-                $user_id = isset($_POST['current_user_id']) ? absint( $_POST['current_user_id'] ) : '';
+                $user_id = get_current_user_id() ? get_current_user_id() : 0;
                 // Don't submit empty comments
                 if (empty($_POST['product_comment_text']))
                     return false;
