@@ -3,9 +3,9 @@ Contributors: wcmp, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh8961
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.7.1
+Tested up to: 5.7.2
 Requires PHP: 5.6
-Stable tag: 3.7.3
+Stable tag: 3.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,6 +279,22 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 3.7.4 - 2021-05-25 =
+* Added - Mapbox API integration #780.
+* Added - Tooltip description support on vendor registration from #787.
+* Added - Let admin decide whether a published product needs admin's approval for each edit #799.
+* Added - Compatibility of WordPress 5.7.2.
+* Enhancement - Weight display even if shipping disabled #850.
+* Enhancement - Store description support with elementor page #855.
+* Enhancement - Shop page name can be removed by filter #851.
+* Enhancement - Grunt version updated.
+* Fix - Sql error.
+* Dev - Added `wcmp_disabled_product_shipping_tab` filter.
+* Dev - Added `wcmp_mapbox_map_style_switcher` filter.
+* Dev - Added `wcmp_dashboard_location_widget_map_style` filter.
+* Dev - Added `wcmp_show_page_title` filter.
+* Updated - Language file.
 
 = 3.7.3 - 2021-05-11 =
 * Added - Razor pay payment gateway integration.
