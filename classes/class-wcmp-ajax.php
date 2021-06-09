@@ -2050,6 +2050,12 @@ class WCMp_Ajax {
                         if ($diff < $commission_threshold_time) {
                             continue;
                         }
+                        $payment_settings = get_option('wcmp_payment_settings_name', true);
+                        if (is_array($payment_settings) && !empty($payment_settings)) {
+                            if (array_key_exists('order_withdrawl_status'. $order->get_status('edit'), $payment_settings)) {
+                                continue;
+                            }
+                        }
                         if (is_commission_requested_for_withdrawals($commission_id) || in_array($order->get_status('edit'), array('on-hold', 'pending', 'failed', 'refunded', 'cancelled'))) {
                             $disabled_reqested_withdrawals = 'disabled';
                         } else {

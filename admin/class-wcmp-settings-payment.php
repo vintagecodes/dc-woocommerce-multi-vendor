@@ -8,6 +8,7 @@ class WCMp_Settings_Payment {
     private $options;
     private $tab;
     private $automatic_payment_method;
+    private $withdrawl_order_status;
 
     /**
      * Start up
@@ -43,6 +44,19 @@ class WCMp_Settings_Payment {
             $i++;
         }
 
+        $this->withdrawl_order_status = apply_filters('withdrawl_order_status', array('on-hold' => __('On hold', 'dc-woocommerce-multi-vendor'), 'processing' => __('Processing', 'dc-woocommerce-multi-vendor'), 'completed' => __('Completed', 'dc-woocommerce-multi-vendor')));
+        $withdrawl_status = array();
+        $status_i = 0;
+        foreach ($this->withdrawl_order_status as $key => $val) {
+            if ($status_i == 0) {
+                $withdrawl_status['order_withdrawl_status' . $key] = array('title' => __('Restrict Order Status from Withdrawl', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'order_withdrawl_status' . $key, 'class' => 'withdrawl_order_status', 'label_for' => 'order_withdrawl_status' . $key, 'text' => $val, 'name' => 'order_withdrawl_status' . $key, 'value' => $key, 'data-display-label' => $val);
+            } else {
+                $withdrawl_status['order_withdrawl_status' . $key] = array('title' => __('', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'order_withdrawl_status' . $key, 'class' => 'withdrawl_order_status', 'label_for' => 'order_withdrawl_status' . $key, 'text' => $val, 'name' => 'order_withdrawl_status' . $key, 'value' => $key, 'data-display-label' => $val);
+            }
+
+            $status_i++;
+        }
+
         $settings_tab_options = array("tab" => "{$this->tab}",
             "ref" => &$this,
             "sections" => array(
@@ -76,7 +90,7 @@ class WCMp_Settings_Payment {
                             ), array("choose_payment_mode_request_disbursal" => array('title' => __('Withdrawal Request', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'wcmp_disbursal_mode_vendor', 'label_for' => 'wcmp_disbursal_mode_vendor', 'name' => 'wcmp_disbursal_mode_vendor', 'text' => __('Vendors can request for commission withdrawal. ', 'dc-woocommerce-multi-vendor'), 'value' => 'Enable'), // Checkbox                                                                            
                         "commission_transfer" => array('title' => __('Withdrawal Charges', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'commission_transfer', 'label_for' => 'commission_transfer', 'name' => 'commission_transfer', 'desc' => __('Vendors will be charged this amount per withdrawal after the quota of free withdrawals is over.', 'dc-woocommerce-multi-vendor')), // Text
                         "no_of_orders" => array('title' => __('Number of Free Withdrawals', 'dc-woocommerce-multi-vendor'), 'type' => 'number', 'id' => 'no_of_orders', 'label_for' => 'no_of_orders', 'name' => 'no_of_orders', 'desc' => __('Number of free withdrawal requests.', 'dc-woocommerce-multi-vendor')), // Text                                                                                                          
-                            )
+                            ), $withdrawl_status
                     ),
                 ),
             ),
@@ -150,6 +164,11 @@ class WCMp_Settings_Payment {
             }
             if (isset($input['gateway_charge_fixed_with_' . $key])) {
                 $new_input['gateway_charge_fixed_with_' . $key] = floatval(sanitize_text_field($input['gateway_charge_fixed_with_' . $key]));
+            }
+        }
+        foreach ($this->withdrawl_order_status as $key => $val) {
+            if (isset($input['order_withdrawl_status' . $key])) {
+                $new_input['order_withdrawl_status' . $key] = sanitize_text_field($input['order_withdrawl_status' . $key]);
             }
         }
         if (isset($input['payment_schedule'])) {
