@@ -2220,6 +2220,7 @@ class WCMp_Ajax {
                     $data[] = apply_filters('wcmp_vendor_transaction_list_row_data', $row, $transaction_id);
                 }
             }
+            $data = array_slice( $data, $requestData['start'], $requestData['length'] );
             $json_data = array(
                 "draw" => intval($requestData['draw']), // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
                 "recordsTotal" => intval(count($transaction_details)), // total number of records
