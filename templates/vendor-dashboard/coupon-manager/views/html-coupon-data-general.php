@@ -50,13 +50,13 @@ defined( 'ABSPATH' ) || exit;
             // Free Shipping.
             if ( wc_shipping_enabled() ) :
                 ?>
-                <!--div class="form-group">
+                <div class="form-group">
                     <label class="control-label col-sm-3 col-md-3" for="free_shipping"><?php esc_html_e( 'Allow free shipping', 'dc-woocommerce-multi-vendor' ); ?></label>
                     <div class="col-md-6 col-sm-9">
                         <input id="free_shipping" name="free_shipping" type="checkbox" class="form-control" value="yes" <?php checked( wc_bool_to_string( $coupon->get_free_shipping( 'edit' ) ), 'yes' ); ?>>
                         <span class="form-text"><?php echo sprintf( __( 'Check this box if the coupon grants free shipping. A <a href="%s" target="_blank">free shipping method</a> must be enabled in your shipping zone and be set to require "a valid free shipping coupon" (see the "Free Shipping Requires" setting).', 'dc-woocommerce-multi-vendor' ), 'https://docs.woocommerce.com/document/free-shipping/' ); ?></span>
                     </div>
-                </div--> 
+                </div>
             <?php endif; ?>
             <?php
             // Expiry date.
