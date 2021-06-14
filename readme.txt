@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.7.2
 Requires PHP: 5.6
-Stable tag: 3.7.4
+Stable tag: 3.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,6 +279,24 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 3.7.5 - 2021-06-15 =
+* Added - Commission by product price #870.
+* Added - LinkedIn & Instagram support with elementor.
+* Added - Let admin decide whether the vendor can change the order status #777.
+* Added - Admin can set order status for withdrawal #777.
+* Added - Compatibility of WooCommerce 5.4.1.
+* Enhancement - Shipping module enhancement #865.
+* Fix - First product missing from elementor page #866.
+* Fix - Pagination not working in the payment history page #864.
+* Fix - Rejected vendor issue #860.
+* Fix - Update Razorpay link #862.
+* Fix - Checking issue #861.
+* Fix - Free shipping coupon missing #846.
+* Dev - Added `wcmp_elementor_vendor_product_page` filter.
+* Dev - Added `withdrawl_order_status` filter.
+* Dev - Added `wcmp_menu_manager_fields` filter.
+* Updated - Language file.
 
 = 3.7.4 - 2021-05-25 =
 * Added - Mapbox API integration #780.
