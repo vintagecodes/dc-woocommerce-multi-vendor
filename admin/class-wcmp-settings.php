@@ -38,6 +38,7 @@ class WCMp_Settings {
         add_action( 'settings_page_payment_paypal_payout_tab_init', array( &$this, 'payment_paypal_payout_init' ), 10, 2 );
         add_action( 'settings_page_payment_stripe_gateway_tab_init', array(&$this, 'payment_stripe_gateway_tab_init'), 10, 2);
         add_action( 'settings_page_payment_refund_payment_tab_init', array( &$this, 'payment_refund_tab_init' ), 10, 2 );
+        add_action( 'settings_page_payment_commission_variation_tab_init', array( &$this, 'commission_variation_tab_init' ), 10, 2 );
         // Settings tabs capability
         add_action( 'settings_page_capabilities_product_tab_init', array( &$this, 'capabilites_product_tab_init' ), 10, 2 );
 //        add_action('settings_page_capabilities_order_tab_init', array(&$this, 'capabilites_order_tab_init'), 10, 2);
@@ -300,6 +301,7 @@ class WCMp_Settings {
     }
 
     public function get_wcmp_settings_tabsections_payment() {
+        global $WCMp;
         $tabsection_payment = array(
             'payment' => array( 'title' => __( 'Payment Settings', 'dc-woocommerce-multi-vendor' ), 'icon' => 'dashicons-share-alt' )
         );
@@ -314,6 +316,9 @@ class WCMp_Settings {
         }
         // refund
         $tabsection_payment['refund_payment'] = array( 'title' => __( 'Refund Options', 'dc-woocommerce-multi-vendor' ), 'icon' => 'dashicons-cart' );
+        if ( $WCMp->vendor_caps->payment_cap['commission_type'] && $WCMp->vendor_caps->payment_cap['commission_type'] == 'commission_by_product_price') {
+            $tabsection_payment['commission_variation'] = array( 'title' => __( 'Commission Variation', 'dc-woocommerce-multi-vendor' ), 'icon' => 'dashicons-money-alt' );
+        }
         return apply_filters( 'wcmp_tabsection_payment', $tabsection_payment );
     }
 
@@ -464,7 +469,11 @@ class WCMp_Settings {
                     settings_fields( "wcmp_{$tab}_{$tab_section}_settings_group" );
                     do_action( "wcmp_{$tab}_{$tab_section}_settings_before_submit" );
                     do_settings_sections( "wcmp-{$tab}-{$tab_section}-settings-admin" );
-                    submit_button();
+                    if ( $tab_section == 'commission_variation' ) {
+                        do_action( "settings_page_{$tab}_{$tab_section}_tab_init", $tab, $tab_section );
+                    } else {
+                        submit_button();
+                    }
                 } else if ( $tab == 'vendor' ) {
                     settings_fields( "wcmp_{$tab}_{$tab_section}_settings_group" );
                     do_action( "wcmp_{$tab}_{$tab_section}_settings_before_submit" );
@@ -627,7 +636,7 @@ class WCMp_Settings {
         do_action( 'befor_settings_page_init' );
         foreach ( $this->tabs as $tab_id => $tab ) {
             do_action( "settings_page_{$tab_id}_tab_init", $tab_id );
-            $exclude_list = apply_filters( 'wcmp_subtab_init_exclude_list', array( 'tools', 'payment', 'registration' ), $tab_id );
+            $exclude_list = apply_filters( 'wcmp_subtab_init_exclude_list', array( 'tools', 'payment', 'registration', 'commission_variation' ), $tab_id );
             if ( $this->is_wcmp_tab_has_subtab( $tab_id ) ) {
                 foreach ( $this->get_wcmp_subtabs( $tab_id ) as $subtab_id => $subtab ) {
                     if ( ! in_array( $subtab_id, $exclude_list ) ) {
@@ -833,6 +842,12 @@ class WCMp_Settings {
         global $WCMp;
         $WCMp->admin->load_class( "settings-{$tab}-{$subsection}", $WCMp->plugin_path, $WCMp->token );
         new WCMp_Settings_Refund_Payment( $tab, $subsection );
+    }
+
+    public function commission_variation_tab_init( $tab, $subsection ) {
+        global $WCMp;
+        $WCMp->admin->load_class( "settings-{$tab}-{$subsection}", $WCMp->plugin_path, $WCMp->token );
+        new WCMp_Settings_Commission_Variation( $tab, $subsection );
     }
 
 //    public function frontend_tab_init($tab) {

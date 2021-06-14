@@ -8,6 +8,7 @@ class WCMp_Settings_Payment {
     private $options;
     private $tab;
     private $automatic_payment_method;
+    private $withdrawl_order_status;
 
     /**
      * Start up
@@ -28,19 +29,33 @@ class WCMp_Settings_Payment {
         $automatic_method = array();
         $gateway_charge = array();
         $i = 0;
+        $desabled_payment_shipping = get_wcmp_vendor_settings( 'is_vendor_shipping_on', 'general' ) && 'Enable' === get_wcmp_vendor_settings( 'is_vendor_shipping_on', 'general' ) ? '' : array('disabled' => 'disabled');
         foreach ($this->automatic_payment_method as $key => $val) {
             if ($i == 0) {
                 $automatic_method['payment_method_' . $key] = array('title' => __('Allowed Payment Methods', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'payment_method_' . $key, 'class' => 'automatic_payment_method', 'label_for' => 'payment_method_' . $key, 'text' => $val, 'name' => 'payment_method_' . $key, 'value' => 'Enable', 'data-display-label' => $val);
             } else if ($key == 'direct_bank') {
                 $automatic_method['payment_method_' . $key] = array('title' => __('', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'payment_method_' . $key, 'class' => 'automatic_payment_method', 'label_for' => 'payment_method_' . $key, 'text' => $val, 'name' => 'payment_method_' . $key, 'value' => 'Enable', 'data-display-label' => $val);
             } else if ($key == 'razorpay_block') {
-                $automatic_method['payment_method_' . $key] = array('title' => __('', 'dc-woocommerce-multi-vendor'), 'custom_tags'=> array('disabled' => 'disabled'), 'type' => 'checkbox', 'id' => 'payment_method_' . $key, 'class' => 'automatic_payment_method', 'label_for' => 'payment_method_' . $key, 'text' => __('For use <a href="//wc-marketplace.com/product/wcmp-frontend-manager/">Razorpay</a> please visit our site.', 'dc-woocommerce-multi-vendor'), 'name' => 'payment_method_' . $key, 'value' => 'Enable', 'data-display-label' => $val);
+                $automatic_method['payment_method_' . $key] = array('title' => __('', 'dc-woocommerce-multi-vendor'), 'custom_tags'=> array('disabled' => 'disabled'), 'type' => 'checkbox', 'id' => 'payment_method_' . $key, 'class' => 'automatic_payment_method', 'label_for' => 'payment_method_' . $key, 'text' => __('For use <a href="https://wordpress.org/plugins/wcmp-razorpay-split-payment/">Razorpay</a> please visit our site.', 'dc-woocommerce-multi-vendor'), 'name' => 'payment_method_' . $key, 'value' => 'Enable', 'data-display-label' => $val);
             } else {
                 $automatic_method['payment_method_' . $key] = array('title' => __('', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'payment_method_' . $key, 'class' => 'automatic_payment_method', 'label_for' => 'payment_method_' . $key, 'text' => $val, 'name' => 'payment_method_' . $key, 'value' => 'Enable', 'data-display-label' => $val);
             }
             $gateway_charge['gateway_charge_' . $key] = array('title' => __('', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'gateway_charge_' . $key, 'class' => 'payment_gateway_charge regular-text', 'label_for' => 'gateway_charge_' . $key, 'name' => 'gateway_charge_' . $key, 'placeholder' => __('For ', 'dc-woocommerce-multi-vendor') . $val, 'desc' => __('Gateway Charge For ', 'dc-woocommerce-multi-vendor') . $val );
             $gateway_charge['gateway_charge_fixed_with_' . $key] = array('title' => __('', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'gateway_charge_fixed_with_' . $key, 'class' => 'payment_gateway_charge regular-text', 'label_for' => 'gateway_charge_fixed_with_' . $key, 'name' => 'gateway_charge_fixed_with_' . $key, 'placeholder' => __('For ', 'dc-woocommerce-multi-vendor') . $val, 'desc' => __('Gateway Charge For ', 'dc-woocommerce-multi-vendor') . $val );
             $i++;
+        }
+
+        $this->withdrawl_order_status = apply_filters('withdrawl_order_status', array('on-hold' => __('On hold', 'dc-woocommerce-multi-vendor'), 'processing' => __('Processing', 'dc-woocommerce-multi-vendor'), 'completed' => __('Completed', 'dc-woocommerce-multi-vendor')));
+        $withdrawl_status = array();
+        $status_i = 0;
+        foreach ($this->withdrawl_order_status as $key => $val) {
+            if ($status_i == 0) {
+                $withdrawl_status['order_withdrawl_status' . $key] = array('title' => __('Restrict Order Status from Withdrawl', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'order_withdrawl_status' . $key, 'class' => 'withdrawl_order_status', 'label_for' => 'order_withdrawl_status' . $key, 'text' => $val, 'name' => 'order_withdrawl_status' . $key, 'value' => $key, 'data-display-label' => $val);
+            } else {
+                $withdrawl_status['order_withdrawl_status' . $key] = array('title' => __('', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'order_withdrawl_status' . $key, 'class' => 'withdrawl_order_status', 'label_for' => 'order_withdrawl_status' . $key, 'text' => $val, 'name' => 'order_withdrawl_status' . $key, 'value' => $key, 'data-display-label' => $val);
+            }
+
+            $status_i++;
         }
 
         $settings_tab_options = array("tab" => "{$this->tab}",
@@ -60,7 +75,7 @@ class WCMp_Settings_Payment {
                         "fixed_with_percentage_qty" => array('title' => __('Fixed Amount', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'fixed_with_percentage_qty', 'label_for' => 'fixed_with_percentage_qty', 'name' => 'fixed_with_percentage_qty', 'desc' => __('Fixed (per unit)', 'dc-woocommerce-multi-vendor')), // Text
                         "commission_include_coupon" => array('title' => __('Share Coupon Discount', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'commission_include_couponn', 'label_for' => 'commission_include_couponn', 'text' => __('Vendors commission will be calculated AFTER deducting the discount, otherwise, the site owner will bear the cost of the coupon.', 'dc-woocommerce-multi-vendor'), 'name' => 'commission_include_coupon', 'value' => 'Enable'), // Checkbox
                         "give_tax" => array('title' => __('Tax', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'give_taxx', 'label_for' => 'give_taxx', 'name' => 'give_tax', 'text' => __('Transfer the tax collected (per product) to the vendor. ', 'dc-woocommerce-multi-vendor'), 'value' => 'Enable'), // Checkbox
-                        "give_shipping" => array('title' => __('Shipping', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'give_shippingg', 'label_for' => 'give_shippingg', 'name' => 'give_shipping', 'text' => __('Transfer shipping charges collected (per product) to the vendor.', 'dc-woocommerce-multi-vendor'), 'value' => 'Enable'), // Checkbox
+                        "give_shipping" => array('title' => __('Shipping', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'give_shippingg', 'custom_tags'=> $desabled_payment_shipping, 'label_for' => 'give_shippingg', 'name' => 'give_shipping', 'text' => __('Transfer shipping charges collected (per product) to the vendor.', 'dc-woocommerce-multi-vendor'), 'value' => 'Enable', 'hints' => __('Make sure your generel settings shipping is on', 'dc-woocommerce-multi-vendor')), // Checkbox
                         "commission_threshold" => array('title' => __('Disbursement Threshold', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'commission_threshold', 'label_for' => 'commission_threshold', 'name' => 'commission_threshold', 'desc' => __('Threshold amount required to disburse commission.', 'dc-woocommerce-multi-vendor')), // Text
                         "commission_threshold_time" => array('title' => __('Withdrawal Locking Period', 'dc-woocommerce-multi-vendor'), 'type' => 'number', 'id' => 'commission_threshold_time', 'label_for' => 'commission_threshold_time', 'name' => 'commission_threshold_time', 'desc' => __('Minimum time required before an individual commission is ready for withdrawal.', 'dc-woocommerce-multi-vendor'), 'placeholder' => __('in days', 'dc-woocommerce-multi-vendor')), // Text
                     ),
@@ -76,7 +91,7 @@ class WCMp_Settings_Payment {
                             ), array("choose_payment_mode_request_disbursal" => array('title' => __('Withdrawal Request', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'wcmp_disbursal_mode_vendor', 'label_for' => 'wcmp_disbursal_mode_vendor', 'name' => 'wcmp_disbursal_mode_vendor', 'text' => __('Vendors can request for commission withdrawal. ', 'dc-woocommerce-multi-vendor'), 'value' => 'Enable'), // Checkbox                                                                            
                         "commission_transfer" => array('title' => __('Withdrawal Charges', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'commission_transfer', 'label_for' => 'commission_transfer', 'name' => 'commission_transfer', 'desc' => __('Vendors will be charged this amount per withdrawal after the quota of free withdrawals is over.', 'dc-woocommerce-multi-vendor')), // Text
                         "no_of_orders" => array('title' => __('Number of Free Withdrawals', 'dc-woocommerce-multi-vendor'), 'type' => 'number', 'id' => 'no_of_orders', 'label_for' => 'no_of_orders', 'name' => 'no_of_orders', 'desc' => __('Number of free withdrawal requests.', 'dc-woocommerce-multi-vendor')), // Text                                                                                                          
-                            )
+                            ), $withdrawl_status
                     ),
                 ),
             ),
@@ -150,6 +165,11 @@ class WCMp_Settings_Payment {
             }
             if (isset($input['gateway_charge_fixed_with_' . $key])) {
                 $new_input['gateway_charge_fixed_with_' . $key] = floatval(sanitize_text_field($input['gateway_charge_fixed_with_' . $key]));
+            }
+        }
+        foreach ($this->withdrawl_order_status as $key => $val) {
+            if (isset($input['order_withdrawl_status' . $key])) {
+                $new_input['order_withdrawl_status' . $key] = sanitize_text_field($input['order_withdrawl_status' . $key]);
             }
         }
         if (isset($input['payment_schedule'])) {

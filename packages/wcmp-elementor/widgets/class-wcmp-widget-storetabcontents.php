@@ -99,33 +99,45 @@ class WCMp_Elementor_StoreTabContents extends WCMp_Elementor_StoreName {
      *
      * @return void
      */
-     protected function render() {
+    protected function render() {
         if ( wcmp_is_store_page() ) {
             global $WCMp;
             $store_id = wcmp_find_shop_page_vendor();
-
             $tab = 'products';
-
             if ( get_query_var( 'reviews' ) ) {
                 $tab = 'reviews';
             }
-
             if ( get_query_var( 'policies' ) ) {
                 $tab = 'policies';
             }
             $vendor_id = $store_id;
-            switch( $tab ) {
-                case 'reviews':
+            $vendor = get_wcmp_vendor($vendor_id);
+            $vendor_products = $vendor ? wp_list_pluck( $vendor->get_products_ids(), 'ID' ) : '';
+            $vendor_product_ids_string = is_array($vendor_products) ? implode(",", $vendor_products) : '';
+
+            $is_block = get_user_meta($vendor->id, '_vendor_turn_off' , true);
+            if ($is_block) {
+                $block_vendor_desc = apply_filters('wcmp_blocked_vendor_text', __('Site Administrator has blocked this vendor', 'dc-woocommerce-multi-vendor'), $vendor);
+                ?><p class="blocked_desc"><?php echo esc_html($block_vendor_desc); ?><p><?php
+            } else {
+                switch( $tab ) {
+                    case 'reviews':
                     $WCMp->review_rating->wcmp_seller_review_rating_form();
                     break;
-                    
-                case 'policies':
+
+                    case 'policies':
                     $WCMp->frontend->wcmp_vendor_shop_page_policies_endpoint($store_id, $tab);
                     break;
-                                                    
-                default:
-                    $WCMp->frontend->wcmp_shop_product_callback();
+                    
+                    default:
+
+                    if (is_array($vendor_products) && !empty($vendor_products) && count($vendor_products) > 0) {
+                        echo apply_filters('wcmp_elementor_vendor_product_page', do_shortcode( '[products ids='. $vendor_product_ids_string .' limit="12" paginate="true"]' ), $vendor_id);
+                    } else {
+                        do_action( 'woocommerce_no_products_found' );
+                    }
                     break;
+                }
             }
 
         } else {

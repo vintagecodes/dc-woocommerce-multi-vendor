@@ -372,7 +372,9 @@ class WCMp_Admin {
             'lang'  => array(
                 'in_percentage' => __('In Percentage', 'dc-woocommerce-multi-vendor'),
                 'in_fixed' => __('In Fixed', 'dc-woocommerce-multi-vendor'),
-            )
+            ),
+            'submiting' => __('Submitting....', 'dc-woocommerce-multi-vendor'),
+            'update' => __('Update', 'dc-woocommerce-multi-vendor'),
         ));
 
         if ( $screen->id == 'wcmp_page_vendors') {

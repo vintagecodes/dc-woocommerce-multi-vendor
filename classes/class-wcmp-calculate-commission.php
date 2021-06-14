@@ -491,6 +491,7 @@ class WCMp_Calculate_Commission {
         $order = wc_get_order($order_id);
         $amount = 0;
         $commission = array();
+        $commission_rule = array();
         $product_value_total = 0;
         if (isset($WCMp->vendor_caps->payment_cap['commission_include_coupon'])) {
             $line_total = $order->get_item_total($item, false, false) * $item['qty'];
@@ -520,6 +521,8 @@ class WCMp_Calculate_Commission {
                         $amount = (float) $line_total * ( (float) $commission['commission_val'] / 100 );
                     } else if ($WCMp->vendor_caps->payment_cap['commission_type'] == 'fixed') {
                         $amount = (float) $commission['commission_val'] * $item['qty'];
+                    } elseif ($WCMp->vendor_caps->payment_cap['commission_type'] == 'commission_by_product_price') {
+                        $amount = $this->wcmp_get_commission_as_per_product_price($product_id, $line_total, $item['qty'], $commission_rule);
                     }
                     if (isset($WCMp->vendor_caps->payment_cap['revenue_sharing_mode'])) {
                         if ($WCMp->vendor_caps->payment_cap['revenue_sharing_mode'] == 'admin') {
@@ -544,6 +547,41 @@ class WCMp_Calculate_Commission {
             }
         }
         return apply_filters('vendor_commission_amount', $amount, $product_id, $variation_id, $item, $order_id, $item_id);
+    }
+
+    public function wcmp_get_commission_as_per_product_price( $product_id = 0, $line_total = 0, $item_quantity = 0, $commission_rule = array() ) {
+        $wcmp_variation_commission_options = get_option( 'wcmp_variation_commission_options', array() );
+        $vendor_commission_by_products = is_array($wcmp_variation_commission_options) && isset( $wcmp_variation_commission_options['vendor_commission_by_products'] ) ? $wcmp_variation_commission_options['vendor_commission_by_products'] : array();
+        $amount = 0;
+        $matched_rule_price = 0;
+        if (!empty($vendor_commission_by_products)) {
+            foreach( $vendor_commission_by_products as $vendor_commission_product_rule ) {
+                $rule_price = $vendor_commission_product_rule['cost'];
+                $rule = $vendor_commission_product_rule['rule'];
+                
+                if( ( $rule == 'upto' ) && ( (float) $line_total <= (float)$rule_price ) && ( !$matched_rule_price || ( (float)$rule_price <= (float)$matched_rule_price ) ) ) {
+                    $matched_rule_price         = $rule_price;
+                    $commission_rule['mode']    = $vendor_commission_product_rule['type'];
+                    $commission_rule['commission_val'] = $vendor_commission_product_rule['commission'];
+                    $commission_rule['commission_fixed']   = isset( $vendor_commission_product_rule['commission_fixed'] ) ? $vendor_commission_product_rule['commission_fixed'] : $vendor_commission_product_rule['commission'];
+                } elseif( ( $rule == 'greater' ) && ( (float) $line_total > (float)$rule_price ) && ( !$matched_rule_price || ( (float)$rule_price >= (float)$matched_rule_price ) ) ) {
+                    $matched_rule_price         = $rule_price;
+                    $commission_rule['mode']    = $vendor_commission_product_rule['type'];
+                    $commission_rule['commission_val'] = $vendor_commission_product_rule['commission'];
+                    $commission_rule['commission_fixed']   = isset( $vendor_commission_product_rule['commission_fixed'] ) ? $vendor_commission_product_rule['commission_fixed'] : $vendor_commission_product_rule['commission'];
+                }
+            }
+        }
+        if (!empty($commission_rule)) {
+            if ($commission_rule['mode'] == 'percent_fixed') {
+                $amount = (float) $line_total * ( (float) $commission_rule['commission_val'] / 100 ) + (float) $commission_rule['commission_fixed'];
+            } else if ($commission_rule['mode'] == 'percent') {
+                $amount = (float) $line_total * ( (float) $commission_rule['commission_val'] / 100 );
+            } else if ($commission_rule['mode'] == 'fixed') {
+                $amount = (float) $commission_rule['commission_fixed'] * $item_quantity;
+            }
+        }
+        return $amount;
     }
 
     /**

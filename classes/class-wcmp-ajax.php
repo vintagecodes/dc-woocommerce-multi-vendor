@@ -145,6 +145,8 @@ class WCMp_Ajax {
         }
         // Follow ajax
         add_action('wp_ajax_wcmp_follow_store_toggle_status', array($this, 'wcmp_follow_store_toggle_status'));
+        // commission by product variation
+        add_action('wp_ajax_commission_variation', array($this, 'commission_variation'));
     }
 
     /**
@@ -2050,6 +2052,12 @@ class WCMp_Ajax {
                         if ($diff < $commission_threshold_time) {
                             continue;
                         }
+                        $payment_settings = get_option('wcmp_payment_settings_name', true);
+                        if (is_array($payment_settings) && !empty($payment_settings)) {
+                            if (array_key_exists('order_withdrawl_status'. $order->get_status('edit'), $payment_settings)) {
+                                continue;
+                            }
+                        }
                         if (is_commission_requested_for_withdrawals($commission_id) || in_array($order->get_status('edit'), array('on-hold', 'pending', 'failed', 'refunded', 'cancelled'))) {
                             $disabled_reqested_withdrawals = 'disabled';
                         } else {
@@ -2220,6 +2228,7 @@ class WCMp_Ajax {
                     $data[] = apply_filters('wcmp_vendor_transaction_list_row_data', $row, $transaction_id);
                 }
             }
+            $data = array_slice( $data, $requestData['start'], $requestData['length'] );
             $json_data = array(
                 "draw" => intval($requestData['draw']), // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw. 
                 "recordsTotal" => intval(count($transaction_details)), // total number of records
@@ -4604,6 +4613,16 @@ class WCMp_Ajax {
             wp_send_json_error( $follow_status, 422 );
         }
         wp_send_json_success( array( 'status' => $follow_status ), 200 );
+    }
+
+    public function commission_variation() {
+        $setting_from_sanitize = isset($_POST['wcmp_settings_form']) ? wp_unslash($_POST['wcmp_settings_form']) : '';
+        parse_str($setting_from_sanitize, $wcmp_settings_form);
+        if( isset( $wcmp_settings_form['vendor_commission_by_products'] ) ) {
+            $wcmp_commission_options['vendor_commission_by_products'] = $wcmp_settings_form['vendor_commission_by_products'];
+        }
+        wcmp_update_option( 'wcmp_variation_commission_options', $wcmp_commission_options );
+        die;
     }
 
 }

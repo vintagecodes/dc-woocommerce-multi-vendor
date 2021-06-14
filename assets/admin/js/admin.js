@@ -221,9 +221,11 @@ jQuery(document).ready(function ($) {
     if ($('#wcmp_disbursal_mode_vendor').is(':checked')) {
         $('#commission_transfer').closest("tr").show();
         $('#no_of_orders').closest("tr").show();
+        $('.withdrawl_order_status').show();
     } else {
         $('#commission_transfer').closest("tr").css("display", "none");
         $('#no_of_orders').closest("tr").css("display", "none");
+        $('.withdrawl_order_status').css("display", "none");        
     }
     
     if ($('#wcmp_disbursal_mode_admin').is(':checked')) {
@@ -270,9 +272,11 @@ jQuery(document).ready(function ($) {
         if ($(this).is(':checked')) {
             $('#commission_transfer').closest("tr").show();
             $('#no_of_orders').closest("tr").show();
+            $('.withdrawl_order_status').show();
         } else {
             $('#commission_transfer').closest("tr").css("display", "none");
             $('#no_of_orders').closest("tr").css("display", "none");
+            $('.withdrawl_order_status').css("display", "none");
         }
     });
     // toggle check uncheck event on gatewar charge
@@ -462,4 +466,23 @@ jQuery(document).ready(function ($) {
             $('.wcmp-widget-vquick-info-captcha-wrap.v3').show();
         }
     }).trigger('change');
+
+    $( '#wcmp_vendor_submit_commission' ).click(function(event) {
+        event.preventDefault();
+        $('#wcmp_vendor_submit_commission').prop("disabled", true);
+        $('#wcmp_vendor_submit_commission').text(wcmp_admin_js_script_data.submiting);
+
+        $.ajax({
+            url:     wcmp_admin_js_script_data.ajax_url,
+            data:    {
+                action: 'commission_variation',
+                wcmp_settings_form   : $('.wcmp_vendors_settings').serialize(),
+            },
+            type:    'POST',
+            success: function( response ) {
+                $('#wcmp_vendor_submit_commission').prop("disabled", false);// enable button after getting respone
+                $('#wcmp_vendor_submit_commission').text(wcmp_admin_js_script_data.update);
+            }
+        });
+    });
 });

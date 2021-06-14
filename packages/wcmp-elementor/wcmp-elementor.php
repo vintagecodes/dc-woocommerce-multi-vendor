@@ -148,7 +148,7 @@ class WCMp_Elementor {
 					'fb'        => 'fab fa-facebook',
 					'gplus'     => 'fab fa-google-plus',
 					'twitter'   => 'fab fa-twitter',
-					'linkedin'  => 'fab fa-linkedin-in',
+					'linkedin'  => 'fab fa-linkedin',
 					'youtube'   => 'fab fa-youtube',
 					'instagram' => 'fab fa-instagram',
 			];

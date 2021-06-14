@@ -127,7 +127,7 @@ final class WCMp_Woo_Helper {
                         'length'            => isset( $data['variable_length'][$i] ) ? wc_clean( $data['variable_length'][$i] ) : '',
                         'width'             => isset( $data['variable_width'][$i] ) ? wc_clean( $data['variable_width'][$i] ) : '',
                         'height'            => isset( $data['variable_height'][$i] ) ? wc_clean( $data['variable_height'][$i] ) : '',
-                        'shipping_class_id' => wc_clean( $data['variable_shipping_class'][$i] ),
+                        'shipping_class_id' => isset($data['variable_shipping_class'][$i]) ? wc_clean( $data['variable_shipping_class'][$i] ) : '',
                         'tax_class'         => isset( $data['variable_tax_class'][$i] ) ? wc_clean( $data['variable_tax_class'][$i] ) : null,
                     )
                 );

@@ -400,7 +400,7 @@ class WCMp_Vendor_Hooks {
         $WCMp->library->load_select2_lib();
         $wcmp_payment_settings_name = get_option( 'wcmp_payment_settings_name' );
         $_vendor_give_shipping = get_user_meta( get_current_vendor_id(), '_vendor_give_shipping', true );
-        if ( isset( $wcmp_payment_settings_name['give_shipping'] ) && empty( $_vendor_give_shipping ) ) {
+        if ( get_wcmp_vendor_settings( 'is_vendor_shipping_on', 'general' ) && 'Enable' === get_wcmp_vendor_settings( 'is_vendor_shipping_on', 'general' ) && empty( $_vendor_give_shipping ) ) {
             if (wp_script_is('wcmp-vendor-shipping', 'registered') &&
                 !wp_script_is('wcmp-vendor-shipping', 'enqueued')) {
                 wp_enqueue_script('wcmp-vendor-shipping');
