@@ -466,4 +466,23 @@ jQuery(document).ready(function ($) {
             $('.wcmp-widget-vquick-info-captcha-wrap.v3').show();
         }
     }).trigger('change');
+
+    $( '#wcmp_vendor_submit_commission' ).click(function(event) {
+        event.preventDefault();
+        $('#wcmp_vendor_submit_commission').prop("disabled", true);
+        $('#wcmp_vendor_submit_commission').text(wcmp_admin_js_script_data.submiting);
+
+        $.ajax({
+            url:     wcmp_admin_js_script_data.ajax_url,
+            data:    {
+                action: 'commission_variation',
+                wcmp_settings_form   : $('.wcmp_vendors_settings').serialize(),
+            },
+            type:    'POST',
+            success: function( response ) {
+                $('#wcmp_vendor_submit_commission').prop("disabled", false);// enable button after getting respone
+                $('#wcmp_vendor_submit_commission').text(wcmp_admin_js_script_data.update);
+            }
+        });
+    });
 });

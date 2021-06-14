@@ -145,6 +145,8 @@ class WCMp_Ajax {
         }
         // Follow ajax
         add_action('wp_ajax_wcmp_follow_store_toggle_status', array($this, 'wcmp_follow_store_toggle_status'));
+        // commission by product variation
+        add_action('wp_ajax_commission_variation', array($this, 'commission_variation'));
     }
 
     /**
@@ -4611,6 +4613,16 @@ class WCMp_Ajax {
             wp_send_json_error( $follow_status, 422 );
         }
         wp_send_json_success( array( 'status' => $follow_status ), 200 );
+    }
+
+    public function commission_variation() {
+        $setting_from_sanitize = isset($_POST['wcmp_settings_form']) ? wp_unslash($_POST['wcmp_settings_form']) : '';
+        parse_str($setting_from_sanitize, $wcmp_settings_form);
+        if( isset( $wcmp_settings_form['vendor_commission_by_products'] ) ) {
+            $wcmp_commission_options['vendor_commission_by_products'] = $wcmp_settings_form['vendor_commission_by_products'];
+        }
+        wcmp_update_option( 'wcmp_variation_commission_options', $wcmp_commission_options );
+        die;
     }
 
 }
