@@ -4484,3 +4484,75 @@ if (!function_exists('wcmp_mapbox_design_switcher')) {
         }
     }
 }
+if (!function_exists('wcmp_vendor_distance_by_shipping_settings')) {
+    function wcmp_vendor_distance_by_shipping_settings( $vendor_id = 0 ) {
+        global $WCMp;
+        $wcmp_shipping_by_distance = get_user_meta( $vendor_id, '_wcmp_shipping_by_distance', true ) ? get_user_meta( $vendor_id, '_wcmp_shipping_by_distance', true ) : array();
+        $WCMp->wcmp_wp_fields->dc_generate_form_field( apply_filters( 'wcmp_marketplace_settings_fields_shipping_distance', array(
+            "wcmp_byd_default_cost" => array('label' => __('Default Cost', 'dc-woocommerce-multi-vendor'), 'name' => 'wcmp_shipping_by_distance[_default_cost]', 'placeholder' => '0.00', 'type' => 'text', 'class' => 'col-md-6 col-sm-9', 'label_class' => 'wcmp_title wcmp_ele wcmp_store_shipping_distance_fields', 'value' => isset($wcmp_shipping_by_distance['_default_cost']) ? $wcmp_shipping_by_distance['_default_cost'] : '' ),
+
+            "wcmp_byd_max_distance" => array('label' => __('Max Distance', 'dc-woocommerce-multi-vendor'), 'name' => 'wcmp_shipping_by_distance[_max_distance]', 'placeholder' => __('No Limit', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'class' => 'col-md-6 col-sm-9', 'label_class' => 'wcmp_title wcmp_ele wcmp_store_shipping_distance_fields', 'value' => isset($wcmp_shipping_by_distance['_max_distance']) ? $wcmp_shipping_by_distance['_max_distance'] : '' ),
+            "wcmp_byd_enable_local_pickup" => array('label' => __('Enable Local Pickup', 'dc-woocommerce-multi-vendor'), 'name' => 'wcmp_shipping_by_distance[_enable_local_pickup]', 'type' => 'checkbox', 'class' => 'wcmp-checkbox wcmp_ele wcmp_store_shipping_distance_fields', 'label_class' => 'wcmp_title checkbox_title checkbox-title wcmp_ele wcmp_store_shipping_distance_fields', 'value' => 'yes', 'dfvalue' => isset($wcmp_shipping_by_distance['_enable_local_pickup']) ? 'yes' : '' ),
+
+            "wcmp_byd_local_pickup_cost" => array('label' => __('Local Pickup Cost', 'dc-woocommerce-multi-vendor'), 'name' => 'wcmp_shipping_by_distance[_local_pickup_cost]', 'placeholder' => '0.00', 'type' => 'text', 'class' => 'col-md-6 col-sm-9', 'label_class' => 'wcmp_title wcmp_ele wcmp_store_shipping_distance_fields', 'value' => isset($wcmp_shipping_by_distance['_local_pickup_cost']) ? $wcmp_shipping_by_distance['_local_pickup_cost'] : '' ),
+        ) ) );
+
+        $wcmp_shipping_by_distance_rates = get_user_meta( $vendor_id, '_wcmp_shipping_by_distance_rates', true ) ? get_user_meta( $vendor_id, '_wcmp_shipping_by_distance_rates', true ) : array();
+        $WCMp->wcmp_wp_fields->dc_generate_form_field(
+            apply_filters( 'wcmp_settings_fields_shipping_rates_by_distance', array( 
+                    "wcmp_shipping_by_distance_rates" => array(
+                        'label'       => __('Distance-Cost Rules', 'dc-woocommerce-multi-vendor'), 
+                        'type'        => 'multiinput',
+                        'class'       => 'form-group',
+                        'value'       => $wcmp_shipping_by_distance_rates,
+                        'options' => array(
+                            "wcmp_distance_rule" => array( 
+                                'label' => __('Distance Rule', 'dc-woocommerce-multi-vendor'), 
+                                'type' => 'select', 
+                                'class' => 'col-md-6 col-sm-9', 
+                                'label_class' => '', 
+                                'options' => array(
+                                    'up_to' => __('Distance up to', 'dc-woocommerce-multi-vendor'),
+                                    'more_than' => __('Distance more than', 'dc-woocommerce-multi-vendor')
+                                )
+                            ),
+                            "wcmp_distance_unit" => array( 
+                                'label' => __('Distance', 'dc-woocommerce-multi-vendor') . ' ( '. __('km', 'dc-woocommerce-multi-vendor') .' )', 
+                                'type' => 'number', 
+                                'class' => 'col-md-6 col-sm-9', 
+                                'label_class' => ''
+                            ),
+                            "wcmp_distance_price" => array( 
+                                'label' => __('Cost', 'dc-woocommerce-multi-vendor') . ' ('.get_woocommerce_currency_symbol().')', 
+                                'type' => 'number', 
+                                'placeholder' => '0.00 (' . __('Free Shipping', 'dc-woocommerce-multi-vendor') . ')',
+                                'class' => 'col-md-6 col-sm-9', 
+                                'label_class' => '' 
+                            ),
+                        )
+                    )
+                ) 
+            )
+        );
+    }
+}
+
+if (!function_exists('wcmp_vendor_different_type_shipping_options')) {
+    function wcmp_vendor_different_type_shipping_options( $vendor_id = 0) {
+        $vendor_shipping_options = get_user_meta($vendor_id, 'vendor_shipping_options', true) ? get_user_meta($vendor_id, 'vendor_shipping_options', true) : '';
+        $shipping_options = apply_filters('wcmp_vendor_shipping_option_to_vendor', array(
+            'distance_by_zone' => __('Distance By Zone', 'dc-woocommerce-multi-vendor'),
+        ) );
+        if (get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' ) && 'Enable' === get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' )) {
+            $shipping_options['distance_by_shipping'] = __('Distance by shippping', 'dc-woocommerce-multi-vendor');
+        }
+        ?>
+        <label for="shipping-options"><?php esc_html_e( 'Shipping Options', 'dc-woocommerce-multi-vendor' ); ?></label>
+        <select class="form-control inline-select" id="shipping-options" name="shippping-options">
+            <?php foreach ( $shipping_options as $value => $label ) : ?>
+                <option value="<?php echo esc_attr( $value ); ?>" <?php echo selected( $vendor_shipping_options, $value, false ); ?>><?php echo esc_html( $label ); ?></option>
+            <?php endforeach; ?>
+        </select>
+        <?php
+    }
+}

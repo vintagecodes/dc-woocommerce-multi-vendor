@@ -1184,6 +1184,17 @@ Class WCMp_Admin_Dashboard {
         $all_allowed_countries = WC()->countries->get_allowed_countries();
         $location = array();
         $zone_id = 0;
+
+        // Distance by shipping
+        $wcmp_shipping_by_distance_rates = isset($_POST['wcmp_shipping_by_distance_rates']) ?  array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_distance_rates'] ) ) : '';
+        update_user_meta($vendor_user_id, '_wcmp_shipping_by_distance_rates', $wcmp_shipping_by_distance_rates);
+
+        $wcmp_shipping_by_distance = isset($_POST['wcmp_shipping_by_distance']) ? array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_distance'] ) ) : '';
+        update_user_meta($vendor_user_id, '_wcmp_shipping_by_distance', $wcmp_shipping_by_distance);
+
+        $vendor_shipping_options = isset($_POST['shippping-options']) ? wc_clean($_POST['shippping-options']) : '';
+        update_user_meta($vendor_user_id, 'vendor_shipping_options', $vendor_shipping_options);
+        
         if (!empty($_POST['wcmp_shipping_zone'])) {
             foreach ($_POST['wcmp_shipping_zone'] as $shipping_zone) {
                 if (isset($shipping_zone['_zone_id']) && $shipping_zone['_zone_id'] != 0) {

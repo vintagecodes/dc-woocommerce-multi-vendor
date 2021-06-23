@@ -199,6 +199,11 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
             return;
         }*/
 
+        $vendor_shipping_options = get_user_meta($vendor_id, 'vendor_shipping_options', true) ? get_user_meta($vendor_id, 'vendor_shipping_options', true) : '';
+        if ( $vendor_shipping_options && $vendor_shipping_options == 'distance_by_shipping') {
+            return;
+        }
+
         if ( empty( $shipping_methods ) ) {
             return;
         }
