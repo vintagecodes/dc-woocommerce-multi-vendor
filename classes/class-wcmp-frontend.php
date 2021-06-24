@@ -1083,11 +1083,12 @@ class WCMp_Frontend {
         <?php
         if( ! WC()->is_rest_api_request() ) {
             if( ( true === WC()->cart->needs_shipping() ) && apply_filters( 'wcmp_is_allow_checkout_user_location', true ) ) {
+                $user_location_filed = wcmp_mapbox_api_enabled() ? array('input-hidden') : array('form-row-wide');
                 $fields['billing']['wcmp_user_location'] = array(
                         'label'     => __( 'Delivery Location', 'dc-woocommerce-multi-vendor' ),
                         'placeholder'   => _x( 'Insert your address ..', 'placeholder', 'dc-woocommerce-multi-vendor' ),
                         'required'  => true,
-                        'class'     => array('form-row-wide'),
+                        'class'     => $user_location_filed,
                         'clear'     => true,
                         'priority'  => 999,
                         'value'     => WC()->session->get( '_wcmp_user_location' )

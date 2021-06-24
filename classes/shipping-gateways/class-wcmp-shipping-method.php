@@ -200,7 +200,7 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
         }*/
 
         $vendor_shipping_options = get_user_meta($vendor_id, 'vendor_shipping_options', true) ? get_user_meta($vendor_id, 'vendor_shipping_options', true) : '';
-        if ( $vendor_shipping_options && $vendor_shipping_options == 'distance_by_shipping') {
+        if ( get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' ) && 'Enable' === get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' ) && $vendor_shipping_options && $vendor_shipping_options == 'distance_by_shipping') {
             return;
         }
 

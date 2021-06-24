@@ -69,7 +69,6 @@ jQuery(document).ready( function($) {
 				});
 			});
 		} else {
-
 			mapboxgl.accessToken = wcmp_checkout_map_options.mapbox_emable;
 			var map = new mapboxgl.Map({
 			container: 'wcmp-user-locaton-map', // container id
@@ -78,7 +77,7 @@ jQuery(document).ready( function($) {
 			zoom: parseInt( wcmp_checkout_map_options.default_zoom )
 			});
 
-			var geocoder = new MapboxGeocoder({
+			var geocoder_mapbox = new MapboxGeocoder({
 				accessToken: mapboxgl.accessToken,
 				marker: {
 					color: 'red'
@@ -86,14 +85,14 @@ jQuery(document).ready( function($) {
 				mapboxgl: mapboxgl
 			});
 			map.on('load', function() {
-				geocoder.on('result', function(ev) {
+				geocoder_mapbox.on('result', function(ev) {
 					document.getElementById("wcmp_user_location").value = ev.result.place_name;
 					document.getElementById("wcmp_user_location_lat").value = ev.result.center[0];
 					document.getElementById("wcmp_user_location_lng").value = ev.result.center[1];
 					$( document.body ).trigger( 'update_checkout' );
 				});
 			});
-			map.addControl(geocoder);
+			map.addControl(geocoder_mapbox);
 		}
 	}
 	
@@ -140,12 +139,7 @@ jQuery(document).ready( function($) {
 	if( jQuery("#wcmp_user_location_lat").length > 0 ) {
 		setTimeout( function() {
 			initialize();
-			
 			if ( navigator.geolocation ) {
-				$('.wcmp_locate_icon').on( 'click', function () {
-					setUser_CurrentLocation();
-				});
-				
 				setUser_CurrentLocation();
 			}
 		}, 1000 );

@@ -217,8 +217,7 @@ class WCMp_Shipping_By_Distance extends WC_Shipping_Method {
   */
   public static function is_shipping_enabled_for_seller( $vendor_id = 0 ) {
     $vendor_shipping_options = get_user_meta($vendor_id, 'vendor_shipping_options', true) ? get_user_meta($vendor_id, 'vendor_shipping_options', true) : '';
-    $vendor_shipping_details = get_user_meta( $vendor_id, '_wcmp_shipping', true ) ? get_user_meta( $vendor_id, '_wcmp_shipping', true ) : '';
-    if ( get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' ) && 'Enable' === get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' ) && !empty($vendor_shipping_details) && $vendor_shipping_options && $vendor_shipping_options == 'distance_by_shipping') {
+    if ( get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' ) && 'Enable' === get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' ) && $vendor_shipping_options && $vendor_shipping_options == 'distance_by_shipping') {
       return true;
     }
     return false;
@@ -333,7 +332,7 @@ class WCMp_Shipping_By_Distance extends WC_Shipping_Method {
         }
       }
 
-      if( !apply_filters( 'wcmp_is_allow_admin_shipping_if_no_vendor_shipping', true ) ) {
+      if( apply_filters( 'wcmp_is_allow_admin_shipping_if_no_vendor_shipping', true ) ) {
         $rates = array();
       }
     }
