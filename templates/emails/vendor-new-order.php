@@ -18,7 +18,7 @@ $text_align = is_rtl() ? 'right' : 'left';
 
 <p><?php printf(esc_html__('A new order was received and marked as %s from %s. Their order is as follows:', 'dc-woocommerce-multi-vendor'), $order->get_status( 'edit' ), $order->get_billing_first_name() . ' ' . $order->get_billing_last_name()); ?></p>
 
-<?php do_action('woocommerce_email_before_order_table', $order, true, false); ?>
+<?php do_action('woocommerce_email_before_order_table', $order, true, false, $email); ?>
 <table cellspacing="0" cellpadding="6" style="width: 100%; border: 1px solid #eee;" border="1" bordercolor="#eee">
     <thead>
         <tr>
