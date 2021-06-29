@@ -103,7 +103,8 @@ class WCMp_Gateway_Stripe_Connect extends WCMp_Payment_Gateway {
             $transfer_args = array(
                 'amount' => $this->get_stripe_amount(),
                 'currency' => $this->currency,
-                'destination' => $this->stripe_user_id
+                'destination' => $this->stripe_user_id,
+                'description' => apply_filters('wcmp_stripe_description_at_paid_time', 'Commissions are ' . implode(",", $this->commissions) . ' paid from ' . get_bloginfo('title'), $this->commissions),
             );
             $transfer_args = wp_parse_args($args, $transfer_args);
             return Transfer::create($transfer_args);
