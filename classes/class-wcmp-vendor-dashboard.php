@@ -2203,6 +2203,10 @@ Class WCMp_Admin_Dashboard {
             $coupon->save();
             do_action( 'wcmp_afm_coupon_options_save', $post_id, $coupon );
 
+            if ( ( ! $_POST['is_update'] || $_POST['original_post_status'] == 'draft' ) && $status != 'draft' ) {
+                $WCMp->product->on_all_status_transitions( $status, '', get_post( $post_id ) );
+            }
+            
             foreach ( $errors as $error ) {
                 wc_add_notice( $error, 'error' );
             }
