@@ -75,6 +75,14 @@ if (!class_exists('WC_Email_Vendor_New_Product_Added')) :
             $this->find[] = '{vendor_name}';
             $this->vendor_name = $vendor->page_title;
             $this->replace[] = $this->vendor_name;
+            
+            $this->find[] = '{post_name}';
+            if ($post_type == 'shop_coupon') {
+                $this->post_name = __('product', 'dc-woocommerce-multi-vendor');   
+            } else {
+                $this->post_name = __('coupon', 'dc-woocommerce-multi-vendor');                   
+            }
+            $this->replace[] = $this->post_name;
 
             $this->post_id = $post->ID;
 
