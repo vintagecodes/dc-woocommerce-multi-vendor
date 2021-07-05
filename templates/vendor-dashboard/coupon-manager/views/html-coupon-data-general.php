@@ -65,7 +65,7 @@ defined( 'ABSPATH' ) || exit;
             <div class="form-group">
                 <label class="control-label col-sm-3 col-md-3" for="expiry_date"><?php esc_html_e( 'Coupon expiry date', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <div class="col-md-6 col-sm-9">
-                    <input class="form-control date-picker" id="expiry_date" name="expiry_date" value="<?php echo esc_attr( $expiry_date ); ?>" type="text" placeholder="<?php esc_attr_e( 'YYYY-MM-DD', 'dc-woocommerce-multi-vendor' ); ?>" pattern="<?php echo esc_attr( apply_filters( 'woocommerce_date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>">
+                    <input class="form-control" id="expiry_date" name="expiry_date" value="<?php echo esc_attr( $expiry_date ); ?>" type="date" placeholder="<?php esc_attr_e( 'YYYY-MM-DD', 'dc-woocommerce-multi-vendor' ); ?>" pattern="<?php echo esc_attr( apply_filters( 'woocommerce_date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>">
                 </div>
             </div>
         </div>

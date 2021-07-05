@@ -33,9 +33,10 @@ class WCMp_Widget_Vendor_On_Sale_Products extends WC_Widget {
 
     public function widget($args, $instance) {
         global $WCMp;
+        if (!wcmp_is_store_page()) return;
         $store_id = wcmp_find_shop_page_vendor();
         $vendor = get_wcmp_vendor($store_id);
-        if ((!wcmp_is_store_page() && !$vendor)) {
+        if (!$vendor) {
             return;
         }
 

@@ -75,6 +75,12 @@ class WCMp_Frontend {
             add_filter( 'woocommerce_account_menu_items',array($this, 'wcmp_customer_followers_vendor'), 99 );
             add_action( 'woocommerce_account_followers_endpoint', array($this, 'wcmp_customer_followers_vendor_callback' ));
         }
+        if (get_wcmp_vendor_settings( 'is_checkout_delivery_location_on', 'general' ) && 'Enable' === get_wcmp_vendor_settings( 'is_checkout_delivery_location_on', 'general' )) {
+            add_filter( 'woocommerce_checkout_fields', array( &$this, 'wcmp_checkout_user_location_fields' ), 50 );
+            add_action( 'woocommerce_after_checkout_billing_form', array( &$this, 'wcmp_checkout_user_location_map' ), 50 );
+            add_action( 'woocommerce_checkout_update_order_review', array( &$this, 'wcmp_checkout_user_location_session_set' ), 50 );
+            add_action( 'woocommerce_checkout_update_order_meta', array( &$this, 'wcmp_checkout_user_location_save' ), 50 );
+        }
     }
 
     /**
@@ -295,6 +301,7 @@ class WCMp_Frontend {
                 'user' => array(
                     'ID' => $vendor_id,
                 ),
+                'vendor_id' => $vendor_id,
                 'destination' => array(
                     'country' => WC()->customer->get_shipping_country(),
                     'state' => WC()->customer->get_shipping_state(),
@@ -304,6 +311,17 @@ class WCMp_Frontend {
                     'address_2' => WC()->customer->get_shipping_address_2()
                 )
             );
+
+            if( apply_filters( 'wcmp_is_allow_checkout_user_location', true ) ) {
+                $wcmp_user_location     = WC()->session->get( '_wcmp_user_location' );
+                $wcmp_user_location_lat = WC()->session->get( '_wcmp_user_location_lat' );
+                $wcmp_user_location_lng = WC()->session->get( '_wcmp_user_location_lng' );
+                if( $wcmp_user_location ) {
+                    $packages[$vendor_id]['wcmp_user_location']     = $wcmp_user_location;
+                    $packages[$vendor_id]['wcmp_user_location_lat'] = $wcmp_user_location_lat;
+                    $packages[$vendor_id]['wcmp_user_location_lng'] = $wcmp_user_location_lng;
+                }
+            }
         }
         return apply_filters('wcmp_split_shipping_packages', $packages);
     }
@@ -412,6 +430,15 @@ class WCMp_Frontend {
         if (wcmp_is_store_page()) {
             wp_enqueue_script('wcmp_seller_review_rating_js');
             wp_enqueue_script('frontend_js');
+        }
+        if( is_checkout() && apply_filters( 'wcmp_is_allow_checkout_user_location', true ) ) {
+            if (wcmp_mapbox_api_enabled()) {
+                $WCMp->library->load_mapbox_api();
+            } else {
+                $WCMp->library->load_gmap_api();                
+            }
+            wp_enqueue_script( 'wcmp_checkout_location_js', $frontend_script_path . 'checkout/wcmp-script-checkout-location' . $suffix . '.js', array('jquery' ), $WCMp->version, true );
+            wp_localize_script( 'wcmp_checkout_location_js', 'wcmp_checkout_map_options', array( 'search_location' => __( 'Insert your address ..', 'dc-woocommerce-multi-vendor' ), 'mapbox_emable' => wcmp_mapbox_api_enabled(), 'default_lat' => -79.4512, 'default_lng' => 43.6568, 'default_zoom' => 2, 'store_icon' => $WCMp->plugin_url . 'assets/images/store-marker.png', 'icon_width' => apply_filters( 'wcmp_map_icon_width', 40 ), 'icon_height' => apply_filters( 'wcmp_map_icon_height', 57 ) ) );
         }
     }
 
@@ -1005,6 +1032,94 @@ class WCMp_Frontend {
             </tbody>
         </table>
         <?php
+    }
+
+        /**
+     * Checkout User Location Field Save
+     */
+    public function wcmp_checkout_user_location_save( $order_id ) {
+        if( apply_filters( 'wcmp_is_allow_checkout_user_location', true ) ) {
+            if ( ! empty( $_POST['wcmp_user_location'] ) ) {
+                update_post_meta( $order_id, '_wcmp_user_location', sanitize_text_field( $_POST['wcmp_user_location'] ) );
+            }
+            if ( ! empty( $_POST['wcmp_user_location_lat'] ) ) {
+                update_post_meta( $order_id, '_wcmp_user_location_lat', sanitize_text_field( $_POST['wcmp_user_location_lat'] ) );
+            }
+            if ( ! empty( $_POST['wcmp_user_location_lng'] ) ) {
+                update_post_meta( $order_id, '_wcmp_user_location_lng', sanitize_text_field( $_POST['wcmp_user_location_lng'] ) );
+            }
+        }
+    }
+
+    /**
+     * Checkout User Location Field Save in Session
+     */
+    public function wcmp_checkout_user_location_session_set( $post_data_raw ) {
+        if( apply_filters( 'wcmp_is_allow_checkout_user_location', true ) ) {
+            parse_str( $post_data_raw, $post_data );
+            if ( ! empty( $post_data['wcmp_user_location'] ) ) {
+                WC()->customer->set_props( array( 'wcmp_user_location' => sanitize_text_field( $post_data['wcmp_user_location'] ) ) );
+                WC()->session->set( '_wcmp_user_location', sanitize_text_field( $post_data['wcmp_user_location'] ) );
+            }
+            if ( ! empty( $post_data['wcmp_user_location_lat'] ) ) {
+                WC()->session->set( '_wcmp_user_location_lat', sanitize_text_field( $post_data['wcmp_user_location_lat'] ) );
+            }
+            if ( ! empty( $post_data['wcmp_user_location_lng'] ) ) {
+                WC()->session->set( '_wcmp_user_location_lng', sanitize_text_field( $post_data['wcmp_user_location_lng'] ) );
+            }
+        }
+    }
+
+    /**
+     * Checkout User Location Field
+     */
+    public function wcmp_checkout_user_location_fields( $fields ) {
+        ?>
+        <style>
+            .input-hidden{
+                display: none;
+            }
+        </style>
+        <?php
+        if( ! WC()->is_rest_api_request() ) {
+            if( ( true === WC()->cart->needs_shipping() ) && apply_filters( 'wcmp_is_allow_checkout_user_location', true ) ) {
+                $user_location_filed = wcmp_mapbox_api_enabled() ? array('input-hidden') : array('form-row-wide');
+                $fields['billing']['wcmp_user_location'] = array(
+                        'label'     => __( 'Delivery Location', 'dc-woocommerce-multi-vendor' ),
+                        'placeholder'   => _x( 'Insert your address ..', 'placeholder', 'dc-woocommerce-multi-vendor' ),
+                        'required'  => true,
+                        'class'     => $user_location_filed,
+                        'clear'     => true,
+                        'priority'  => 999,
+                        'value'     => WC()->session->get( '_wcmp_user_location' )
+                 );
+                $fields['billing']['wcmp_user_location_lat'] = array(
+                        'required'  => false,
+                        'class'     => array('input-hidden'),
+                        'value'     => WC()->session->get( '_wcmp_user_location_lat' )
+                 );
+                $fields['billing']['wcmp_user_location_lng'] = array(
+                        'required'  => false,
+                        'class'     => array('input-hidden'),
+                        'value'     => WC()->session->get( '_wcmp_user_location_lng' )
+                 );
+            }
+        }
+
+     return $fields;
+    }
+
+    /**
+     * Checkout User Location Map
+     */
+    public function wcmp_checkout_user_location_map( $checkout ) {
+        if( ( true === WC()->cart->needs_shipping() ) && apply_filters( 'wcmp_is_allow_checkout_user_location', true ) ) {
+            ?>
+            <div class="woocommerce-billing-fields__field-wrapper">
+                <div class="wcmp-user-locaton-map" id="wcmp-user-locaton-map" style="width: 100%; height: 300px;"></div>
+            </div>
+            <?php
+        }
     }
 
 }

@@ -179,7 +179,48 @@ jQuery(document).ready(function ($) {
             $('#payment_schedule').closest("tr").css("display", "none");
         }
     });
+
+    // distance by shipping
+    if ($('#is_vendor_shipping_on').is(':checked')) {
+        $('#enabled_distance_by_shipping_for_vendor').closest("tr").show();
+    } else {
+        $('#enabled_distance_by_shipping_for_vendor').closest("tr").css("display", "none");
+    }
     
+    $('#is_vendor_shipping_on').change(function () {
+        if ($(this).is(':checked')) {
+            $('#enabled_distance_by_shipping_for_vendor').closest("tr").show();
+        } else {
+            $('#enabled_distance_by_shipping_for_vendor').closest("tr").css("display", "none");
+        }
+    });
+
+    $('#enabled_distance_by_shipping_for_vendor').change(function () {
+        if ($(this).is(':checked')) {
+            $('#is_checkout_delivery_location_on').prop('checked', true);
+        } else {
+            $('#is_checkout_delivery_location_on').prop('checked', false);
+        }
+    });    
+    
+    $('#shipping-options').change(function () {
+        var shipping_option = $(this).val();
+        if (shipping_option == 'distance_by_shipping') {
+            $('#wcmp-vendor-shipping-by-distance-section').show();
+            $('#wcmp-vendor-shipping-by-zone-section').hide();
+        } else if (shipping_option == 'distance_by_zone') {
+            $('#wcmp-vendor-shipping-by-distance-section').hide();
+            $('#wcmp-vendor-shipping-by-zone-section').show();
+        } else {}
+    });
+
+    if ($('#shipping-options').val() == 'distance_by_shipping') {
+        $('#wcmp-vendor-shipping-by-distance-section').show();
+        $('#wcmp-vendor-shipping-by-zone-section').hide();
+    } else if ($('#shipping-options').val() == 'distance_by_zone') {
+        $('#wcmp-vendor-shipping-by-distance-section').hide();
+        $('#wcmp-vendor-shipping-by-zone-section').show();
+    } else {}
     
     if ($('#is_submit_product').is(':checked')) {
         $('#is_published_product').closest("tr").show();

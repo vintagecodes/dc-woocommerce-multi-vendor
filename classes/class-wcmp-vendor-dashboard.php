@@ -579,7 +579,9 @@ Class WCMp_Admin_Dashboard {
 
                     array_walk($state_key_by_country, 'wcmp_state_key_alter');
 
-                    $state_key_by_country = call_user_func_array('array_merge', $state_key_by_country);
+                    if ($selected_country_codes && is_array($selected_country_codes) && !empty($selected_country_codes) && isset($selected_country_codes[0])) {
+                        $state_key_by_country = $state_key_by_country[$selected_country_codes[0]];
+                    }
 
                     $show_limit_location_link = apply_filters('show_limit_location_link', (!in_array('postcode', $zone_location_types)));
                     $vendor_shipping_methods = $zones['shipping_methods'];
@@ -1184,6 +1186,17 @@ Class WCMp_Admin_Dashboard {
         $all_allowed_countries = WC()->countries->get_allowed_countries();
         $location = array();
         $zone_id = 0;
+
+        // Distance by shipping
+        $wcmp_shipping_by_distance_rates = isset($_POST['wcmp_shipping_by_distance_rates']) ?  array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_distance_rates'] ) ) : '';
+        update_user_meta($vendor_user_id, '_wcmp_shipping_by_distance_rates', $wcmp_shipping_by_distance_rates);
+
+        $wcmp_shipping_by_distance = isset($_POST['wcmp_shipping_by_distance']) ? array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_distance'] ) ) : '';
+        update_user_meta($vendor_user_id, '_wcmp_shipping_by_distance', $wcmp_shipping_by_distance);
+
+        $vendor_shipping_options = isset($_POST['shippping-options']) ? wc_clean($_POST['shippping-options']) : '';
+        update_user_meta($vendor_user_id, 'vendor_shipping_options', $vendor_shipping_options);
+        
         if (!empty($_POST['wcmp_shipping_zone'])) {
             foreach ($_POST['wcmp_shipping_zone'] as $shipping_zone) {
                 if (isset($shipping_zone['_zone_id']) && $shipping_zone['_zone_id'] != 0) {
@@ -2192,6 +2205,10 @@ Class WCMp_Admin_Dashboard {
             $coupon->save();
             do_action( 'wcmp_afm_coupon_options_save', $post_id, $coupon );
 
+            if ( ( ! $_POST['is_update'] || $_POST['original_post_status'] == 'draft' ) && $status != 'draft' ) {
+                $WCMp->product->on_all_status_transitions( $status, '', get_post( $post_id ) );
+            }
+            
             foreach ( $errors as $error ) {
                 wc_add_notice( $error, 'error' );
             }

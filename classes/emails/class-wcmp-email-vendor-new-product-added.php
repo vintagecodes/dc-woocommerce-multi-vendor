@@ -75,6 +75,14 @@ if (!class_exists('WC_Email_Vendor_New_Product_Added')) :
             $this->find[] = '{vendor_name}';
             $this->vendor_name = $vendor->page_title;
             $this->replace[] = $this->vendor_name;
+            
+            $this->find[] = '{post_name}';
+            if ($post_type == 'shop_coupon') {
+                $this->post_name = __('product', 'dc-woocommerce-multi-vendor');   
+            } else {
+                $this->post_name = __('coupon', 'dc-woocommerce-multi-vendor');                   
+            }
+            $this->replace[] = $this->post_name;
 
             $this->post_id = $post->ID;
 
@@ -98,7 +106,7 @@ if (!class_exists('WC_Email_Vendor_New_Product_Added')) :
          * @return string
          */
         public function get_default_subject() {
-            return apply_filters('wcmp_admin_new_vendor_product_email_subject', __('[{blogname}] New product submitted by {vendor_name} - {product_name}', 'dc-woocommerce-multi-vendor'), $this->object);
+            return apply_filters('wcmp_admin_new_vendor_product_email_subject', __('[{blogname}] New {post_name} submitted by {vendor_name} - {product_name}', 'dc-woocommerce-multi-vendor'), $this->object);
         }
 
         /**
@@ -108,7 +116,7 @@ if (!class_exists('WC_Email_Vendor_New_Product_Added')) :
          * @return string
          */
         public function get_default_heading() {
-            return apply_filters('wcmp_admin_new_vendor_product_email_heading', __('New product submitted: {product_name}', 'dc-woocommerce-multi-vendor'), $this->object);
+            return apply_filters('wcmp_admin_new_vendor_product_email_heading', __('New {post_name} submitted: {product_name}', 'dc-woocommerce-multi-vendor'), $this->object);
         }
 
         /**

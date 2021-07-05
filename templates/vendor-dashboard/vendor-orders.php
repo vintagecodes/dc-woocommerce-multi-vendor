@@ -40,7 +40,11 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
                 <div class="order-filter-actions alignleft actions">
                     <select id="order_bulk_actions" name="bulk_action" class="bulk-actions form-control inline-input">
                         <option value=""><?php esc_html_e('Bulk Actions', 'dc-woocommerce-multi-vendor'); ?></option>
-                        <?php 
+                        <?php
+                        $disallow_vendor_order_status = get_wcmp_vendor_settings('disallow_vendor_order_status', 'capabilities', 'product') && get_wcmp_vendor_settings('disallow_vendor_order_status', 'capabilities', 'product') == 'Enable' ? true : false;
+                        if ($disallow_vendor_order_status) {
+                            unset($bulk_actions['mark_processing'], $bulk_actions['mark_on-hold'], $bulk_actions['mark_completed']);
+                        }
                         if( $bulk_actions ) :
                             foreach ( $bulk_actions as $key => $action ) {
                                 echo '<option value="' . $key . '">' . $action . '</option>';

@@ -139,7 +139,7 @@ class WCMp_Order {
         global $typenow;
         $user = wp_get_current_user();
         if ('shop_order' == $typenow) {
-            if (current_user_can('administrator') && empty($_REQUEST['s'])) {
+            if (current_user_can('administrator') || current_user_can('shop_manager') && empty($_REQUEST['s'])) {
                 $query['post_parent'] = 0;
             }elseif(in_array('dc_vendor', $user->roles)){
                 $query['author'] = $user->ID;

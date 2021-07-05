@@ -643,7 +643,7 @@ class WCMp_Product {
      */
     function on_all_status_transitions($new_status, $old_status, $post) {
         global $WCMp;
-        if ('product' !== $post->post_type || $new_status === $old_status) {
+        if ($new_status === $old_status) {
             return;
         }
         // skip for new posts and auto drafts

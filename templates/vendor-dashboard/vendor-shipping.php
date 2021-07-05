@@ -20,6 +20,11 @@ $vendor_shipping_data = get_user_meta($vendor->id, 'vendor_shipping_data', true)
 ?>
 <div class="col-md-12">
     <form name="vendor_shipping_form" class="wcmp_shipping_form form-horizontal" method="post">
+        <?php wcmp_vendor_different_type_shipping_options($vendor->id); ?>
+        <div id="wcmp-vendor-shipping-by-distance-section">
+            <?php wcmp_vendor_distance_by_shipping_settings($vendor->id); ?>
+        </div>
+        <div id="wcmp-vendor-shipping-by-zone-section">
         <div class="panel panel-default panel-pading pannel-outer-heading">
             <div class="panel-heading d-flex">
                 <h3><?php esc_html_e('Shipping zones', 'dc-woocommerce-multi-vendor'); ?></h3>
@@ -90,6 +95,7 @@ $vendor_shipping_data = get_user_meta($vendor->id, 'vendor_shipping_data', true)
                     <div id="vendor-shipping-methods"></div>
                 </div>
             </div>
+        </div>
         </div>
         <?php do_action('wcmp_before_shipping_form_end_vendor_dashboard'); ?>
         <div class="wcmp-action-container">
