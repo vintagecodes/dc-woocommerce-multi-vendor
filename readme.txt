@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.7.2
 Requires PHP: 5.6
-Stable tag: 3.7.5
+Stable tag: 3.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,6 +279,38 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 3.7.6 - 2021-07-06 =
+* Added - Distance wise shipping #872.
+* Added - Checkout delivery location through google and mapbox map.
+* Added - Table rate shipping migration.
+* Added - Stripe description added #879.
+* Added - Commission search by id #888.
+* Added - Vendor can change order status as per settings #883.
+* Enhancement - Admin gets mail when vendor add coupon #891.
+* Added - Added a new class for the third party modification #887.
+* Fix - Query monitor found an issue #878.
+* Fix - Shop manager sub order view issue #877.
+* Fix - Product policy text styling changed #874.
+* Fix - Hook filter conflict with the third party plugin #880.
+* Fix - Coupon expiry date design break #895.
+* Fix - Coupon not reflecting in the shipping mail sent to the customers #893.
+* Fix - Ledger table error.
+* Fix - WCMp shipping error with PHP 8.0.6.
+* Dev - Added `wcmp_stripe_description_at_paid_time` filter.
+* Dev - Added `wcmp_is_allow_checkout_user_location` filter.
+* Dev - Added `wcmp_map_icon_width` filter.
+* Dev - Added `wcmp_map_icon_height` filter.
+* Dev - Added `wcmp_is_allow_store_shipping` filter.
+* Dev - Added `wcmp_is_apply_tax_on_shipping_rates` filter.
+* Dev - Added `wcmp_local_pickup_shipping_option_label` filter.
+* Dev - Added `wcmp_free_shipping_threshold_consider_tax` filter.
+* Dev - Added `wcmp_shipping_distance_calculate_amount` filter.
+* Dev - Added `wcmp_is_allow_hide_admin_shipping_for_vendor_shipping` filter.
+* Dev - Added `wcmp_is_allow_admin_shipping_if_no_vendor_shipping` filter.
+* Dev - Added `wcmp_settings_fields_shipping_rates_by_distance` filter.
+* Dev - Added `wcmp_vendor_shipping_option_to_vendor` filter.
+* Updated - Language file.
 
 = 3.7.5 - 2021-06-15 =
 * Added - Commission by product price #870.
