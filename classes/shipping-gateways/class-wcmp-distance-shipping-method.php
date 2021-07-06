@@ -332,7 +332,7 @@ class WCMp_Shipping_By_Distance extends WC_Shipping_Method {
         }
       }
 
-      if( apply_filters( 'wcmp_is_allow_admin_shipping_if_no_vendor_shipping', true ) ) {
+      if( apply_filters( 'wcmp_is_allow_admin_shipping_if_no_vendor_shipping', false ) ) {
         $rates = array();
       }
     }

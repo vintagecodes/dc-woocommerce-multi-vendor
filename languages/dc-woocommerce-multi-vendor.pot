@@ -7,7 +7,7 @@ msgstr ""
 "Marketplace 3.6.0\n"
 "Report-Msgid-Bugs-To: https://github.com/dualcube/dc-woocommerce-multi-"
 "vendor/issues\n"
-"POT-Creation-Date: 2021-07-05 08:23+0000\n"
+"POT-Creation-Date: 2021-07-06 12:43+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -4874,7 +4874,6 @@ msgstr ""
 msgid "Paypal Email"
 msgstr ""
 
-#: admin/class-wcmp-settings-payment.php:28
 #: admin/class-wcmp-settings-vendors.php:514
 #: classes/class-wcmp-post-transaction.php:195 classes/class-wcmp-user.php:541
 #: templates/vendor-dashboard/vendor-billing.php:19
@@ -4888,6 +4887,13 @@ msgstr ""
 
 #: classes/gateways/class-wcmp-gateway-paypal-masspay.php:22
 msgid "Paypal masspay"
+msgstr ""
+
+#: admin/class-wcmp-settings-payment.php:28
+msgid ""
+"PayPal Masspay (Stop Waiting and Pay Vendors Immediately with PayPal Real-"
+"Time Split Payment using <a href=\"https://wc-marketplace.com/product/wcmp-"
+"paypal-marketplace/\">WCMp PayPal Marketplace</a>. Please visit our site)"
 msgstr ""
 
 #: classes/gateways/class-wcmp-gateway-paypal-masspay.php:64

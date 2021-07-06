@@ -4541,10 +4541,10 @@ if (!function_exists('wcmp_vendor_different_type_shipping_options')) {
     function wcmp_vendor_different_type_shipping_options( $vendor_id = 0) {
         $vendor_shipping_options = get_user_meta($vendor_id, 'vendor_shipping_options', true) ? get_user_meta($vendor_id, 'vendor_shipping_options', true) : '';
         $shipping_options = apply_filters('wcmp_vendor_shipping_option_to_vendor', array(
-            'distance_by_zone' => __('Distance By Zone', 'dc-woocommerce-multi-vendor'),
+            'distance_by_zone' => __('Shippping by Zone', 'dc-woocommerce-multi-vendor'),
         ) );
         if (get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' ) && 'Enable' === get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' )) {
-            $shipping_options['distance_by_shipping'] = __('Distance by shippping', 'dc-woocommerce-multi-vendor');
+            $shipping_options['distance_by_shipping'] = __('Shippping by Distance', 'dc-woocommerce-multi-vendor');
         }
         ?>
         <label for="shipping-options"><?php esc_html_e( 'Shipping Options', 'dc-woocommerce-multi-vendor' ); ?></label>
