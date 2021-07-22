@@ -3,9 +3,9 @@ Contributors: wcmp, purnendu, itzmekhokan, rajsekharchatterjee11, sumitsingh8961
 Tags: multi vendor marketplace, woocommerce multivendor marketplace, multi seller store, product vendors, best marketplace plugin, multi seller, one product multi seller, woocommerce vendors, ebay, etsy, amazon, commission rate
 Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
-Tested up to: 5.7.2
+Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 3.7.6
+Stable tag: 3.7.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,6 +279,16 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 3.7.6 - 2021-07-22 =
+* Added - Compatibility of WordPress 5.8.
+* Added - Compatibility of WooCommerce 5.5.1.
+* Added - Create a new section for vendor shipping #909.
+* Added - Update description #908.
+* Added - Suborder creation via backend #903.
+* Fix - Backend search not working #901.
+* Fix - Policy tab display at the shop when admin disable it.
+* Updated - Language file.
 
 = 3.7.6 - 2021-07-06 =
 * Added - Distance wise shipping #872.
