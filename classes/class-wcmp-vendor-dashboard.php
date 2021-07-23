@@ -2204,9 +2204,19 @@ Class WCMp_Admin_Dashboard {
             }
             $coupon->save();
             do_action( 'wcmp_afm_coupon_options_save', $post_id, $coupon );
-
-            if ( ( ! $_POST['is_update'] || $_POST['original_post_status'] == 'draft' ) && $status != 'draft' ) {
-                $WCMp->product->on_all_status_transitions( $status, '', get_post( $post_id ) );
+            
+            $status_for_send_mail_to_admin = apply_filters('wcmp_send_coupon_mail_admin_status', array('draft'));
+            if ( !in_array( $status, $status_for_send_mail_to_admin) ) {
+                $current_user = get_current_vendor_id();
+                if ($current_user)
+                    $current_user_is_vendor = is_user_wcmp_vendor($current_user);
+                if ($current_user_is_vendor && !get_post_meta($post_id, 'wcmp_coupon_mail_send_to_admin')) {
+                    //send mails to admin for new vendor coupon
+                    $vendor = get_wcmp_vendor_by_term(get_user_meta($current_user, '_vendor_term_id', true));
+                    $email_admin = WC()->mailer()->emails['WC_Email_Vendor_New_Coupon_Added'];
+                    $email_admin->trigger($post_id, get_post( $post_id ), $vendor);
+                    update_post_meta($post_id, 'wcmp_coupon_mail_send_to_admin', true);
+                }
             }
             
             foreach ( $errors as $error ) {
