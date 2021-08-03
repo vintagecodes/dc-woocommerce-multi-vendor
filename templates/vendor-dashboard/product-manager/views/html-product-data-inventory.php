@@ -88,6 +88,7 @@ defined( 'ABSPATH' ) || exit;
             <?php do_action( 'wcmp_afm_product_options_stock_fields', $post->ID, $product_object, $post ); ?>
             <?php
             $stock_status_invisibility = apply_filters( 'inventory_tab_stock_status_section_invisibility', array( 'variable', 'external' ) );
+            $hide_classes = '';
             if ( call_user_func_array( "wcmp_is_allowed_product_type", $stock_status_invisibility ) ) :
                 $hide_classes = implode( ' ', preg_filter( '/^/', 'hide_if_', $stock_status_invisibility ) );
             endif; ?> 
