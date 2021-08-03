@@ -661,11 +661,11 @@ class WCMp_Vendor {
                 $variation_id = $item['variation_id'];
             }
             $product_id = $item['product_id'];
-            $commission_amount = get_wcmp_vendor_order_amount(array('order_id' => $order->get_id(), 'product_id' => $product_id, 'variation_id' => $variation_id, 'order_item_id' => $item_id));
+            $commission_amount = $item->get_meta('_vendor_item_commission', true);
             if ($is_ship)
                 echo "\n" . sprintf(__('Total: %s', 'dc-woocommerce-multi-vendor'), $order->get_formatted_line_subtotal($item));
             else
-                echo "\n" . sprintf(__('Commission: %s', 'dc-woocommerce-multi-vendor'), wc_price($commission_amount['commission_amount']));
+                echo "\n" . sprintf(__('Commission: %s', 'dc-woocommerce-multi-vendor'), wc_price($commission_amount));
 
             echo "\n\n";
         }
