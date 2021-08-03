@@ -90,21 +90,21 @@ defined( 'ABSPATH' ) || exit;
             $stock_status_invisibility = apply_filters( 'inventory_tab_stock_status_section_invisibility', array( 'variable', 'external' ) );
             if ( call_user_func_array( "wcmp_is_allowed_product_type", $stock_status_invisibility ) ) :
                 $hide_classes = implode( ' ', preg_filter( '/^/', 'hide_if_', $stock_status_invisibility ) );
-                ?>
-                <div class="form-group-row stock_status_field <?php echo $hide_classes; ?>">
-                    <div class="form-group">
-                        <label class="control-label col-sm-3 col-md-3" for="_stock_status"><?php _e( 'Stock status', 'dc-woocommerce-multi-vendor' ); ?></label>
-                        <div class="col-md-6 col-sm-9">
-                            <select id="_stock_status" name="_stock_status" class="form-control">
-                                <?php foreach ( wc_get_product_stock_status_options() as $key => $option ) : ?>
-                                    <option value="<?php echo $key; ?>" <?php selected( $product_object->get_stock_status( 'edit' ), $key ); ?>><?php echo $option; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>    
-                </div>
-                <?php do_action( 'wcmp_afm_product_options_stock_status', $post->ID, $product_object, $post ); ?> 
-            <?php endif; ?> 
+            endif; ?> 
+            <div class="form-group-row stock_status_field <?php echo $hide_classes; ?>">
+                <div class="form-group">
+                    <label class="control-label col-sm-3 col-md-3" for="_stock_status"><?php _e( 'Stock status', 'dc-woocommerce-multi-vendor' ); ?></label>
+                    <div class="col-md-6 col-sm-9">
+                        <select id="_stock_status" name="_stock_status" class="form-control">
+                            <?php foreach ( wc_get_product_stock_status_options() as $key => $option ) : ?>
+                                <option value="<?php echo $key; ?>" <?php selected( $product_object->get_stock_status( 'edit' ), $key ); ?>><?php echo $option; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>    
+            </div>
+            <?php do_action( 'wcmp_afm_product_options_stock_status', $post->ID, $product_object, $post ); ?> 
+            
         <?php endif; ?> 
         <?php
         $sold_individually_visibility = apply_filters( 'inventory_tab_sold_individually_section', array( 'simple', 'variable' ) );
