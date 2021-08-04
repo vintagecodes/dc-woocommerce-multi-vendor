@@ -37,7 +37,7 @@ if ( $totals = $order->get_order_item_totals() ) {
 
 echo "\n****************************************************\n\n";
 
-do_action( 'woocommerce_email_after_order_table', $order, $sent_to_admin, $plain_text );
+do_action( 'woocommerce_email_after_order_table', $order, $sent_to_admin, $plain_text, $email );
 echo __( 'Customer Details', 'dc-woocommerce-multi-vendor' ) . "\n";
 
 if ( $order->get_billing_email() )

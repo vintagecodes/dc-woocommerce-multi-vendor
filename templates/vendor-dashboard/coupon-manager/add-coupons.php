@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 global $WCMp;
 
 $post_status = get_post_status( $post->ID );
-$title = in_array( $post_status, array( "publish", "draft" ) ) ? $post->post_title : '';
+$title = in_array( $post_status, array( "publish", "draft", "pending" ) ) ? $post->post_title : '';
 ?>
 <div class="col-md-12 add-coupon-wrapper">
     <?php do_action( 'before_wcmp_afm_add_coupon_form' ); ?>

@@ -52,7 +52,7 @@ $vendor = get_wcmp_vendor_by_term($vendor_id);
 		}
 	?>
 </table>
-<?php do_action('woocommerce_email_after_order_table', $order, true); ?>
+<?php do_action('woocommerce_email_after_order_table', $order, true, $plain_text, $email); ?>
 
 <?php do_action( 'woocommerce_email_order_meta', $order, true ); ?>
 

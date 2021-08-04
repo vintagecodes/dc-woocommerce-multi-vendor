@@ -51,6 +51,7 @@ class WCMp_Email {
 		include( 'emails/class-wcmp-email-vendor-review.php' );
 		include( 'emails/class-wcmp-email-vendor-followed.php' );
 		include( 'emails/class-wcmp-email-admin-change-order-status.php' );
+		include( 'emails/class-wcmp-email-vendor-new-coupon-added.php' );
 
         $wcmp_email = array();
         $wcmp_email['WC_Email_Vendor_New_Account'] = new WC_Email_Vendor_New_Account();
@@ -77,6 +78,7 @@ class WCMp_Email {
 		$wcmp_email['WC_Email_Vendor_Review'] = new WC_Email_Vendor_Review();
 		$wcmp_email['WC_Email_Vendor_Followed'] = new WC_Email_Vendor_Followed();
 		$wcmp_email['WC_Email_Admin_Change_Order_Status'] = new WC_Email_Admin_Change_Order_Status();
+		$wcmp_email['WC_Email_Vendor_New_Coupon_Added'] = new WC_Email_Vendor_New_Coupon_Added();
 
         return array_merge( $emails, apply_filters( 'wcmp_email_classes', $wcmp_email ) );
     }

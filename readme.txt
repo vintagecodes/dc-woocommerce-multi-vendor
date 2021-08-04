@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 3.7.7
+Stable tag: 3.7.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -280,7 +280,17 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Changelog ==
 
-= 3.7.6 - 2021-07-22 =
+= 3.7.8 - 2021-08-04 =
+* Added - Compatibility of WooCommerce 5.5.2.
+* Added - Added filter for third party logo modification #920.
+* Fix - Error from new order plain mail #922.
+* Fix - spelling mistake on the shipping page #921.
+* Fix - Parameter mismatch with the third party plugin #919.
+* Fix - Stock status code issue at vendor dashboard #918.
+* Fix - Suborder search issue #917.
+* Updated - Language file.
+
+= 3.7.7 - 2021-07-22 =
 * Added - Compatibility of WordPress 5.8.
 * Added - Compatibility of WooCommerce 5.5.1.
 * Added - Create a new section for vendor shipping #909.
