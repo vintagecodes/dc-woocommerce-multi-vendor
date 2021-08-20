@@ -376,6 +376,10 @@ class WCMp_Admin {
             ),
             'submiting' => __('Submitting....', 'dc-woocommerce-multi-vendor'),
             'update' => __('Update', 'dc-woocommerce-multi-vendor'),
+            'everywhere_else_option'  => __( 'Everywhere Else', 'dc-woocommerce-multi-vendor' ),
+            'multiblock_delete_confirm' => __( "Are you sure and want to delete this 'Block'?\nYou can't undo this action ...", "dc-woocommerce-multi-vendor" ),
+            'wcmp_multiblick_addnew_help' => __( 'Add New Block', 'dc-woocommerce-multi-vendor' ),
+            'wcmp_multiblick_remove_help' => __( 'Remove Block', 'dc-woocommerce-multi-vendor' ),
         ));
 
         if ( $screen->id == 'wcmp_page_vendors') {
@@ -419,7 +423,7 @@ class WCMp_Admin {
             $WCMp->library->load_bootstrap_script_lib();
             $WCMp->library->load_bootstrap_style_lib();
         }
-        if (in_array($screen->id, array('wcmp_page_vendors'))) :
+        if (in_array($screen->id, array('wcmp_page_vendors', 'toplevel_page_dc-vendor-shipping'))) :
         	$WCMp->library->load_upload_lib();
 	        wp_enqueue_script('wcmp_admin_js');
                 wp_register_script('wc-country-select', WC()->plugin_url() . '/assets/js/frontend/country-select' . $suffix . '.js', array('jquery'), WC_VERSION);

@@ -819,7 +819,14 @@ Class WCMp_Admin_Dashboard {
                 <?php }
                     
                 } else { ?>
-                    <table class="wcmp-shipping-zones wc-shipping-zones widefat">
+                    <?php wcmp_vendor_different_type_shipping_options(get_current_user_id()); ?>
+                    <div id="wcmp-vendor-shipping-by-distance-section">
+                    <?php wcmp_vendor_distance_by_shipping_settings(get_current_user_id()); ?>
+                    </div>
+                    <div id="wcmp-vendor-shipping-by-country-section">
+                    <?php wcmp_vendor_shipping_by_country_settings(get_current_user_id()); ?>
+                    </div>
+                    <table class="wcmp-shipping-zones wc-shipping-zones widefat" id="wcmp-vendor-shipping-by-zone-section">
                             <thead>
                                 <tr>
                                     <th><?php _e('Zone name', 'dc-woocommerce-multi-vendor'); ?></th> 
@@ -879,6 +886,7 @@ Class WCMp_Admin_Dashboard {
             ?>
                             </tbody>
                         </table>
+                        <button id="btn-ok" class="button button-primary button-large wcmp-shipping-zone-add-method"><?php esc_html_e('Save changes', 'dc-woocommerce-multi-vendor'); ?></button>
                 <?php }
                 ?>
                     <?php do_action('wcmp_vendor_shipping_settings'); ?>
@@ -897,6 +905,108 @@ Class WCMp_Admin_Dashboard {
                 $all_allowed_countries = WC()->countries->get_allowed_countries();
                 $location = array();
                 $zone_id = 0;
+                // country wise shipping
+                $wcmp_shipping_by_country_rates = isset($_POST['wcmp_shipping_by_country']) ?  array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_country'] ) ) : '';
+                wcmp_update_user_meta(get_current_user_id(), '_wcmp_shipping_by_country', $wcmp_shipping_by_country_rates);
+                if(isset($_POST['wcmp_shipping_rates']) && !empty($_POST['wcmp_shipping_rates'])) {
+                    $wcmp_country_rates = array();
+                    $wcmp_state_rates   = array(); 
+                    foreach( $_POST['wcmp_shipping_rates'] as $wcmp_shipping_rates ) {
+                        if( $wcmp_shipping_rates['wcmp_country_to'] ) {
+                            if( $wcmp_shipping_rates['wcmp_shipping_state_rates'] && !empty( $wcmp_shipping_rates['wcmp_shipping_state_rates'] ) ) {
+                                foreach( $wcmp_shipping_rates['wcmp_shipping_state_rates'] as $wcmp_shipping_state_rates ) {
+
+                                    if( $wcmp_shipping_state_rates['wcmp_state_to'] ) {
+                                        $wcmp_state_rates[$wcmp_shipping_rates['wcmp_country_to']][$wcmp_shipping_state_rates['wcmp_state_to']] = $wcmp_shipping_state_rates['wcmp_state_to_price'];
+                                    }
+
+                                }
+                            }
+                            $wcmp_country_rates[$wcmp_shipping_rates['wcmp_country_to']] = $wcmp_shipping_rates['wcmp_country_to_price'];
+                        }
+                    }
+                    wcmp_update_user_meta( get_current_user_id(), '_wcmp_country_rates', $wcmp_country_rates );
+                    wcmp_update_user_meta( get_current_user_id(), '_wcmp_state_rates', $wcmp_state_rates );
+                }
+
+                // Distance by shipping
+                $wcmp_shipping_by_distance_rates = isset($_POST['wcmp_shipping_by_distance_rates']) ?  array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_distance_rates'] ) ) : '';
+                update_user_meta(get_current_user_id(), '_wcmp_shipping_by_distance_rates', $wcmp_shipping_by_distance_rates);
+
+                $wcmp_shipping_by_distance = isset($_POST['wcmp_shipping_by_distance']) ? array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_distance'] ) ) : '';
+                update_user_meta(get_current_user_id(), '_wcmp_shipping_by_distance', $wcmp_shipping_by_distance);
+
+                $vendor_shipping_options = isset($_POST['shippping-options']) ? wc_clean($_POST['shippping-options']) : '';
+                update_user_meta(get_current_user_id(), 'vendor_shipping_options', $vendor_shipping_options);
+                
+                if (!empty($_POST['wcmp_shipping_zone'])) {
+                    foreach ($_POST['wcmp_shipping_zone'] as $shipping_zone) {
+                        if (isset($shipping_zone['_zone_id']) && $shipping_zone['_zone_id'] != 0) {
+                            $zone_id = $shipping_zone['_zone_id'];
+
+                            if (isset($shipping_zone['_limit_zone_location']) && $shipping_zone['_limit_zone_location']) {
+                                if (!empty($shipping_zone['_select_zone_states'])) {
+                                    $state_array = array();
+                                    foreach ($shipping_zone['_select_zone_states'] as $zone_state) {
+                                        $state_array[] = array(
+                                            'code' => $zone_state,
+                                            'type' => 'state'
+                                        );
+                                    }
+
+                                    $location = array_merge($location, $state_array);
+                                }
+
+                                if (!empty($shipping_zone['_select_zone_postcodes'])) {
+                                    $postcode_array = array();
+                                    $zone_postcodes = array_map('trim', explode(',', $shipping_zone['_select_zone_postcodes']));
+                                    foreach ($zone_postcodes as $zone_postcode) {
+                                        $postcode_array[] = array(
+                                            'code' => $zone_postcode,
+                                            'type' => 'postcode'
+                                        );
+                                    }
+
+                                    $location = array_merge($location, $postcode_array);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!empty($_POST['wcmp_shipping_zone'])) {
+                    foreach ($_POST['wcmp_shipping_zone'] as $shipping_zone) {
+                        if (isset($shipping_zone['_zone_id']) && $shipping_zone['_zone_id'] != 0) {
+                            $zone_id = $shipping_zone['_zone_id'];
+
+                            if (isset($shipping_zone['_limit_zone_location']) && $shipping_zone['_limit_zone_location']) {
+                                if (!empty($shipping_zone['_select_zone_states'])) {
+                                    $state_array = array();
+                                    foreach ($shipping_zone['_select_zone_states'] as $zone_state) {
+                                        $state_array[] = array(
+                                            'code' => $zone_state,
+                                            'type' => 'state'
+                                        );
+                                    }
+
+                                    $location = array_merge($location, $state_array);
+                                }
+
+                                if (!empty($shipping_zone['_select_zone_postcodes'])) {
+                                    $postcode_array = array();
+                                    $zone_postcodes = array_map('trim', explode(',', $shipping_zone['_select_zone_postcodes']));
+                                    foreach ($zone_postcodes as $zone_postcode) {
+                                        $postcode_array[] = array(
+                                            'code' => $zone_postcode,
+                                            'type' => 'postcode'
+                                        );
+                                    }
+
+                                    $location = array_merge($location, $postcode_array);
+                                }
+                            }
+                        }
+                    }
+                }
                 if (!empty($_POST['wcmp_shipping_zone'])) {
                     foreach ($_POST['wcmp_shipping_zone'] as $shipping_zone) {
                         if (isset($shipping_zone['_zone_id']) && $shipping_zone['_zone_id'] != 0) {
@@ -1186,6 +1296,30 @@ Class WCMp_Admin_Dashboard {
         $all_allowed_countries = WC()->countries->get_allowed_countries();
         $location = array();
         $zone_id = 0;
+
+        // country wise shipping
+        $wcmp_shipping_by_country_rates = isset($_POST['wcmp_shipping_by_country']) ?  array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_country'] ) ) : '';
+        wcmp_update_user_meta($vendor_user_id, '_wcmp_shipping_by_country', $wcmp_shipping_by_country_rates);
+        if(isset($_POST['wcmp_shipping_rates']) && !empty($_POST['wcmp_shipping_rates'])) {
+            $wcmp_country_rates = array();
+            $wcmp_state_rates   = array(); 
+            foreach( $_POST['wcmp_shipping_rates'] as $wcmp_shipping_rates ) {
+                if( $wcmp_shipping_rates['wcmp_country_to'] ) {
+                    if( $wcmp_shipping_rates['wcmp_shipping_state_rates'] && !empty( $wcmp_shipping_rates['wcmp_shipping_state_rates'] ) ) {
+                        foreach( $wcmp_shipping_rates['wcmp_shipping_state_rates'] as $wcmp_shipping_state_rates ) {
+
+                            if( $wcmp_shipping_state_rates['wcmp_state_to'] ) {
+                                $wcmp_state_rates[$wcmp_shipping_rates['wcmp_country_to']][$wcmp_shipping_state_rates['wcmp_state_to']] = $wcmp_shipping_state_rates['wcmp_state_to_price'];
+                            }
+
+                        }
+                    }
+                    $wcmp_country_rates[$wcmp_shipping_rates['wcmp_country_to']] = $wcmp_shipping_rates['wcmp_country_to_price'];
+                }
+            }
+            wcmp_update_user_meta( $vendor_user_id, '_wcmp_country_rates', $wcmp_country_rates );
+            wcmp_update_user_meta( $vendor_user_id, '_wcmp_state_rates', $wcmp_state_rates );
+        }
 
         // Distance by shipping
         $wcmp_shipping_by_distance_rates = isset($_POST['wcmp_shipping_by_distance_rates']) ?  array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_distance_rates'] ) ) : '';

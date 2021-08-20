@@ -61,6 +61,7 @@ class WCMp_Settings_General {
                     "fields" => array(
                         "is_vendor_shipping_on" => array('title' => __('Enable Vendor Shipping ', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'is_vendor_shipping_on', 'label_for' => 'is_vendor_shipping_on', 'name' => 'is_vendor_shipping_on', 'value' => 'Enable', 'text' => __('If enabled vendor can configure their shipping on dashboard.', 'dc-woocommerce-multi-vendor')), // Checkbox
                         "enabled_distance_by_shipping_for_vendor" => array('title' => __('Enable Distance By Shipping', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'enabled_distance_by_shipping_for_vendor', 'label_for' => 'enabled_distance_by_shipping_for_vendor', 'name' => 'enabled_distance_by_shipping_for_vendor', 'value' => 'Enable', 'text' => __('If enabled vendor can configure shipping by distance.', 'dc-woocommerce-multi-vendor')), // Checkbox
+                        "enabled_shipping_by_country_for_vendor" => array('title' => __('Enable Shipping By Country', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'enabled_shipping_by_country_for_vendor', 'label_for' => 'enabled_shipping_by_country_for_vendor', 'name' => 'enabled_shipping_by_country_for_vendor', 'value' => 'Enable', 'text' => __('If enabled vendor can configure shipping by country.', 'dc-woocommerce-multi-vendor')), // Checkbox
                         "is_checkout_delivery_location_on" => array('title' => __('Enable Checkout Delivery Location', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'is_checkout_delivery_location_on', 'label_for' => 'is_checkout_delivery_location_on', 'name' => 'is_checkout_delivery_location_on', 'value' => 'Enable', 'text' => __('If enabled customer can add delivery location to map.', 'dc-woocommerce-multi-vendor'), 'hints' => __('You must enable this option whenever you are using the shipping by distance feature.', 'dc-woocommerce-multi-vendor')), // Checkbox
                     ),
                 ),
@@ -129,6 +130,9 @@ class WCMp_Settings_General {
         }
         if(isset($input['enabled_distance_by_shipping_for_vendor'])){
             $new_input['enabled_distance_by_shipping_for_vendor'] = $input['enabled_distance_by_shipping_for_vendor'];
+        }
+        if(isset($input['enabled_shipping_by_country_for_vendor'])){
+            $new_input['enabled_shipping_by_country_for_vendor'] = $input['enabled_shipping_by_country_for_vendor'];
         }
         if(isset($input['is_checkout_delivery_location_on'])){
             $new_input['is_checkout_delivery_location_on'] = $input['is_checkout_delivery_location_on'];

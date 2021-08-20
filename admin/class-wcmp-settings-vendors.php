@@ -724,6 +724,9 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 						<div id="wcmp-vendor-shipping-by-distance-section">
 							<?php wcmp_vendor_distance_by_shipping_settings(absint($_GET['ID'])); ?>
 						</div>
+						<div id="wcmp-vendor-shipping-by-country-section">
+							<?php wcmp_vendor_shipping_by_country_settings(absint($_GET['ID'])); ?>
+						</div>
 						<div id="wcmp-vendor-shipping-by-zone-section">
 						<table class="wcmp-shipping-zones wc-shipping-zones widefat">
 							<thead>

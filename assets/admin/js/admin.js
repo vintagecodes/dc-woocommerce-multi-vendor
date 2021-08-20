@@ -72,64 +72,6 @@ jQuery(document).ready(function ($) {
             $checkbox.prop( 'checked', ! $checkbox.prop( 'checked' ) ).change();
     } );
 
-    $('.multi_input_holder').each(function () {
-        var multi_input_holder = $(this);
-        if (multi_input_holder.find('.multi_input_block').length == 1)
-            multi_input_holder.find('.remove_multi_input_block').css('display', 'none');
-        multi_input_holder.find('.multi_input_block').each(function () {
-            if ($(this)[0] != multi_input_holder.find('.multi_input_block:last')[0]) {
-                $(this).find('.add_multi_input_block').remove();
-            }
-        });
-
-        multi_input_holder.find('.add_multi_input_block').click(function () {
-            var holder_id = multi_input_holder.attr('id');
-            var holder_name = multi_input_holder.data('name');
-            var multi_input_blockCount = multi_input_holder.data('length');
-            multi_input_blockCount++;
-            var multi_input_blockEle = multi_input_holder.find('.multi_input_block:first').clone(true);
-
-            multi_input_blockEle.find('textarea,input:not(input[type=button],input[type=submit])').val('');
-            multi_input_blockEle.find('.multi_input_block_element').each(function () {
-                var ele = $(this);
-                var ele_name = ele.data('name');
-                ele.attr('name', holder_name + '[' + multi_input_blockCount + '][' + ele_name + ']');
-                ele.attr('id', holder_id + '_' + ele_name + '_' + multi_input_blockCount);
-                if (ele.parent().hasClass('dc-wp-fields-uploader')) {
-                    var uploadEle = ele.parent();
-                    uploadEle.find('img').attr('src', '').attr('id', holder_id + '_' + ele_name + '_' + multi_input_blockCount + '_display').addClass('placeHolder');
-                    uploadEle.find('.upload_button').attr('id', holder_id + '_' + ele_name + '_' + multi_input_blockCount + '_button').show();
-                    uploadEle.find('.remove_button').attr('id', holder_id + '_' + ele_name + '_' + multi_input_blockCount + '_remove_button').hide();
-                }
-
-                if (ele.hasClass('dc_datepicker')) {
-                    ele.removeClass('hasDatepicker').datepicker({
-                        dateFormat: ele.data('date_format'),
-                        changeMonth: true,
-                        changeYear: true
-                    });
-                }
-
-            });
-
-            multi_input_blockEle.find('.add_multi_input_block').remove();
-            multi_input_holder.append(multi_input_blockEle);
-            multi_input_holder.find('.multi_input_block:last').append($(this));
-            if (multi_input_holder.find('.multi_input_block').length > 1)
-                multi_input_holder.find('.remove_multi_input_block').css('display', 'block');
-            multi_input_holder.data('length', multi_input_blockCount);
-        });
-
-        multi_input_holder.find('.remove_multi_input_block').click(function () {
-            var addEle = multi_input_holder.find('.add_multi_input_block').clone(true);
-            $(this).parent().remove();
-            multi_input_holder.find('.add_multi_input_block').remove();
-            multi_input_holder.find('.multi_input_block:last').append(addEle);
-            if (multi_input_holder.find('.multi_input_block').length == 1)
-                multi_input_holder.find('.remove_multi_input_block').css('display', 'none');
-        });
-    });
-
     if ($('#commission_typee').val() == 'fixed_with_percentage') {
         $('#default_commissionn').closest("tr").css("display", "none");
         $('#fixed_with_percentage_qty').closest("tr").css("display", "none");
@@ -203,23 +145,301 @@ jQuery(document).ready(function ($) {
         }
     });    
     
+
+    $('.wcmp_country_to_select').select2(); 
+    $('.wcmp-select').select2();
+    $('.wcmp_country_to_select').each(function() {
+        $(this).change(function() {
+            setStateBoxforCountry( $(this) );
+        }).change();
+    });
+
+    setTimeout(function() {
+        $('#wcmp_shipping_rates').children('.multi_input_block').children('.add_multi_input_block').click(function() {
+            $('#wcmp_shipping_rates').children('.multi_input_block:last').find('.wcmp_country_to_select').select2();
+            $('#wcmp_shipping_rates').children('.multi_input_block:last').find('.wcmp_country_to_select').change(function() {
+                setStateBoxforCountry( $(this) );
+            }).change();
+        });
+    }, 2000 );
+    function setStateBoxforCountry( countryBox ) {
+        var states_json = wc_country_select_params.countries.replace( /&quot;/g, '"' ),
+        states = $.parseJSON( states_json ),
+        country = countryBox.val();
+
+        if ( states[ country ] ) {
+            if ( $.isEmptyObject( states[ country ] ) ) {
+                countryBox.parent().find('.wcmp_state_to_select').each(function() {
+                    $statebox = $(this);
+                    $statebox_id = $statebox.attr('id');
+                    $statebox_name = $statebox.attr('name');
+                    $statebox_val = $statebox.val();
+                    if( $statebox_val === null ) $statebox_val = '';
+                    $statebox_dataname = $statebox.data('name');
+
+                    if ( $statebox.is( 'select' ) ) {
+                        $statebox.replaceWith( '<input type="text" name="'+$statebox_name+'" id="'+$statebox_id+'" data-name="'+$statebox_dataname+'" value="'+$statebox_val+'" class="wcmp-text wcmp_state_to_select multi_input_block_element" />' );
+                    }
+                });
+            } else {
+                input_selected_state = '';
+                var options = '',
+                state = states[ country ];
+                countryBox.parent().find('.wcmp_state_to_select').each(function() {
+
+                    $statebox = $(this);
+                    $statebox_id = $statebox.attr('id');
+                    $statebox_name = $statebox.attr('name');
+                    $statebox_val = $statebox.val();
+                    if( $statebox_val === null ) $statebox_val = '';
+                    $statebox_dataname = $statebox.data('name');
+
+                    for ( var index in state ) {
+                        if ( state.hasOwnProperty( index ) ) {
+                            if ( $statebox_val ) {
+                                if ( $statebox_val == index ) {
+                                    var selected_value = 'selected="selected"';
+                                } else {
+                                    var selected_value = '';
+                                }
+                            }
+                            options = options + '<option value="' + index + '"' + selected_value + '>' + state[ index ] + '</option>';
+                        }
+                    }
+
+
+                    if ( $statebox.is( 'select' ) ) {
+                        $statebox.html( '<option value="">' + wc_country_select_params.i18n_select_state_text + '</option><optgroup label="-------------------------------------"><option value="everywhere">'+wcmp_admin_js_script_data.everywhere_else_option+'</option></optgroup><optgroup label="-------------------------------------">' + options + '</optgroup>' );
+                    }
+                    if ( $statebox.is( 'input' ) ) {
+                        $statebox.replaceWith( '<select name="'+$statebox_name+'" id="'+$statebox_id+'" data-name="'+$statebox_dataname+'" class="wcmp-select wcmp_state_to_select multi_input_block_element"></select>' );
+                        $statebox = $('#'+$statebox_id);
+                        $statebox.html( '<option value="">' + wc_country_select_params.i18n_select_state_text + '</option><optgroup label="-------------------------------------"><option value="everywhere">'+wcmp_admin_js_script_data.everywhere_else_option+'</option></optgroup><optgroup label="-------------------------------------">' + options + '</optgroup>' );
+                    }
+                    $statebox.val( $statebox_val );
+                });
+            }
+        } else {
+            countryBox.parent().find('.wcmp_state_to_select').each(function() {
+                $statebox = $(this);
+                $statebox_id = $statebox.attr('id');
+                $statebox_name = $statebox.attr('name');
+                $statebox_val = $statebox.val();
+                if( $statebox_val === null ) $statebox_val = '';
+                $statebox_dataname = $statebox.data('name');
+
+                if ( $statebox.is( 'select' ) ) {
+                    $statebox.replaceWith( '<input type="text" name="'+$statebox_name+'" id="'+$statebox_id+'" data-name="'+$statebox_dataname+'" value="'+$statebox_val+'" class="wcmp-text wcmp_state_to_select multi_input_block_element" />' );
+                }
+            });
+        }
+    }
+
+    $('.multi_input_holder').each(function() {
+        var multi_input_holder = $(this);
+        addMultiInputProperty(multi_input_holder);
+    });
+
+    function addMultiInputProperty(multi_input_holder) {
+        var multi_input_limit = multi_input_holder.data('limit');
+        if( typeof multi_input_limit == 'undefined' ) multi_input_limit = -1;
+        if(multi_input_holder.children('.multi_input_block').length == 1) multi_input_holder.children('.multi_input_block').children('.remove_multi_input_block').css('display', 'none');
+        if( multi_input_holder.children('.multi_input_block').length == multi_input_limit )  multi_input_holder.find('.add_multi_input_block').hide();
+        else multi_input_holder.find('.add_multi_input_block').show();
+        multi_input_holder.children('.multi_input_block').each(function() {
+            if($(this)[0] != multi_input_holder.children('.multi_input_block:last')[0]) {
+                $(this).children('.add_multi_input_block').remove();
+            }
+            $(this).children('.add_multi_input_block').attr( 'title', wcmp_admin_js_script_data.wcmp_multiblick_addnew_help );
+            $(this).children('.remove_multi_input_block').attr( 'title', wcmp_admin_js_script_data.wcmp_multiblick_remove_help );
+            $(this).children('.wcmp_multiblock_sortable').remove();
+        });
+
+        multi_input_holder.children('.multi_input_block').children('.add_multi_input_block').off('click').on('click', function() {
+            var holder_id = multi_input_holder.attr('id');
+            var holder_name = multi_input_holder.data('name');
+            var multi_input_blockCount = multi_input_holder.data('length');
+            multi_input_blockCount++;
+            var multi_input_blockEle = multi_input_holder.children('.multi_input_block:first').clone(false);
+
+            multi_input_blockEle.find('textarea,input:not(input[type=button],input[type=submit],input[type=checkbox],input[type=radio])').val('');
+            multi_input_blockEle.find('input[type=checkbox]').attr('checked', false);
+            multi_input_blockEle.find('.select2-container').remove();
+            multi_input_blockEle.find('select').select2();
+            multi_input_blockEle.find('select').select2('destroy');
+            multi_input_blockEle.children('.multi_input_block_element:not(.multi_input_holder)').each(function () {
+                var ele = $(this);
+                var ele_name = ele.data('name');
+                if(ele.hasClass('wcmp-wp-fields-uploader')) {} else if(ele.hasClass('wp-picker-container')) {} else {
+                    ele.attr('name', holder_name+'['+multi_input_blockCount+']['+ele_name+']');
+                    ele.attr('id', holder_id + '_' + ele_name + '_' + multi_input_blockCount);
+                }
+            });
+        // Nested multi-input block property
+        multi_input_blockEle.children('.multi_input_holder').each(function() {
+            setNestedMultiInputIndex($(this), holder_id, holder_name, multi_input_blockCount);
+        });
+
+        multi_input_blockEle.children('.remove_multi_input_block').off('click').on('click', function() {
+            var rconfirm = confirm(wcmp_admin_js_script_data.multiblock_delete_confirm);
+            if(rconfirm) {
+                var remove_ele_parent = $(this).parent().parent();
+                var addEle = remove_ele_parent.children('.multi_input_block').children('.add_multi_input_block').clone(true);
+                $(this).parent().remove();
+                remove_ele_parent.children('.multi_input_block').children('.add_multi_input_block').remove();
+                remove_ele_parent.children('.multi_input_block:last').append(addEle);
+                if( remove_ele_parent.children('.multi_input_block').length == multi_input_limit ) remove_ele_parent.find('.add_multi_input_block').hide();
+                else remove_ele_parent.find('.add_multi_input_block').show();
+                if(remove_ele_parent.children('.multi_input_block').length == 1) remove_ele_parent.children('.multi_input_block').children('.remove_multi_input_block').css('display', 'none');
+            }
+        });
+
+        multi_input_blockEle.children('.add_multi_input_block').remove();
+        multi_input_holder.append(multi_input_blockEle);
+        multi_input_holder.children('.multi_input_block:last').append($(this));
+        if(multi_input_holder.children('.multi_input_block').length > 1) multi_input_holder.children('.multi_input_block').children('.remove_multi_input_block').css('display', 'block');
+        if( multi_input_holder.children('.multi_input_block').length == multi_input_limit ) multi_input_holder.find('.add_multi_input_block').hide();
+        else multi_input_holder.find('.add_multi_input_block').show();
+        multi_input_holder.data('length', multi_input_blockCount);
+
+        // Fields Type Property
+        multi_input_holder.find('.field_type_options').each(function() {
+            $(this).off('change').on('change', function() {
+                $(this).parent().find('.field_type_select_options').hide();
+                $(this).parent().find('.field_type_html_options').hide();
+                if( $(this).val() == 'select' ) $(this).parent().find('.field_type_select_options').show();
+                else if( $(this).val() == 'mselect' ) $(this).parent().find('.field_type_select_options').show();
+                else if( $(this).val() == 'dropdown' ) $(this).parent().find('.field_type_select_options').show();
+                else if( $(this).val() == 'html' ) $(this).parent().find('.field_type_html_options').show();
+            } ).change();
+        } );
+
+        // Group Name
+        multi_input_holder.find('.custom_field_is_group').each( function() {
+            $(this).change( function() {
+                if( $(this).is(':checked') ) {
+                    $(this).parent().find('.custom_field_is_group_name').css('visibility', 'visible');
+                } else {
+                    $(this).parent().find('.custom_field_is_group_name').css('visibility', 'hidden');
+                }
+            } ).change();
+        } );
+
+        });
+
+        if(!multi_input_holder.hasClass('multi_input_block_element')) {
+        //multi_input_holder.children('.multi_input_block').css('padding-bottom', '40px');
+        }
+        if(multi_input_holder.children('.multi_input_block').children('.multi_input_holder').length > 0) {
+        //multi_input_holder.children('.multi_input_block').css('padding-bottom', '40px');
+        }
+
+        multi_input_holder.children('.multi_input_block').children('.remove_multi_input_block').off('click').on('click', function() {
+            var rconfirm = confirm(wcmp_admin_js_script_data.multiblock_delete_confirm);
+            if(rconfirm) {
+                var remove_ele_parent = $(this).parent().parent();
+                var addEle = remove_ele_parent.children('.multi_input_block').children('.add_multi_input_block').clone(true);
+                $(this).parent().remove();
+                remove_ele_parent.children('.multi_input_block').children('.add_multi_input_block').remove();
+                remove_ele_parent.children('.multi_input_block:last').append(addEle);
+                if(remove_ele_parent.children('.multi_input_block').length == 1) remove_ele_parent.children('.multi_input_block').children('.remove_multi_input_block').css('display', 'none');
+                if( remove_ele_parent.children('.multi_input_block').length == multi_input_limit ) remove_ele_parent.find('.add_multi_input_block').hide();
+                else remove_ele_parent.find('.add_multi_input_block').show();
+            }
+        });
+
+        // Fields Type Property
+        multi_input_holder.find('.field_type_options').each(function() {
+            $(this).off('change').on('change', function() {
+                $(this).parent().find('.field_type_select_options').hide();
+                $(this).parent().find('.field_type_html_options').hide();
+                if( $(this).val() == 'select' ) $(this).parent().find('.field_type_select_options').show();
+                else if( $(this).val() == 'mselect' ) $(this).parent().find('.field_type_select_options').show();
+                else if( $(this).val() == 'dropdown' ) $(this).parent().find('.field_type_select_options').show();
+                else if( $(this).val() == 'html' ) $(this).parent().find('.field_type_html_options').show();
+            } ).change();
+        } );
+
+        // Group Name
+        multi_input_holder.find('.custom_field_is_group').each( function() {
+            $(this).change( function() {
+                if( $(this).is(':checked') ) {
+                    $(this).parent().find('.custom_field_is_group_name').css('visibility', 'visible');
+                } else {
+                    $(this).parent().find('.custom_field_is_group_name').css('visibility', 'hidden');
+                }
+            } ).change();
+        } );
+    }
+
+    function setNestedMultiInputIndex(nested_multi_input, holder_id, holder_name, multi_input_blockCount) {
+        nested_multi_input.children('.multi_input_block:not(:last)').remove();
+        var multi_input_id = nested_multi_input.attr('id');
+        multi_input_id = multi_input_id.replace(holder_id + '_', '');
+
+        var multi_input_id_splited = multi_input_id.split('_');
+        var multi_input_name = '';        
+
+        for(var i = 0; i < (multi_input_id_splited.length -1); i++) {
+            if(multi_input_name != '') multi_input_name += '_';
+            multi_input_name += multi_input_id_splited[i];
+        }
+        nested_multi_input.attr('data-name', holder_name+'['+multi_input_blockCount+']['+multi_input_name+']');
+        nested_multi_input.attr('id', holder_id+'_'+multi_input_name+'_'+multi_input_blockCount);
+        var nested_multi_input_block_count = 0;
+        nested_multi_input.children('.multi_input_block').children('.multi_input_block_element:not(.multi_input_holder)').each(function() {
+            var ele = $(this);
+            var ele_name = ele.data('name');
+            if(ele.hasClass('wcmp-wp-fields-uploader')) {} else {
+                var multiple = ele.attr('multiple');
+                if (typeof multiple !== typeof undefined && multiple !== false) {
+                    ele.attr('name', holder_name+'['+multi_input_blockCount+']['+multi_input_name+']['+nested_multi_input_block_count+']['+ele_name+'][]');
+                } else {
+                    ele.attr('name', holder_name+'['+multi_input_blockCount+']['+multi_input_name+']['+nested_multi_input_block_count+']['+ele_name+']');
+                }
+                ele.attr('id', holder_id+'_'+multi_input_name+'_'+multi_input_blockCount + '_' + ele_name + '_' + nested_multi_input_block_count);
+            }
+        });
+
+        addMultiInputProperty(nested_multi_input);
+
+        if(nested_multi_input.children('.multi_input_block').children('.multi_input_holder').length > 0) nested_multi_input.children('.multi_input_block').css('padding-bottom', '40px');
+
+        nested_multi_input.children('.multi_input_block').children('.multi_input_holder').each(function() {
+            setNestedMultiInputIndex($(this), holder_id+'_'+multi_input_name+'_0', holder_name+'['+multi_input_blockCount+']['+multi_input_name+']', 0);
+        });
+    }
+
     $('#shipping-options').change(function () {
         var shipping_option = $(this).val();
+        console.log(shipping_option);
         if (shipping_option == 'distance_by_shipping') {
             $('#wcmp-vendor-shipping-by-distance-section').show();
             $('#wcmp-vendor-shipping-by-zone-section').hide();
+            $('#wcmp-vendor-shipping-by-country-section').hide();
         } else if (shipping_option == 'distance_by_zone') {
             $('#wcmp-vendor-shipping-by-distance-section').hide();
             $('#wcmp-vendor-shipping-by-zone-section').show();
+            $('#wcmp-vendor-shipping-by-country-section').hide();
+        } else if (shipping_option == 'shipping_by_country') {
+            $('#wcmp-vendor-shipping-by-distance-section').hide();
+            $('#wcmp-vendor-shipping-by-country-section').show();
+            $('#wcmp-vendor-shipping-by-zone-section').hide();
         } else {}
     });
 
     if ($('#shipping-options').val() == 'distance_by_shipping') {
         $('#wcmp-vendor-shipping-by-distance-section').show();
         $('#wcmp-vendor-shipping-by-zone-section').hide();
+        $('#wcmp-vendor-shipping-by-country-section').hide();
     } else if ($('#shipping-options').val() == 'distance_by_zone') {
         $('#wcmp-vendor-shipping-by-distance-section').hide();
         $('#wcmp-vendor-shipping-by-zone-section').show();
+        $('#wcmp-vendor-shipping-by-country-section').hide();
+    } else if ($('#shipping-options').val() == 'shipping_by_country') {
+        $('#wcmp-vendor-shipping-by-distance-section').hide();
+        $('#wcmp-vendor-shipping-by-zone-section').hide();
+        $('#wcmp-vendor-shipping-by-country-section').show();
     } else {}
     
     if ($('#is_submit_product').is(':checked')) {
