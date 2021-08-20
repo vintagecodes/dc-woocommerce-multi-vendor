@@ -296,6 +296,7 @@ $_wp_editor_settings = apply_filters('wcmp_vendor_storefront_wp_editor_settings'
                                         });
                                     });
                                     map.addControl(geocoder);
+                                    map.addControl(new mapboxgl.NavigationControl());
                                 </script>
                                 <?php
                             } elseif (!empty($api_key)) {
