@@ -17,9 +17,9 @@ defined( 'ABSPATH' ) || exit;
     <div class="row-padding"> 
         <?php if ( wc_product_weight_enabled() ) : ?> 
             <div class="form-group">
-                <label class="control-label col-sm-3 col-md-3" for="_weight"><?php echo __( 'Weight', 'dc-woocommerce-multi-vendor' ) . ' (' . get_option( 'woocommerce_weight_unit' ) . ')' ?></label>
+                <label class="control-label col-sm-3 col-md-3" for="_weight"><?php esc_html_e( 'Weight', 'dc-woocommerce-multi-vendor' ) . ' (' . get_option( 'woocommerce_weight_unit' ) . ')' ?></label>
                 <div class="col-md-6 col-sm-9">
-                    <input class="form-control" type="text" id="_weight" name="_weight" value="<?php echo $product_object->get_weight( 'edit' ); ?>" placeholder="<?php echo wc_format_localized_decimal( 0 ); ?>" />
+                    <input class="form-control" type="text" id="_weight" name="_weight" value="<?php echo isset($_POST['_weight']) ? absint($_POST['_weight']) : $product_object->get_weight( 'edit' ); ?>" placeholder="<?php echo wc_format_localized_decimal( 0 ); ?>" />
                 </div>
             </div> 
         <?php endif; ?>
@@ -29,13 +29,13 @@ defined( 'ABSPATH' ) || exit;
                 <div class="col-md-6 col-sm-9">
                     <div class="row">
                         <div class="col-md-4">
-                            <input class="form-control col-md-4" id="product_length" placeholder="<?php esc_attr_e( 'Length', 'dc-woocommerce-multi-vendor' ); ?>" class="input-text wc_input_decimal" size="6" type="text" name="_length" value="<?php echo esc_attr( wc_format_localized_decimal( $product_object->get_length( 'edit' ) ) ); ?>" />
+                            <input class="form-control col-md-4" id="product_length" placeholder="<?php esc_attr_e( 'Length', 'dc-woocommerce-multi-vendor' ); ?>" class="input-text wc_input_decimal" size="6" type="text" name="_length" value="<?php echo isset($_POST['_length']) ? absint($_POST['_length']) : esc_attr( wc_format_localized_decimal( $product_object->get_length( 'edit' ) ) ); ?>" />
                         </div>
                         <div class="col-md-4">
-                            <input class="form-control col-md-4" placeholder="<?php esc_attr_e( 'Width', 'dc-woocommerce-multi-vendor' ); ?>" class="input-text wc_input_decimal" size="6" type="text" name="_width" value="<?php echo esc_attr( wc_format_localized_decimal( $product_object->get_width( 'edit' ) ) ); ?>" />
+                            <input class="form-control col-md-4" placeholder="<?php esc_attr_e( 'Width', 'dc-woocommerce-multi-vendor' ); ?>" class="input-text wc_input_decimal" size="6" type="text" name="_width" value="<?php echo isset($_POST['_width']) ? absint($_POST['_width']) : esc_attr( wc_format_localized_decimal( $product_object->get_width( 'edit' ) ) ); ?>" />
                         </div>
                         <div class="col-md-4">
-                            <input class="form-control col-md-4" placeholder="<?php esc_attr_e( 'Height', 'dc-woocommerce-multi-vendor' ); ?>" class="input-text wc_input_decimal last" size="6" type="text" name="_height" value="<?php echo esc_attr( wc_format_localized_decimal( $product_object->get_height( 'edit' ) ) ); ?>" />
+                            <input class="form-control col-md-4" placeholder="<?php esc_attr_e( 'Height', 'dc-woocommerce-multi-vendor' ); ?>" class="input-text wc_input_decimal last" size="6" type="text" name="_height" value="<?php echo isset($_POST['_height']) ? absint($_POST['_height']) : esc_attr( wc_format_localized_decimal( $product_object->get_height( 'edit' ) ) ); ?>" />
                         </div>
                     </div>
                 </div>

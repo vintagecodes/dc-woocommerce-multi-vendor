@@ -2028,6 +2028,14 @@ Class WCMp_Admin_Dashboard {
 
             do_action( 'wcmp_before_post_update' );
 
+            $can_publish = true;
+            $check_any_error_has = apply_filters('wcmp_error_from_product_publish', $error_msg = '', $_POST);
+            if ($check_any_error_has) {
+                $can_publish = false;
+                wc_add_notice( $check_any_error_has, 'error' );
+            }
+
+            if ($can_publish) :
             $post_id = wp_update_post( $post_data, true );
 
             if ( $post_id && ! is_wp_error( $post_id ) ) {
@@ -2223,6 +2231,7 @@ Class WCMp_Admin_Dashboard {
                 $error_msg = ( $post_id->get_error_code() === 'empty_content' ) ? __( 'Content, title, and excerpt are empty.', 'dc-woocommerce-multi-vendor' ) : $post_id->get_error_message();
                 wc_add_notice( $error_msg, 'error' );
             }
+            endif;
         }
     }
     
