@@ -2242,6 +2242,7 @@ Class WCMp_Admin_Dashboard {
         $current_endpoint = get_wcmp_vendor_settings( 'wcmp_' . str_replace( '-', '_', $current_endpoint_key ) . '_endpoint', 'vendor', 'general', $current_endpoint_key );
         // retrive add-coupon endpoint name in case admn changes that from settings
         $add_coupon_endpoint = get_wcmp_vendor_settings( 'wcmp_add_coupon_endpoint', 'vendor', 'general', 'add-coupon' );
+        $can_publish = false;
         //Return if not add coupon endpoint
         if ( $current_endpoint !== $add_coupon_endpoint || ! isset( $_POST['wcmp_afm_coupon_nonce'] ) ) {
             return;
@@ -2255,7 +2256,7 @@ Class WCMp_Admin_Dashboard {
 
         if ( empty( $_POST['post_title'] ) ) {
             wc_add_notice( __( "Coupon code can't be empty.", 'dc-woocommerce-multi-vendor' ), 'error' );
-            return;
+            $can_publish = false;
         }
            
         $cpn_pro_supports = false;
@@ -2263,7 +2264,7 @@ Class WCMp_Admin_Dashboard {
         $cpn_pro_supports = ( !$cpn_pro_supports && ( !isset( $_POST['product_categories'] ) || empty( $_POST['product_categories'] ) ) ) ? $cpn_pro_supports : true;
         if ( !$cpn_pro_supports ) {
             wc_add_notice( __( 'Select atleast one product or category.', 'dc-woocommerce-multi-vendor' ), 'error' );
-            return;
+            $can_publish = false;
         }
 
         $post_id = isset($_POST['post_ID']) ? absint( $_POST['post_ID'] ) : 0;
@@ -2278,8 +2279,14 @@ Class WCMp_Admin_Dashboard {
                 wc_add_notice( __( 'Coupon code already exists - customers will use the latest coupon with this code.', 'dc-woocommerce-multi-vendor' ), 'error' );
             } else {
                 wc_add_notice( __( 'Coupon code already exists - provide a different coupon code.', 'dc-woocommerce-multi-vendor' ), 'error' );
-                return;
+                $can_publish = false;
             }
+        }
+
+        $check_any_error_has = apply_filters('wcmp_error_from_coupon_publish', $error_msg = '', $_POST);
+        if ($check_any_error_has) {
+            $can_publish = false;
+            wc_add_notice( $check_any_error_has, 'error' );
         }
 
         if ( isset( $_POST['status'] ) && $_POST['status'] === 'draft' ) {
@@ -2312,6 +2319,8 @@ Class WCMp_Admin_Dashboard {
             ), $_POST );
 
         do_action( 'wcmp_afm_before_coupon_post_update' );
+
+        if ($can_publish) :
 
         $post_id = wp_update_post( $post_data, true );
 
@@ -2381,6 +2390,7 @@ Class WCMp_Admin_Dashboard {
         } else {
             wc_add_notice( $post_id->get_error_message(), 'error' );
         }
+        endif;
     }
     
     public function wcmp_vendor_dashboard_add_product_url( $url ) {
