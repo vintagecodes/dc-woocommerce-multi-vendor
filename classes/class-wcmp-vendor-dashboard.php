@@ -2242,7 +2242,7 @@ Class WCMp_Admin_Dashboard {
         $current_endpoint = get_wcmp_vendor_settings( 'wcmp_' . str_replace( '-', '_', $current_endpoint_key ) . '_endpoint', 'vendor', 'general', $current_endpoint_key );
         // retrive add-coupon endpoint name in case admn changes that from settings
         $add_coupon_endpoint = get_wcmp_vendor_settings( 'wcmp_add_coupon_endpoint', 'vendor', 'general', 'add-coupon' );
-        $can_publish = false;
+        $can_publish = true;
         //Return if not add coupon endpoint
         if ( $current_endpoint !== $add_coupon_endpoint || ! isset( $_POST['wcmp_afm_coupon_nonce'] ) ) {
             return;
