@@ -3862,6 +3862,7 @@ if ( ! function_exists( 'wcmp_get_product_terms_HTML' ) ) {
         } else {
             $terms = array();
         }
+        $terms = isset( $_POST['tax_input'][$taxonomy] ) ? wp_parse_id_list( $_POST['tax_input'][$taxonomy] ) : $terms;
         $terms = apply_filters( 'wcmp_get_product_terms_html_selected_terms', $terms, $taxonomy, $id );
         if ( $hierarchical ) {
             return generate_hierarchical_taxonomy_html( $taxonomy, $product_terms, $terms, $add_cap );
