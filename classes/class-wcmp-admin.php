@@ -367,7 +367,7 @@ class WCMp_Admin {
         wp_register_script('wcmp_vendor_shipping', $WCMp->plugin_url . 'assets/admin/js/vendor-shipping' . $suffix . '.js', array( 'jquery', 'wp-util', 'underscore', 'backbone', 'jquery-ui-sortable', 'wc-backbone-modal' ), $WCMp->version );
         wp_register_script( 'wc-enhanced-select', WC()->plugin_url() . '/assets/js/admin/wc-enhanced-select' . $suffix . '.js', array( 'jquery', 'selectWoo' ), WC_VERSION );
 
-        $WCMp->localize_script('wcmp_admin_js', array(
+        $WCMp->localize_script('wcmp_admin_js', apply_filters('wcmp_admin_js_localize_script', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'vendors_nonce' => wp_create_nonce('wcmp-vendors'),
             'lang'  => array(
@@ -381,7 +381,7 @@ class WCMp_Admin {
             'wcmp_multiblick_addnew_help' => __( 'Add New Block', 'dc-woocommerce-multi-vendor' ),
             'wcmp_multiblick_remove_help' => __( 'Remove Block', 'dc-woocommerce-multi-vendor' ),
             'multi_split_payment_options' => $WCMp->vendor_dashboard->is_multi_option_split_enabled(true),
-        ));
+        )));
 
         if ( $screen->id == 'wcmp_page_vendors') {
             // Admin end shipping
