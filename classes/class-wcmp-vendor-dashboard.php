@@ -2943,7 +2943,7 @@ Class WCMp_Admin_Dashboard {
             }
         }
     }
-    
+
     public function is_multi_option_split_enabled($find_payment_methods = false) {
         require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
         $count = 0;
@@ -2960,7 +2960,7 @@ Class WCMp_Admin_Dashboard {
             $payment_methods[] = 'razorpay';
             $count++;
         }
-        if($find_payment_methods) return apply_filters('wcmp_multi_split_payment_options', $payment_methods);
+        if ($find_payment_methods) return apply_filters('wcmp_multi_split_payment_options', $payment_methods);
         return $count && $count > 1 ? $count : false;
     }
 
