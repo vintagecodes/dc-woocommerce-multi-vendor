@@ -344,9 +344,11 @@ class WCMp_Order {
         
         $has_sub_order = get_post_meta($order_id, 'has_wcmp_sub_order', true) ? true : false;
         $suborders = get_wcmp_suborders( $order_id, false, false);
-        if ($is_sub_create && $suborders) {
-            foreach ( $suborders as $v_order_id ) {
-                wp_delete_post($v_order_id, true);
+        if ($is_sub_create) {
+            if ($suborders) {
+                foreach ( $suborders as $v_order_id ) {
+                    wp_delete_post($v_order_id, true);
+                }
             }
             $this->wcmp_create_orders($order_id, array(), $order, true);
         }
