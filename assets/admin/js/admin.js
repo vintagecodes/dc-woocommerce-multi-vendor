@@ -75,13 +75,21 @@ jQuery(document).ready(function ($) {
     if ($('#commission_typee').val() == 'fixed_with_percentage') {
         $('#default_commissionn').closest("tr").css("display", "none");
         $('#fixed_with_percentage_qty').closest("tr").css("display", "none");
+        $('#fixed_with_percentage_per_vendor').closest("tr").css("display", "none");
     } else if ($('#commission_typee').val() == 'fixed_with_percentage_qty') {
         $('#default_commissionn').closest("tr").css("display", "none");
+        $('#fixed_with_percentage').closest("tr").css("display", "none");
+        $('#fixed_with_percentage_per_vendor').closest("tr").css("display", "none");
+    } else if ($('#commission_typee').val() == 'fixed_with_percentage_per_vendor') {
+        $('#default_commissionn').closest("tr").css("display", "none");
+        $('#fixed_with_percentage').closest("tr").css("display", "none");
+        $('#fixed_with_percentage_qty').closest("tr").css("display", "none");
         $('#fixed_with_percentage').closest("tr").css("display", "none");
     } else {
         $('#default_percentage').closest("tr").css("display", "none");
         $('#fixed_with_percentage').closest("tr").css("display", "none");
         $('#fixed_with_percentage_qty').closest("tr").css("display", "none");
+        $('#fixed_with_percentage_per_vendor').closest("tr").css("display", "none");
     }
 
     $('#commission_typee').change(function () {
@@ -93,6 +101,7 @@ jQuery(document).ready(function ($) {
             $('#default_percentage').closest("tr").show();
             $('#fixed_with_percentage').closest("tr").show();
             $('#fixed_with_percentage_qty').closest("tr").hide();
+            $('#fixed_with_percentage_per_vendor').closest("tr").hide();
         } else if (commission_type == 'fixed_with_percentage_qty') {
             $('#default_commissionn').closest("tr").css("display", "none");
             $('#default_percentage').closest("tr").show();
@@ -100,11 +109,22 @@ jQuery(document).ready(function ($) {
             $('#fixed_with_percentage').closest("tr").hide();
             $('#default_percentage').val('');
             $('#fixed_with_percentage_qty').val('');
+            $('#fixed_with_percentage_per_vendor').closest("tr").hide();
+        } else if (commission_type == 'fixed_with_percentage_per_vendor') {
+            $('#default_commissionn').closest("tr").css("display", "none");
+            $('#default_percentage').closest("tr").show();
+            $('#fixed_with_percentage_per_vendor').closest("tr").show();
+            $('#fixed_with_percentage').closest("tr").hide();
+            $('#default_percentage').val('');
+            $('#fixed_with_percentage_per_vendor').val('');
+            $('#fixed_with_percentage_qty').closest("tr").hide();
+            $('#fixed_with_percentage').closest("tr").hide();
         } else {
             $('#default_commissionn').closest("tr").show();
             $('#default_percentage').closest("tr").css("display", "none");
             $('#fixed_with_percentage').closest("tr").css("display", "none");
             $('#fixed_with_percentage_qty').closest("tr").css("display", "none");
+            $('#fixed_with_percentage_per_vendor').closest("tr").css("display", "none");
         }
     });
 

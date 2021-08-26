@@ -203,6 +203,11 @@ class WCMp_Commission {
                 }
             }
 
+            // fixed + percentage per vendor's order
+            if ($WCMp->vendor_caps->payment_cap['commission_type'] == 'fixed_with_percentage_per_vendor') {
+                $commission_amount = (float) $order->get_total() * ( (float) $WCMp->vendor_caps->payment_cap['default_percentage'] / 100 ) + (float) $WCMp->vendor_caps->payment_cap['fixed_with_percentage_per_vendor'];
+            }
+            
             /**
              * Action hook to adjust items commission rates before save.
              *
