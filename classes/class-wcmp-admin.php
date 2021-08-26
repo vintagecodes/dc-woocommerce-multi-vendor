@@ -380,6 +380,7 @@ class WCMp_Admin {
             'multiblock_delete_confirm' => __( "Are you sure and want to delete this 'Block'?\nYou can't undo this action ...", "dc-woocommerce-multi-vendor" ),
             'wcmp_multiblick_addnew_help' => __( 'Add New Block', 'dc-woocommerce-multi-vendor' ),
             'wcmp_multiblick_remove_help' => __( 'Remove Block', 'dc-woocommerce-multi-vendor' ),
+            'multi_split_payment_options' => $WCMp->vendor_dashboard->is_multi_option_split_enabled(true),
         ));
 
         if ( $screen->id == 'wcmp_page_vendors') {

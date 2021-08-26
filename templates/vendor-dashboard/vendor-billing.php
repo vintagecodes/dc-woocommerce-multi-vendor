@@ -27,7 +27,12 @@ if (isset($payment_admin_settings['payment_method_stripe_masspay']) && $payment_
 if (isset($payment_admin_settings['payment_method_direct_bank']) && $payment_admin_settings['payment_method_direct_bank'] = 'Enable') {
     $payment_mode['direct_bank'] = __('Direct Bank', 'dc-woocommerce-multi-vendor');
 }
+$is_multi_option_enabled = $WCMp->vendor_dashboard->is_multi_option_split_enabled();
+if ($is_multi_option_enabled) {
+	$payment_mode['all_above_split_payment'] = __('All above payment mode', 'dc-woocommerce-multi-vendor');
+}
 $vendor_payment_mode_select = apply_filters('wcmp_vendor_payment_mode', $payment_mode);
+$multi_split_payment_options = $WCMp->vendor_dashboard->is_multi_option_split_enabled(true);
 ?>
 <div class="col-md-12">
     <form method="post" name="shop_settings_form" class="wcmp_billing_form">
@@ -233,9 +238,17 @@ $vendor_payment_mode_select = apply_filters('wcmp_vendor_payment_mode', $payment
 </div>
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
+    	var multi_split_payment_options = JSON.parse('<?php echo json_encode($multi_split_payment_options); ?>');
         $('#vendor_payment_mode').on('change', function () {
             $('.payment-gateway').hide();
             $('.payment-gateway-' + $(this).val()).show();
+            // display all split payment mode if all above payment is checked
+            if ($(this).val() == 'all_above_split_payment') {
+            	$.each(multi_split_payment_options, function (key , val){ 
+            		$('.payment-gateway-' + val).show();
+            		$('.payment-gateway-' + val).append('<br>');
+            	});
+            }
         }).change();
     });
 </script>

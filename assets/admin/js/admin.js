@@ -659,6 +659,12 @@ jQuery(document).ready(function ($) {
     $('#vendor_payment_mode').on('change', function () {
         $('.payment-gateway').hide();
         $('.payment-gateway-' + $(this).val()).show();
+        if ($(this).val() == 'all_above_split_payment') {
+            $.each(wcmp_admin_js_script_data.multi_split_payment_options, function (key , val){ 
+                $('.payment-gateway-' + val).show();
+                $('.payment-gateway-' + val).append('<br>');
+            });
+        }
     }).change();
     
     $('.vendor-preview').click(function() {

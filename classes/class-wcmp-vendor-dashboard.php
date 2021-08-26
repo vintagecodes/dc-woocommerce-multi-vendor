@@ -42,7 +42,12 @@ Class WCMp_Admin_Dashboard {
         add_filter( 'wcmp_vendor_submit_product', array( &$this, 'wcmp_vendor_dashboard_add_product_url' ), 10 );
         // send email to folloed customer
         add_action( 'save_post', array( &$this, 'notify_followed_customers' ), 99, 2 );
-
+        // Multi split payment hook call
+        if (!empty($this->is_multi_option_split_enabled(true)) && $this->is_multi_option_split_enabled() > 1) {
+            foreach ($this->is_multi_option_split_enabled(true) as $payment_name) {
+                add_filter('wcmp_'.$payment_name.'_enabled', '__return_true');
+            }
+        }
         // Submit comment
         $this->submit_comment();
 
@@ -2937,6 +2942,26 @@ Class WCMp_Admin_Dashboard {
                 }
             }
         }
+    }
+    
+    public function is_multi_option_split_enabled($find_payment_methods = false) {
+        require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+        $count = 0;
+        $payment_methods = array();
+        if ( is_plugin_active('wcmp-paypal-checkout-gateway/wcmp-paypal-checkout-gateway.php') && array_key_exists('paypal_masspay', get_wcmp_available_payment_gateways()) ) {
+            $payment_methods[] = 'paypal_masspay';
+            $count++;
+        }
+        if ( is_plugin_active('wcmp-stripe-marketplace/wcmp-stripe-marketplace.php') && array_key_exists('stripe_masspay', get_wcmp_available_payment_gateways()) ) {
+            $payment_methods[] = 'stripe_masspay';
+            $count++;
+        }
+        if ( is_plugin_active('wcmp-razorpay-split-payment/wcmp-razorpay-checkout-gateway.php') && array_key_exists('razorpay', get_wcmp_available_payment_gateways())) {
+            $payment_methods[] = 'razorpay';
+            $count++;
+        }
+        if($find_payment_methods) return apply_filters('wcmp_multi_split_payment_options', $payment_methods);
+        return $count && $count > 1 ? $count : false;
     }
 
 }
