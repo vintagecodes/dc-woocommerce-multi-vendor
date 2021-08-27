@@ -319,7 +319,7 @@ class WCMp_Settings {
         }
         // refund
         $tabsection_payment['refund_payment'] = array( 'title' => __( 'Refund Options', 'dc-woocommerce-multi-vendor' ), 'icon' => 'dashicons-cart' );
-        if ( $WCMp->vendor_caps->payment_cap['commission_type'] && $WCMp->vendor_caps->payment_cap['commission_type'] == 'commission_by_product_price') {
+        if ( $WCMp->vendor_caps->payment_cap['commission_type'] && $WCMp->vendor_caps->payment_cap['commission_type'] == 'commission_by_product_price' || $WCMp->vendor_caps->payment_cap['commission_type'] == 'commission_by_purchase_quantity') {
             $tabsection_payment['commission_variation'] = array( 'title' => __( 'Commission Variation', 'dc-woocommerce-multi-vendor' ), 'icon' => 'dashicons-money-alt' );
         }
         return apply_filters( 'wcmp_tabsection_payment', $tabsection_payment );

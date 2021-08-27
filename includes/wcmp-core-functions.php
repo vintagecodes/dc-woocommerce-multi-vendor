@@ -3448,6 +3448,7 @@ if (!function_exists('wcmp_get_available_commission_types')) {
         $available_commission_types['fixed_with_percentage'] = __('%age + Fixed (per transaction)', 'dc-woocommerce-multi-vendor');
         $available_commission_types['fixed_with_percentage_qty'] = __('%age + Fixed (per unit)', 'dc-woocommerce-multi-vendor');
         $available_commission_types['commission_by_product_price'] = __('Commission By Product Price', 'dc-woocommerce-multi-vendor');
+        $available_commission_types['commission_by_purchase_quantity'] = __('Commission By Purchase Quantity', 'dc-woocommerce-multi-vendor');
         $available_commission_types['fixed_with_percentage_per_vendor'] = __('%age + Fixed (per vendor)', 'dc-woocommerce-multi-vendor');
         
         return apply_filters('wcmp_get_available_commission_types', $available_commission_types);

@@ -4635,7 +4635,10 @@ class WCMp_Ajax {
         if( isset( $wcmp_settings_form['vendor_commission_by_products'] ) ) {
             $wcmp_commission_options['vendor_commission_by_products'] = $wcmp_settings_form['vendor_commission_by_products'];
         }
-        wcmp_update_option( 'wcmp_variation_commission_options', array_filter( array_map( 'wc_clean', (array) $wcmp_commission_options ) ) );
+        if( isset( $wcmp_settings_form['commission']['commission_by_quantity'] ) ) {
+            $wcmp_commission_options['vendor_commission_by_quantity'] = $wcmp_settings_form['commission']['commission_by_quantity'];
+        }
+        wcmp_update_option( 'wcmp_variation_commission_options', $wcmp_commission_options );
         die;
     }
 
