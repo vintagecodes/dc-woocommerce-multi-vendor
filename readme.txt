@@ -294,6 +294,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 * Fix - Transaction email Html issue #937.
 * Fix - Transaction email amount is not showing as per woocommerce setting.
 * Fix - Sub Orders Not creating from backend created orders #932.
+* Fix - Order notes structure display #939.
 * Dev - Added `wcmp_marketplace_settings_fields_review` filter.
 * Dev - Added `wcmp_admin_js_localize_script` filter.
 * Dev - Added `wcmp_vendors_product_review_args_array` filter.

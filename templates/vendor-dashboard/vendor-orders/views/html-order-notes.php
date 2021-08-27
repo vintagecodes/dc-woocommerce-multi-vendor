@@ -37,7 +37,7 @@ global $WCMp;
                         $note_classes   = apply_filters( 'wcmp_order_note_class', array_filter( $note_classes ), $note );
                         ?>
                         <li class="list-group-item list-group-item-action flex-column align-items-start order-notes">
-                            <p class="order-note"><span><?php echo wptexturize( wp_kses_post( $note->content ) ); ?></span></p>
+                            <div class="order-note"><span><?php echo wp_kses_post( wpautop( wptexturize( make_clickable( $note->content ) ) ) ); ?></span></div>
                             <p>
                                 <abbr class="exact-date" title="<?php echo $note->date_created->date( 'y-m-d h:i:s' ); ?>"><?php printf( __( 'added on %1$s at %2$s', 'dc-woocommerce-multi-vendor' ), $note->date_created->date_i18n( wc_date_format() ), $note->date_created->date_i18n( wc_time_format() ) ); ?></abbr>
                                 <?php
