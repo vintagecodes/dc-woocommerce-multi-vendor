@@ -280,7 +280,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Changelog ==
 
-= 3..8.0 - 2021-08-27 =
+= 3.8.0 - 2021-08-30 =
 * Added - Compatibility of WooCommerce 5.6.0.
 * Added - Multi section Review System #871.
 * Added - Product and vendor review sync #751.
@@ -310,6 +310,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 * Dev - Added `wcmp_shipping_country_calculate_amount` filter.
 * Dev - Added `wcmp_settings_fields_shipping_by_country` filter.
 * Dev - Added `wcmp_settings_fields_shipping_rates_by_country` filter.
+* Dev - Added `wcmp_quantity_wise_commission_amount_modify` filter.
 * Updated - Language file.
 
 = 3.7.8 - 2021-08-04 =

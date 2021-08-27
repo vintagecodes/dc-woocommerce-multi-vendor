@@ -624,7 +624,7 @@ class WCMp_Calculate_Commission {
                 $amount = (float) $commission_rule['commission_fixed'];
             }
         }
-        return $amount;
+        return apply_filters('wcmp_quantity_wise_commission_amount_modify', $amount, $product_id, $line_total, $item_quantity, $commission_rule);
     }
 
     /**
