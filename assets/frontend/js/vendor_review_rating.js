@@ -40,7 +40,8 @@ jQuery(document).ready(function ($) {
                     action: 'wcmp_add_review_rating_vendor',
                     rating: rating,
                     comment: comment,
-                    vendor_id: $('#wcmp_vendor_for_rating').val()
+                    vendor_id: $('#wcmp_vendor_for_rating').val(),
+                    multi_rate_details: $('#commentform').serialize()
                 }
                 $.post(wcmp_seller_review_rating_js_script_data.ajax_url, data, function (response) {
                     if (response == 1) {
