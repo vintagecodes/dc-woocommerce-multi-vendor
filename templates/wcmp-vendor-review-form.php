@@ -31,6 +31,15 @@ $is_start_with_full_rating = apply_filters('wcmp_is_start_with_full_rating', fal
     <div id="reviews" >
         <div id="wcmp_vendor_reviews">
             <?php if (isset($is_enable) && $is_enable) { ?>
+                <?php
+                if (!is_customer_not_given_review_to_vendor( $vendor_id, get_current_user_id())) {
+                    ?>
+                    <div class="woocommerce-info">
+                        <?php esc_html_e('You have already reviewed this vendor', 'dc-woocommerce-multi-vendor'); ?>
+                    </div>
+                    <?php
+                }
+                ?>
                 <div id="review_form_wrapper">
                     <div id="review_form">
                         <div id="respond" class="comment-respond">
