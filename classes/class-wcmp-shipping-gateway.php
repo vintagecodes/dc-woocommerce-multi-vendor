@@ -35,6 +35,7 @@ class WCMp_Shipping_Gateway {
         self::load_class( 'shipping-zone', 'helpers' );
         self::load_class( 'shipping-method' );
         self::load_class( 'distance-shipping-method' );
+        self::load_class( 'country-shipping-method' );
     }
     /**
      * WCMp Shipping methods register themselves by returning their main class name through the woocommerce_shipping_methods filter.
@@ -43,7 +44,8 @@ class WCMp_Shipping_Gateway {
      */
     public function add_shipping_methods($methods) {
         $methods['wcmp_vendor_shipping'] = 'WCMP_Vendor_Shipping_Method';
-        $methods['wcmp_vendor_distance_shipping'] = 'WCMp_Shipping_By_Distance';        
+        $methods['wcmp_vendor_distance_shipping'] = 'WCMp_Shipping_By_Distance';
+        $methods['wcmp_vendor_country_shipping'] = 'WCMp_Shipping_By_Country';    
         return apply_filters( 'wcmp_vendor_shipping_method_init', $methods );
     }
 

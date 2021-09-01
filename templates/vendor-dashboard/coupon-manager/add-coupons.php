@@ -52,7 +52,7 @@ $title = in_array( $post_status, array( "publish", "draft", "pending" ) ) ? $pos
                                     ),
                                     'editor_css'    => '<style>#wp-coupon_description-editor-container .wp-editor-area{height:175px; width:100%;}</style>',
                                 );
-                                wp_editor( $coupon->get_description( 'edit' ), 'coupon_description', $settings );
+                                wp_editor( isset($_POST['coupon_description']) ? wc_clean($_POST['coupon_description']) : $coupon->get_description( 'edit' ), 'coupon_description', $settings );
                                 ?>
                             </div>
                         </div>

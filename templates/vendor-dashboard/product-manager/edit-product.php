@@ -49,7 +49,7 @@ global $WCMp;
                             if( !apply_filters( 'wcmp_vendor_product_excerpt_richedit', true ) ) {
                                 $settings['tinymce'] = $settings['quicktags'] = $settings['media_buttons'] = false;
                             }
-                            wp_editor( htmlspecialchars_decode( $product_object->get_short_description( 'edit' ) ), 'product_excerpt', $settings );
+                            wp_editor( htmlspecialchars_decode( isset($_POST['product_excerpt']) ? wc_clean($_POST['product_excerpt']) : $product_object->get_short_description( 'edit' ) ), 'product_excerpt', $settings );
                             ?>  
                         </div>
                     </div>
@@ -79,7 +79,7 @@ global $WCMp;
             </div>
             <div class="left-primary-info">
                 <div class="product-gallery-wrapper">
-                    <div class="featured-img upload_image"><?php $featured_img = $product_object->get_image_id( 'edit' ) ? $product_object->get_image_id( 'edit' ) : ''; ?>
+                    <div class="featured-img upload_image"><?php $featured_img = isset($_POST['featured_img']) ? wc_clean($_POST['featured_img']) : ($product_object->get_image_id( 'edit' ) ? $product_object->get_image_id( 'edit' ) : ''); ?>
                         <a href="#" class="upload_image_button tips <?php echo $featured_img ? 'remove' : ''; ?>" <?php echo current_user_can( 'upload_files' ) ? '' : 'data-nocaps="true" '; ?>data-title="<?php esc_attr_e( 'Product image', 'dc-woocommerce-multi-vendor' ); ?>" data-button="<?php esc_attr_e( 'Set product image', 'dc-woocommerce-multi-vendor' ); ?>" rel="<?php echo esc_attr( $post->ID ); ?>">
                             <div class="upload-placeholder pos-middle">
                                 <i class="wcmp-font ico-image-icon"></i>
@@ -99,7 +99,7 @@ global $WCMp;
                                 // Backwards compatibility.
                                 $attachment_ids = get_posts( 'post_parent=' . $post->ID . '&numberposts=-1&post_type=attachment&orderby=menu_order&order=ASC&post_mime_type=image&fields=ids&meta_key=_woocommerce_exclude_image&meta_value=0' );
                                 $attachment_ids = array_diff( $attachment_ids, array( get_post_thumbnail_id() ) );
-                                $product_image_gallery = implode( ',', $attachment_ids );
+                                $product_image_gallery = isset($_POST['product_image_gallery']) ? wc_clean($_POST['product_image_gallery']) : implode( ',', $attachment_ids );
                             }
 
                             $attachments = array_filter( explode( ',', $product_image_gallery ) );
@@ -174,10 +174,9 @@ global $WCMp;
                                 <?php foreach ( $self->get_product_type_options() as $key => $option ) : ?>
                                     <?php
                                     if ( ! empty( $post->ID ) && metadata_exists( 'post', $post->ID, '_' . $key ) ) {
-                                        $selected_value = is_callable( array( $product_object, "is_$key" ) ) ? $product_object->{"is_$key"}() : 'yes' === get_post_meta( $post->ID, '_' . $key, true );
+                                        $selected_value = isset($_POST['_'.$key]) && $_POST['_'.$key] == 'on' ? true : ( is_callable( array( $product_object, "is_$key" ) ) ? $product_object->{"is_$key"}() : 'yes' === get_post_meta( $post->ID, '_' . $key, true ));
                                     } else {
-                                        $selected_value = 'yes' === ( isset( $option['default'] ) ? $option['default'] : 'no' );
-                                    }
+                                        $selected_value = 'yes' === ( isset($_POST['_'.$key]) && $_POST['_'.$key] == 'on' ? 'yes' : ( isset( $option['default'] ) ? $option['default'] : 'no' ) );                                    }
                                     ?>
                                     <label for="<?php echo esc_attr( $option['id'] ); ?>" class="<?php echo esc_attr( $option['wrapper_class'] ); ?> tips" data-tip="<?php echo esc_attr( $option['description'] ); ?>"><input type="checkbox" name="<?php echo esc_attr( $option['id'] ); ?>" id="<?php echo esc_attr( $option['id'] ); ?>" <?php echo checked( $selected_value, true, false ); ?> /> <?php echo esc_html( $option['label'] ); ?></label>
                                 <?php endforeach; ?>

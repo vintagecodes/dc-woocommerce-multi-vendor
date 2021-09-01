@@ -547,6 +547,10 @@ final class WCMp {
                     'i18n' 	=> array(
 			'deleteShippingMethodConfirmation'	=> __( 'Are you absolutely sure to delete this shipping method?', 'dc-woocommerce-multi-vendor' ),
                     ),
+                    'everywhere_else_option'  => __( 'Everywhere Else', 'dc-woocommerce-multi-vendor' ),
+                    'multiblock_delete_confirm' => __( "Are you sure and want to delete this 'Block'?\nYou can't undo this action ...", "dc-woocommerce-multi-vendor" ),
+                    'wcmp_multiblick_addnew_help' => __( 'Add New Block', 'dc-woocommerce-multi-vendor' ),
+                    'wcmp_multiblick_remove_help' => __( 'Remove Block', 'dc-woocommerce-multi-vendor' ),
                 );
                 break;
             case 'wcmp-meta-boxes' :

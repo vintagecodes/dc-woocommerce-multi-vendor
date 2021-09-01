@@ -42,7 +42,12 @@ Class WCMp_Admin_Dashboard {
         add_filter( 'wcmp_vendor_submit_product', array( &$this, 'wcmp_vendor_dashboard_add_product_url' ), 10 );
         // send email to folloed customer
         add_action( 'save_post', array( &$this, 'notify_followed_customers' ), 99, 2 );
-
+        // Multi split payment hook call
+        if (!empty($this->is_multi_option_split_enabled(true)) && $this->is_multi_option_split_enabled() > 1) {
+            foreach ($this->is_multi_option_split_enabled(true) as $payment_name) {
+                add_filter('wcmp_'.$payment_name.'_enabled', '__return_true');
+            }
+        }
         // Submit comment
         $this->submit_comment();
 
@@ -444,7 +449,7 @@ Class WCMp_Admin_Dashboard {
                     return false;
                 // Only submit if the order has the product belonging to this vendor
                 $order = wc_get_order($_POST['order_id']);
-                $comment = isset($_POST['comment_text']) ? wc_clean( wp_unslash( $_POST['comment_text'] ) ) : '';
+                $comment = isset($_POST['comment_text']) ? wp_kses_post( trim( wp_unslash( $_POST['comment_text'] ) ) ) : '';
                 $note_type = isset($_POST['note_type']) ? wc_clean( wp_unslash( $_POST['note_type'] ) ) : '';
 		        $is_customer_note = ( 'customer' === $note_type ) ? 1 : 0;
                 $comment_id = $order->add_order_note($comment, $is_customer_note, true);
@@ -819,7 +824,14 @@ Class WCMp_Admin_Dashboard {
                 <?php }
                     
                 } else { ?>
-                    <table class="wcmp-shipping-zones wc-shipping-zones widefat">
+                    <?php wcmp_vendor_different_type_shipping_options(get_current_user_id()); ?>
+                    <div id="wcmp-vendor-shipping-by-distance-section">
+                    <?php wcmp_vendor_distance_by_shipping_settings(get_current_user_id()); ?>
+                    </div>
+                    <div id="wcmp-vendor-shipping-by-country-section">
+                    <?php wcmp_vendor_shipping_by_country_settings(get_current_user_id()); ?>
+                    </div>
+                    <table class="wcmp-shipping-zones wc-shipping-zones widefat" id="wcmp-vendor-shipping-by-zone-section">
                             <thead>
                                 <tr>
                                     <th><?php _e('Zone name', 'dc-woocommerce-multi-vendor'); ?></th> 
@@ -879,6 +891,7 @@ Class WCMp_Admin_Dashboard {
             ?>
                             </tbody>
                         </table>
+                        <button id="btn-ok" class="button button-primary button-large wcmp-shipping-zone-add-method"><?php esc_html_e('Save changes', 'dc-woocommerce-multi-vendor'); ?></button>
                 <?php }
                 ?>
                     <?php do_action('wcmp_vendor_shipping_settings'); ?>
@@ -897,6 +910,108 @@ Class WCMp_Admin_Dashboard {
                 $all_allowed_countries = WC()->countries->get_allowed_countries();
                 $location = array();
                 $zone_id = 0;
+                // country wise shipping
+                $wcmp_shipping_by_country_rates = isset($_POST['wcmp_shipping_by_country']) ?  array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_country'] ) ) : '';
+                wcmp_update_user_meta(get_current_user_id(), '_wcmp_shipping_by_country', $wcmp_shipping_by_country_rates);
+                if(isset($_POST['wcmp_shipping_rates']) && !empty($_POST['wcmp_shipping_rates'])) {
+                    $wcmp_country_rates = array();
+                    $wcmp_state_rates   = array(); 
+                    foreach( $_POST['wcmp_shipping_rates'] as $wcmp_shipping_rates ) {
+                        if( $wcmp_shipping_rates['wcmp_country_to'] ) {
+                            if( $wcmp_shipping_rates['wcmp_shipping_state_rates'] && !empty( $wcmp_shipping_rates['wcmp_shipping_state_rates'] ) ) {
+                                foreach( $wcmp_shipping_rates['wcmp_shipping_state_rates'] as $wcmp_shipping_state_rates ) {
+
+                                    if( $wcmp_shipping_state_rates['wcmp_state_to'] ) {
+                                        $wcmp_state_rates[$wcmp_shipping_rates['wcmp_country_to']][$wcmp_shipping_state_rates['wcmp_state_to']] = $wcmp_shipping_state_rates['wcmp_state_to_price'];
+                                    }
+
+                                }
+                            }
+                            $wcmp_country_rates[$wcmp_shipping_rates['wcmp_country_to']] = $wcmp_shipping_rates['wcmp_country_to_price'];
+                        }
+                    }
+                    wcmp_update_user_meta( get_current_user_id(), '_wcmp_country_rates', $wcmp_country_rates );
+                    wcmp_update_user_meta( get_current_user_id(), '_wcmp_state_rates', $wcmp_state_rates );
+                }
+
+                // Distance by shipping
+                $wcmp_shipping_by_distance_rates = isset($_POST['wcmp_shipping_by_distance_rates']) ?  array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_distance_rates'] ) ) : '';
+                update_user_meta(get_current_user_id(), '_wcmp_shipping_by_distance_rates', $wcmp_shipping_by_distance_rates);
+
+                $wcmp_shipping_by_distance = isset($_POST['wcmp_shipping_by_distance']) ? array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_distance'] ) ) : '';
+                update_user_meta(get_current_user_id(), '_wcmp_shipping_by_distance', $wcmp_shipping_by_distance);
+
+                $vendor_shipping_options = isset($_POST['shippping-options']) ? wc_clean($_POST['shippping-options']) : '';
+                update_user_meta(get_current_user_id(), 'vendor_shipping_options', $vendor_shipping_options);
+                
+                if (!empty($_POST['wcmp_shipping_zone'])) {
+                    foreach ($_POST['wcmp_shipping_zone'] as $shipping_zone) {
+                        if (isset($shipping_zone['_zone_id']) && $shipping_zone['_zone_id'] != 0) {
+                            $zone_id = $shipping_zone['_zone_id'];
+
+                            if (isset($shipping_zone['_limit_zone_location']) && $shipping_zone['_limit_zone_location']) {
+                                if (!empty($shipping_zone['_select_zone_states'])) {
+                                    $state_array = array();
+                                    foreach ($shipping_zone['_select_zone_states'] as $zone_state) {
+                                        $state_array[] = array(
+                                            'code' => $zone_state,
+                                            'type' => 'state'
+                                        );
+                                    }
+
+                                    $location = array_merge($location, $state_array);
+                                }
+
+                                if (!empty($shipping_zone['_select_zone_postcodes'])) {
+                                    $postcode_array = array();
+                                    $zone_postcodes = array_map('trim', explode(',', $shipping_zone['_select_zone_postcodes']));
+                                    foreach ($zone_postcodes as $zone_postcode) {
+                                        $postcode_array[] = array(
+                                            'code' => $zone_postcode,
+                                            'type' => 'postcode'
+                                        );
+                                    }
+
+                                    $location = array_merge($location, $postcode_array);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!empty($_POST['wcmp_shipping_zone'])) {
+                    foreach ($_POST['wcmp_shipping_zone'] as $shipping_zone) {
+                        if (isset($shipping_zone['_zone_id']) && $shipping_zone['_zone_id'] != 0) {
+                            $zone_id = $shipping_zone['_zone_id'];
+
+                            if (isset($shipping_zone['_limit_zone_location']) && $shipping_zone['_limit_zone_location']) {
+                                if (!empty($shipping_zone['_select_zone_states'])) {
+                                    $state_array = array();
+                                    foreach ($shipping_zone['_select_zone_states'] as $zone_state) {
+                                        $state_array[] = array(
+                                            'code' => $zone_state,
+                                            'type' => 'state'
+                                        );
+                                    }
+
+                                    $location = array_merge($location, $state_array);
+                                }
+
+                                if (!empty($shipping_zone['_select_zone_postcodes'])) {
+                                    $postcode_array = array();
+                                    $zone_postcodes = array_map('trim', explode(',', $shipping_zone['_select_zone_postcodes']));
+                                    foreach ($zone_postcodes as $zone_postcode) {
+                                        $postcode_array[] = array(
+                                            'code' => $zone_postcode,
+                                            'type' => 'postcode'
+                                        );
+                                    }
+
+                                    $location = array_merge($location, $postcode_array);
+                                }
+                            }
+                        }
+                    }
+                }
                 if (!empty($_POST['wcmp_shipping_zone'])) {
                     foreach ($_POST['wcmp_shipping_zone'] as $shipping_zone) {
                         if (isset($shipping_zone['_zone_id']) && $shipping_zone['_zone_id'] != 0) {
@@ -1186,6 +1301,30 @@ Class WCMp_Admin_Dashboard {
         $all_allowed_countries = WC()->countries->get_allowed_countries();
         $location = array();
         $zone_id = 0;
+
+        // country wise shipping
+        $wcmp_shipping_by_country_rates = isset($_POST['wcmp_shipping_by_country']) ?  array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_country'] ) ) : '';
+        wcmp_update_user_meta($vendor_user_id, '_wcmp_shipping_by_country', $wcmp_shipping_by_country_rates);
+        if(isset($_POST['wcmp_shipping_rates']) && !empty($_POST['wcmp_shipping_rates'])) {
+            $wcmp_country_rates = array();
+            $wcmp_state_rates   = array(); 
+            foreach( $_POST['wcmp_shipping_rates'] as $wcmp_shipping_rates ) {
+                if( $wcmp_shipping_rates['wcmp_country_to'] ) {
+                    if( $wcmp_shipping_rates['wcmp_shipping_state_rates'] && !empty( $wcmp_shipping_rates['wcmp_shipping_state_rates'] ) ) {
+                        foreach( $wcmp_shipping_rates['wcmp_shipping_state_rates'] as $wcmp_shipping_state_rates ) {
+
+                            if( $wcmp_shipping_state_rates['wcmp_state_to'] ) {
+                                $wcmp_state_rates[$wcmp_shipping_rates['wcmp_country_to']][$wcmp_shipping_state_rates['wcmp_state_to']] = $wcmp_shipping_state_rates['wcmp_state_to_price'];
+                            }
+
+                        }
+                    }
+                    $wcmp_country_rates[$wcmp_shipping_rates['wcmp_country_to']] = $wcmp_shipping_rates['wcmp_country_to_price'];
+                }
+            }
+            wcmp_update_user_meta( $vendor_user_id, '_wcmp_country_rates', $wcmp_country_rates );
+            wcmp_update_user_meta( $vendor_user_id, '_wcmp_state_rates', $wcmp_state_rates );
+        }
 
         // Distance by shipping
         $wcmp_shipping_by_distance_rates = isset($_POST['wcmp_shipping_by_distance_rates']) ?  array_filter( array_map( 'wc_clean', $_POST['wcmp_shipping_by_distance_rates'] ) ) : '';
@@ -1894,6 +2033,14 @@ Class WCMp_Admin_Dashboard {
 
             do_action( 'wcmp_before_post_update' );
 
+            $can_publish = true;
+            $check_any_error_has = apply_filters('wcmp_error_from_product_publish', $error_msg = '', $_POST);
+            if ($check_any_error_has) {
+                $can_publish = false;
+                wc_add_notice( $check_any_error_has, 'error' );
+            }
+
+            if ($can_publish) :
             $post_id = wp_update_post( $post_data, true );
 
             if ( $post_id && ! is_wp_error( $post_id ) ) {
@@ -2089,6 +2236,7 @@ Class WCMp_Admin_Dashboard {
                 $error_msg = ( $post_id->get_error_code() === 'empty_content' ) ? __( 'Content, title, and excerpt are empty.', 'dc-woocommerce-multi-vendor' ) : $post_id->get_error_message();
                 wc_add_notice( $error_msg, 'error' );
             }
+            endif;
         }
     }
     
@@ -2099,6 +2247,7 @@ Class WCMp_Admin_Dashboard {
         $current_endpoint = get_wcmp_vendor_settings( 'wcmp_' . str_replace( '-', '_', $current_endpoint_key ) . '_endpoint', 'vendor', 'general', $current_endpoint_key );
         // retrive add-coupon endpoint name in case admn changes that from settings
         $add_coupon_endpoint = get_wcmp_vendor_settings( 'wcmp_add_coupon_endpoint', 'vendor', 'general', 'add-coupon' );
+        $can_publish = true;
         //Return if not add coupon endpoint
         if ( $current_endpoint !== $add_coupon_endpoint || ! isset( $_POST['wcmp_afm_coupon_nonce'] ) ) {
             return;
@@ -2112,7 +2261,7 @@ Class WCMp_Admin_Dashboard {
 
         if ( empty( $_POST['post_title'] ) ) {
             wc_add_notice( __( "Coupon code can't be empty.", 'dc-woocommerce-multi-vendor' ), 'error' );
-            return;
+            $can_publish = false;
         }
            
         $cpn_pro_supports = false;
@@ -2120,7 +2269,7 @@ Class WCMp_Admin_Dashboard {
         $cpn_pro_supports = ( !$cpn_pro_supports && ( !isset( $_POST['product_categories'] ) || empty( $_POST['product_categories'] ) ) ) ? $cpn_pro_supports : true;
         if ( !$cpn_pro_supports ) {
             wc_add_notice( __( 'Select atleast one product or category.', 'dc-woocommerce-multi-vendor' ), 'error' );
-            return;
+            $can_publish = false;
         }
 
         $post_id = isset($_POST['post_ID']) ? absint( $_POST['post_ID'] ) : 0;
@@ -2135,8 +2284,14 @@ Class WCMp_Admin_Dashboard {
                 wc_add_notice( __( 'Coupon code already exists - customers will use the latest coupon with this code.', 'dc-woocommerce-multi-vendor' ), 'error' );
             } else {
                 wc_add_notice( __( 'Coupon code already exists - provide a different coupon code.', 'dc-woocommerce-multi-vendor' ), 'error' );
-                return;
+                $can_publish = false;
             }
+        }
+
+        $check_any_error_has = apply_filters('wcmp_error_from_coupon_publish', $error_msg = '', $_POST);
+        if ($check_any_error_has) {
+            $can_publish = false;
+            wc_add_notice( $check_any_error_has, 'error' );
         }
 
         if ( isset( $_POST['status'] ) && $_POST['status'] === 'draft' ) {
@@ -2169,6 +2324,8 @@ Class WCMp_Admin_Dashboard {
             ), $_POST );
 
         do_action( 'wcmp_afm_before_coupon_post_update' );
+
+        if ($can_publish) :
 
         $post_id = wp_update_post( $post_data, true );
 
@@ -2238,6 +2395,7 @@ Class WCMp_Admin_Dashboard {
         } else {
             wc_add_notice( $post_id->get_error_message(), 'error' );
         }
+        endif;
     }
     
     public function wcmp_vendor_dashboard_add_product_url( $url ) {
@@ -2784,6 +2942,26 @@ Class WCMp_Admin_Dashboard {
                 }
             }
         }
+    }
+
+    public function is_multi_option_split_enabled($find_payment_methods = false) {
+        require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+        $count = 0;
+        $payment_methods = array();
+        if ( is_plugin_active('wcmp-paypal-checkout-gateway/wcmp-paypal-checkout-gateway.php') && array_key_exists('paypal_masspay', get_wcmp_available_payment_gateways()) ) {
+            $payment_methods[] = 'paypal_masspay';
+            $count++;
+        }
+        if ( is_plugin_active('wcmp-stripe-marketplace/wcmp-stripe-marketplace.php') && array_key_exists('stripe_masspay', get_wcmp_available_payment_gateways()) ) {
+            $payment_methods[] = 'stripe_masspay';
+            $count++;
+        }
+        if ( is_plugin_active('wcmp-razorpay-split-payment/wcmp-razorpay-checkout-gateway.php') && array_key_exists('razorpay', get_wcmp_available_payment_gateways())) {
+            $payment_methods[] = 'razorpay';
+            $count++;
+        }
+        if ($find_payment_methods) return apply_filters('wcmp_multi_split_payment_options', $payment_methods);
+        return $count && $count > 1 ? $count : false;
     }
 
 }

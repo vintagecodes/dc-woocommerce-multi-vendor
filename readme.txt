@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 3.7.8
+Stable tag: 3.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,6 +279,40 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 3.8.0 - 2021-09-01 =
+* Added - Compatibility of WooCommerce 5.6.0.
+* Added - Multi section Review System #871.
+* Added - Product and vendor review sync #751.
+* Added - Country wise shipping.
+* Added - Purchase wise commission.
+* Added - Automatic Split Payment detection #938.
+* Added - New Commission %+fixed per vendor #934.
+* Added - Mapbox zoom in and zoom out feature #929.
+* Added - Nested multi-input library.
+* Fix - Product and Coupon data is removing at the time of publishing product error #927.
+* Fix - Transaction email Html issue #937.
+* Fix - Transaction email amount is not showing as per woocommerce setting.
+* Fix - Sub Orders Not creating from backend created orders #932.
+* Fix - Order notes structure display #939.
+* Dev - Added `wcmp_marketplace_settings_fields_review` filter.
+* Dev - Added `wcmp_admin_js_localize_script` filter.
+* Dev - Added `wcmp_vendors_product_review_args_array` filter.
+* Dev - Added `wcmp_vendors_product_review_args_to_fetch` filter.
+* Dev - Added `wcmp_vendors_product_review_info_args` filter.
+* Dev - Added `wcmp_is_start_with_full_rating` filter.
+* Dev - Added `wcmp_is_allow_store_shipping` filter.
+* Dev - Added `hide_country_shiping_default_zero_cost` filter.
+* Dev - Added `wcmp_is_apply_tax_on_shipping_rates` filter.
+* Dev - Added `wcmp_local_pickup_shipping_option_label` filter.
+* Dev - Added `wcmp_free_shipping_minimum_order_amount` filter.
+* Dev - Added `wcmp_free_shipping_threshold_consider_tax` filter.
+* Dev - Added `wcmp_shipping_country_calculate_amount` filter.
+* Dev - Added `wcmp_shipping_country_calculate_amount` filter.
+* Dev - Added `wcmp_settings_fields_shipping_by_country` filter.
+* Dev - Added `wcmp_settings_fields_shipping_rates_by_country` filter.
+* Dev - Added `wcmp_quantity_wise_commission_amount_modify` filter.
+* Updated - Language file.
 
 = 3.7.8 - 2021-08-04 =
 * Added - Compatibility of WooCommerce 5.5.2.
@@ -1307,5 +1341,5 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Upgrade Notice ==
 
-= 3.7.0 =
-3.7+ is a major update. Make a full site backup and [review latest release](https://wc-marketplace.com/latest-release/) before upgrading your marketplace to avoid any undesirable situations.
+= 3.8.0 =
+3.8+ is a major update. Make a full site backup and [review latest release](https://wc-marketplace.com/latest-release/) before upgrading your marketplace to avoid any undesirable situations.

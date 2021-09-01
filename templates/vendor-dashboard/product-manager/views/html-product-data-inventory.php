@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
                     <span class="img_tip" data-desc="<?php esc_html_e( 'SKU refers to a Stock-keeping unit, a unique identifier for each distinct product and service that can be purchased.', 'dc-woocommerce-multi-vendor' ); ?>"></span>
                 </label>
                 <div class="col-md-6 col-sm-9">
-                    <input class="form-control" type="text" id="_sku" name="_sku" value="<?php echo $product_object->get_sku( 'edit' ); ?>" />                    
+                    <input class="form-control" type="text" id="_sku" name="_sku" value="<?php echo isset($_POST['_sku']) ? wc_clean($_POST['_sku']) : $product_object->get_sku( 'edit' ); ?>" />                    
                 </div>
             </div> 
         <?php endif; ?>
@@ -34,11 +34,11 @@ defined( 'ABSPATH' ) || exit;
                 <div class="form-group-row <?php echo $manage_stock_classes; ?>"> 
                     <div class="form-group">
                         <label class="control-label col-sm-3 col-md-3" for="_manage_stock">
-                            <?php _e( 'Manage stock?', 'dc-woocommerce-multi-vendor' ); ?>
+                            <?php esc_html_e( 'Manage stock?', 'dc-woocommerce-multi-vendor' ); ?>
                             <?php do_action( 'wcmp_afm_product_options_stock_description' ); ?>
                         </label>
                         <div class="col-md-6 col-sm-9">
-                            <input class="form-control" type="checkbox" id="_manage_stock" name="_manage_stock" value="yes"<?php checked( $product_object->get_manage_stock( 'edit' ), true ); ?>/>
+                            <input class="form-control" type="checkbox" id="_manage_stock" name="_manage_stock" value="yes"<?php checked( isset($_POST['_manage_stock']) && $_POST['_manage_stock'] == 'yes' ? true : $product_object->get_manage_stock( 'edit' ), true ); ?>/>
                             <span class="form-text"><?php esc_html_e( 'Enable stock management at product level', 'dc-woocommerce-multi-vendor' ); ?> 
                         </div>
                     </div>  
@@ -56,7 +56,7 @@ defined( 'ABSPATH' ) || exit;
                                 <span class="img_tip" data-desc="<?php esc_html_e( 'Stock quantity. If this is a variable product this value will be used to control stock for all variations, unless you define stock at variation level.', 'dc-woocommerce-multi-vendor' ); ?>"></span>
                             </label>
                             <div class="col-md-6 col-sm-9">
-                                <input class="form-control" type="text" id="_stock" name="_stock" value="<?php echo wc_stock_amount( $product_object->get_stock_quantity( 'edit' ) ); ?>" /> 
+                                <input class="form-control" type="text" id="_stock" name="_stock" value="<?php echo isset($_POST['_stock']) ? absint($_POST['_stock']) : wc_stock_amount( $product_object->get_stock_quantity( 'edit' ) ); ?>" /> 
                             </div>
                         </div>
                         <?php echo '<input type="hidden" name="_original_stock" value="' . esc_attr( wc_stock_amount( $product_object->get_stock_quantity( 'edit' ) ) ) . '" />'; ?>
@@ -68,7 +68,7 @@ defined( 'ABSPATH' ) || exit;
                             <div class="col-md-6 col-sm-9">
                                 <select id="_backorders" name="_backorders" class="form-control">
                                     <?php foreach ( wc_get_product_backorder_options() as $key => $option ) : ?>
-                                        <option value="<?php echo $key; ?>" <?php selected( $product_object->get_backorders( 'edit' ), $key ); ?>><?php echo $option; ?></option>
+                                        <option value="<?php echo $key; ?>" <?php selected( isset($_POST['_backorders']) ? wc_clean($_POST['_backorders']) : $product_object->get_backorders( 'edit' ), $key ); ?>><?php echo $option; ?></option>
                                     <?php endforeach; ?>
                                 </select> 
                             </div>
@@ -79,7 +79,7 @@ defined( 'ABSPATH' ) || exit;
                                 <span class="img_tip" data-desc="<?php esc_html_e( 'When product stock reaches this amount you will be notified by email', 'dc-woocommerce-multi-vendor' ); ?>"></span>
                             </label>
                             <div class="col-md-6 col-sm-9">
-                                <input class="form-control" type="text" id="_low_stock_amount" name="_low_stock_amount" value="<?php echo $product_object->get_low_stock_amount( 'edit' ); ?>" placeholder="<?php echo esc_attr(get_option( 'woocommerce_notify_low_stock_amount') ); ?>" /> 
+                                <input class="form-control" type="text" id="_low_stock_amount" name="_low_stock_amount" value="<?php echo isset($_POST['_low_stock_amount']) ? absint($_POST['_low_stock_amount']) : $product_object->get_low_stock_amount( 'edit' ); ?>" placeholder="<?php echo esc_attr(get_option( 'woocommerce_notify_low_stock_amount') ); ?>" /> 
                             </div>
                         </div>
                     </div>
@@ -98,7 +98,7 @@ defined( 'ABSPATH' ) || exit;
                     <div class="col-md-6 col-sm-9">
                         <select id="_stock_status" name="_stock_status" class="form-control">
                             <?php foreach ( wc_get_product_stock_status_options() as $key => $option ) : ?>
-                                <option value="<?php echo $key; ?>" <?php selected( $product_object->get_stock_status( 'edit' ), $key ); ?>><?php echo $option; ?></option>
+                                <option value="<?php echo $key; ?>" <?php selected( isset($_POST['_stock_status']) ? wc_clean($_POST['_stock_status']) : $product_object->get_stock_status( 'edit' ), $key ); ?>><?php echo $option; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -116,7 +116,7 @@ defined( 'ABSPATH' ) || exit;
                 <div class="form-group">
                     <label class="control-label col-sm-3 col-md-3" for="_sold_individually"><?php esc_html_e( 'Sold individually', 'dc-woocommerce-multi-vendor' ); ?></label>
                     <div class="col-md-6 col-sm-9">
-                        <input class="form-control" type="checkbox" id="_sold_individually" name="_sold_individually" value="yes"<?php checked( $product_object->get_sold_individually( 'edit' ), true ); ?>/>
+                        <input class="form-control" type="checkbox" id="_sold_individually" name="_sold_individually" value="yes"<?php checked( isset($_POST['_sold_individually']) && $_POST['_sold_individually'] == 'yes' ? true : $product_object->get_sold_individually( 'edit' ), true ); ?>/>
                         <span class="form-text"><?php esc_html_e( 'Enable this to only allow one of this item to be bought in a single order', 'dc-woocommerce-multi-vendor' ); ?></span>
                     </div>
                 </div> 

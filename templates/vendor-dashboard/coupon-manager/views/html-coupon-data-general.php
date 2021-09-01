@@ -13,8 +13,8 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @author 		WC Marketplace
- * @package 	WCMp/templates/vendor dashboard/coupon manager/views
+ * @author      WC Marketplace
+ * @package     WCMp/templates/vendor dashboard/coupon manager/views
  * @version     3.3.0
  */
 defined( 'ABSPATH' ) || exit;
@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
                     <select class="form-control" id="discount_type" name="discount_type">
                         <?php
                         $coupon_types = wc_get_coupon_types();
-                        $coupon_type = $coupon->get_discount_type( 'edit' );
+                        $coupon_type = isset($_POST['discount_type']) ? wc_clean($_POST['discount_type']) : $coupon->get_discount_type( 'edit' );
                         foreach ( $coupon_types as $key => $value ) {
                             echo '<option value="' . $key . '" ' . selected( $coupon_type, $key, false ) . '>' . $value . '</option>';
                         }
@@ -43,7 +43,7 @@ defined( 'ABSPATH' ) || exit;
                     <span class="img_tip" data-desc="<?php esc_html_e( 'Value of the coupon.', 'dc-woocommerce-multi-vendor' ); ?>"></span>
                 </label>
                 <div class="col-md-6 col-sm-9">
-                    <input id="coupon_amount" name="coupon_amount" value="<?php echo esc_attr( $coupon->get_amount( 'edit' ) ); ?>" type="text" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ); ?>" class="form-control">
+                    <input id="coupon_amount" name="coupon_amount" value="<?php echo isset($_POST['coupon_amount']) ? wc_clean($_POST['coupon_amount']) : esc_attr( $coupon->get_amount( 'edit' ) ); ?>" type="text" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ); ?>" class="form-control">
                 </div>
             </div> 
             <?php
@@ -53,7 +53,7 @@ defined( 'ABSPATH' ) || exit;
                 <div class="form-group">
                     <label class="control-label col-sm-3 col-md-3" for="free_shipping"><?php esc_html_e( 'Allow free shipping', 'dc-woocommerce-multi-vendor' ); ?></label>
                     <div class="col-md-6 col-sm-9">
-                        <input id="free_shipping" name="free_shipping" type="checkbox" class="form-control" value="yes" <?php checked( wc_bool_to_string( $coupon->get_free_shipping( 'edit' ) ), 'yes' ); ?>>
+                        <input id="free_shipping" name="free_shipping" type="checkbox" class="form-control" value="yes" <?php checked( wc_bool_to_string( isset($_POST['free_shipping']) ? 'yes' : $coupon->get_free_shipping( 'edit' ) ), 'yes' ); ?>>
                         <span class="form-text"><?php echo sprintf( __( 'Check this box if the coupon grants free shipping. A <a href="%s" target="_blank">free shipping method</a> must be enabled in your shipping zone and be set to require "a valid free shipping coupon" (see the "Free Shipping Requires" setting).', 'dc-woocommerce-multi-vendor' ), 'https://docs.woocommerce.com/document/free-shipping/' ); ?></span>
                     </div>
                 </div>
@@ -65,7 +65,7 @@ defined( 'ABSPATH' ) || exit;
             <div class="form-group">
                 <label class="control-label col-sm-3 col-md-3" for="expiry_date"><?php esc_html_e( 'Coupon expiry date', 'dc-woocommerce-multi-vendor' ); ?></label>
                 <div class="col-md-6 col-sm-9">
-                    <input class="form-control" id="expiry_date" name="expiry_date" value="<?php echo esc_attr( $expiry_date ); ?>" type="date" placeholder="<?php esc_attr_e( 'YYYY-MM-DD', 'dc-woocommerce-multi-vendor' ); ?>" pattern="<?php echo esc_attr( apply_filters( 'woocommerce_date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>">
+                    <input class="form-control" id="expiry_date" name="expiry_date" value="<?php echo isset($_POST['expiry_date']) ? wc_clean($_POST['expiry_date']) : esc_attr( $expiry_date ); ?>" type="date" placeholder="<?php esc_attr_e( 'YYYY-MM-DD', 'dc-woocommerce-multi-vendor' ); ?>" pattern="<?php echo esc_attr( apply_filters( 'woocommerce_date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>">
                 </div>
             </div>
         </div>

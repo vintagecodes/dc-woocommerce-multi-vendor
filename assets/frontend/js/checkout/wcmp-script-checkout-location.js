@@ -93,6 +93,7 @@ jQuery(document).ready( function($) {
 				});
 			});
 			map.addControl(geocoder_mapbox);
+			map.addControl(new mapboxgl.NavigationControl());
 		}
 	}
 	

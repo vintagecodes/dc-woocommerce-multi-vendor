@@ -50,7 +50,7 @@ defined( 'ABSPATH' ) || exit;
                 <div class="product_attributes wc-metaboxes product-variations-wrapper">  
                     <?php
                     // Product attributes - taxonomies and custom, ordered, with visibility and variation attributes set
-                    $attributes = $product_object->get_attributes( 'edit' );
+                    $attributes = isset( $_POST['wc_attributes'] ) ? wcmp_woo()->prepare_attributes( $_POST['wc_attributes'] ) : $product_object->get_attributes( 'edit' );
                     $i = -1;
                     foreach ( $attributes as $attribute ) {
                         $i ++;

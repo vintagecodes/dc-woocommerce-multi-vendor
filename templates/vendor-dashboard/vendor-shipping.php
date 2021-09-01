@@ -24,6 +24,9 @@ $vendor_shipping_data = get_user_meta($vendor->id, 'vendor_shipping_data', true)
         <div id="wcmp-vendor-shipping-by-distance-section">
             <?php wcmp_vendor_distance_by_shipping_settings($vendor->id); ?>
         </div>
+        <div id="wcmp-vendor-shipping-by-country-section">
+            <?php wcmp_vendor_shipping_by_country_settings($vendor->id); ?>
+        </div>
         <div id="wcmp-vendor-shipping-by-zone-section">
         <div class="panel panel-default panel-pading pannel-outer-heading">
             <div class="panel-heading d-flex">

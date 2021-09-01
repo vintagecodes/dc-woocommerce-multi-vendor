@@ -13,8 +13,8 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @author 		WC Marketplace
- * @package 	WCMp/templates/vendor dashboard/coupon manager/views
+ * @author      WC Marketplace
+ * @package     WCMp/templates/vendor dashboard/coupon manager/views
  * @version     3.3.0
  */
 defined( 'ABSPATH' ) || exit;
@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
                     <span class="img_tip" data-desc="<?php esc_html_e( 'How many times this coupon can be used before it is void.', 'dc-woocommerce-multi-vendor' ); ?>"></span>
                 </label>
                 <div class="col-md-6 col-sm-9">
-                    <input type="number" id="usage_limit" name="usage_limit" class="form-control" value="<?php echo esc_attr( $coupon->get_usage_limit( 'edit' ) ? $coupon->get_usage_limit( 'edit' ) : '' ); ?>" placeholder="<?php esc_attr_e( 'Unlimited usage', 'dc-woocommerce-multi-vendor' ); ?>" step="1" min="0">
+                    <input type="number" id="usage_limit" name="usage_limit" class="form-control" value="<?php echo isset($_POST['usage_limit']) ? absint($_POST['usage_limit']) : esc_attr( $coupon->get_usage_limit( 'edit' ) ? $coupon->get_usage_limit( 'edit' ) : '' ); ?>" placeholder="<?php esc_attr_e( 'Unlimited usage', 'dc-woocommerce-multi-vendor' ); ?>" step="1" min="0">
                 </div>
             </div> 
             <div class="form-group">
@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) || exit;
                     <span class="img_tip" data-desc="<?php esc_html_e( 'The maximum number of individual items this coupon can apply to when using product discounts. Leave blank to apply to all qualifying items in cart.', 'dc-woocommerce-multi-vendor' ); ?>"></span>
                 </label>
                 <div class="col-md-6 col-sm-9">
-                    <input type="number" id="limit_usage_to_x_items" name="limit_usage_to_x_items" class="form-control" value="<?php echo esc_attr( $coupon->get_limit_usage_to_x_items( 'edit' ) ? $coupon->get_limit_usage_to_x_items( 'edit' ) : '' ); ?>" placeholder="<?php esc_attr_e( 'Apply to all qualifying items in cart', 'dc-woocommerce-multi-vendor' ); ?>" step="1" min="0">
+                    <input type="number" id="limit_usage_to_x_items" name="limit_usage_to_x_items" class="form-control" value="<?php echo isset($_POST['limit_usage_to_x_items']) ? $_POST['limit_usage_to_x_items'] : (esc_attr( $coupon->get_limit_usage_to_x_items( 'edit' ) ? $coupon->get_limit_usage_to_x_items( 'edit' ) : '' )); ?>" placeholder="<?php esc_attr_e( 'Apply to all qualifying items in cart', 'dc-woocommerce-multi-vendor' ); ?>" step="1" min="0">
                 </div>
             </div>
             <div class="form-group">
@@ -47,7 +47,7 @@ defined( 'ABSPATH' ) || exit;
                     <span class="img_tip" data-desc="<?php esc_html_e( 'How many times this coupon can be used by an individual user. Uses billing email for guests, and user ID for logged in users.', 'dc-woocommerce-multi-vendor' ); ?>"></span>
                 </label>
                 <div class="col-md-6 col-sm-9">
-                    <input type="number" id="usage_limit_per_user" name="usage_limit_per_user" class="form-control" value="<?php echo esc_attr( $coupon->get_usage_limit_per_user( 'edit' ) ? $coupon->get_usage_limit_per_user( 'edit' ) : '' ); ?>" placeholder="<?php esc_attr_e( 'Unlimited usage', 'dc-woocommerce-multi-vendor' ); ?>" step="1" min="0">
+                    <input type="number" id="usage_limit_per_user" name="usage_limit_per_user" class="form-control" value="<?php echo isset($_POST['usage_limit_per_user']) ? absint($_POST['usage_limit_per_user']) : (esc_attr( $coupon->get_usage_limit_per_user( 'edit' ) ? $coupon->get_usage_limit_per_user( 'edit' ) : '' )); ?>" placeholder="<?php esc_attr_e( 'Unlimited usage', 'dc-woocommerce-multi-vendor' ); ?>" step="1" min="0">
                 </div>
             </div>
         </div>

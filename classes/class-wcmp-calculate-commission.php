@@ -523,6 +523,8 @@ class WCMp_Calculate_Commission {
                         $amount = (float) $commission['commission_val'] * $item['qty'];
                     } elseif ($WCMp->vendor_caps->payment_cap['commission_type'] == 'commission_by_product_price') {
                         $amount = $this->wcmp_get_commission_as_per_product_price($product_id, $line_total, $item['qty'], $commission_rule);
+                    } elseif ($WCMp->vendor_caps->payment_cap['commission_type'] == 'commission_by_purchase_quantity') {
+                        $amount = $this->wcmp_get_commission_rule_by_quantity_rule($product_id, $line_total, $item['qty'], $commission_rule);
                     }
                     if (isset($WCMp->vendor_caps->payment_cap['revenue_sharing_mode'])) {
                         if ($WCMp->vendor_caps->payment_cap['revenue_sharing_mode'] == 'admin') {
@@ -582,6 +584,47 @@ class WCMp_Calculate_Commission {
             }
         }
         return $amount;
+    }
+
+    public function wcmp_get_commission_rule_by_quantity_rule($product_id = 0, $line_total = 0, $item_quantity = 0, $commission_rule = array()) {
+        $wcmp_variation_commission_options = get_option( 'wcmp_variation_commission_options', array() );
+         $vendor_commission_quantity_rules = is_array($wcmp_variation_commission_options) && isset( $wcmp_variation_commission_options['vendor_commission_by_quantity'] ) ? $wcmp_variation_commission_options['vendor_commission_by_quantity'] : array();
+
+        if( !$product_id ) return false;
+
+        if( !$commission_rule )  $commission_rule = array( 'rule' => 'by_quantity', 'mode' => 'fixed', 'percent' => 0, 'fixed' => 0, 'tax_enable' => 'no', 'tax_name' => '', 'tax_percent' => '' );
+        if( empty( $vendor_commission_quantity_rules ) ) {
+            $commission_rule['mode'] = 'fixed';
+            $commission_rule['commission_fixed'] = 0;
+        }
+
+        $matched_rule_quantity = $amount = 0;
+        foreach( $vendor_commission_quantity_rules as $vendor_commission_quantity_rule ) {
+            $rule_quantity = $vendor_commission_quantity_rule['quantity'];
+            $rule = $vendor_commission_quantity_rule['rule'];
+
+            if( ( $rule == 'upto' ) && ( (float) $item_quantity <= (float)$rule_quantity ) && ( !$matched_rule_quantity || ( (float)$rule_quantity <= (float)$matched_rule_quantity ) ) ) {
+                $matched_rule_quantity      = $rule_quantity;
+                $commission_rule['mode']    = $vendor_commission_quantity_rule['type'];
+                $commission_rule['commission_val'] = $vendor_commission_quantity_rule['commission'];
+                $commission_rule['commission_fixed']   = isset( $vendor_commission_quantity_rule['commission_fixed'] ) ? $vendor_commission_quantity_rule['commission_fixed'] : 0;
+            } elseif( ( $rule == 'greater' ) && ( (float) $item_quantity > (float)$rule_quantity ) && ( !$matched_rule_quantity || ( (float)$rule_quantity >= (float)$matched_rule_quantity ) ) ) {
+                $matched_rule_quantity      = $rule_quantity;
+                $commission_rule['mode']    = $vendor_commission_quantity_rule['type'];
+                $commission_rule['commission_val'] = $vendor_commission_quantity_rule['commission'];
+                $commission_rule['commission_fixed']   = isset( $vendor_commission_quantity_rule['commission_fixed'] ) ? $vendor_commission_quantity_rule['commission_fixed'] : 0;
+            }
+        }
+        if (!empty($commission_rule)) {
+            if ($commission_rule['mode'] == 'percent_fixed') {
+                $amount = (float) $line_total * ( (float) $commission_rule['commission_val'] / 100 ) + (float) $commission_rule['commission_fixed'];
+            } else if ($commission_rule['mode'] == 'percent') {
+                $amount = (float) $line_total * ( (float) $commission_rule['commission_val'] / 100 );
+            } else if ($commission_rule['mode'] == 'fixed') {
+                $amount = (float) $commission_rule['commission_fixed'];
+            }
+        }
+        return apply_filters('wcmp_quantity_wise_commission_amount_modify', $amount, $product_id, $line_total, $item_quantity, $commission_rule);
     }
 
     /**

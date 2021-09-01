@@ -32,6 +32,7 @@ if(!empty($store_lat) && !empty($store_lng)) : ?>
             var marker1 = new mapboxgl.Marker()
             .setLngLat([<?php echo $store_lat ?>, <?php echo $store_lng ?>])
             .addTo(map);
+            map.addControl(new mapboxgl.NavigationControl());
             map.addControl(new mapboxgl.FullscreenControl());
             // current location fetch
             map.addControl(

@@ -73,6 +73,7 @@ class WCMp_Settings_Payment {
                         "default_percentage" => array('title' => __('Commission Percentage', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'default_percentage', 'label_for' => 'default_percentage', 'name' => 'default_percentage', 'desc' => __('This will be the default percentage paid to vendors if product and vendor specific commission is not set. ', 'dc-woocommerce-multi-vendor')), // Text
                         "fixed_with_percentage" => array('title' => __('Fixed Amount', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'fixed_with_percentage', 'label_for' => 'fixed_with_percentage', 'name' => 'fixed_with_percentage', 'desc' => __('Fixed (per transaction)', 'dc-woocommerce-multi-vendor')), // Text
                         "fixed_with_percentage_qty" => array('title' => __('Fixed Amount', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'fixed_with_percentage_qty', 'label_for' => 'fixed_with_percentage_qty', 'name' => 'fixed_with_percentage_qty', 'desc' => __('Fixed (per unit)', 'dc-woocommerce-multi-vendor')), // Text
+                        "fixed_with_percentage_per_vendor" => array('title' => __('Fixed Amount', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'fixed_with_percentage_per_vendor', 'label_for' => 'fixed_with_percentage_per_vendor', 'name' => 'fixed_with_percentage_per_vendor', 'desc' => __('Fixed (per vendor)', 'dc-woocommerce-multi-vendor')), // Text
                         "commission_include_coupon" => array('title' => __('Share Coupon Discount', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'commission_include_couponn', 'label_for' => 'commission_include_couponn', 'text' => __('Vendors commission will be calculated AFTER deducting the discount, otherwise, the site owner will bear the cost of the coupon.', 'dc-woocommerce-multi-vendor'), 'name' => 'commission_include_coupon', 'value' => 'Enable'), // Checkbox
                         "give_tax" => array('title' => __('Tax', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'give_taxx', 'label_for' => 'give_taxx', 'name' => 'give_tax', 'text' => __('Transfer the tax collected (per product) to the vendor. ', 'dc-woocommerce-multi-vendor'), 'value' => 'Enable'), // Checkbox
                         "give_shipping" => array('title' => __('Shipping', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'give_shippingg', 'custom_tags'=> $desabled_payment_shipping, 'label_for' => 'give_shippingg', 'name' => 'give_shipping', 'text' => __('Transfer shipping charges collected (per product) to the vendor.', 'dc-woocommerce-multi-vendor'), 'value' => 'Enable', 'hints' => __('Make sure your generel settings shipping is on', 'dc-woocommerce-multi-vendor')), // Checkbox
@@ -122,6 +123,9 @@ class WCMp_Settings_Payment {
         }
         if (isset($input['fixed_with_percentage_qty'])) {
             $new_input['fixed_with_percentage_qty'] = floatval(sanitize_text_field($input['fixed_with_percentage_qty']));
+        }
+        if (isset($input['fixed_with_percentage_per_vendor'])) {
+            $new_input['fixed_with_percentage_per_vendor'] = floatval(sanitize_text_field($input['fixed_with_percentage_per_vendor']));
         }
         if (isset($input['fixed_with_percentage'])) {
             $new_input['fixed_with_percentage'] = floatval(sanitize_text_field($input['fixed_with_percentage']));

@@ -40,7 +40,8 @@ jQuery(document).ready(function ($) {
                     action: 'wcmp_add_review_rating_vendor',
                     rating: rating,
                     comment: comment,
-                    vendor_id: $('#wcmp_vendor_for_rating').val()
+                    vendor_id: $('#wcmp_vendor_for_rating').val(),
+                    multi_rate_details: $('#commentform').serialize()
                 }
                 $.post(wcmp_seller_review_rating_js_script_data.ajax_url, data, function (response) {
                     if (response == 1) {
@@ -58,6 +59,14 @@ jQuery(document).ready(function ($) {
                 });
 
             });
+
+            $('.wcmp-star-rating-heading').each(function() {
+                $(this).find('p.stars a').on('click', function() {
+                    $(this).parent().parent().parent().find('.rating_text').text($(this).text());
+                    $(this).parent().parent().parent().find('.rating_value').val($(this).text());
+                });
+            });
+            
     $('input#wcmp_review_load_more').click(function (e) {
         var pageno = $('#vendor_review_rating_pagi_form #wcmp_review_rating_pageno');
         var postperpage = $('#vendor_review_rating_pagi_form #wcmp_review_rating_postperpage');

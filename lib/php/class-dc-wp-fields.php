@@ -504,120 +504,317 @@ if (!class_exists('WCMp_WP_Fields')) {
          * @return void
          */
         public function multi_input($field) {
-            $field['class'] = isset($field['class']) ? $field['class'] : '';
-            $field['value'] = isset($field['value']) ? $field['value'] : array();
-            $field['name'] = isset($field['name']) ? $field['name'] : $field['id'];
-            $field['options'] = isset($field['options']) ? $field['options'] : array();
-            $field['value'] = array_values($field['value']);
-            $field = $this->field_wrapper_start($field);
+            $field['class']         = isset( $field['class'] ) ? $field['class'] : '';
+            $field['value']         = isset( $field['value'] ) ? $field['value'] : array();
+            $field['name']          = isset( $field['name'] ) ? $field['name'] : $field['id'];
+            $field['options']   = isset( $field['options'] ) ? $field['options'] : array();   
+            $field['value']     = array_values($field['value']);    
+            $field              = $this->multi_input_field_wrapper_start($field);
+            $has_dummy          = isset( $field['has_dummy'] ) ? 1 : 0;
 
-            printf(
-                    '<div id="%s" class="%s multi_input_holder" data-name="%s" data-length="%s">', $field['id'], $field['class'], $field['name'], count($field['value'])
-            );
+            // Custom attribute handling
+            $custom_attributes = array();
+
+            if ( ! empty( $field['custom_attributes'] ) && is_array( $field['custom_attributes'] ) ) {
+                foreach ( $field['custom_attributes'] as $attribute => $value ) {
+                    $custom_attributes[] = 'data-' . esc_attr( $attribute ) . '="' . esc_attr( $value ) . '"';
+
+                    // Required Option
+                    if( $attribute == 'required' ) { 
+                        if( !isset( $field['custom_attributes']['required_message'] ) ) {
+                            if( !isset( $field['label'] ) ) $field['label'] = str_replace( '_', ' ', ucfirst( $field['id'] ) );
+                            $custom_attributes[] = 'data-required_message="' . esc_attr( $field['label'] ) . ': ' . __( 'This field is required.', 'wc-frontend-manager' ) . '"';
+                        }
+                        $field['label'] .= '<span class="required">*</span>';
+                    }
+                }
+            }
 
             $eleCount = count($field['value']);
-            if (!$eleCount)
-                $eleCount = 1;
+            if( !$eleCount ) $eleCount = 1;
 
+            printf(
+                '<div id="%s" class="%s multi_input_holder" data-name="%s" data-length="%s" data-has-dummy="%s" %s>',
+                $field['id'],
+                $field['class'],
+                $field['name'],
+                count($field['value']),
+                $has_dummy,
+                implode(' ', $custom_attributes)
+            );
 
-            if (!empty($field['options'])) {
-                for ($blockCount = 0; $blockCount < $eleCount; $blockCount++) {
-                    printf('<div class="multi_input_block">');
-                    foreach ($field['options'] as $optionKey => $optionField) {
+            $has_dummy_class = 'multi_input_block_dummy';
+            if( !$has_dummy || count($field['value']) ) $has_dummy_class = '';
+
+            if(!empty($field['options'])) {
+                for($blockCount = 0; $blockCount < $eleCount; $blockCount++) {
+                    $wrapper_class = '';
+                    $wrapper_class = isset($field['value'][$blockCount]['wrapper_class']) ? $field['value'][$blockCount]['wrapper_class'] : '';
+                    printf('<div class="multi_input_block ' . $wrapper_class . ' ' . $has_dummy_class . '">');
+                    foreach($field['options'] as $optionKey => $optionField) {
                         $optionField = $this->check_field_id_name($optionKey, $optionField);
-                        if ($optionField['type'] == 'checkbox') {
-                            if (isset($field['value']) && isset($field['value'][$blockCount]) && isset($field['value'][$blockCount][$optionField['name']]))
-                                $optionField['dfvalue'] = $field['value'][$blockCount][$optionField['name']];
+                        if($optionField['type'] == 'checkbox') {
+                            if(isset($field['value']) && isset($field['value'][$blockCount]) && isset($field['value'][$blockCount][$optionField['name']])) $optionField['dfvalue'] = $field['value'][$blockCount][$optionField['name']];
+                        } elseif($optionField['type'] == 'html') {
+
                         } else {
-                            if (isset($field['value']) && isset($field['value'][$blockCount]) && isset($field['value'][$blockCount][$optionField['name']]))
-                                $optionField['value'] = $field['value'][$blockCount][$optionField['name']];
+                            if(isset($field['value']) && isset($field['value'][$blockCount]) && isset($field['value'][$blockCount][$optionField['name']])) $optionField['value'] = $field['value'][$blockCount][$optionField['name']];
+                        }
+                        $option_values = array();
+                        if($optionField['type'] == 'select') {
+                            if(isset($field['value']) && isset($field['value'][$blockCount]) && isset($field['value'][$blockCount]['option_values'])) $optionField['options'] = $field['value'][$blockCount]['option_values'];
                         }
                         $optionField['custom_attributes']['name'] = $optionField['name'];
-                        if (!isset($optionField['class']))
-                            $optionField['class'] = '';
+                        if(!isset($optionField['class'])) $optionField['class'] = '';
                         $optionField['class'] .= ' multi_input_block_element';
                         $optionField['id'] = $field['id'] . '_' . $optionField['name'] . '_' . $blockCount;
-                        $optionField['name'] = $field['name'] . '[' . $blockCount . '][' . $optionField['name'] . ']';
-                        if (!empty($optionField['type'])) {
-                            switch ($optionField['type']) {
+                        $optionField['name'] = $field['name'].'['.$blockCount.']['.$optionField['name'].']';
+                        if(!empty($optionField['type'])) {
+                            switch($optionField['type']) {
                                 case 'input':
                                 case 'text':
                                 case 'email':
                                 case 'number':
+                                case 'numeric':
+                                case 'time':
                                 case 'file':
-                                case 'password':
                                 case 'url':
-                                    $this->text_input($optionField);
-                                    break;
+                                case 'phone':
+                                case 'password':
+                                case 'textfield':
+                                    $this->multi_input_text_input($optionField);
+                                break;
 
                                 case 'hidden':
                                     $this->hidden_input($optionField);
-                                    break;
+                                break;
 
                                 case 'textarea':
+                                case 'wysiwyg':
                                     $this->textarea_input($optionField);
-                                    break;
+                                break;
 
                                 case 'wpeditor':
                                     $this->wpeditor_input($optionField);
-                                    break;
+                                break;
 
                                 case 'checkbox':
                                     $this->checkbox_input($optionField);
-                                    break;
+                                break;
+
+                                case 'checklist':
+                                    $this->checklist_input($field);
+                                break;
+
+                                case 'checkboxoffon':
+                                    $this->checkbox_offon_input($optionField);
+                                break;
 
                                 case 'radio':
                                     $this->radio_input($optionField);
-                                    break;
+                                break;
+
+                                case 'radiooffon':
+                                    $this->radio_offon_input($optionField);
+                                break;
 
                                 case 'select':
-                                    $this->select_input($optionField);
-                                    break;
+                                    $this->multi_input_select_input($optionField);
+                                break;
+
+                                case 'country':
+                                    $this->country_input($optionField);
+                                break;
 
                                 case 'timezone':
                                     $this->timezone_input($optionField);
-                                    break;
+                                break;
 
                                 case 'upload':
                                     $this->upload_input($optionField);
-                                    break;
+                                break;
+
+                                case 'file':
+                                    $this->file_input($optionField);
+                                break;
 
                                 case 'colorpicker':
                                     $this->colorpicker_input($optionField);
-                                    break;
+                                break;
 
                                 case 'datepicker':
+                                case 'date':
                                     $this->datepicker_input($optionField);
-                                    break;
+                                break;
 
                                 case 'multiinput':
                                     $this->multi_input($optionField);
-                                    break;
+                                break;
 
                                 case 'title':
                                     $this->title_input($optionField);
-                                    break;
-                                case 'label':
-                                    $this->label_input($optionField);
-                                    break;
+                                break;
+
+                                case 'html':
+                                    $this->html_input($optionField);
+                                break;
 
                                 default:
 
-                                    break;
+                                break;
+
                             }
                         }
                     }
                     printf('<span class="multi_input_block_manupulate remove_multi_input_block button-secondary">-</span>
-                <span class="add_multi_input_block multi_input_block_manupulate button-primary">+</span></div>');
+                        <span class="add_multi_input_block multi_input_block_manupulate button-primary">+</span></div>');
                 }
             }
 
             printf('</div>');
 
-            $this->field_wrapper_end($field);
+            $this->multi_input_field_wrapper_end($field);
         }
 
         /*         * ************************************** Help Functions *********************************************** */
+
+        public function multi_input_field_wrapper_start($field) {
+            $field['wrapper_class'] = isset( $field['wrapper_class'] ) ? ($field['wrapper_class'] . ' ' . $field['id'] . '_wrapper') : ($field['id'] . '_wrapper');
+            $field['label_holder_class'] = isset( $field['label_holder_class'] ) ? ($field['label_holder_class']. ' ' . $field['id'] . '_label_holder') : ($field['id'] . '_label_holder');
+            $field['label_for'] = isset( $field['label_for'] ) ? ($field['label_for']. ' ' . $field['id']) : $field['id'];
+            $field['label_class'] = isset( $field['label_class'] ) ? ($field['label_for']. ' ' . $field['label_class']) : $field['label_for'];
+
+            do_action('before_field_wrapper', $field);
+            do_action('before_field_wrapper_' . $field['id']);
+
+            if(isset($field['in_table'])) {
+                printf(
+                    '<tr class="%s">',
+                    $field['wrapper_class']
+                );
+            }
+
+            do_action('field_wrapper_start', $field);
+            do_action('field_wrapper_start_' . $field['id'], $field);
+
+            if(isset($field['label'])) {
+                do_action('before_field_label');
+                do_action('before_field_label_' . $field['id'], $field);
+
+                if(isset($field['in_table'])) {
+                    printf(
+                        '<th class="%s">',
+                        $field['label_holder_class']
+                    );
+                }
+                do_action('field_label_start', $field);
+                do_action('field_label_start_' . $field['id'], $field);
+                printf(
+                    '<p class="%s"><strong>%s</strong>',
+                    $field['label_class'],
+                    $this->wcmp_removeslashes( $field['label'] )
+                );
+                if( isset( $field['hints'] ) && !empty( $field['hints'] ) ) {
+                    printf(
+                        '<span class="img_tip" data-desc="%s"></span>', wp_kses_post($field['hints'])
+                    );
+                }
+                printf(
+                    '</p><label class="screen-reader-text" for="%s">%s</label>',
+                    $field['label_for'],
+                    $this->wcmp_removeslashes( $field['label'] )
+                );
+
+                // Description
+                if( in_array( $field['type'], array( 'checklist', 'radio' ) ) ) {
+                    if( isset( $field['desc'] ) && !empty( $field['desc'] ) ) {
+                        do_action('before_desc', $field);
+                        do_action('before_desc_' . $field['id'], $field);
+                        if( !isset($field['desc_class']) ) $field['desc_class'] = '';
+
+                        printf(
+                            '<p class="description instructions %s">%s</p>',
+                            wp_kses_post ( $field['desc_class'] ),
+                            wp_kses_post ( $field['desc'] )
+                        );
+
+                        do_action('after_desc_' . $field['id'], $field);
+                        do_action('after_desc', $field);
+                    }
+                }
+
+                do_action('field_label_end_' . $field['id'], $field);
+                do_action('field_label_end', $field);
+                if(isset($field['in_table'])) printf('</th>');
+
+                do_action('after_field_label_' . $field['id'], $field);
+                do_action('after_field_label', $field);
+            }
+
+            do_action('before_field', $field);
+            do_action('before_field_' . $field['id'], $field);
+
+            if(isset($field['in_table']) && isset($field['label'])) printf('<td>');
+            else if(isset($field['in_table']) && !isset($field['label'])) printf('<td colspan="2">');
+
+            do_action('field_start', $field);
+            do_action('field_start_' . $field['id'], $field);
+
+            if(!isset($field['custom_attributes'])) $field['custom_attributes'] = array();
+            $field['custom_attributes'] = apply_filters('manupulate_custom_attributes', $field['custom_attributes']);
+            $field['custom_attributes'] = apply_filters('manupulate_custom_attributes_' . $field['id'], $field['custom_attributes']);
+
+            return $field;
+        }
+
+        public function multi_input_field_wrapper_end($field) {
+            // Help message
+            if( !isset( $field['label'] ) && isset( $field['hints'] ) && !empty( $field['hints'] ) ) {
+                do_action('before_hints', $field);
+                do_action('before_hints_' . $field['id'], $field);
+
+                printf(
+                    '<span class="img_tip" data-desc="%s"></span>', wp_kses_post($field['hints'])
+                );
+
+                do_action('after_hints_' . $field['id'], $field);
+                do_action('after_hints', $field);
+            }
+
+            // Description
+            if( !in_array( $field['type'], array( 'checklist', 'radio' ) ) ) {
+                if( isset( $field['desc'] ) && !empty( $field['desc'] ) ) {
+                    do_action('before_desc', $field);
+                    do_action('before_desc_' . $field['id'], $field);
+                    if( !isset($field['desc_class']) ) $field['desc_class'] = '';
+
+                    printf(
+                        '<p class="description %s">%s</p>',
+                        wp_kses_post ( $field['desc_class'] ),
+                        wp_kses_post ( $field['desc'] )
+                    );
+
+                    do_action('after_desc_' . $field['id'], $field);
+                    do_action('after_desc', $field);
+                }
+            }
+
+            do_action('field_end_' . $field['id'], $field);
+            do_action('field_end', $field);
+
+            if(isset($field['in_table'])) printf('</td>');
+
+            do_action('after_field_' . $field['id'], $field);
+            do_action('after_field', $field);
+
+            do_action('field_wrapper_end_' . $field['id'], $field);
+            do_action('field_wrapper_end', $field);
+
+            if(isset($field['in_table'])) printf('</tr>');
+
+            do_action('afet_field_wrapper_' . $field['id'], $field);
+            do_action('after_field_wrapper', $field);
+        }
 
         public function field_wrapper_start($field) {
             $field['wrapper_class'] = isset($field['wrapper_class']) ? ($field['wrapper_class'] . ' ' . $field['id'] . '_wrapper') : ($field['id'] . '_wrapper');
@@ -691,11 +888,11 @@ if (!class_exists('WCMp_WP_Fields')) {
             if (isset($field['hints'])) {
                 do_action('before_hints');
                 do_action('before_hints_' . $field['id']);
-
-                printf(
+                if (apply_filters('wcmp_img_tip_display_on_fileds_section', false)) {
+                    printf(
                         '<span class="img_tip" data-desc="%s"></span>', wp_kses_post($field['hints'])
-                );
-
+                    );
+                }
                 do_action('after_hints_' . $field['id']);
                 do_action('after_hints');
             }
@@ -749,6 +946,85 @@ if (!class_exists('WCMp_WP_Fields')) {
             do_action('after_field_wrapper');
             if (!isset($field['in_table']))
                 echo '</fieldset>';
+        }
+
+        public function wcmp_removeslashes( $string ) {
+            $string = implode("",explode("\\",$string));
+            return stripslashes(trim($string));
+        }
+
+        public function multi_input_select_input($field) {
+            $field['class'] = isset($field['class']) ? $field['class'] : 'select short';
+            $field['value'] = isset($field['value']) ? $field['value'] : '';
+            $field['name'] = isset($field['name']) ? $field['name'] : $field['id'];
+
+            // Custom attribute handling
+            $custom_attributes = array();
+
+            if (!empty($field['custom_attributes']) && is_array($field['custom_attributes']))
+                foreach ($field['custom_attributes'] as $attribute => $value)
+                    $custom_attributes[] = 'data-' . esc_attr($attribute) . '="' . esc_attr($value) . '"';
+
+            // attribute handling
+            $attributes = array();
+
+            if (!empty($field['attributes']) && is_array($field['attributes']))
+                foreach ($field['attributes'] as $attribute => $value)
+                    $attributes[] = esc_attr($attribute) . '="' . esc_attr($value) . '"';
+
+            $options = '';
+            foreach ($field['options'] as $key => $value) {
+                if (is_array($value)) {
+                    $options .= '<optgroup label="' . $value['label'] . '">';
+                    foreach ($value['options'] as $key1 => $value1) {
+                        $options .= '<option value="' . esc_attr($key1) . '" ' . selected(esc_attr($field['value']), esc_attr($key1), false) . '>' . esc_html($this->string_wpml($value1)) . '</option>';
+                    }
+                    $options .= '</optgroup>';
+                } else {
+                    $options .= '<option value="' . esc_attr($key) . '" ' . selected(esc_attr($field['value']), esc_attr($key), false) . '>' . esc_html($this->string_wpml($value)) . '</option>';
+                }
+            }
+
+            $field = $this->multi_input_field_wrapper_start($field);
+
+            printf(
+                    '<select id="%s" name="%s" class="%s" %s %s>%s</select>', esc_attr($field['id']), esc_attr($field['name']), esc_attr($field['class']), implode(' ', $custom_attributes), implode(' ', $attributes), $options
+            );
+
+            $this->multi_input_field_wrapper_end($field);
+        }
+
+        public function multi_input_text_input($field) {
+            $field['placeholder'] = isset($field['placeholder']) ? $field['placeholder'] : '';
+            $field['class'] = isset($field['class']) ? $field['class'] : 'regular-text';
+            $field['dfvalue'] = isset($field['dfvalue']) ? $field['dfvalue'] : '';
+            $field['value'] = isset($field['value']) ? $field['value'] : $field['dfvalue'];
+            if (empty($field['value'])) {
+                $field['value'] = $field['dfvalue'];
+            }
+            $field['name'] = isset($field['name']) ? $field['name'] : $field['id'];
+            $field['type'] = isset($field['type']) ? $field['type'] : 'text';
+
+            // Custom attribute handling
+            $custom_attributes = array();
+
+            if (!empty($field['custom_attributes']) && is_array($field['custom_attributes']))
+                foreach ($field['custom_attributes'] as $attribute => $value)
+                    $custom_attributes[] = 'data-' . esc_attr($attribute) . '="' . esc_attr($value) . '"';
+
+            // attribute handling
+            $attributes = array();
+
+            if (!empty($field['attributes']) && is_array($field['attributes']))
+                foreach ($field['attributes'] as $attribute => $value)
+                    $attributes[] = esc_attr($attribute) . '="' . esc_attr($value) . '"';
+
+            $field = $this->multi_input_field_wrapper_start($field);
+
+            printf(
+                    '<input type="%s" id="%s" name="%s" class="%s" value="%s" placeholder="%s" %s %s />', $field['type'], esc_attr($field['id']), esc_attr($field['name']), esc_attr($field['class']), esc_attr($this->string_wpml('' . $field['value'] . '')), esc_attr($this->string_wpml('' . $field['placeholder'] . '')), implode(' ', $custom_attributes), implode(' ', $attributes)
+            );
+            $this->multi_input_field_wrapper_end($field);
         }
 
         public function dc_generate_form_field($fields, $common_attrs = array()) {

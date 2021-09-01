@@ -16,9 +16,9 @@ global $WCMp;
     <div class="panel-heading">
         <h1>
             <?php if( !get_wcmp_vendor_settings('is_singleproductmultiseller', 'general') == 'Enable' && get_wcmp_vendor_settings('is_disable_marketplace_plisting', 'general') != 'Enable' ) : ?>
-            <span class="primary-color"><span><?php _e( 'Step 2 of', 'dc-woocommerce-multi-vendor' );?></span> <?php _e( '2:', 'dc-woocommerce-multi-vendor' );?></span> 
+            <span class="primary-color"><span><?php esc_html_e( 'Step 2 of', 'dc-woocommerce-multi-vendor' );?></span> <?php esc_html_e( '2:', 'dc-woocommerce-multi-vendor' );?></span> 
             <?php endif; ?>
-            <?php _e( 'Add Product Details', 'dc-woocommerce-multi-vendor' );?>
+            <?php esc_html_e( 'Add Product Details', 'dc-woocommerce-multi-vendor' );?>
         </h1>
         <?php if( get_transient( 'classified_product_terms_vendor'. get_current_user_id() ) || ($self->is_spmv() && $post) || $is_update ) : ?>
         <?php do_action( 'wcmp_afm_before_product_highlights_category_wrap', $post->ID, $product_object, $post ); ?> 
@@ -63,9 +63,9 @@ global $WCMp;
                     }
                     // give option to set default terms hierarchy
                     if( $nos_hierarchy > 1 && ( get_wcmp_vendor_settings('is_disable_marketplace_plisting', 'general') != 'Enable' ) ){ ?>
-                    <p class="pull-right multiple-cat-hierarchy"><?php _e( 'Select a different category :', 'dc-woocommerce-multi-vendor' );?>
+                    <p class="pull-right multiple-cat-hierarchy"><?php esc_html_e( 'Select a different category :', 'dc-woocommerce-multi-vendor' );?>
                         <strong id="multiple-cat-hierarchy-lbl" class="primary-color">
-                            <button type="button" class="multi-cat-choose-dflt-btn editabble-button" data-toggle="collapse" data-target="#multi_cat_hierarchy_visiblity"><u><?php _e( 'Choose default', 'dc-woocommerce-multi-vendor' );?></u> <i class="wcmp-font ico-downarrow-2-icon"></i></button>
+                            <button type="button" class="multi-cat-choose-dflt-btn editabble-button" data-toggle="collapse" data-target="#multi_cat_hierarchy_visiblity"><u><?php esc_html_e( 'Choose default', 'dc-woocommerce-multi-vendor' );?></u> <i class="wcmp-font ico-downarrow-2-icon"></i></button>
                         </strong>
                     </p> 
                     <div id="multi_cat_hierarchy_visiblity" class="wcmp-clps collapse dropdown-panel">
@@ -118,10 +118,10 @@ global $WCMp;
         <div class="product-title-wrap <?php echo ( $self->is_spmv() || $is_update ) ? 'product-edit-mode' : 'product-add-mode'; ?>"> <!-- product-add-mode / product-edit-mode according to flow -->
             <div class="pull-left product-title-inner full-1080"> 
                 <p class="pro-title">
-                    <label><?php _e('Product Title', 'dc-woocommerce-multi-vendor'); ?>: </label>
-                    <strong class="editable-content"><?php echo $product_object->get_title( 'edit' ); ?></strong>
+                    <label><?php esc_html_e('Product Title', 'dc-woocommerce-multi-vendor'); ?>: </label>
+                    <strong class="editable-content"><?php echo isset($_POST['post_title']) ? wc_clean($_POST['post_title']) : $product_object->get_title( 'edit' ); ?></strong>
                     <?php if( (!$self->is_spmv() && $is_update) || !apply_filters('wcmp_singleproductmultiseller_edit_product_title_disabled', true) ) : ?>
-                    <button type="button" class="editable-content-button"><i class="wcmp-font ico-edit-pencil-icon" title="<?php _e('Edit', 'dc-woocommerce-multi-vendor'); ?>"></i> <!--span>edit</span--></button>
+                    <button type="button" class="editable-content-button"><i class="wcmp-font ico-edit-pencil-icon" title="<?php esc_attr_e('Edit', 'dc-woocommerce-multi-vendor'); ?>"></i> <!--span>edit</span--></button>
                     <?php endif; ?>
                     <span class="editing-content">
                         <input type="text" class="form-control" name="post_title" id="post_title" value="<?php echo $product_object->get_title( 'edit' ); ?>"<?php if ( $self->is_spmv() && apply_filters('wcmp_singleproductmultiseller_edit_product_title_disabled', true) ) echo ' readonly="readonly"'; ?>>
@@ -143,12 +143,12 @@ global $WCMp;
                     <?php } ?>
                     <strong class="editable-content"><?php echo $self->get_gtin_no(); ?></strong>
                     <?php if( !$self->is_spmv() && $is_update ) : ?>
-                    <button type="button" class="editable-content-button"><i class="wcmp-font ico-edit-pencil-icon" title="<?php _e('Edit', 'dc-woocommerce-multi-vendor'); ?>"></i> <!--span>edit</span--></button>
+                    <button type="button" class="editable-content-button"><i class="wcmp-font ico-edit-pencil-icon" title="<?php esc_attr_e('Edit', 'dc-woocommerce-multi-vendor'); ?>"></i> <!--span>edit</span--></button>
                     <?php endif; ?>
                     <span class="editing-content">
-                        <label><?php _e('GTIN', 'dc-woocommerce-multi-vendor'); ?>:</label>
+                        <label><?php esc_html_e('GTIN', 'dc-woocommerce-multi-vendor'); ?>:</label>
                         <select class="form-control inline-input" name="_wcmp_gtin_type">
-                        <option value=""><?php _e( 'Select type', 'dc-woocommerce-multi-vendor' ); ?></option>  
+                        <option value=""><?php esc_html_e( 'Select type', 'dc-woocommerce-multi-vendor' ); ?></option>  
                         <?php 
                         $gtin_types = apply_filters('wcmp_add_product_default_gtin_types', $WCMp->taxonomy->get_wcmp_gtin_terms(array('fields' => 'id=>name', 'orderby' => 'id')), $post, $self);
                         foreach ($gtin_types as $term_id => $name) {
@@ -156,7 +156,7 @@ global $WCMp;
                         }
                         ?>
                     </select>
-                    <input type="text" class="form-control inline-input" name="_wcmp_gtin_code" placeholder="<?php _e( 'GTIN Code', 'dc-woocommerce-multi-vendor' );?>" value="<?php echo $self->get_gtin_no(); ?>">
+                    <input type="text" class="form-control inline-input" name="_wcmp_gtin_code" placeholder="<?php esc_attr_e( 'GTIN Code', 'dc-woocommerce-multi-vendor' );?>" value="<?php echo $self->get_gtin_no(); ?>">
                     </span> 
                 </p>
                 <?php endif; ?>
@@ -193,8 +193,8 @@ global $WCMp;
                         }
                         ?>
                         <div class="form-group mt-15">
-                            <button type="button" class="btn btn-default btn-sm catalog-visiblity-btn"><?php _e('Ok', 'dc-woocommerce-multi-vendor'); ?></button>
-                            <a href="javascript:void(0)" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#product_visiblity"><?php _e('Cancel', 'dc-woocommerce-multi-vendor'); ?></a>
+                            <button type="button" class="btn btn-default btn-sm catalog-visiblity-btn"><?php esc_html_e('Ok', 'dc-woocommerce-multi-vendor'); ?></button>
+                            <a href="javascript:void(0)" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#product_visiblity"><?php esc_html_e('Cancel', 'dc-woocommerce-multi-vendor'); ?></a>
                         </div>
                     </div>
                 </div>

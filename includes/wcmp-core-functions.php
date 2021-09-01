@@ -1032,6 +1032,19 @@ if (!function_exists('wcmp_get_vendor_review_info')) {
             $args = apply_filters('wcmp_vendor_review_rating_args_to_fetch', $args_default);
             $rating = 0;
             $comments = get_comments($args);
+            // If product review sync enabled
+            if (get_wcmp_vendor_settings('product_review_sync', 'general') && get_wcmp_vendor_settings('product_review_sync', 'general') == 'Enable') {
+                $vendor = get_wcmp_vendor_by_term( $vendor_term_id );
+                $args_default_for_product = apply_filters('wcmp_vendors_product_review_info_args', array(
+                    'status' => 'approve',
+                    'type' => 'review',
+                    'post__in' => wp_list_pluck($vendor->get_products_ids(), 'ID' ),
+                    'author__not_in' => array($vendor->id)
+                ) );
+                if (!empty(get_comments($args_default_for_product))) {
+                    $comments = array_merge(get_comments($args), get_comments($args_default_for_product));
+                }
+            }
             if ($comments && count($comments) > 0) {
                 foreach ($comments as $comment) {
                     $rating += floatval(get_comment_meta($comment->comment_ID, 'vendor_rating', true));
@@ -3435,7 +3448,9 @@ if (!function_exists('wcmp_get_available_commission_types')) {
         $available_commission_types['fixed_with_percentage'] = __('%age + Fixed (per transaction)', 'dc-woocommerce-multi-vendor');
         $available_commission_types['fixed_with_percentage_qty'] = __('%age + Fixed (per unit)', 'dc-woocommerce-multi-vendor');
         $available_commission_types['commission_by_product_price'] = __('Commission By Product Price', 'dc-woocommerce-multi-vendor');
-
+        $available_commission_types['commission_by_purchase_quantity'] = __('Commission By Purchase Quantity', 'dc-woocommerce-multi-vendor');
+        $available_commission_types['fixed_with_percentage_per_vendor'] = __('%age + Fixed (per vendor)', 'dc-woocommerce-multi-vendor');
+        
         return apply_filters('wcmp_get_available_commission_types', $available_commission_types);
     }
 
@@ -3862,6 +3877,7 @@ if ( ! function_exists( 'wcmp_get_product_terms_HTML' ) ) {
         } else {
             $terms = array();
         }
+        $terms = isset( $_POST['tax_input'][$taxonomy] ) ? wp_parse_id_list( $_POST['tax_input'][$taxonomy] ) : $terms;
         $terms = apply_filters( 'wcmp_get_product_terms_html_selected_terms', $terms, $taxonomy, $id );
         if ( $hierarchical ) {
             return generate_hierarchical_taxonomy_html( $taxonomy, $product_terms, $terms, $add_cap );
@@ -4546,6 +4562,9 @@ if (!function_exists('wcmp_vendor_different_type_shipping_options')) {
         if (get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' ) && 'Enable' === get_wcmp_vendor_settings( 'enabled_distance_by_shipping_for_vendor', 'general' )) {
             $shipping_options['distance_by_shipping'] = __('Shipping by Distance', 'dc-woocommerce-multi-vendor');
         }
+        if (get_wcmp_vendor_settings( 'enabled_shipping_by_country_for_vendor', 'general' ) && 'Enable' === get_wcmp_vendor_settings( 'enabled_shipping_by_country_for_vendor', 'general' )) {
+            $shipping_options['shipping_by_country'] = __('Shipping by Country', 'dc-woocommerce-multi-vendor');
+        }
         ?>
         <label for="shipping-options"><?php esc_html_e( 'Shipping Options', 'dc-woocommerce-multi-vendor' ); ?></label>
         <select class="form-control inline-select" id="shipping-options" name="shippping-options">
@@ -4556,3 +4575,104 @@ if (!function_exists('wcmp_vendor_different_type_shipping_options')) {
         <?php
     }
 }
+
+if (!function_exists('wcmp_vendor_shipping_by_country_settings')) {
+    function wcmp_vendor_shipping_by_country_settings( $vendor_id = 0 ) {
+        global $WCMp;
+        $wcmp_shipping_by_country = wcmp_get_user_meta( $vendor_id, '_wcmp_shipping_by_country', array() ) ? wcmp_get_user_meta( $vendor_id, '_wcmp_shipping_by_country', array() )[0] : '';
+        $wcmp_country_rates       = wcmp_get_user_meta( $vendor_id, '_wcmp_country_rates', array() ) ? wcmp_get_user_meta( $vendor_id, '_wcmp_country_rates', array() ) : '';
+        $wcmp_state_rates         = wcmp_get_user_meta( $vendor_id, '_wcmp_state_rates', array() ) ? wcmp_get_user_meta( $vendor_id, '_wcmp_state_rates', array() ) : '';
+        $WCMp->wcmp_wp_fields->dc_generate_form_field (
+            apply_filters( 'wcmp_settings_fields_shipping_by_country', array(
+                "wcmp_shipping_type_price" => array('label' => __('Default Shipping Price', 'dc-woocommerce-multi-vendor'), 'name' => 'wcmp_shipping_by_country[_wcmp_shipping_type_price]', 'placeholder' => '0.00', 'type' => 'text', 'class' => 'col-md-6 col-sm-9', 'label_class' => 'wcmp_title wcmp_ele', 'value' => isset($wcmp_shipping_by_country['_wcmp_shipping_type_price']) ? $wcmp_shipping_by_country['_wcmp_shipping_type_price'] : '', 'hints' => __('This is the base price and will be the starting shipping price for each product', 'dc-woocommerce-multi-vendor') ),
+                "wcmp_additional_product" => array('label' => __('Per Product Additional Price', 'dc-woocommerce-multi-vendor'), 'name' => 'wcmp_shipping_by_country[_wcmp_additional_product]', 'placeholder' => '0.00', 'type' => 'text', 'class' => 'col-md-6 col-sm-9', 'label_class' => 'wcmp_title wcmp_ele', 'value' => isset($wcmp_shipping_by_country['_wcmp_additional_product']) ? $wcmp_shipping_by_country['_wcmp_additional_product'] : '', 'hints' => __('If a customer buys more than one type product from your store, first product of the every second type will be charged with this price', 'dc-woocommerce-multi-vendor') ),
+                "wcmp_additional_qty" => array('label' => __('Per Qty Additional Price', 'dc-woocommerce-multi-vendor'), 'name' => 'wcmp_shipping_by_country[_wcmp_additional_qty]', 'placeholder' => '0.00', 'type' => 'text', 'class' => 'col-md-6 col-sm-9', 'label_class' => 'wcmp_title wcmp_ele', 'value' => isset($wcmp_shipping_by_country['_wcmp_additional_qty']) ? $wcmp_shipping_by_country['_wcmp_additional_qty'] : '', 'hints' => __('Every second product of same type will be charged with this price', 'dc-woocommerce-multi-vendor') ),
+                "wcmp_byc_free_shipping_amount" => array('label' => __('Free Shipping Minimum Order Amount', 'dc-woocommerce-multi-vendor'), 'name' => 'wcmp_shipping_by_country[_free_shipping_amount]', 'placeholder' => __( 'NO Free Shipping', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'class' => 'col-md-6 col-sm-9', 'label_class' => 'wcmp_title wcmp_ele', 'value' => isset($wcmp_shipping_by_country['_free_shipping_amount']) ? $wcmp_shipping_by_country['_free_shipping_amount'] : '', 'hints' => __('Free shipping will be available if order amount more than this. Leave empty to disable Free Shipping.', 'dc-woocommerce-multi-vendor') ),
+                "wcmp_byc_enable_local_pickup" => array('label' => __('Enable Local Pickup', 'dc-woocommerce-multi-vendor'), 'name' => 'wcmp_shipping_by_country[_enable_local_pickup]', 'type' => 'checkbox', 'class' => 'wcmp-checkbox wcmp_ele', 'label_class' => 'wcmp_title checkbox_title checkbox-title wcmp_ele', 'value' => 'yes', 'dfvalue' => isset($wcmp_shipping_by_country['_enable_local_pickup']) ? 'yes' : '' ),
+                "wcmp_byc_local_pickup_cost" => array('label' => __('Local Pickup Cost', 'dc-woocommerce-multi-vendor'), 'name' => 'wcmp_shipping_by_country[_local_pickup_cost]', 'placeholder' => '0.00', 'type' => 'text', 'class' => 'col-md-6 col-sm-9', 'label_class' => 'wcmp_title wcmp_ele', 'value' => isset($wcmp_shipping_by_country['_local_pickup_cost']) ? $wcmp_shipping_by_country['_local_pickup_cost'] : '' ),
+            ) )
+        );
+
+        $wcmp_shipping_rates = array();
+        $state_options = array();
+        if ( $wcmp_country_rates ) {
+            foreach ( $wcmp_country_rates[0] as $country => $country_rate ) {
+                $wcmp_shipping_state_rates = array();
+                $state_options = array();
+                if ( !empty( $wcmp_state_rates[0] ) && isset( $wcmp_state_rates[0][$country] ) ) {
+                    foreach ( $wcmp_state_rates[0][$country] as $state => $state_rate ) {
+                        $state_options[$state] = $state;
+                        $wcmp_shipping_state_rates[] = array( 
+                            'wcmp_state_to' => $state, 
+                            'wcmp_state_to_price' => $state_rate, 
+                            'option_values' => $state_options 
+                        );
+                    }
+                }
+                $wcmp_shipping_rates[] = array( 
+                    'wcmp_country_to' => $country, 
+                    'wcmp_country_to_price' => $country_rate, 
+                    'wcmp_shipping_state_rates' => $wcmp_shipping_state_rates 
+                );
+            }   
+        }
+        $every_where = array('everywhere' => __('Everywhere Else', 'dc-woocommerce-multi-vendor'));
+        $WCMp->wcmp_wp_fields->dc_generate_form_field( 
+            apply_filters( 'wcmp_settings_fields_shipping_rates_by_country', array( 
+                "wcmp_shipping_rates" => array(
+                    'label' => __('Shipping Rates by Country', 'dc-woocommerce-multi-vendor') , 
+                    'type' => 'multiinput', 
+                    'value' => $wcmp_shipping_rates, 
+                    'desc' => __( 'Add the countries you deliver your products to. You can specify states as well. If the shipping price is same except some countries, there is an option Everywhere Else, you can use that.', 'dc-woocommerce-multi-vendor' ),
+                    'desc_class' => 'instructions', 
+                    'options' => array(
+                        "wcmp_country_to" => array(
+                            'label' => __('Country', 'dc-woocommerce-multi-vendor'), 
+                            'type' => 'select',
+                            'class' => 'col-md-6 col-sm-9 wcmp_country_to_select', 
+                            'options' => array_merge($every_where, WC()->countries->get_shipping_countries())
+                        ),
+                        "wcmp_country_to_price" => array(
+                            'label' => __('Cost', 'dc-woocommerce-multi-vendor') . '('.get_woocommerce_currency_symbol().')', 
+                            'type' => 'text',
+                            'dfvalue' => 0,
+                            'placeholder' => '0.00',
+                            'class' => 'col-md-6 col-sm-9', 
+                        ),
+                        "wcmp_shipping_state_rates" => array(
+                            'label' => __('State Shipping Rates', 'dc-woocommerce-multi-vendor'), 
+                            'type' => 'multiinput', 
+                            'label_class' => 'wcmp_title wcmp_shipping_state_rates_label', 
+                            'options' => array(
+                                "wcmp_state_to" => array( 
+                                    'label' => __('State', 'dc-woocommerce-multi-vendor'), 
+                                    'type' => 'select', 'class' => 'col-md-6 col-sm-9 wcmp_state_to_select', 
+                                    'options' => $state_options 
+                                ),
+                                "wcmp_state_to_price" => array( 
+                                    'label' => __('Cost', 'dc-woocommerce-multi-vendor') . '('.get_woocommerce_currency_symbol().')', 
+                                    'type' => 'text', 
+                                    'dfvalue' => 0,
+                                    'placeholder' => '0.00 (' . __('Free Shipping', 'dc-woocommerce-multi-vendor') . ')', 
+                                    'class' => 'col-md-6 col-sm-9', 
+                                ),
+                            ) 
+                        )   
+                    ) 
+                )
+            ) ) 
+        );
+    }
+}
+
+if (!function_exists('is_customer_not_given_review_to_vendor')) {
+    function is_customer_not_given_review_to_vendor( $vendor_id = 0, $customer_id = 0) {
+        $vendor = get_wcmp_vendor($vendor_id);
+        $reviews_lists = $vendor->get_reviews_and_rating(0);
+        $vendor_review_user_id = wp_list_pluck($reviews_lists, 'user_id');
+        if (in_array($customer_id, $vendor_review_user_id)) {
+            return false;
+        }
+        return true;
+    }
+} 

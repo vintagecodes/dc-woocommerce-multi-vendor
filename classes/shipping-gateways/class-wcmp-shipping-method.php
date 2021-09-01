@@ -204,6 +204,10 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
             return;
         }
 
+        if ( get_wcmp_vendor_settings( 'enabled_shipping_by_country_for_vendor', 'general' ) && 'Enable' === get_wcmp_vendor_settings( 'enabled_shipping_by_country_for_vendor', 'general' ) && $vendor_shipping_options && $vendor_shipping_options == 'shipping_by_country') {
+            return;
+        }
+
         if ( empty( $shipping_methods ) ) {
             return;
         }

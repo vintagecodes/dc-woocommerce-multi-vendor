@@ -64,6 +64,8 @@
 
             // full screen control
             map.addControl(new mapboxgl.FullscreenControl());
+            // Zoom in out feature
+            map.addControl(new mapboxgl.NavigationControl());
             // current location fetch
             map.addControl(
                 new mapboxgl.GeolocateControl({
