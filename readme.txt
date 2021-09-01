@@ -280,7 +280,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Changelog ==
 
-= 3.8.0 - 2021-08-30 =
+= 3.8.0 - 2021-09-01 =
 * Added - Compatibility of WooCommerce 5.6.0.
 * Added - Multi section Review System #871.
 * Added - Product and vendor review sync #751.
