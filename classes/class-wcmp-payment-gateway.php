@@ -85,14 +85,17 @@ abstract class WCMp_Payment_Gateway {
             $carrier = get_wcmp_vendor_settings('gateway_charges_cost_carrier', 'payment', '', 'vendor');
             if ($gateway_charge_amount) {
                 foreach ($order_totals as $order_id => $details) {
+                    $order = wc_get_order($order_id);
+                    $order_total = $order->get_total_refunded() ? ( $details['order_total'] - $order->get_total_refunded() ) : $details['order_total'];
+                    $vendor_total = $order->get_total_refunded() ? ( $details['vendor_total'] - $order->get_total_refunded() ) : $details['vendor_total'];
                     $order_gateway_charge = 0;
-                    $vendor_ratio = ($details['vendor_total'] / $details['order_total']);
+                    $vendor_ratio = ($vendor_total / $$order_total);
                     if ('percent' === $payment_gateway_charge_type) {
-                        $parcentize_charges = ($details['order_total'] * $gateway_charge_amount) / 100;
+                        $parcentize_charges = ($$order_total * $gateway_charge_amount) / 100;
                         $order_gateway_charge = ($vendor_ratio) ? $vendor_ratio * $parcentize_charges : $parcentize_charges;
                     }else if ('fixed_with_percentage' === $payment_gateway_charge_type) {
                         $gateway_fixed_charge_amount = floatval(get_wcmp_vendor_settings("gateway_charge_fixed_with_{$this->payment_gateway}", "payment"));
-                        $parcentize_charges = (($details['order_total'] * $gateway_charge_amount) / 100 );
+                        $parcentize_charges = (($$order_total * $gateway_charge_amount) / 100 );
                         $fixed_charges = floatval($gateway_fixed_charge_amount) / count($details['order_marchants']);
                         $order_gateway_charge = ($vendor_ratio) ? ($vendor_ratio * $parcentize_charges) + $fixed_charges : ($parcentize_charges + $fixed_charges);
                     }else{
