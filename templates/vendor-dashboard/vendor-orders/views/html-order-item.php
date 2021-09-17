@@ -89,6 +89,13 @@ $row_class    = apply_filters( 'wcmp_vendor_dash_html_order_item_class', ! empty
                     }
                     ?>
             </div>
+            <div>
+                <?php
+                if ( $item->get_subtotal() !== $item->get_total() ) {
+                        echo '<span class="wc-order-item-discount">' . wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $order->get_currency() ) ) . '</span> '. __('discount', 'dc-woocommerce-multi-vendor');
+                }
+                ?>
+            </div>
             <div class="edit" style="display: none;">
                     <div class="split-input">
                             <div class="input">
