@@ -311,17 +311,18 @@ class WCMp_Shipping_By_Distance extends WC_Shipping_Method {
     $free_shipping_available = false;
     $wcmp_shipping = array();
     if( apply_filters( 'wcmp_is_allow_hide_admin_shipping_for_vendor_shipping', true ) && isset( $package['vendor_id'] ) ) {
-      foreach ( $rates as $rate_id => $rate ) {
-        if ( 'wcmp_product_shipping_by_distance' === $rate->method_id ) {
-          $id = explode(":", $rate_id, 2);
-          $id = $id[0];
-          if($id === 'free_shipping') {
-            $free_shipping_available = apply_filters( 'wcmp_is_allow_hide_other_shipping_if_free', true );
+      if ($rates) {
+        foreach ( $rates as $rate_id => $rate ) {
+          if ( 'wcmp_product_shipping_by_distance' === $rate->method_id ) {
+            $id = explode(":", $rate_id, 2);
+            $id = $id[0];
+            if($id === 'free_shipping') {
+              $free_shipping_available = apply_filters( 'wcmp_is_allow_hide_other_shipping_if_free', true );
+            }
+            $wcmp_shipping[ $rate_id ] = $rate;  
           }
-          $wcmp_shipping[ $rate_id ] = $rate;  
         }
       }
-
       if($free_shipping_available) {
         foreach ( $wcmp_shipping as $rate_id => $rate ) { 
           $id = explode(":", $rate_id, 2);
