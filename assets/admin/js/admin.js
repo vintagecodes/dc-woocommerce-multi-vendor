@@ -573,6 +573,14 @@ jQuery(document).ready(function ($) {
             $('#gateway_charges_cost_carrier').closest('tr').hide();
         }
     }).change();
+
+    $('#commission_include_couponn').change(function () {
+        if ($(this).prop('checked')) {
+            $('#admin_coupon_excluded').closest('tr').show();
+        } else {
+            $('#admin_coupon_excluded').closest('tr').hide();
+        }
+    }).change();
     
     $( "input[name^='wcmp_payment_settings_name[gateway_charge_fixed_with_']" ).closest('tr').hide();
     $('#payment_gateway_charge_type').on('change', function(){

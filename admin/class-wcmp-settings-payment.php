@@ -75,6 +75,7 @@ class WCMp_Settings_Payment {
                         "fixed_with_percentage_qty" => array('title' => __('Fixed Amount', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'fixed_with_percentage_qty', 'label_for' => 'fixed_with_percentage_qty', 'name' => 'fixed_with_percentage_qty', 'desc' => __('Fixed (per unit)', 'dc-woocommerce-multi-vendor')), // Text
                         "fixed_with_percentage_per_vendor" => array('title' => __('Fixed Amount', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'fixed_with_percentage_per_vendor', 'label_for' => 'fixed_with_percentage_per_vendor', 'name' => 'fixed_with_percentage_per_vendor', 'desc' => __('Fixed (per vendor)', 'dc-woocommerce-multi-vendor')), // Text
                         "commission_include_coupon" => array('title' => __('Share Coupon Discount', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'commission_include_couponn', 'label_for' => 'commission_include_couponn', 'text' => __('Vendors commission will be calculated AFTER deducting the discount, otherwise, the site owner will bear the cost of the coupon.', 'dc-woocommerce-multi-vendor'), 'name' => 'commission_include_coupon', 'value' => 'Enable'), // Checkbox
+                         "admin_coupon_excluded" => array('title' => __('Admin created coupon excluded', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'admin_coupon_excluded', 'label_for' => 'admin_coupon_excluded', 'text' => __('Admin created coupon excluded', 'dc-woocommerce-multi-vendor'), 'name' => 'admin_coupon_excluded', 'value' => 'Enable'), // Checkbox
                         "give_tax" => array('title' => __('Tax', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'give_taxx', 'label_for' => 'give_taxx', 'name' => 'give_tax', 'text' => __('Transfer the tax collected (per product) to the vendor. ', 'dc-woocommerce-multi-vendor'), 'value' => 'Enable'), // Checkbox
                         "give_shipping" => array('title' => __('Shipping', 'dc-woocommerce-multi-vendor'), 'type' => 'checkbox', 'id' => 'give_shippingg', 'custom_tags'=> $desabled_payment_shipping, 'label_for' => 'give_shippingg', 'name' => 'give_shipping', 'text' => __('Transfer shipping charges collected (per product) to the vendor.', 'dc-woocommerce-multi-vendor'), 'value' => 'Enable', 'hints' => __('Make sure your generel settings shipping is on', 'dc-woocommerce-multi-vendor')), // Checkbox
                         "commission_threshold" => array('title' => __('Disbursement Threshold', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'commission_threshold', 'label_for' => 'commission_threshold', 'name' => 'commission_threshold', 'desc' => __('Threshold amount required to disburse commission.', 'dc-woocommerce-multi-vendor')), // Text
@@ -150,6 +151,9 @@ class WCMp_Settings_Payment {
         }
         if (isset($input['give_tax'])) {
             $new_input['give_tax'] = sanitize_text_field($input['give_tax']);
+        }
+        if (isset($input['admin_coupon_excluded'])) {
+            $new_input['admin_coupon_excluded'] = sanitize_text_field($input['admin_coupon_excluded']);
         }
         if (isset($input['give_shipping'])) {
             $new_input['give_shipping'] = sanitize_text_field($input['give_shipping']);
