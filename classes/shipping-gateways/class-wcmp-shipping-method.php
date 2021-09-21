@@ -450,7 +450,7 @@ class WCMP_Vendor_Shipping_Method extends WC_Shipping_Method {
     */
     public function select_default_rate( $chosen_method, $_available_methods ) {
         //Select the 'Default' method from WooCommerce settings
-        if( array_key_exists( $this->default, $_available_methods ) ) {
+        if( is_array($_available_methods) && array_key_exists( $this->default, $_available_methods ) ) {
             return $this->default;
         }
 

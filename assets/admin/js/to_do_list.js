@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
 		 });
 	});
 	
-	$('.vendor_dismiss_submit').click(function (e) {
+	$('.vendor_dismiss_submit, .vendor_dismiss_button').click(function (e) {
 		e.preventDefault();
 		var id = $(this).attr('data-id');
 		var reason = $('#dismiss-reason-'+id).val();

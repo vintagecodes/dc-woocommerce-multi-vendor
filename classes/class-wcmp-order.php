@@ -739,9 +739,11 @@ class WCMp_Order {
         if( $cart && $cart->get_coupons() ) :
             foreach ( $cart->get_coupons() as $code => $coupon ) {
                 if( !in_array( $coupon->get_discount_type(), apply_filters( 'wcmp_order_available_coupon_types', array( 'fixed_product', 'percent', 'fixed_cart' ), $order, $cart ) ) ) continue;
-                $coupon_products = explode(",", get_post_meta( $coupon->get_id(), 'product_ids', true ) );
-                $match_coupon_product = array_intersect($cart_product_ids, $coupon_products);
-                if (!$match_coupon_product) continue;                
+                $coupon_products = get_post_meta( $coupon->get_id(), 'product_ids', true ) ? explode(",", get_post_meta( $coupon->get_id(), 'product_ids', true ) ) : array();
+                if (!empty($coupon_products)) {
+                    $match_coupon_product = array_intersect($cart_product_ids, $coupon_products);
+                    if (!$match_coupon_product) continue;             
+                }
                 $item = new WC_Order_Item_Coupon();
                 $item->set_props(
                     array(

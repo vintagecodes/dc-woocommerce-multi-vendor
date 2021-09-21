@@ -493,8 +493,21 @@ class WCMp_Calculate_Commission {
         $commission = array();
         $commission_rule = array();
         $product_value_total = 0;
+        // Check order coupon created by vendor or not
+        $order_counpon_author_is_vendor = false;
+        if ($order->get_coupon_codes()) {
+            foreach( $order->get_coupon_codes() as $coupon_code ) {
+                $coupon = new WC_Coupon($coupon_code);
+                $order_counpon_author_is_vendor = $coupon && is_user_wcmp_vendor( get_post_field ( 'post_author', $coupon->get_id() ) ) ? true : false;
+            }
+        }
+
         if (isset($WCMp->vendor_caps->payment_cap['commission_include_coupon'])) {
-            $line_total = $order->get_item_total($item, false, false) * $item['qty'];
+            if (isset($WCMp->vendor_caps->payment_cap['admin_coupon_excluded']) && $order_counpon_author_is_vendor) {
+                $line_total = $order->get_item_subtotal($item, false, false) * $item['qty'];
+            } else {
+                $line_total = $order->get_item_total($item, false, false) * $item['qty'];
+            }
         } else {
             $line_total = $order->get_item_subtotal($item, false, false) * $item['qty'];
         }
