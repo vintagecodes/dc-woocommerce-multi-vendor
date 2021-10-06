@@ -42,7 +42,9 @@ class WCMp_Elementor_StoreData {
 		$store_id = wcmp_find_shop_page_vendor();
 		$store = get_wcmp_vendor( $store_id );
 		$vendor_hide_description = apply_filters('wcmp_vendor_store_header_hide_description', get_user_meta($store_id, '_vendor_hide_description', true), $store_id);
-
+		$vendor_hide_address = apply_filters('wcmp_vendor_store_header_hide_store_address', get_user_meta($store_id, '_vendor_hide_address', true), $store_id);
+		$vendor_hide_phone = apply_filters('wcmp_vendor_store_header_hide_store_phone', get_user_meta($store_id, '_vendor_hide_phone', true), $store_id);
+		$vendor_hide_email = apply_filters('wcmp_vendor_store_header_hide_store_email', get_user_meta($store_id, '_vendor_hide_email', true), $store_id);
 		if ( $store_id ) {
 			$this->store_data['id'] = $store_id;
 
@@ -70,7 +72,7 @@ class WCMp_Elementor_StoreData {
 
 			$address = $store->get_formatted_address();
 			if( $address ) {
-				if ( ! empty( $address ) ) {
+				if ( !$vendor_hide_address && !empty( $address ) ) {
 					$this->store_data['address'] = $address;
 				}
 			}
@@ -78,14 +80,14 @@ class WCMp_Elementor_StoreData {
 			$phone = $store->phone;
 
 			if( $phone ) {
-				if ( ! empty( $phone ) ) {
+				if ( !$vendor_hide_phone && !empty( $phone ) ) {
 					$this->store_data['phone'] = $phone;
 				}
 			}
 
 			$email = $store->user_data->user_email;
 			if( $email ) {
-				if ( ! empty( $email ) ) {
+				if ( !$vendor_hide_email && !empty( $email ) ) {
 					$this->store_data['email'] = $email;
 				}
 			}
