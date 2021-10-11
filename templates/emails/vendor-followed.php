@@ -17,7 +17,7 @@ else  $title = esc_html__( 'Product', 'dc-woocommerce-multi-vendor' );
 
 $vendor = get_wcmp_vendor( $post->post_author );
 $product = wc_get_product( $post->ID );
-$product_link = $product->get_permalink();
+$product_link = $product ? $product->get_permalink() : '';
 $product_name = $product->get_title();
 
 ?>
@@ -25,7 +25,11 @@ $product_name = $product->get_title();
 
 	<p><?php printf( esc_html__( "Hi there! This is a notification about a new %s on %s.",  'dc-woocommerce-multi-vendor' ), $title, get_option( 'blogname' ) ); ?></p>
 	<p>
-		<?php printf( esc_html__( "%s title: %s",  'dc-woocommerce-multi-vendor' ), $title, $product_link ); ?><br/>
+		<?php 
+        if ($product_link) {
+            printf( esc_html__( "%s title: %s",  'dc-woocommerce-multi-vendor' ), $title, $product_link ); 
+        }
+        ?><br/>
 		<?php printf( esc_html__( "Submitted by: %s",  'dc-woocommerce-multi-vendor' ), $vendor->page_title ); ?><br/><br/>
 	</p>
 
