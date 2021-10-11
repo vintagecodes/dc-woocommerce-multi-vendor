@@ -503,10 +503,9 @@ class WCMp_Calculate_Commission {
         }
 
         if (isset($WCMp->vendor_caps->payment_cap['commission_include_coupon'])) {
-            if (isset($WCMp->vendor_caps->payment_cap['admin_coupon_excluded']) && $order_counpon_author_is_vendor) {
+            $line_total = $order->get_item_total($item, false, false) * $item['qty'];
+            if (isset($WCMp->vendor_caps->payment_cap['admin_coupon_excluded']) && !$order_counpon_author_is_vendor) {
                 $line_total = $order->get_item_subtotal($item, false, false) * $item['qty'];
-            } else {
-                $line_total = $order->get_item_total($item, false, false) * $item['qty'];
             }
         } else {
             $line_total = $order->get_item_subtotal($item, false, false) * $item['qty'];
