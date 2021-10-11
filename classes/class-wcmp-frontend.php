@@ -902,8 +902,7 @@ class WCMp_Frontend {
             );
         }
 
-        $is_enable = wcmp_seller_review_enable(absint($vendor->term_id));
-        if (isset($is_enable) && $is_enable) {
+        if (get_wcmp_vendor_settings('is_sellerreview', 'general') == 'Enable') {
             $tabs['reviews'] = array(
                 'id' => 'reviews',
                 'title' => __( 'Reviews', 'dc-woocommerce-multi-vendor' ),

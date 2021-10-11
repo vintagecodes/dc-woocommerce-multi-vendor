@@ -43,7 +43,7 @@ $is_start_with_full_rating = apply_filters('wcmp_is_start_with_full_rating', fal
                 <div id="review_form_wrapper">
                     <div id="review_form">
                         <div id="respond" class="comment-respond">
-                            <?php if ($vendor->id != get_current_vendor_id() && is_customer_not_given_review_to_vendor( $vendor_id, get_current_user_id()) && apply_filters('customer_can_share_review_only_once', true)) : ?>
+                            <?php if ($vendor->id != get_current_vendor_id() && is_customer_not_given_review_to_vendor( $vendor_id, get_current_user_id()) && wcmp_seller_review_enable($vendor_term_id) && apply_filters('customer_can_share_review_only_once', true)) : ?>
                                 <h3 id="reply-title" class="comment-reply-title"><?php
                                     if ($count == 0) {
                                         echo sprintf(__('Be the first to review “%s”', 'dc-woocommerce-multi-vendor'), $shop_name);
