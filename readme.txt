@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 3.8.1
+Stable tag: 3.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,6 +279,17 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 3.8.2 - 2021-11-10 =
+* Added - Compatibility of WooCommerce 5.7.1.
+* Fix - Commission for deleted order not getting delete #960.
+* Fix - Review not showing for non-login user #958.
+* Fix - Issue with "Admin created coupon excluded" option of coupon. #957.
+* Fix - “Hide phone in front end” and “Hide email in front end” not working with elementor #955.
+* Fix - Add coupon issue for follow vendor #954.
+* Fix - Gateway Calculation charge #952.
+* Fix - Conflict with siteground hosting server.
+* Updated - Language file.
 
 = 3.8.1 - 2021-10-20 =
 * Added - Compatibility of WordPress 5.8.1.

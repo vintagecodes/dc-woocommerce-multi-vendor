@@ -65,7 +65,7 @@ class WCMp_Order {
             // Order Trash 
             add_action( 'trashed_post', array( $this, 'trash_wcmp_suborder' ), 10, 1 );
             // Order Delete 
-            add_action( 'deleted_post', array( $this, 'delete_wcmp_suborder' ), 10, 1 );
+            add_action( 'before_delete_post', array( $this, 'delete_wcmp_suborder' ), 10, 1 );
             // Restrict default order edit caps for vendor
             add_action( 'admin_enqueue_scripts', array( $this, 'wcmp_vendor_order_backend_restriction' ), 99 );
             add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 99 );
@@ -1201,7 +1201,8 @@ class WCMp_Order {
     
     public function delete_wcmp_suborder( $order_id ) {
         if ( wp_get_post_parent_id( $order_id ) == 0 ) {
-            $wcmp_suborders = get_wcmp_suborders($order_id);
+            $parent_order = wc_get_order($order_id);
+            $wcmp_suborders = ( $parent_order ? $parent_order->get_status() == 'trash' : '' ) ? get_wcmp_suborders($order_id, array('post_status' => 'trash')) : get_wcmp_suborders($order_id);
             if ( $wcmp_suborders ) {
                 foreach ( $wcmp_suborders as $suborder ) {
                     $commission_id = get_post_meta( $suborder->get_id(), '_commission_id', true );
