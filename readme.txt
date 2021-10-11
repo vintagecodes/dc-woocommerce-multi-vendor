@@ -288,6 +288,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 * Fix - “Hide phone in front end” and “Hide email in front end” not working with elementor #955.
 * Fix - Add coupon issue for follow vendor #954.
 * Fix - Gateway Calculation charge #952.
+* Fix - Conflict with siteground hosting server.
 * Updated - Language file.
 
 = 3.8.1 - 2021-10-20 =
