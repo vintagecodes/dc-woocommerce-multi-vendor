@@ -16,7 +16,7 @@ global $WCMp;
 
 
 do_action( 'woocommerce_email_header', $email_heading, $email );
-$amount = get_post_meta($transaction_id, 'amount', true) - get_post_meta($transaction_id, 'transfer_charge', true) - get_post_meta($transaction_id, 'gateway_charge', true);
+$amount = floatval(get_post_meta($transaction_id, 'amount', true)) - floatval(get_post_meta($transaction_id, 'transfer_charge', true)) - floatval(get_post_meta($transaction_id, 'gateway_charge', true));
 ?>
 		
 <p><?php echo apply_filters( 'wcmp_thankyou_transaction_received_text', sprintf(__( 'Hello,<br>We have received a new withdrawal request for %s from you and your request is being processed.The order details are as follows:', 'dc-woocommerce-multi-vendor'), get_woocommerce_currency().$amount), $transaction_id ); ?></p>
