@@ -21,7 +21,7 @@ $text_align = is_rtl() ? 'right' : 'left';
 
 <p><?php printf(esc_html__('This is to inform you that we recently updated the article %s :', 'dc-woocommerce-multi-vendor'), $post_title); ?></p>
 
-<p><?php echo esc_html($post_content); ?></p>
+<p><?php printf(esc_html($post_content)); ?></p>
 
 <p><?php printf(esc_html__('You can always check the changes from here  %s. We would request you to check the same and take the necessary action if required.', 'dc-woocommerce-multi-vendor'), $announcement_link ); ?></p>
 
