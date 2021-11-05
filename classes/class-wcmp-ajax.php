@@ -4152,16 +4152,18 @@ class WCMp_Ajax {
             );
             
             if( $parent_line_items ){
-                $parent_refund = wc_create_refund(
-                        array(
-                            'amount' => $refund_amount,
-                            'reason' => $refund_reason,
-                            'order_id' => $parent_order_id,
-                            'line_items' => $parent_line_items,
-                            'refund_payment' => $api_refund,
-                            'restock_items' => $restock_refunded_items,
-                        )
-                );
+                if (apply_filters('wcmp_allow_refund_parent_order', true)) {
+                    $parent_refund = wc_create_refund(
+                            array(
+                                'amount' => $refund_amount,
+                                'reason' => $refund_reason,
+                                'order_id' => $parent_order_id,
+                                'line_items' => $parent_line_items,
+                                'refund_payment' => $api_refund,
+                                'restock_items' => $restock_refunded_items,
+                            )
+                    );
+                }
             }
 
             if (is_wp_error($refund)) {
