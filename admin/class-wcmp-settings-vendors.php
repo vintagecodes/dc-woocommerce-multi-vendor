@@ -230,7 +230,8 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 	
 	public function process_bulk_action() {
 		if ( 'delete' === $this->current_action() ) {
-		 	$delete_url = self_admin_url('users.php?action=delete&users[]=' . implode( '&users[]=', absint($_GET['ID']) ));
+			$vendor_ids = isset($_GET['ID']) ? array_filter(wc_clean($_GET['ID'])) : array();
+		 	$delete_url = self_admin_url('users.php?action=delete&users[]=' . implode( '&users[]=', $vendor_ids ));
     		$delete_url = str_replace( '&amp;', '&', wp_nonce_url( $delete_url, 'bulk-users' ) );
 			wp_safe_redirect ($delete_url);
 			exit();

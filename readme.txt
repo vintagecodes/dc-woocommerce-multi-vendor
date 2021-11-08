@@ -291,6 +291,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 * Fix - Email error #978.
 * Fix - Error at myaccount view order page.
 * Fix - Do not automatically refund parent order filter added.
+* Fix - Bulk vendor delete not working #981.
 * Updated - Language file.
 
 = 3.8.2 - 2021-11-10 =
