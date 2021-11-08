@@ -280,7 +280,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 == Changelog ==
 
-= 3.8.3 - 2021-11-9 =
+= 3.8.3 - 2021-11-09 =
 * Added - Compatibility of WooCommerce 5.8.0.
 * Enhancement - Display Announcement Content #971
 * Fix - Product review sync issue.
@@ -289,6 +289,7 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 * Fix - Downloadable product save issue #975.
 * Fix - Vendor setup widget css broken #968.
 * Fix - Email error #978.
+* Fix - Error at myaccount view order page.
 * Fix - Do not automatically refund parent order filter added.
 * Updated - Language file.
 
