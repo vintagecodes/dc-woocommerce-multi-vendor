@@ -67,8 +67,9 @@ class WCMp_Vendor {
                     'author__not_in' => array($this->id)
                 ) );
                 $args_default_for_product = wp_parse_args($args2, $args_default_for_product);
-                if (!empty(get_comments($args_default_for_product))) {
-                    return apply_filters('wcmp_vendors_product_review_args_to_fetch', array_merge(get_comments($args_default_for_product), get_comments($args)), $args_default_for_product, $this);
+                $product_review_count = !empty($vendor->get_products_ids()) ? get_comments($args_default_for_product) : array();
+                if (!empty($product_review_count)) {
+                    return apply_filters('wcmp_vendors_product_review_args_to_fetch', array_merge($product_review_count, get_comments($args)), $args_default_for_product, $this);
                 }
             }
             return get_comments($args);
@@ -99,7 +100,8 @@ class WCMp_Vendor {
                     'post__in' => wp_list_pluck($vendor->get_products_ids(), 'ID' ),
                     'author__not_in' => array($this->id)
                 ) );
-                return apply_filters('wcmp_vendors_product_review_args_count_to_fetch', (absint(get_comments($args_default_for_product)) + get_comments($args)), $args_default_for_product, $this);
+                $product_review_count = !empty($vendor->get_products_ids()) ? get_comments($args_default_for_product) : 0;
+                return apply_filters('wcmp_vendors_product_review_args_count_to_fetch', (absint($product_review_count) + get_comments($args)), $args_default_for_product, $this);
             }
             return get_comments($args);
         }
