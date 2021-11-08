@@ -230,7 +230,8 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 	
 	public function process_bulk_action() {
 		if ( 'delete' === $this->current_action() ) {
-		 	$delete_url = self_admin_url('users.php?action=delete&users[]=' . implode( '&users[]=', absint($_GET['ID']) ));
+			$vendor_ids = isset($_GET['ID']) ? array_filter(wc_clean($_GET['ID'])) : array();
+		 	$delete_url = self_admin_url('users.php?action=delete&users[]=' . implode( '&users[]=', $vendor_ids ));
     		$delete_url = str_replace( '&amp;', '&', wp_nonce_url( $delete_url, 'bulk-users' ) );
 			wp_safe_redirect ($delete_url);
 			exit();
@@ -771,7 +772,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 													<td>
 														<div class="col-actions">
 															<span class="view">
-																<a href="JavaScript:void(0);" data-vendor_id="<?php echo $_GET['ID']; ?>" data-zone-id="<?php echo $vendor_shipping_zones['zone_id']; ?>" class="vendor_edit_zone modify-shipping-methods" title="<?php _e('Edit', 'dc-woocommerce-multi-vendor'); ?>"><?php _e('Edit', 'dc-woocommerce-multi-vendor'); ?></a>
+																<a href="JavaScript:void(0);" data-vendor_id="<?php echo esc_attr($_GET['ID']); ?>" data-zone-id="<?php echo esc_attr($vendor_shipping_zones['zone_id']); ?>" class="vendor_edit_zone modify-shipping-methods" title="<?php esc_html_e('Edit', 'dc-woocommerce-multi-vendor'); ?>"><?php esc_html_e('Edit', 'dc-woocommerce-multi-vendor'); ?></a>
 															</span> 
 														</div>
 													</td>
@@ -1105,7 +1106,7 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 										{{{ data.actions_html }}}
 										<p class="wcmp-loader"></p>
 									</div>
-									<a class="button button-primary button-large" href="<?php echo '?page=' . $_REQUEST['page'] . '&action=edit&ID={{ data.ID }}'; ?>"><?php _e( 'Edit Vendor', 'dc-woocommerce-multi-vendor' );?></a>
+									<a class="button button-primary button-large" href="<?php echo '?page=' . esc_attr($_REQUEST['page']) . '&action=edit&ID={{ data.ID }}'; ?>"><?php esc_html_e( 'Edit Vendor', 'dc-woocommerce-multi-vendor' );?></a>
 								</div>
 							</footer>
 						</section>

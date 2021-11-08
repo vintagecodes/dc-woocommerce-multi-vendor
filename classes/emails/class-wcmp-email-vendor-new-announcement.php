@@ -51,6 +51,7 @@ if (!class_exists('WC_Email_Vendor_New_Announcement')) :
                 $this->object = $post;
                 $this->find[] = '{title}';
                 $this->post_title = $post->post_title;
+                $this->post_content = $post->post_content;
                 $this->replace[] = $this->post_title;
 
                 $vendor_email = $vendor->user_data->user_email;
@@ -99,6 +100,7 @@ if (!class_exists('WC_Email_Vendor_New_Announcement')) :
                 'email_heading' => $this->get_heading(),
                 'vendor' => $this->vendor,
                 'post_title' => $this->post_title,
+                'post_content'  => $this->post_content,
                 'single' => $this->single,
                 'sent_to_admin' => false,
                 'plain_text' => false,
@@ -117,6 +119,7 @@ if (!class_exists('WC_Email_Vendor_New_Announcement')) :
                 'email_heading' => $this->get_heading(),
                 'vendor' => $this->vendor,
                 'post_title' => $this->post_title,
+                'post_content'  => $this->post_content,
                 'single' => $this->single,
                 'sent_to_admin' => false,
                 'plain_text' => true,

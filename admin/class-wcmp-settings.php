@@ -415,7 +415,7 @@ class WCMp_Settings {
         <div class="wrap wcmp-settings-wrap">
             <?php $this->wcmp_settings_tabs(); ?>
             <?php
-            $tab = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ? $_GET['tab'] : current( array_keys( $this->tabs ) );
+            $tab = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ? esc_attr($_GET['tab']) : current( array_keys( $this->tabs ) );
 
             foreach ( $this->tabs as $tab_id => $_tab ) {
                 if ( $tab_id != $tab ) {
@@ -450,7 +450,7 @@ class WCMp_Settings {
                 }
             }
             ?>
-            <form class='wcmp_vendors_settings <?php echo $this->is_wcmp_tab_has_subtab( $tab ) ? 'wcmp_subtab_content' : 'wcmp_tab_content'; ?> wcmp_<?php echo $tab; ?>_<?php echo $tab_section; ?>_settings_group' method="post" action="options.php">
+            <form class='wcmp_vendors_settings <?php echo $this->is_wcmp_tab_has_subtab( $tab ) ? 'wcmp_subtab_content' : 'wcmp_tab_content'; ?> wcmp_<?php echo esc_attr($tab); ?>_<?php echo esc_attr($tab_section); ?>_settings_group' method="post" action="options.php">
                 <?php
                 $tab_desc = $this->get_settings_tab_desc();
                 if ( ! empty( $tab_desc[$tab] ) ) {

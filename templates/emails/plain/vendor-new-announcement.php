@@ -4,8 +4,8 @@
  *
  * Override this template by copying it to yourtheme/dc-product-vendor/emails/plain/vendor-new-announcement.php
  *
- * @author 		WC Marketplace
- * @package 	dc-product-vendor/Templates
+ * @author      WC Marketplace
+ * @package     dc-product-vendor/Templates
  * @version   0.0.1
  */
 
@@ -19,7 +19,11 @@ echo sprintf( __('%s', 'dc-woocommerce-multi-vendor'),  $post_title) . "\n\n";
 
 $announcement_link = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_announcements_endpoint', 'vendor', 'general', 'vendor-announcements')));
 
-echo sprintf( __('This is to inform you that we recently updated the article %s. You can always check the changes from here  %s. We would request you to check the same and take the necessary action if required.', 'dc-woocommerce-multi-vendor'), $post_title, $announcement_link ) . "\n";
+echo sprintf(__('This is to inform you that we recently updated the article %s :','dc-woocommerce-multi-vendor'), $post_title). "\n";
+
+echo sprintf(_($post_content))."\n";
+
+echo sprintf( __('You can always check the changes from here  %s. We would request you to check the same and take the necessary action if required.', 'dc-woocommerce-multi-vendor'), $announcement_link ) . "\n";
 
 printf( __( "View the announcement: %s",  'dc-woocommerce-multi-vendor' ), esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_announcements_endpoint', 'vendor', 'general', 'vendor-announcements')))) . "\n";
 

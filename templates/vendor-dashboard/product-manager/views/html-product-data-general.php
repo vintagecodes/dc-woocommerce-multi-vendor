@@ -132,7 +132,7 @@ global $WCMp;
                         <span class="img_tip" data-desc="<?php esc_attr_e( 'Leave blank for unlimited re-downloads.', 'dc-woocommerce-multi-vendor' ) ?>"></span>
                     </label>
                     <div class="col-md-6 col-sm-9">
-                        <input class="form-control" type="text" id="_download_limit" placeholder="<?php esc_attr_e( 'Unlimited', 'dc-woocommerce-multi-vendor' ); ?>" name="_download_limit" value="<?php echo -1 === $product_object->get_download_limit( 'edit' ) ? (isset($_POST['_download_limit']) ? absint($_POST['_download_limit']) : $product_object->get_download_limit( 'edit' )) : ''; ?>" />
+                        <input class="form-control" type="text" id="_download_limit" placeholder="<?php esc_attr_e( 'Unlimited', 'dc-woocommerce-multi-vendor' ); ?>" name="_download_limit" value="<?php echo -1 === $product_object->get_download_limit( 'edit' ) ? '' : (isset($_POST['_download_limit']) ? absint($_POST['_download_limit']) : $product_object->get_download_limit( 'edit' )); ?>" />
                     </div>
                 </div> 
                 <div class="form-group">
@@ -141,7 +141,7 @@ global $WCMp;
                         <span class="img_tip" data-desc="<?php esc_attr_e( 'Enter the number of days before a download link expires, or leave blank.', 'dc-woocommerce-multi-vendor' ) ?>"></span> 
                     </label>
                     <div class="col-md-6 col-sm-9">
-                        <input class="form-control" type="text" placeholder="<?php esc_attr_e( 'Never', 'dc-woocommerce-multi-vendor' ); ?>" id="_download_expiry" name="_download_expiry" value="<?php echo -1 === $product_object->get_download_expiry( 'edit' ) ? (isset($_POST['_download_expiry']) ? wc_clean($_POST['_download_expiry']) : $product_object->get_download_expiry( 'edit' )) : ''; ?>" />
+                        <input class="form-control" type="text" placeholder="<?php esc_attr_e( 'Never', 'dc-woocommerce-multi-vendor' ); ?>" id="_download_expiry" name="_download_expiry" value="<?php echo -1 === $product_object->get_download_expiry( 'edit' ) ? '' : (isset($_POST['_download_expiry']) ? wc_clean($_POST['_download_expiry']) : $product_object->get_download_expiry( 'edit' )); ?>" />
                     </div>
                 </div> 
                 <?php do_action( 'wcmp_afm_product_options_downloads', $post->ID, $product_object, $post ); ?>

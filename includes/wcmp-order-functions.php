@@ -247,6 +247,7 @@ function wcmp_get_customer_refund_order_msg( $order, $settings = array() ) {
         $message['msg'] = isset( $default_msg['order_refund_period_overed'] ) ? $default_msg['order_refund_period_overed'] : __( 'Your Refund Period is over. Please contact with your seller for further information', 'dc-woocommerce-multi-vendor' );
     }
 
+    $settings = $settings && is_array($settings) ? $settings : array();
     if( !in_array( $order->get_status() , $settings ) ) {
         $message['type'] = 'info';
         $message['msg'] = isset( $default_msg['order_status_not_allowed'] ) ? $default_msg['order_status_not_allowed'] : __( 'Your Refund is not allowed for this order status', 'dc-woocommerce-multi-vendor' );

@@ -2542,7 +2542,7 @@ Class WCMp_Admin_Dashboard {
                 </title>
                 <?php wp_print_scripts('wc-setup'); ?>
                 <?php wp_print_scripts('wcmp-setup'); ?>
-                <?php do_action('wcmp_admin_print_styles'); ?>
+                <?php do_action('admin_print_styles'); ?>
                 <?php do_action('wcmp_vendor_head'); ?>
                 <style type="text/css">
                     .wc-setup-steps {

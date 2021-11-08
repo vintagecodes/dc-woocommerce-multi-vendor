@@ -5,7 +5,7 @@ Donate link: https://wc-marketplace.com/donate
 Requires at least: 4.4
 Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 3.8.2
+Stable tag: 3.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -279,6 +279,21 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 14. Show Multiple Seller in Single Product.
 
 == Changelog ==
+
+= 3.8.3 - 2021-11-09 =
+* Added - Compatibility of WooCommerce 5.8.0.
+* Enhancement - Display Announcement Content #971.
+* Enhancement - Filter added for calcuating gateway charge after refund amount.
+* Fix - Product review sync issue.
+* Fix - Follow button not working for other languages.
+* Fix - Commission issue after refund #976.
+* Fix - Downloadable product save issue #975.
+* Fix - Vendor setup widget css broken #968.
+* Fix - Email error #978.
+* Fix - Error at myaccount view order page.
+* Fix - Do not automatically refund parent order filter added.
+* Fix - Bulk vendor delete not working #981.
+* Updated - Language file.
 
 = 3.8.2 - 2021-11-10 =
 * Added - Compatibility of WooCommerce 5.7.1.
