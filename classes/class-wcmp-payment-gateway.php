@@ -86,8 +86,13 @@ abstract class WCMp_Payment_Gateway {
             if ($gateway_charge_amount) {
                 foreach ($order_totals as $order_id => $details) {
                     $order = wc_get_order($order_id);
-                    $order_total = $order->get_total_refunded() ? ( $details['order_total'] - $order->get_total_refunded() ) : $details['order_total'];
-                    $vendor_total = $order->get_total_refunded() ? ( $details['vendor_total'] - $order->get_total_refunded() ) : $details['vendor_total'];
+                    if (apply_filters('wcmp_gateway_charge_with_refunded_order_amount', true)) {
+                        $order_total =  $details['order_total'];
+                        $vendor_total = $details['vendor_total'];
+                    } else {
+                        $order_total = $order->get_total_refunded() ? ( $details['order_total'] - $order->get_total_refunded() ) : $details['order_total'];
+                        $vendor_total = $order->get_total_refunded() ? ( $details['vendor_total'] - $order->get_total_refunded() ) : $details['vendor_total'];
+                    }
                     $order_gateway_charge = 0;
                     $vendor_ratio = ($vendor_total / $order_total);
                     if ('percent' === $payment_gateway_charge_type) {

@@ -282,7 +282,8 @@ Ans. Obviously, you can! Join in on our [GitHub repository](https://github.com/d
 
 = 3.8.3 - 2021-11-09 =
 * Added - Compatibility of WooCommerce 5.8.0.
-* Enhancement - Display Announcement Content #971
+* Enhancement - Display Announcement Content #971.
+* Enhancement - Filter added for calcuating gateway charge after refund amount.
 * Fix - Product review sync issue.
 * Fix - Follow button not working for other languages.
 * Fix - Commission issue after refund #976.
