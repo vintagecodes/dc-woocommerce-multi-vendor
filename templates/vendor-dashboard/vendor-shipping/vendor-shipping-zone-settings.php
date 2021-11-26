@@ -1,4 +1,5 @@
 <?php global $WCMp; ?>
+
 <div class="zone-component panel-content-padding">
 	<div class="shipping-zone-list">
 		<a href="javascript:void(0);" ><i class="wcmp-font ico-back-arrow"></i> <?php  esc_html_e('Shipping Zones', 'dc-woocommerce-multi-vendor'); ?></a>
@@ -62,7 +63,7 @@
 						<th class="action"><?php esc_html_e('Action', 'dc-woocommerce-multi-vendor'); ?></th>
 					</tr>
 				</thead> 
-				<tbody>
+				<tbody class="sortable">
 					<?php 
 					if(empty($vendor_shipping_methods)) { ?> 
 						<tr>
@@ -71,7 +72,7 @@
 						<?php 
 					} else { 
 						foreach ( $vendor_shipping_methods as $vendor_shipping_method ) { ?>
-							<tr>
+							<tr id="item-<?php echo $vendor_shipping_method['instance_id'] ?>">
 								<td><?php echo esc_html($vendor_shipping_method['title']); ?>
 									<div data-instance_id="<?php echo $vendor_shipping_method['instance_id']; ?>" data-method_id="<?php echo $vendor_shipping_method['id']; ?>" data-method-settings='<?php echo json_encode($vendor_shipping_method); ?>' class="row-actions edit_del_actions">
 									</div>
@@ -103,3 +104,19 @@
 		?>
 	</div>
 </div>
+
+<script>
+	jQuery(document).ready(function($) {
+		$(".sortable").sortable({
+			axis: 'y',
+			update: function (event, ui) {
+				var data_detail = $(this).sortable('serialize');
+				var data = {
+					action: 'wcmp_vendor_zone_shipping_order',
+					data_detail: data_detail,
+				};
+				$.post("<?php echo admin_url('admin-ajax.php') ?>", data, function () {});
+			}
+		});
+	});
+</script>

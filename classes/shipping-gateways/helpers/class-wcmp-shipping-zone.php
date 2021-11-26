@@ -101,6 +101,15 @@ class WCMP_Shipping_Zone {
         $vendor_shipping_methods = wcmp_get_shipping_methods();
         $method = array();
 
+        $asc_order = get_user_meta($vendor_id, 'wcmp_vendor_shipping_zone_order', true);
+        if ($asc_order) {
+            usort($results, function ($a, $b) use ($asc_order) {
+                $pos_a = array_search($a->instance_id, $asc_order);
+                $pos_b = array_search($b->instance_id, $asc_order);
+                return $pos_a - $pos_b;
+            });
+        }
+
         foreach ( $results as $key => $result ) {
             $shipping_method = isset( $vendor_shipping_methods[$result->method_id] ) ? $vendor_shipping_methods[$result->method_id] : array();
             $default_settings = array(

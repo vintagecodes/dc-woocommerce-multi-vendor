@@ -71,7 +71,7 @@ i.wcmp-font {
     max-width: 100%; }
 
 .wcmp_social_profile {
-  position: absolute;
+  /*position: absolute;*/
   right: 15px;
   bottom: 15px;
   z-index: 1; }
