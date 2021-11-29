@@ -503,6 +503,8 @@ class WCMp_Vendor_Hooks {
         wp_enqueue_media();
         wp_enqueue_script( 'selectWoo' );
         wp_enqueue_style('advance-product-manager');
+        // play video on wp editor
+        wp_enqueue_script( 'mce-view' );
         wp_register_script( 'wcmp-advance-product', $WCMp->plugin_url . 'assets/frontend/js/product.js', array( 'jquery', 'jquery-ui-sortable', 'select2_js', 'jquery-ui-datepicker', 'selectWoo', 'wcmp-serializejson', 'wcmp-tabs' ), $WCMp->version );
         wp_enqueue_script( 'wcmp-meta-boxes' );
         $WCMp->localize_script( 'wcmp-meta-boxes');
