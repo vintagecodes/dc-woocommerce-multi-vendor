@@ -209,7 +209,7 @@ if ($products_table_headers) {
                 type: "post",
                 data: function (data) {
                     data.products_filter_action = $('form#wcmp_product_list_form').serialize();
-                    data.post_status = "<?php echo isset($_GET['post_status']) ? trim($_GET['post_status']) : 'all' ?>";
+                    data.post_status = "<?php echo isset($_GET['post_status']) ? esc_attr(trim($_GET['post_status'])) : 'all' ?>";
                     data.product_cat = $('#product_cat').val();
                     data.bulk_action = $('#product_bulk_actions').val();
                     data.search_keyword = $('#pro_search_key').val();
