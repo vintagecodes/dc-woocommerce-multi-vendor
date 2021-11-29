@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) || exit;
                     <span class="img_tip" data-desc="<?php esc_html_e( 'The maximum number of individual items this coupon can apply to when using product discounts. Leave blank to apply to all qualifying items in cart.', 'dc-woocommerce-multi-vendor' ); ?>"></span>
                 </label>
                 <div class="col-md-6 col-sm-9">
-                    <input type="number" id="limit_usage_to_x_items" name="limit_usage_to_x_items" class="form-control" value="<?php echo isset($_POST['limit_usage_to_x_items']) ? $_POST['limit_usage_to_x_items'] : (esc_attr( $coupon->get_limit_usage_to_x_items( 'edit' ) ? $coupon->get_limit_usage_to_x_items( 'edit' ) : '' )); ?>" placeholder="<?php esc_attr_e( 'Apply to all qualifying items in cart', 'dc-woocommerce-multi-vendor' ); ?>" step="1" min="0">
+                    <input type="number" id="limit_usage_to_x_items" name="limit_usage_to_x_items" class="form-control" value="<?php echo isset($_POST['limit_usage_to_x_items']) ? esc_attr($_POST['limit_usage_to_x_items']) : (esc_attr( $coupon->get_limit_usage_to_x_items( 'edit' ) ? $coupon->get_limit_usage_to_x_items( 'edit' ) : '' )); ?>" placeholder="<?php esc_attr_e( 'Apply to all qualifying items in cart', 'dc-woocommerce-multi-vendor' ); ?>" step="1" min="0">
                 </div>
             </div>
             <div class="form-group">

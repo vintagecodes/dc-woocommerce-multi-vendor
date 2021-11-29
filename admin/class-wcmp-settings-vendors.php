@@ -393,6 +393,15 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 					if ( isset( $_POST['vendor_cancellation_policy'] ) ) {
 					    update_user_meta( $user_id, 'vendor_cancellation_policy', stripslashes( html_entity_decode( $_POST['vendor_cancellation_policy'], ENT_QUOTES, get_bloginfo( 'charset' ) ) ) );
 					}
+					if (isset($_POST['_store_location']) && !empty($_POST['_store_location'])) {
+						wcmp_update_user_meta($user_id, '_store_location', wc_clean($_POST['_store_location']));
+					}
+					if (isset($_POST['_store_lat']) && !empty($_POST['_store_lat'])) {
+						wcmp_update_user_meta($user_id, '_store_lat', wc_clean($_POST['_store_lat']));
+					}
+					if (isset($_POST['_store_lng']) && !empty($_POST['_store_lng'])) {
+						wcmp_update_user_meta($user_id, '_store_lng', wc_clean($_POST['_store_lng']));
+					}
 				}
 				do_action('wcmp_vendor_details_update', $_POST, $vendor);
 				if ( is_wp_error( $errors ) && ! empty( $errors->errors ) ) {
@@ -481,6 +490,11 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 							$tzstring = 'UTC+' . $current_offset;
 						}
 					}
+
+					$store_location = get_user_meta(absint($_GET['ID']), '_store_location', true) ? get_user_meta(absint($_GET['ID']), '_store_location', true) : '';
+					$store_lat = get_user_meta(absint($_GET['ID']), '_store_lat', true) ? get_user_meta(absint($_GET['ID']), '_store_lat', true) : 0;
+					$store_lng = get_user_meta(absint($_GET['ID']), '_store_lng', true) ? get_user_meta(absint($_GET['ID']), '_store_lng', true) : 0;
+
 					$states = ($vendor_obj->country_code && WC()->countries->get_states( $vendor_obj->country_code )) ? WC()->countries->get_states( $vendor_obj->country_code ) : array();
 					$store_tab_options =  array(
 								"vendor_page_title" => array('label' => __('Store Name *', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'vendor_page_title', 'label_for' => 'vendor_page_title', 'name' => 'vendor_page_title', 'value' => $vendor_obj->page_title ),
@@ -494,6 +508,10 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 								"vendor_city" => array('label' => __('City', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'vendor_city', 'label_for' => 'vendor_city', 'name' => 'vendor_city', 'value' => $vendor_obj->city),
 								"vendor_postcode" => array('label' => __('ZIP code', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'vendor_postcode', 'label_for' => 'vendor_postcode', 'name' => 'vendor_postcode', 'value' => $vendor_obj->postcode),
 								"timezone_string" => array('label' => __('Timezone', 'dc-woocommerce-multi-vendor'), 'type' => 'text', 'id' => 'timezone_string', 'label_for' => 'timezone_string', 'name' => 'timezone_string', 'value' => $tzstring, 'attributes' => array('readonly' => true)),
+								"find_address" => array( 'label' => __( 'Map Default Location', 'dc-woocommerce-multi-vendor' ), 'name' => 'find_address', 'type' => 'text', 'class' => 'regular-text', 'value' => $store_location, 'attributes' => array('readonly' => true) ),
+								"store_location" => array( 'type' => 'hidden', 'class' => 'regular-text', 'name' => '_store_location', 'id' => 'store_location', 'value' => $store_location ),
+								"store_lat" => array( 'type' => 'hidden', 'name' => '_store_lat', 'id' => 'store_lat', 'value' => $store_lat ),
+								"store_lng" => array( 'type' => 'hidden', 'name' => '_store_lng', 'id' => 'store_lng', 'value' => $store_lng ),
 							);
 					
 					$social_tab_options =  array(
@@ -645,8 +663,132 @@ class WCMp_Settings_WCMp_Vendors extends WP_List_Table {
 					<?php } ?>
 					<?php if($is_approved_vendor) { ?>
 					<div id="store">
-						<h2><?php echo __('Store Settings', 'dc-woocommerce-multi-vendor'); ?></h2>
+						<h2><?php
+						echo __('Store Settings', 'dc-woocommerce-multi-vendor'); ?></h2>
 						<?php $WCMp->wcmp_wp_fields->dc_generate_form_field(apply_filters("settings_{$this->tab}_store_tab_options", $store_tab_options, $vendor_obj));?>
+                            
+                        <?php if (!empty(get_wcmp_vendor_settings('google_api_key')) && !wcmp_mapbox_api_enabled()) { ?>
+                        	<input type="text" id="searchStoreAddress" class="regular-text" placeholder="<?php esc_html_e('Enter store location', 'dc-woocommerce-multi-vendor'); ?>">
+                        <?php }	?>
+						<div id="store-maps" class="store-maps" class="wcmp-gmap" style="width: 100%; height: 300px;"></div>
+						<?php
+                        if (wcmp_mapbox_api_enabled()) {
+                            $WCMp->library->load_mapbox_api();
+                            $map_style = apply_filters( 'wcmp_dashboard_location_widget_map_style', 'mapbox://styles/mapbox/streets-v11');
+                            ?>
+                            <script>
+                                mapboxgl.accessToken = '<?php echo wcmp_mapbox_api_enabled(); ?>';
+                                var map = new mapboxgl.Map({
+                                    container: 'store-maps', // container id
+                                    style: '<?php echo $map_style ?>',
+                                    center: [<?php echo $store_lat ?>, <?php echo $store_lng ?>],
+                                    zoom: 5
+                                });
+
+                                var marker1 = new mapboxgl.Marker()
+                                    .setLngLat([<?php echo $store_lat ?>, <?php echo $store_lng ?>])
+                                .addTo(map);
+                                var geocoder = new MapboxGeocoder({
+                                    accessToken: mapboxgl.accessToken,
+                                    marker: {
+                                        color: 'red'
+                                    },
+                                    mapboxgl: mapboxgl
+                                });
+                                map.on('load', function() {
+                                    geocoder.on('result', function(ev) {
+                                        document.getElementById("store_location").value = ev.result.place_name;
+                                        document.getElementById("find_address").value = ev.result.place_name;
+                                        document.getElementById("store_lat").value = ev.result.center[0];
+                                        document.getElementById("store_lng").value = ev.result.center[1];
+                                    });
+                                });
+                                map.addControl(geocoder);
+                                map.addControl(new mapboxgl.NavigationControl());
+                            </script>
+                            <?php
+                        } elseif (!empty(get_wcmp_vendor_settings('google_api_key'))) {
+							$WCMp->library->load_gmap_api();
+							wp_add_inline_script('wcmp-gmaps-api', '(function ($) {
+							function initialize() {
+								var latlng = new google.maps.LatLng(' . $store_lat . ',' . $store_lng . ');
+								var map = new google.maps.Map(document.getElementById("store-maps"), {
+								center: latlng,
+								blur : true,
+								zoom: 15
+							});
+							var marker = new google.maps.Marker({
+								map: map,
+								position: latlng,
+								draggable: true,
+								anchorPoint: new google.maps.Point(0, -29)
+							});
+
+							var input = document.getElementById("searchStoreAddress");
+
+							map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+							var geocoder = new google.maps.Geocoder();
+							var autocomplete = new google.maps.places.Autocomplete(input);
+							autocomplete.bindTo("bounds", map);
+							var infowindow = new google.maps.InfoWindow();   
+
+							autocomplete.addListener("place_changed", function() {
+							infowindow.close();
+							marker.setVisible(false);
+							var place = autocomplete.getPlace();
+							if (!place.geometry) {
+								window.alert("Autocomplete returned place contains no geometry");
+								return;
+							}
+
+							// If the place has a geometry, then present it on a map.
+							if (place.geometry.viewport) {
+								map.fitBounds(place.geometry.viewport);
+							} else {
+								map.setCenter(place.geometry.location);
+								map.setZoom(17);
+							}
+
+							marker.setPosition(place.geometry.location);
+							marker.setVisible(true);
+
+							bindDataToForm(place.formatted_address,place.geometry.location.lat(),place.geometry.location.lng(),place.address_components);
+							infowindow.setContent(place.formatted_address);
+							infowindow.open(map, marker);
+							showTooltip(infowindow,marker,place.formatted_address);
+							});
+							google.maps.event.addListener(marker, "dragend", function() {
+
+							geocoder.geocode({"latLng": marker.getPosition()}, function(results, status) {
+							if (status == google.maps.GeocoderStatus.OK) {
+										if (results[0]) {    
+												bindDataToForm(results[0].formatted_address,marker.getPosition().lat(),marker.getPosition().lng(), results[0].address_components);
+												infowindow.setContent(results[0].formatted_address);
+												infowindow.open(map, marker);
+												showTooltip(infowindow,marker,results[0].formatted_address);
+												document.getElementById("searchStoreAddress");
+											}
+										}
+									});
+								});
+							}
+
+							function bindDataToForm(address,lat,lng,address_components){
+								document.getElementById("find_address").value = address;
+								document.getElementById("store_location").value = address;
+								document.getElementById("store_lat").value = lat;
+								document.getElementById("store_lng").value = lng;
+							}
+							function showTooltip(infowindow,marker,address){
+							google.maps.event.addListener(marker, "click", function() { 
+									infowindow.setContent(address);
+									infowindow.open(map, marker);
+								});
+							}
+							google.maps.event.addDomListener(window, "load", initialize);
+							})(jQuery);');
+						}
+						?>
 					</div>
 					<div id="social">
 						<h2><?php echo __('Social Information', 'dc-woocommerce-multi-vendor'); ?></h2>

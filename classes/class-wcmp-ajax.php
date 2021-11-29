@@ -148,6 +148,8 @@ class WCMp_Ajax {
         // commission by product variation
         add_action('wp_ajax_commission_variation', array($this, 'commission_variation'));
         add_action('wp_ajax_admin_review_setting', array($this, 'admin_review_setting'));
+
+        add_action('wp_ajax_wcmp_vendor_zone_shipping_order', array($this, 'wcmp_vendor_zone_shipping_order'));
     }
 
     /**
@@ -4674,4 +4676,14 @@ class WCMp_Ajax {
         die;
     }
 
+    // Update vendor shipping zone order
+    public function wcmp_vendor_zone_shipping_order() {
+        $array_items = array();
+        foreach (explode("&", $_POST['data_detail']) as $value) {
+            $array_items[] = (int) str_replace("item[]=","",$value);
+        }
+        if (!empty($array_items)) {
+            update_user_meta(get_current_vendor_id(), 'wcmp_vendor_shipping_zone_order', array_filter(wc_clean($array_items)));
+        }
+    }
 }

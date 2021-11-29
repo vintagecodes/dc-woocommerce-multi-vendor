@@ -27,6 +27,7 @@ global $WCMp;
         <!-- Top product highlight -->
         <?php
         $WCMp->template->get_template( 'vendor-dashboard/product-manager/views/html-product-highlights.php', array( 'self' => $self, 'product_object' => $product_object, 'post' => $post, 'is_update' => $is_update ) );
+        $image_size = apply_filters('wcmp_product_uploaded_image_size', 'medium');
         ?>
         <!-- End of Top product highlight -->
         <div class="product-primary-info custom-panel"> 
@@ -85,7 +86,7 @@ global $WCMp;
                                 <i class="wcmp-font ico-image-icon"></i>
                                 <p><?php _e( 'Click to upload Image', 'dc-woocommerce-multi-vendor' );?></p>
                             </div>
-                            <img src="<?php echo $featured_img ? esc_url( wp_get_attachment_image_src( $featured_img, 'medium' )[0] ) : esc_url( wc_placeholder_img_src() ); ?>" />
+                            <img src="<?php echo $featured_img ? esc_url( wp_get_attachment_image_src( $featured_img, $image_size )[0] ) : esc_url( wc_placeholder_img_src() ); ?>" />
                             <input type="hidden" name="featured_img" class="upload_image_id" value="<?php echo esc_attr( $featured_img ); ?>" />
                         </a>
                     </div>

@@ -2010,13 +2010,17 @@ Class WCMp_Admin_Dashboard {
             } elseif ( isset( $_POST['status'] ) && $_POST['status'] === 'publish' ) {
                 if ( ! current_user_can( 'publish_products' ) ) {
                     $status = 'pending';
-                } elseif (isset($_POST['original_post_title']) && !empty($_POST['original_post_title']) && $needs_admin_approval_for_publish) {
-                    $status = 'pending';
                 } else {
                     $status = 'publish';
                 }
             } else {
                 wp_die( __( 'Invalid product status.', 'dc-woocommerce-multi-vendor' ) );
+            }
+
+            if ($needs_admin_approval_for_publish && isset($_POST['original_post_title']) && empty($_POST['original_post_title'])) {
+                $status = 'pending';
+            } elseif (isset($_POST['original_post_title']) && !empty($_POST['original_post_title']) && $needs_admin_approval_for_publish) {
+               $status = 'publish';
             }
 
             $post_data = apply_filters( 'wcmp_submitted_product_data', array(
