@@ -45,6 +45,7 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
                         if ($disallow_vendor_order_status) {
                             unset($bulk_actions['mark_processing'], $bulk_actions['mark_on-hold'], $bulk_actions['mark_completed']);
                         }
+                        $bulk_actions['bulk_mark_shipped'] = __('Bulk Mark Shipped', 'dc-woocommerce-multi-vendor');
                         if( $bulk_actions ) :
                             foreach ( $bulk_actions as $key => $action ) {
                                 echo '<option value="' . $key . '">' . $action . '</option>';
@@ -206,6 +207,13 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
         });
         $(document).on('click', '#order_list_do_bulk_action', function (e) {
             orders_table.ajax.reload();
+        });
+        // Bulk mark as shipped
+        $(document).on('change', '#order_bulk_actions', function () {
+            if ($(this).val() == 'bulk_mark_shipped') {
+                $('#wcmp-marke-ship-order-id').val($('form#wcmp_order_list_form').serialize());
+                $('#marke-as-ship-modal').modal('show');
+            }
         });
     });
 
