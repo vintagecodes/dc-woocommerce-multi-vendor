@@ -265,7 +265,7 @@ class WCMp_Ajax {
             } else {
                 do_action('wcmp_orders_list_do_handle_bulk_actions', $requestData['bulk_action'], $ids, $requestData, $vendor_all_orders );
             }
-        }else{
+        } else {
             if (isset($filterActionData['order_status']) && $filterActionData['order_status'] != 'all') {
                 foreach ($vendor_all_orders as $key => $id) { 
                     if (get_post_status( $id ) != $filterActionData['order_status']) { 
@@ -282,6 +282,12 @@ class WCMp_Ajax {
                         }
                     }
                 }
+            }
+            // search by order id
+            if (isset($requestData['search_keyword']) && !empty($requestData['search_keyword'])) {
+                unset($args['date_query']);
+                $args['post__in'] = array($requestData['search_keyword']);
+                $vendor_all_orders = wcmp_get_orders($args);
             }
             do_action('wcmp_orders_list_do_handle_filter_actions', $filterActionData, $ids, $requestData, $vendor_all_orders );
         }

@@ -26,6 +26,10 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-body">
+            <div class="order_search pull-right">
+                <input type="text" class="pro_search_key no_input form-control inline-input" id="pro_search_key" name="search_keyword" />
+                <button class="wcmp_black_btn btn btn-secondary" type="button" id="pro_search_btn"><?php _e('Search', 'dc-woocommerce-multi-vendor'); ?></button>
+            </div>
             <form name="wcmp_vendor_dashboard_orders" method="POST" class="form-inline">
                 <div class="form-group">
                     <input type="date" name="wcmp_start_date_order" class="pickdate gap1 wcmp_start_date_order form-control" placeholder="<?php esc_attr_e('from', 'dc-woocommerce-multi-vendor'); ?>" value="<?php echo isset($_POST['wcmp_start_date_order']) ? wc_clean($_POST['wcmp_start_date_order']) : date('Y-m-01'); ?>" />
@@ -193,6 +197,7 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
                     data.end_date = '<?php echo $end_date; ?>';
                     data.bulk_action = $('#order_bulk_actions').val();
                     data.order_status = $('#filter_by_order_status').val();
+                    data.search_keyword = $('#pro_search_key').val();
                 },
                 error: function(xhr, status, error) {
                     $("#wcmp-vendor-orders tbody").append('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty" style="text-align:center;">'+error+' - <a href="javascript:window.location.reload();"><?php _e('Reload', 'dc-woocommerce-multi-vendor'); ?></a></td></tr>');
@@ -214,6 +219,10 @@ $orders_list_table_headers = apply_filters('wcmp_datatable_order_list_table_head
                 $('#wcmp-marke-ship-order-id').val($('form#wcmp_order_list_form').serialize());
                 $('#marke-as-ship-modal').modal('show');
             }
+        });
+        // order search
+        $(document).on('click', '#pro_search_btn', function () {
+            orders_table.ajax.reload();
         });
     });
 
