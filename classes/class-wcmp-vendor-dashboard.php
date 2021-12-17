@@ -2559,7 +2559,7 @@ Class WCMp_Admin_Dashboard {
                     <a href="<?php echo apply_filters( 'wcmp_vendor_setup_wizard_site_logo_link', site_url(), get_current_user_id() ); ?>">
                         <?php $site_logo = get_wcmp_vendor_settings('wcmp_dashboard_site_logo', 'vendor', 'dashboard') ? get_wcmp_vendor_settings('wcmp_dashboard_site_logo', 'vendor', 'dashboard') : '';
                         if ($site_logo) { ?>
-                        <?php echo apply_filters('wcmp_vendor_setup_wizard_logo_customization', '<img src="'. get_url_from_upload_field_value($site_logo) .'" alt="'. bloginfo() .'">', $site_logo); ?>
+                        <?php echo apply_filters('wcmp_vendor_setup_wizard_logo_customization', '<img src="'. get_url_from_upload_field_value($site_logo) .'" alt="'. get_bloginfo() .'">', $site_logo); ?>
                         <?php } else {
                             echo bloginfo();
                         } ?>
