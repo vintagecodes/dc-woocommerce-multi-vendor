@@ -3094,7 +3094,7 @@ class WCMp_Ajax {
             $sold_product_list = array();
             if ( $vendor_orders ) :
                 foreach ( $vendor_orders as $order ) {
-                    $line_items = $order->get_items('line_item');
+                    $line_items = apply_filters('wcmp_widget_vendor_product_sales_report_line_items', $order->get_items('line_item') );
                     foreach ( $line_items as $item_id => $item ) {
                         if (array_key_exists($item->get_product_id(), $sold_product_list)) {
                             $sold_product_list[$item->get_product_id()]['qty'] += $item->get_quantity();
