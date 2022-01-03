@@ -20,7 +20,7 @@ $text_align = is_rtl() ? 'right' : 'left';
 <?php $announcement_link = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_vendor_settings('wcmp_vendor_announcements_endpoint', 'vendor', 'general', 'vendor-announcements'))); ?>
 
 <p><?php printf(esc_html__('This is to inform you that we recently updated the article %s :', 'dc-woocommerce-multi-vendor'), $post_title); ?></p>
-<p><?php printf(esc_html__('Vendor Name: %s','dc-woocommerce-multi-vendor'), $vendor->page_title); ?></p>
+<p><?php printf(esc_html__('Vendor Name: %s', 'dc-woocommerce-multi-vendor'), $vendor->page_title); ?></p>
 
 <p><?php printf(esc_html($post_content)); ?></p>
 
