@@ -21,7 +21,7 @@ $announcement_link = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_ven
 
 echo sprintf(__('This is to inform you that we recently updated the article %s :','dc-woocommerce-multi-vendor'), $post_title). "\n";
 
-echo sprintf(_('Vendor Name:  %s','dc-woocommerce-multi-vendor'), $vendor->page_title)."\n";
+echo sprintf(__('Vendor Name:  %s', 'dc-woocommerce-multi-vendor'), $vendor->page_title)."\n";
 
 echo sprintf(_($post_content))."\n";
 
