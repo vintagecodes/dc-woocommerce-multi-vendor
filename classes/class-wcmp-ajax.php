@@ -338,7 +338,7 @@ class WCMp_Ajax {
                     } else if ($key == 'mark_ship') {
                         $action_html .= '<i title="' . $mark_ship_title . '" class="wcmp-font ' . $action['icon'] . '"></i> ';
                     } else {
-                        $action_html .= '<a href="' . $action['url'] . '" title="' . $action['title'] . '"><i class="wcmp-font ' . $action['icon'] . '"></i></a> ';
+                        $action_html .= '<a href="' . $action['url'] . '" target="'. $action['target'] .'" title="' . $action['title'] . '"><i class="wcmp-font ' . $action['icon'] . '"></i></a> ';
                     }
                 }
                 $data[] = apply_filters('wcmp_datatable_order_list_row_data', array(
