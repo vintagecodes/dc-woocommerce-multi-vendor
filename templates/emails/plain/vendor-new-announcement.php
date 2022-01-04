@@ -21,7 +21,7 @@ $announcement_link = esc_url(wcmp_get_vendor_dashboard_endpoint_url(get_wcmp_ven
 
 echo sprintf(__('This is to inform you that we recently updated the article %s :','dc-woocommerce-multi-vendor'), $post_title). "\n";
 
-echo sprintf(_($post_content))."\n";
+echo sprintf(apply_filters('wcmp_announcement_content', $post_content))."\n";
 
 echo sprintf( __('You can always check the changes from here  %s. We would request you to check the same and take the necessary action if required.', 'dc-woocommerce-multi-vendor'), $announcement_link ) . "\n";
 
