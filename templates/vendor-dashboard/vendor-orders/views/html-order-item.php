@@ -50,7 +50,7 @@ $row_class    = apply_filters( 'wcmp_vendor_dash_html_order_item_class', ! empty
     <td class="item_cost" width="1%" data-sort-value="<?php echo esc_attr( $order->get_item_subtotal( $item, false, true ) ); ?>">
             <div class="view">
                     <?php
-                            echo wc_price( $order->get_item_total( $item, false, true ), array( 'currency' => $order->get_currency() ) );
+                            echo wc_price( $order->get_item_subtotal( $item, false, true ), array( 'currency' => $order->get_currency() ) );
 
                     if ( $item->get_subtotal() !== $item->get_total() ) {
                             echo '<span class="wc-order-item-discount">-' . wc_price( wc_format_decimal( $order->get_item_subtotal( $item, false, false ) - $order->get_item_total( $item, false, false ), '' ), array( 'currency' => $order->get_currency() ) ) . '</span>';
@@ -78,7 +78,7 @@ $row_class    = apply_filters( 'wcmp_vendor_dash_html_order_item_class', ! empty
     <td class="line_cost" width="1%" data-sort-value="<?php echo esc_attr( $item->get_total() ); ?>">
             <div class="view">
                     <?php
-                    echo wc_price( $item->get_total(), array( 'currency' => $order->get_currency() ) );
+                    echo wc_price( $item->get_subtotal(), array( 'currency' => $order->get_currency() ) );
 
                     if ( $item->get_subtotal() !== $item->get_total() ) {
                             echo '<span class="wc-order-item-discount">-' . wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $order->get_currency() ) ) . '</span>';
