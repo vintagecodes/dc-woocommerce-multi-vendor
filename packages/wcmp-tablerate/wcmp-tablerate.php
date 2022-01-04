@@ -180,8 +180,8 @@ class WCMp_Tablerate {
                                     ), array(
                                 '%d',
                                 '%s',
-                                '%d',
-                                '%d',
+                                '%s',
+                                '%s',
                                 '%d',
                                 '%d',
                                 '%s',
@@ -322,8 +322,8 @@ class WCMp_Tablerate {
                                 ), array(
                             '%d',
                             '%s',
-                            '%d',
-                            '%d',
+                            '%s',
+                            '%s',
                             '%d',
                             '%d',
                             '%s',
