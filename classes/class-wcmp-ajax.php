@@ -338,7 +338,7 @@ class WCMp_Ajax {
                     } else if ($key == 'mark_ship') {
                         $action_html .= '<i title="' . $mark_ship_title . '" class="wcmp-font ' . $action['icon'] . '"></i> ';
                     } else {
-                        $action_html .= '<a href="' . $action['url'] . '" title="' . $action['title'] . '"><i class="wcmp-font ' . $action['icon'] . '"></i></a> ';
+                        $action_html .= '<a href="' . $action['url'] . '" target="'. $action['target'] .'" title="' . $action['title'] . '"><i class="wcmp-font ' . $action['icon'] . '"></i></a> ';
                     }
                 }
                 $data[] = apply_filters('wcmp_datatable_order_list_row_data', array(
@@ -3094,7 +3094,7 @@ class WCMp_Ajax {
             $sold_product_list = array();
             if ( $vendor_orders ) :
                 foreach ( $vendor_orders as $order ) {
-                    $line_items = $order->get_items('line_item');
+                    $line_items = apply_filters('wcmp_widget_vendor_product_sales_report_line_items', $order->get_items('line_item') );
                     foreach ( $line_items as $item_id => $item ) {
                         if (array_key_exists($item->get_product_id(), $sold_product_list)) {
                             $sold_product_list[$item->get_product_id()]['qty'] += $item->get_quantity();

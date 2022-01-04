@@ -253,9 +253,10 @@ class WCMp_Order {
                     echo '<ul class="wcmp-order-vendor" style="margin:0px;">';
                     foreach ($wcmp_suborders as $suborder) {
                         $vendor = get_wcmp_vendor(get_post_field('post_author', $suborder->get_id()));
+                        $vendor_page_title = ($vendor) ? $vendor->page_title : __('Deleted vendor', 'dc-woocommerce-multi-vendor');
                         $order_uri = apply_filters('wcmp_admin_vendor_shop_order_edit_url', esc_url('post.php?post=' . $suborder->get_id() . '&action=edit'), $suborder->get_id());
 
-                        printf('<li><mark class="%s tips" data-tip="%s">%s</mark> <strong><a href="%s">#%s</a></strong> &ndash; <small class="wcmp-order-for-vendor">%s %s</small></li>', sanitize_title($suborder->get_status()), $suborder->get_status(), $suborder->get_status(), $order_uri, $suborder->get_order_number(), _x('for', 'Order table details', 'dc-woocommerce-multi-vendor'), $vendor->page_title
+                        printf('<li><mark class="%s tips" data-tip="%s">%s</mark> <strong><a href="%s">#%s</a></strong> &ndash; <small class="wcmp-order-for-vendor">%s %s</small></li>', sanitize_title($suborder->get_status()), $suborder->get_status(), $suborder->get_status(), $order_uri, $suborder->get_order_number(), _x('for', 'Order table details', 'dc-woocommerce-multi-vendor'), $vendor_page_title
                         );
 
                         do_action('wcmp_after_suborder_details', $suborder);
